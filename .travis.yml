@@ -1,0 +1,51 @@
+language: php
+
+env:
+  - PHALCON_VERSION="phalcon-v2.0.5"
+  - PHALCON_VERSION="phalcon-v2.0.4"
+  - PHALCON_VERSION="phalcon-v2.0.3"
+  - PHALCON_VERSION="phalcon-v2.0.2"
+  - PHALCON_VERSION="phalcon-v2.0.1"
+  - PHALCON_VERSION="phalcon-v2.0.0"
+
+php:
+  - 5.4
+  - 5.5
+  - 5.6
+
+services:
+  - mysql
+
+sudo: required
+
+addons:
+  hosts:
+    - pforum.loc
+
+before_script:
+  # setup phalcon
+  - ./tests/build/install-phalcon.sh ${PHALCON_VERSION}
+  - php -r 'echo \Phalcon\Version::get() . PHP_EOL;'
+  - cp ./tests/build/config.php ./app/config/config.php
+  # update composer
+  - composer self-update
+  - composer update
+
+after_script:
+  - mysql -e 'DROP DATABASE forum;' -uroot
+
+script:
+  - vendor/bin/phpcs --standard=PSR2 --extensions=php --warning-severity=0 apps/controllers apps/forms common
+  - php codecept.phar run --debug
+
+notifications:
+  email:
+    - hello@phanbook.com
+
+addons:
+  apt:
+    packages:
+    - curl
+    - libcurl3
+    - php5-curl
+    - nginx

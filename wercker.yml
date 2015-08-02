@@ -1,0 +1,64 @@
+box: duythien/phalcon@1.2.2
+no-response-timeout: 25
+build:
+    steps:
+        - bundle-install
+        - leipert/composer-install@0.0.1
+        #- script:
+        #    name: install dependencie
+        #    code: composer install --no-ansi --no-dev --no-interaction --no-progress --no-scripts --optimize-autoloader
+        #    # php composer.phar install --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader
+        #- script:
+        #    name: Serve application for integration tests
+        #    code: php -S localhost:8000 >> /dev/null &
+        - script:
+            name: sass compile
+            #code: bundle exec sass --style compressed assets/scss/styles.scss:assets/css/styles.min.css --debug-info
+            code: compass compile sass-test
+        - script:
+             name: codeception
+             code: codecept run --debug
+        #Code Style Check
+        #- mbrevda/phpcs:
+         #   directory: apps
+         #   standard: PSR2
+         #   ignore: tests
+         #   report: full
+  #send messages into hipchat
+    after-steps:
+        - dannyrscott/slack-notify@1.1.2:
+            subdomain: "hovercrowd"
+            token: $SLACK_TOKEN
+            channel: "random"
+deploy:
+    steps:
+        - add-to-known_hosts:
+            hostname: dev.hovercrowd.com
+        - mktemp:
+            envvar: PRIVATEKEY_PATH
+        - create-file:
+            name: write key
+            filename: $PRIVATEKEY_PATH
+            content: $DG_DEV_PRIVATE
+            overwrite: true
+        - anka-sirota/rsync-deploy@0.1.12:
+            host: dev.hovercrowd.com
+            directory: /var/www/hovercrowd
+            sshkey: $PRIVATEKEY_PATH
+            user: root
+    after-steps:
+        - indytechcook/wercker-step-slack-notify:
+            subdomain: hovercrowd
+            token: $SLACK_TOKEN
+            channel: random
+            icon_url: https://avatars3.githubusercontent.com/u/1695193?s=140
+            username: wercker
+        - iansmith9876/pretty-slack-notify@0.0.8:
+            team: hovercrowd
+            token: $SLACK_TOKEN
+            channel: random
+            username: wercker
+        - dannyrscott/slack-notify@1.1.2:
+            subdomain: "hovercrowd"
+            token: $SLACK_TOKEN
+            channel: "random"

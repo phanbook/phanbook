@@ -1,0 +1,17 @@
+.idea/
+vendor/
+common/cache
+common/config/config.local.php
+common/config/config.php
+apps/frontend/cache/volt/*
+tests/_output
+PayPal.log
+sftp-config.json
+.DS_Store
+public/.DS_Store
+public/images/.DS_Store
+opsfiles/.vagrant
+Dockerfile
+
+#css
+#public/css/custom.css

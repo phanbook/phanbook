@@ -1,0 +1,71 @@
+
+#form-grid thead tr:first-child th {
+    cursor: pointer;
+    outline: 0;
+}
+#form-grid th:after {
+    font-family: FontAwesome;
+    color: #333;
+    position: relative;
+    font-weight: normal;
+    float: right;
+}
+#form-grid .sorting:after {
+    content: "\f0dc";
+    color: #ccc;
+}
+#form-grid .sorting_asc:after {
+    content: "\f0de";
+}
+#form-grid .sorting_desc:after {
+    content: "\f0dd";
+}
+
+#form-grid .per-page-select {
+    width: 60px;
+}
+
+#form-grid .table tr.row-selected td{
+    background-color:#ffffcc !important;
+}
+
+#form-grid .table tr.row-selected .progress{
+    background-color: #fff;
+}
+
+.panel .table td, .panel .table th {
+    padding: 6px 13px;
+    border-top: 1px solid #eaeef1;
+}
+
+.switch input:checked + span:after {
+    left: 22px;
+}
+.switch span {
+    position: relative;
+    width: 40px;
+    height: 20px;
+}
+.switch span:after {
+    width: 16px;
+    border-radius: 30px;
+}
+
+#map-canvas {
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+
+.form-horizontal .control-label, .form-horizontal .radio, .form-horizontal .checkbox, .form-horizontal .radio-inline, .form-horizontal .checkbox-inline {
+    padding-top: 4px;
+}
+.created {
+    margin-top: -67px;
+}
+.summary a, .summary span {
+    font-size: 20px;
+}
+.date-post{
+    margin-top: -40px;
+}

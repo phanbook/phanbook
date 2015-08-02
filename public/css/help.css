@@ -1,0 +1,39 @@
+.single-content h1{
+    font-size: xx-large;
+    margin-top: 20px;
+    text-align: center;
+}
+p {
+    font-size: medium;
+    line-height: 1.3em;
+}
+.single-content .info {
+    text-align: center;
+    font-size: larger;
+    padding-top: 10px;
+}
+ul{
+    list-style: none;
+}
+.single-content li.first-rule {
+    border-top: 1px solid #ddd;
+    padding-top: 18px;
+}
+.single-content li {
+    border-bottom: 1px solid #ddd;
+    margin: 10px;
+    padding: 10px;
+}
+.single-content .expander {
+    color: gray;
+    cursor: help;
+    padding: 10px;
+}
+.single-content li.bad-example {
+    background: #F5A9A9 none repeat scroll 0% 0%;
+}
+.single-content li.good-example {
+    background: #BCF5A9 none repeat scroll 0% 0%;
+}
+
+

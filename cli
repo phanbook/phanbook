@@ -1,0 +1,78 @@
+<?php
+
+/**
+ * a cli launcher and a cli script that launches phalcon tasks
+ *
+ * @example php cli.php [task] [action] [param1 [param2 ...]]
+ * @example php cli.php Example index
+ * @example php cli.php Example index --debug --single --no-record
+ */
+
+
+define('ROOT_DIR', __DIR__ . '/');
+define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'local'));
+date_default_timezone_set('UTC');
+
+// Necessary requires to get things going
+require ROOT_DIR . '/vendor/autoload.php';
+require ROOT_DIR . '/common/tools/cli/PhpError.php';
+require ROOT_DIR . '/common/tools/cli/IRun.php';
+require ROOT_DIR . '/common/tools/cli/Output.php';
+require ROOT_DIR . '/common/Console.php';
+
+use Phalcon\DI\FactoryDefault\CLI;
+use Phanbook\Console as ConsoleApp;
+
+// Capture runtime errors
+register_shutdown_function(['Phanbook\Tools\Cli\PhpError', 'runtimeShutdown']);
+
+try {
+    $app = new ConsoleApp( new CLI());
+    // Record any php warnings/errors
+    set_error_handler(['Phanbook\Tools\Cli\PhpError', 'errorHandler']);
+
+    // Check if only run single instance
+    if ($key = array_search('--single', $argv)) {
+        $app->setSingleInstance(true);
+        // Ensure pid removes even on fatal error
+        register_shutdown_function([$app, 'removeProcessInstance']);
+    }
+
+    // Check if logging to database
+    if ($key = array_search('--record', $argv)) {
+        $app->setRecording(true);
+    }
+
+    // Check if debug mode
+    if ($key = array_search('--debug', $argv)) {
+        $app->setDebug(true);
+        //todo laster
+        // Ensure debug display even on fatal error
+        //register_shutdown_function([new Events\Cli\Debug(FALSE), 'display'], $app);
+    }
+
+    $app->setArgs($argv, $argc);
+
+    // Boom, Run
+    $app->run();
+} catch (Exception $e) {
+    echo $e;
+    exit(255);
+}
+
+function d($object, $kill = true)
+{
+    var_export($object);
+    if ($kill) {
+        exit;
+    }
+}
+/**
+ * Fix undefined function t when save object which is have method
+ * Validate in model
+ *
+ */
+function t($string)
+{
+    //nothing
+}

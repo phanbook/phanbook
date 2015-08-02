@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+#
+# Executes setup.rb using the Ruby bundled with Vagrant.
+#
+
+if ! which vagrant > /dev/null; then
+    echo "Vagrant doesn't seem to be installed. Please download and install it"
+    echo "from http://www.vagrantup.com/downloads.html and re-run setup.sh."
+    exit 1
+fi
+
+# These paths assume Vagrant was installed from the vendor-supplied packages
+# if [ "$(uname)" == "Darwin" ]; then
+#     ruby=/Applications/Vagrant/embedded/bin/ruby
+# else
+#     ruby=/opt/vagrant/embedded/bin/ruby
+# fi
+
+
+#Setup some dependency
+#rm -rf opsfiles
+if [ ! -d "opsfiles" ]; then
+    git clone --depth=1 git@github.com:Phanbook/opsfiles.git
+fi
+
+if [ "up" == "$1" ]; then
+    (cd opsfiles && vagrant up)
+fi
+if [ "provision" == "$1" ]; then
+    cd opsfiles && vagrant provision
+fi
+if [ "ssh" == "$1" ]; then
+    cd opsfiles && vagrant ssh ubuntu
+fi
+if [ "halt" == "$1" ]; then
+    cd opsfiles && vagrant halt
+fi
+if [ "destroy" == "$1" ]; then
+    cd opsfiles && vagrant destroy
+fi
+
+#Docker setup
+if [ "docker" == "$1" ]; then
+    if ! which docker > /dev/null; then
+        echo "Docker doesn't seem to be installed. Please download and install it"
+        echo "from http://www.docker.io/downloads.html and re-run phanbook."
+        exit 3
+    fi
+    sudo service docker start
+    cp opsfiles/Dockerfile .
+    #Replace password default by paramater you provided
+    if [ -n "$2" ]; then
+        sed -ie "s/password__phanbook/$2/g" Dockerfile
+    fi
+    docker build -t="phanbook/v1" .
+    docker run -p 80:80 phanbook/v1
+fi
+
+
