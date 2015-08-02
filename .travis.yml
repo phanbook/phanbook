@@ -1,13 +1,5 @@
 language: php
 
-env:
-  - PHALCON_VERSION="phalcon-v2.0.5"
-  - PHALCON_VERSION="phalcon-v2.0.4"
-  - PHALCON_VERSION="phalcon-v2.0.3"
-  - PHALCON_VERSION="phalcon-v2.0.2"
-  - PHALCON_VERSION="phalcon-v2.0.1"
-  - PHALCON_VERSION="phalcon-v2.0.0"
-
 php:
   - 5.4
   - 5.5
@@ -15,35 +7,45 @@ php:
 
 services:
   - mysql
+  - memcached
 
-sudo: required
+sudo: false
 
-addons:
-  hosts:
-    - pforum.loc
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
+
+env:
+  - PHALCON_VERSION="2.0.6"
+  - PHALCON_VERSION="2.0.5"
+# - PHALCON_VERSION="2.0.4"
+# - PHALCON_VERSION="2.0.3"
+#  - PHALCON_VERSION="2.0.2"
+#  - PHALCON_VERSION="2.0.1"
+#  - PHALCON_VERSION="2.0.0"
+
+install:
+  - composer self-update
+  - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b phalcon-v${PHALCON_VERSION}
+  - (cd cphalcon/ext; export CFLAGS="-g3 -O1 -fno-delete-null-pointer-checks -Wall"; phpize &> /dev/null && ./configure --silent --enable-phalcon &> /dev/null && make --silent -j4 > /dev/null && make --silent install && phpenv config-add ../unit-tests/ci/phalcon.ini &> /dev/null)
+  - php -r 'echo \Phalcon\Version::get() . PHP_EOL;'
+  - composer install --prefer-source --no-interaction
 
 before_script:
-  # setup phalcon
-  - ./tests/build/install-phalcon.sh ${PHALCON_VERSION}
-  - php -r 'echo \Phalcon\Version::get() . PHP_EOL;'
-  # update composer
-  - composer self-update
-  - composer update
+  #- cp ./tests/config/config.php.dist ./app/config/config.php
+  #- mysql -e 'CREATE DATABASE phosphorum CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;'
+  #- cat schemas/forum.sql | mysql phosphorum
+  #- (cd ./scripts/ && php random-entries.php > /dev/null)
 
 after_script:
-  - mysql -e 'DROP DATABASE forum;' -uroot
+  #- mysql -e 'DROP DATABASE forum;' -uroot
 
 script:
-  - vendor/bin/phpcs --standard=PSR2 --extensions=php --warning-severity=0 apps/controllers apps/forms common
-  - php codecept.phar run --debug
+  - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 --ignore=app/cache app/
+  - vendor/bin/codecept build
+  - vendor/bin/codecept run
 
 notifications:
   email:
     - hello@phanbook.com
-
-addons:
-  apt:
-    packages:
-    - curl
-    - libcurl3
-    - php5-curl
