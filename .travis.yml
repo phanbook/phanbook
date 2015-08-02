@@ -34,7 +34,7 @@ install:
 
 before_script:
   - echo "USE mysql;\nUPDATE user SET password=PASSWORD('phanbook') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
-  - cp ./common/config/config.example.php .common/config/config.php
+  - cp ./common/config/config.example.php ./common/config/config.php
   - mysql -e 'CREATE DATABASE phanbook CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;' -uroot -pphanbook
   - cat databases/phanbook.sql | mysql -uroot phanbook -pphanbook
   #- (cd ./scripts/ && php random-entries.php > /dev/null)
