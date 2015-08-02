@@ -14,7 +14,7 @@
 
 [![wercker status](https://app.wercker.com/status/fc4506f68f8c38271cb4cc514e1e90ea/m/master "wercker status")](https://app.wercker.com/project/bykey/fc4506f68f8c38271cb4cc514e1e90ea)
 
-[![Build Status](https://secure.travis-ci.org/phanbook/phanbook.svg?branch=master)](http://travis-ci.org/phanbook/phanbook)
+[![Build Status](https://api.travis-ci.org/Phanbook/phanbook.svg?branch=master)](http://travis-ci.org/phanbook/phanbook)
 ## Goals
 
 - **Fast and simple.** No clutter, no bloat, no complex dependencies. Phanbook is built with Phalcon PHP so it's quick and easy to deploy. 
