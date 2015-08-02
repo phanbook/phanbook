@@ -48,4 +48,3 @@ addons:
     - curl
     - libcurl3
     - php5-curl
-    - nginx
