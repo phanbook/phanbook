@@ -26,7 +26,6 @@ before_script:
   # setup phalcon
   - ./tests/build/install-phalcon.sh ${PHALCON_VERSION}
   - php -r 'echo \Phalcon\Version::get() . PHP_EOL;'
-  - cp ./tests/build/config.php ./app/config/config.php
   # update composer
   - composer self-update
   - composer update
