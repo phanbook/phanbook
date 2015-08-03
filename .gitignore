@@ -11,7 +11,7 @@ sftp-config.json
 public/.DS_Store
 public/images/.DS_Store
 opsfiles/.vagrant
-Dockerfile
+/Dockerfile
 
 #css
 #public/css/custom.css

@@ -20,7 +20,7 @@ fi
 #Setup some dependency
 #rm -rf opsfiles
 if [ ! -d "opsfiles" ]; then
-    git clone --depth=1 git@github.com:Phanbook/opsfiles.git
+    git clone --depth=1 git@github.com:phanbook/opsfiles.git
 fi
 
 if [ "up" == "$1" ]; then
@@ -53,7 +53,8 @@ if [ "docker" == "$1" ]; then
         sed -ie "s/password__phanbook/$2/g" Dockerfile
     fi
     docker build -t="phanbook/v1" .
-    docker run -p 80:80 phanbook/v1
+    #docker run -p 80:80 phanbook/v1
+    docker run -d -v $(pwd):/usr/share/nginx/html/www:rw -p 80:80 phanbook/v1
 fi
 
 
