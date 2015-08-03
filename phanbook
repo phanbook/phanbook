@@ -3,12 +3,6 @@
 # Executes setup.rb using the Ruby bundled with Vagrant.
 #
 
-if ! which vagrant > /dev/null; then
-    echo "Vagrant doesn't seem to be installed. Please download and install it"
-    echo "from http://www.vagrantup.com/downloads.html and re-run setup.sh."
-    exit 1
-fi
-
 # These paths assume Vagrant was installed from the vendor-supplied packages
 # if [ "$(uname)" == "Darwin" ]; then
 #     ruby=/Applications/Vagrant/embedded/bin/ruby
@@ -24,6 +18,11 @@ if [ ! -d "opsfiles" ]; then
 fi
 
 if [ "up" == "$1" ]; then
+    if ! which vagrant > /dev/null; then
+        echo "Vagrant doesn't seem to be installed. Please download and install it"
+        echo "from http://www.vagrantup.com/downloads.html and re-run setup.sh."
+        exit 1
+    fi
     (cd opsfiles && vagrant up)
 fi
 if [ "provision" == "$1" ]; then
