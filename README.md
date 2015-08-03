@@ -54,7 +54,7 @@ We want Phanbook to be the most powerful forum software out there, and we have a
 
   ```192.168.33.33 phanbook.dev```
 
-4. Visit phanbook.dev or 192.168.33.33 in a browser. To get full information how to setup that can see [here](http://github.com/phanbook/docs/install.md)
+4. Visit phanbook.dev or 192.168.33.33 in a browser. To get full information how to setup that can see [here](https://github.com/phanbook/docs/blob/master/install.md)
 
 ## Docker
 To play Phanbook with Docker you just do follow command below:
@@ -64,9 +64,14 @@ chmod +x phanbook
 ./phanbook docker #it will use default password is phanbook
 ./phanbook docker mysql_password # change mysql_password to you want use it
 ```
-Visit 127.0.0.1 in a browser. If you use windown see more [here](http://github.com/phanbook/docs/install.md)
+Visit 127.0.0.1 in a browser. If you use windown see more [here](https://github.com/phanbook/docs/blob/master/install.md)
+
+## Default we have setup a user with:
+- Username: admin
+- Password: phanbook
 
 ## Security
+
 We take security very seriously at Phanbook; all our code is 100% open source and peer reviewed. Please read our security guide for an overview of security measures in Phanbook.
 
 ## Contributing
@@ -91,8 +96,6 @@ The original Phanbook code contributors can be found in [AUTHORS.MD](https://git
 
 Copyright 2014 - 2015 Phanbook Construction Kit, Inc.
 
-Licensed under the GNU General Public License Version 2.0 (or later); you may not use this work except in compliance with the License. You may obtain a copy of the License in the LICENSE file, or at:
-
-http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
+Licensed under the GNU General Public License Version 2.0 (or later); you may not use this work except in compliance with the License. You may obtain a copy of the License in the LICENSE file, or at http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
