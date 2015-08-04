@@ -11,9 +11,7 @@
 
 ## Build Status and Join chats us:
 
-[![Build Status](https://travis-ci.org/phanbook/phanbook.svg?branch=master)](https://travis-ci.org/phanbook/phanbook)
-
-[![Salck](https://img.shields.io/badge/slack-join%20chat%20%E2%86%92-brightgreen.svg?style=flat-square)](http://chat.phalcontip.com)
+[![Build Status](https://travis-ci.org/phanbook/phanbook.svg?branch=master)](https://travis-ci.org/phanbook/phanbook) [![Salck](https://img.shields.io/badge/slack-join%20chat%20%E2%86%92-brightgreen.svg?style=flat-square)](http://chat.phalcontip.com)
 
 ## Goals
 
