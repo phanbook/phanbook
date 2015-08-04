@@ -2,7 +2,7 @@
 #This is config for vagrant
 #@todo refactor later
 #
-echo "export MYSQL_PASSWORD=phanbook" >>/etc/profile
+echo "export MYSQL_PASSWORD=password__phanbook" >>/etc/profile
 
 echo "export DB_NAME=phanbook" >> /etc/profile
 
