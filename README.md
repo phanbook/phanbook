@@ -4,17 +4,16 @@
 
 [Live Demo](http://phanbook.com) -
 [Development Forum](http://meta.phanbook.com) -
-[Twitter](http://twitter.com/) -
+[Discourse Theme](http://discourse.phanbook.com) -
+[Phalcon Theme](http://meta.phanbook.com) -
 [Contact](mailto:hello@phanbook.com) -
 [Donate](http://phanbook.com/donate)
 
-[![Salck](https://img.shields.io/badge/slack-join%20chat%20%E2%86%92-brightgreen.svg?style=flat-square)](http://chat.phalcontip.com)
-
-## Build Status:
+## Build Status and Join chats us:
 
 [![Build Status](https://travis-ci.org/phanbook/phanbook.svg?branch=master)](https://travis-ci.org/phanbook/phanbook)
 
-[![wercker status](https://app.wercker.com/status/fc4506f68f8c38271cb4cc514e1e90ea/m/master "wercker status")](https://app.wercker.com/project/bykey/fc4506f68f8c38271cb4cc514e1e90ea)
+[![Salck](https://img.shields.io/badge/slack-join%20chat%20%E2%86%92-brightgreen.svg?style=flat-square)](http://chat.phalcontip.com)
 
 ## Goals
 
