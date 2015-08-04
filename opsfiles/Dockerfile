@@ -12,7 +12,8 @@ RUN apt-get update && apt-get install -yqq \
     gcc \
     python-dev \
     locales \
-    python-pip
+    python-pip \
+    wget
 #
 
 ENV  DEBIAN_FRONTEND noninteractive
