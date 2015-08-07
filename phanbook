@@ -45,15 +45,14 @@ if [ "docker" == "$1" ]; then
         echo "from http://www.docker.io/downloads.html and re-run phanbook."
         exit 3
     fi
-    sudo service docker start
-    cp opsfiles/Dockerfile .
-    #Replace password default by paramater you provided
-    if [ -n "$2" ]; then
-        sed -ie "s/password__phanbook/$2/g" Dockerfile
+    if ! which docker-compose > /dev/null; then
+        curl -L https://github.com/docker/compose/releases/download/1.3.3/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+        chmod +x /usr/local/bin/docker-compose
+        sudo service docker start
     fi
-    docker build -t="phanbook/v1" .
-    #docker run -p 80:80 phanbook/v1
-    docker run -d -v $(pwd):/usr/share/nginx/html/www:rw -p 80:80 phanbook/v1
+
+    cp opsfiles/docker/docker-compose.yml .
+    docker-compose up -d
 fi
 
 
