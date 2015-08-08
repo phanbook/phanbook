@@ -17,9 +17,11 @@ cache:
     - $HOME/.composer/cache
 
 env:
-  - PHALCON_VERSION="2.0.6"
-  - PHALCON_VERSION="2.0.5"
-  - APPLICATION_ENV="travis"
+  global:
+    - APPLICATION_ENV="travis"
+  matrix:
+    - PHALCON_VERSION="2.0.6"
+    - PHALCON_VERSION="2.0.5"
 # - PHALCON_VERSION="2.0.4"
 # - PHALCON_VERSION="2.0.3"
 #  - PHALCON_VERSION="2.0.2"
