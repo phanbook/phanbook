@@ -2,8 +2,9 @@
 # vi: set ft=ruby :
 $setupDocker = <<SCRIPT
 # Stop and remove any existing containers
-docker stop $(docker ps -a -q)
 docker rm $(docker ps -a -q)
+# Delete all images
+docker rmi $(docker images -q)
 
 # Build containers from Dockerfiles
 

@@ -26,8 +26,8 @@ return new \Phalcon\Config(
     */
     'database'  => array(
         'mysql'     => array(
-            'host'     => 'localhost',
-            'username' => 'root',
+            'host'     => 'db',
+            'username' => 'phanbook',
             'password' => 'password__phanbook',
             'dbname'   => 'phanbook',
             'charset'  => 'utf8',

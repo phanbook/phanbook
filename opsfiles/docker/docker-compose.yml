@@ -21,10 +21,10 @@ app:
     - ./:/var/www/html
 db:
   image: phanbook/mysql
-  volumes:
-   - /opt/mysql/data:/var/lib/mysql
-  environment:
-   - MYSQL_DB=phanbook
-   - MYSQL_PASS=phanbook
-   - MYSQL_USER=phanbook
-  # env_file: opsfiles/docker/config.env
+  #volumes:
+  #  - /opt/mysql/data:/var/lib/mysql
+  #environment:
+  #  - MYSQL_DB=phanbook
+  #  - MYSQL_PASS=phanbook
+  #  - MYSQL_USER=phanbook
+  env_file: ./opsfiles/docker/config.env
