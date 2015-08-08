@@ -44,6 +44,10 @@ $di = new FactoryDefault();
  * Register the configuration itself as a service
  */
 $config = include ROOT_DIR .'/common/config/config.php';
+if (file_exists(__DIR__ . '/config.' . APPLICATION_ENV . '.php')) {
+    $overrideConfig = include __DIR__ . '/config.' . APPLICATION_ENV . '.php';
+    $config->merge($overrideConfig);
+}
 $di->set('config', $config, true);
 //setup timezone
 date_default_timezone_set($di->get('config')->application->timezone ?: 'UTC');
