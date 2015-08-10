@@ -21,6 +21,8 @@ use Phalcon\Queue\Beanstalk;
 use Phanbook\Tools\Cli\Output;
 use Phanbook\Markdown\ParsedownExtra;
 use Phanbook\Mail\Mail;
+use Phanbook\Queue\DummyServer;
+
 
 /**
  * Console.
