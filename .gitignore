@@ -15,3 +15,6 @@ opsfiles/.vagrant
 
 #css
 #public/css/custom.css
+
+tests/_support/_generated/*.php
+selenium-server-standalone-*.jar

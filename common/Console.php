@@ -23,7 +23,6 @@ use Phanbook\Markdown\ParsedownExtra;
 use Phanbook\Mail\Mail;
 use Phanbook\Queue\DummyServer;
 
-
 /**
  * Console.
  */

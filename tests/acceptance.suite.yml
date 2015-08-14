@@ -7,9 +7,23 @@
 class_name: AcceptanceTester
 modules:
     enabled:
+        - Filesystem
+        - Phalcon2
+        #- WebDriver
+        - Db
         - PhpBrowser
-        - AcceptanceHelper
     config:
+        Phalcon2:
+            bootstrap: 'tests/bootstrap.php'
+            cleanup: true
+            savepoints: true
         PhpBrowser:
             url: 'http://127.0.0.1'
-        
+            curl:
+              CURLOPT_RETURNTRANSFER: true
+
+        # WebDriver:
+        #  url: 'http://localhost/'
+        #  browser: phantomjs
+        #  capabilities:
+        #      webStorageEnabled: true

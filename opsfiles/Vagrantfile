@@ -26,11 +26,18 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       :owner          => 'vagrant', \
       :group          => 'vagrant', \
       :mount_options  => ['dmode=777,fmode=777']
-
+    config.vm.provider "virtualbox" do |vb|
+        vb.customize [
+          'modifyvm', :id,
+          '--memory', '1024',
+          '--cpus', 2,
+          '--name', 'phanbook',
+        ]
+    end
     # Ubuntu box
     config.vm.define "ubuntu" do |web|
         web.vm.box = "ubuntu/trusty64"
-        web.vm.network :private_network, ip: "192.168.33.33"
+        web.vm.network :private_network, ip: "192.168.33.34"
         web.vm.provision "shell", path: "scripts/config.sh"
         web.vm.provision "shell", path: "scripts/ubuntu/base.sh"
         web.vm.provision "shell", path: "scripts/ubuntu/mysql.sh"
