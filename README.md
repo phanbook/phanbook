@@ -1,6 +1,6 @@
 # Phanbook
 
-**Delightfully simple forums.** [Phanbook](http://phanbook.com) is the next-generation forum software that makes online discussion fun again. Also the name Phanbook is mean - Phan(Phalcon PHP)book(the your note book)
+[Phanbook](http://phanbook.com) is the next-generation forum and Q&A software that makes online discussion fun again. Also the name Phanbook is mean - Phan(Phalcon PHP)book(the your note book)
 
 [Live Demo](http://phanbook.com) -
 [Development Forum](http://meta.phanbook.com) -
