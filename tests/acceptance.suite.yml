@@ -18,7 +18,7 @@ modules:
             cleanup: true
             savepoints: true
         PhpBrowser:
-            url: 'http://127.0.0.1'
+            url: 'http://localhost'
             curl:
               CURLOPT_RETURNTRANSFER: true
 
