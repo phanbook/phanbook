@@ -40,7 +40,7 @@ before_script:
   - php -S 127.0.0.1:8000 -t public/ .htrouter.php >/dev/null 2>&1 &
 
 after_script:
-  - mysql -e 'DROP DATABASE phanbook;' -uroot -ppassword__phanbook
+  #- mysql -e 'DROP DATABASE phanbook;' -uroot -ppassword__phanbook
 
 script:
   - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 --ignore=/apps/views,apps/cache,/common/library/Markdown apps/controllers/ common/ apps/forms/
