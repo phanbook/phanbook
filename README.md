@@ -1,6 +1,6 @@
 # Phanbook
 
-**Delightfully simple forums.** [Phanbook](http://phanbook.com) is the next-generation forum software that makes online discussion fun again. Also the name Phanbook is mean - Phan(Phalcon PHP)book(the your note book)
+[Phanbook](http://phanbook.com) is the next-generation Q&A and forum software that makes online discussion, question and answer site for professional and enthusiast people. Also the name Phanbook is mean - Phan(Phalcon PHP)book(the your note book)
 
 [Live Demo](http://phanbook.com) -
 [Development Forum](http://meta.phanbook.com) -
@@ -16,8 +16,9 @@
 ## Goals
 
 - **Fast and simple.** No clutter, no bloat, no complex dependencies. Phanbook is built with Phalcon PHP so it's quick and easy to deploy. 
-- **Beautiful and responsive.** This is forum software for humans. Phanbook is carefully designed to be consistent and intuitive across platforms, out-of-the-box. It's backed by LESS, so themeing is a cinch.
+- **Beautiful and responsive.** This is forum software for humans. Phanbook is carefully designed to be consistent and intuitive across platforms, out-of-the-box.
 - **Powerful and extensible.** Customize, extend, and integrate Phanbook to suit your community. Phanbook's architecture is amazingly flexible, prioritizing comprehensive APIs and great documentation.
+- **Easily deploy** With Docker and Vagrant you can easy deploy to production with Docker and setup environment develop with Vagrant.
 - **Free and open.** Phanbook is released under the [GNU General license](https://github.com/phanbook/phanbook/blob/master/LICENSE.txt).
 
 ## Features
@@ -27,9 +28,9 @@ We want Phanbook to be the most powerful forum software out there, and we have a
 - Mutiple Theme
 - Spam Blocking
 - Markdown and rich text editing support
-- Powerful search
-- Single sign-on (Facebook, Twitter, GitHub, etc.)
-- Topic/category subscriptions and digest emails
+- Powerful search with Elasticsearch
+- Single sign-on (Facebook, Google, GitHub, etc.)
+- Topic/Tags subscriptions and digest emails
 - File attachments
 - Post flagging/reporting and an intelligent auto-moderation system
 - Rewards, badges, and gamification
@@ -49,9 +50,9 @@ We want Phanbook to be the most powerful forum software out there, and we have a
 
 3. Add an entry to your /etc/hosts file:
 
-  ```192.168.33.33 phanbook.dev```
+  ```192.168.33.34 phanbook.dev```
 
-4. Visit phanbook.dev or 192.168.33.33 in a browser. To get full information how to setup that can see [here](https://github.com/phanbook/docs/blob/master/install.md)
+4. Visit phanbook.dev or 192.168.33.34 in a browser. To get full information how to setup that can see [here](https://github.com/phanbook/docs/blob/master/install.md)
 
 ## Docker
 To play Phanbook with Docker you just do follow command below:
@@ -59,7 +60,6 @@ To play Phanbook with Docker you just do follow command below:
 ```
 chmod +x phanbook
 ./phanbook docker #it will use default password is phanbook
-./phanbook docker mysql_password # change mysql_password to you want use it
 ```
 Visit 127.0.0.1 in a browser. If you use windown see more [here](https://github.com/phanbook/docs/blob/master/install.md)
 
