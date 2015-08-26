@@ -12,6 +12,7 @@ fi
 if [[ ! -f "common/config/config.php" ]]; then
     cp common/config/config.example.php common/config/config.php
 fi
+sed -i "s/'host'     => 'db'/'host'     => 'localhost'/" common/config/config.php
 
 chmod 777 -R apps/logs
 chmod 777 -R apps/cache/volt
