@@ -5,9 +5,9 @@
 echo "export MYSQL_PASSWORD=password__phanbook" >>/etc/profile
 
 echo "export DB_NAME=phanbook" >> /etc/profile
+echo "export MYSQL_USER=phanbook" >> /etc/profile
 
 echo "export ROOT_DIR=/usr/share/nginx/html/www/" >> /etc/profile
-
 echo "export ENV=development" >> /etc/profile
 
 source /etc/profile

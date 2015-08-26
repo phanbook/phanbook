@@ -21,16 +21,17 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get -y  install mariadb-server
 service mysql start
 update-rc.d mysql defaults
 # Setup password and create database
-mysqladmin -u root password $MYSQL_PASSWORD
-mysqladmin -u root -p$MYSQL_PASSWORD create $DB_NAME
+mysql -uroot -e "CREATE USER '${MYSQL_USER}'@'%' IDENTIFIED BY '$MYSQL_PASSWORD'"
+mysql -uroot -e "GRANT ALL PRIVILEGES ON *.* TO '${MYSQL_USER}'@'%' WITH GRANT OPTION"
+mysqladmin -u root  create $DB_NAME
 
 # Import database
 
 if [ "$ENV" == "production" ]; then
-   mysql -u root -p$MYSQL_PASSWORD  $DB_NAME <  "${ROOT_DIR}databases/phanbook_prd.sql"
+   mysql -u root $DB_NAME <  "${ROOT_DIR}databases/phanbook_prd.sql"
 fi
 
 if [ "$ENV" == "development" ]; then
-   mysql -u root -p$MYSQL_PASSWORD  $DB_NAME <  "${ROOT_DIR}databases/phanbook.sql"
+   mysql -u root  $DB_NAME <  "${ROOT_DIR}databases/phanbook.sql"
 fi
 
