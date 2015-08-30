@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Aug 02, 2015 at 10:55 AM
+-- Generation Time: Aug 30, 2015 at 06:40 AM
 -- Server version: 5.5.41-MariaDB
 -- PHP Version: 5.4.16
 
@@ -444,7 +444,7 @@ CREATE TABLE IF NOT EXISTS `successLogins` (
   `usersId` int(15) NOT NULL,
   `ipAddress` varchar(100) NOT NULL,
   `userAgent` varchar(200) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `successLogins`
@@ -494,7 +494,9 @@ INSERT INTO `successLogins` (`id`, `usersId`, `ipAddress`, `userAgent`) VALUES
 (41, 1, '14.169.15.36', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:39.0) Gecko/20100101 Firefox/39.0'),
 (42, 1, '14.169.15.36', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:39.0) Gecko/20100101 Firefox/39.0'),
 (43, 1, '14.169.15.36', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:39.0) Gecko/20100101 Firefox/39.0'),
-(44, 1, '14.169.15.36', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:39.0) Gecko/20100101 Firefox/39.0');
+(44, 1, '14.169.15.36', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:39.0) Gecko/20100101 Firefox/39.0'),
+(45, 1, '14.169.15.36', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:39.0) Gecko/20100101 Firefox/39.0'),
+(46, 1, '14.169.15.36', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:39.0) Gecko/20100101 Firefox/39.0');
 
 -- --------------------------------------------------------
 
@@ -532,7 +534,7 @@ CREATE TABLE IF NOT EXISTS `template` (
   `key` varchar(64) NOT NULL DEFAULT '',
   `subject` varchar(255) DEFAULT NULL,
   `content` text
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `template`
@@ -543,7 +545,8 @@ INSERT INTO `template` (`id`, `name`, `key`, `subject`, `content`) VALUES
 (2, 'Forgot Password', 'forgotpassword', 'Reset your password', '<h5>Hello {{ firstname }} {{ lastname }},</h5>\r\n<p>Below you will find the link that you have requested to reset your password</p>\r\n<h4><a href="{{ link }}">Change my password</a></h4>'),
 (6, 'Test', 'test', 'Phanbook TEST', 'This is a test email. \r\n\r\n© {{ date(''Y'') }} Phanbook'),
 (7, 'Right side theme default', 'rightside', 'Right sidebar', '<!-- begin right-sidebar -->\r\n<div id="right-sidebar" class="sidebar">\r\n    <div class="spacer">\r\n        <form role="search" id="search-right" action="/search">\r\n            <input type="text" tabindex="20" placeholder="{{t(''search'')}}" name="q">\r\n            <input type="submit" tabindex="22" value="">\r\n        </form>\r\n    </div>\r\n    <div class="spacer">\r\n        <div class="sidebox submit submit-link">\r\n            <div class="morelink" data-descr="Please remember to read the rules. Thank you!">\r\n                <a target="_top" class="login-required" href="/hackernew/submit">{{t(''Submit a new link'')}}</a>\r\n            </div>\r\n        </div>\r\n    </div>\r\n    {% if post is defined and this.view.getActionName() == ''view''%}\r\n        <div class="spacer">\r\n            <div class="linkinfo">\r\n                <div class="date">\r\n                    <span>this post was submitted on</span>\r\n                    <time datetime="{{date(''Y-M-D h:i'', post.getCreatedAt())}}">{{ date(''d M Y'', post.getCreatedAt())}}</time>\r\n                </div>\r\n                <div class="score">\r\n                    <span class="number">{{ post.getBounty()[''value''] ? post.getBounty()[''value''] : 0 }}</span>\r\n                    <span class="word">points</span> (95% upvoted)\r\n                </div>\r\n                <div class="shortlink">shortlink:\r\n                    <input type="text" id="shortlink-text" readonly="readonly" value="http://phanbook.com">\r\n                </div>\r\n            </div>\r\n        </div>\r\n    {% endif %}\r\n    <div class="spacer">\r\n        <div class="titlebox">\r\n            <h1 class="hover redditname">\r\n                <a class="hover" href="p/PHP/">PHP</a>\r\n            </h1>\r\n            <span data-sr_name="PHP" class="fancy-toggle-button subscribe-button toggle">\r\n                {% if 1 == 1 %}\r\n                    <a href="#" class="add" data-descr="Subscribe!">subscribe</a>\r\n                {% else %}\r\n                    <a href="#" class="remove" data-descr="Unsubscribe!">unsubscribe</a>\r\n                {% endif %}\r\n            </span>\r\n            <span class="subscribers"><span class="number">37,215</span> <span class="word">readers</span></span>\r\n            <div class="usertext-body may-blank-within md-container ">\r\n                <div class="md"><p><a href="/p/PHP/wiki/index">Subphannook FAQ</a></p>\r\n\r\n                    <p>{{t(''Releases'')}}: <a href="http://php.net/downloads.php">Current Releases</a>, <a href="http://windows.php.net/download/">Windows Releases</a>, <a href="http://museum.php.net/">Old Releases</a></p>\r\n\r\n                    <p>Sources: <a href="https://svn.php.net/viewvc/">Subversion</a>, <a href="https://git.php.net/">Git</a>, <a href="http://lxr.php.net/">Source Search</a></p>\r\n\r\n                    <p><a href="/">Contribute to the PHP Documentation</a></p>\r\n\r\n                    <p>Related subreddits:\r\n                        <a href="/p/css">CSS</a>, <a href="/p/javascript">JavaScript</a>,\r\n                        <a href="/p/web-design">Web Design</a>, <a href="/p/wordpress">Wordpress</a>, <a href="/p/webdev">WebDev</a>\r\n                    </p>\r\n\r\n                    <p>Join <a href="http://chat.phalcontip.com">#phalcon</a> on Freenode!</p>\r\n\r\n                    <hr>\r\n\r\n                    <p><a href="/p/PHP">/p/PHP</a> is not a support subphanbook. Please visit <a href="/p/phphelp">/p/phphelp</a> for help, or connect to <a href="http://chat.phalcontip.com">##php on Slack chat</a> (<a href="https://slack.com/faq.shtml#thien">you registration required</a>)</p>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <div class="spacer">\r\n        <a href="">\r\n        {{image(''images/sponsor.png'')}}\r\n        </a>\r\n    </div>\r\n    <div id="hot-network-questions" class="spacer">\r\n        <h4>\r\n            {{ link_to(''posts/hot'', t(''Hot Network Community'')) }}\r\n        </h4>\r\n        <ul class="widget">\r\n                {% for hot in hotPosts %}\r\n                    <li>\r\n                        <p>\r\n                            <span class="number"> {{ hot.getNumberReply() }}</span>\r\n                            <span class="text">\r\n                            {{ link_to(hot.getType() ~ ''/'' ~ hot.getId() ~ ''/'' ~ hot.getSlug(), hot.getTitle())}}</span>\r\n                        </p>\r\n                    </li>\r\n                {% endfor %}\r\n        </ul>\r\n    </div><!-- hot-network-questions -->\r\n</div>\r\n'),
-(8, 'SendSpool', 'sendspool', 'Send Spool', '{# The template use for send mail when have a reply or comment on post#}\r\n<h5>Hello {{ name }} </h5>\r\n{{ content }}\r\n<p style="font-size:small;-webkit-text-size-adjust:none;color:#717171;">\r\n&mdash;<br>Reply to this email directly or view the complete thread on\r\n<a href="{{ link }}">{{ this.config.application.name }}</a>\r\nChange your e-mail preferences <a href="{{this.config.application.publicUrl}}/settings">here</a></p>\r\n</p>\r\n');
+(8, 'SendSpool', 'sendspool', 'Send Spool', '{# The template use for send mail when have a reply or comment on post#}\r\n<h5>Hello {{ name }} </h5>\r\n{{ content }}\r\n<p style="font-size:small;-webkit-text-size-adjust:none;color:#717171;">\r\n&mdash;<br>Reply to this email directly or view the complete thread on\r\n<a href="{{ link }}">{{ this.config.application.name }}</a>\r\nChange your e-mail preferences <a href="{{this.config.application.publicUrl}}/settings">here</a></p>\r\n</p>\r\n'),
+(9, 'Send Digest', 'senddigest', 'Top stories', '{# The template use for send digest#}\r\n<html><head></head>\r\n<body>\r\n    <h5>Hello {{ username }} </h5>\r\n    <h3> A brief summary of {{this.config.application.name}} since your last visit on last week </h3>\r\n    {% for post in posts %}\r\n        <p><a class="title" href="{{ post[''link''] }}"> {{ post[''title''] }}</a></p>\r\n\r\n        <p> {{ post[''content'']}} <a class="read-more" href="{{ post[''link''] }}">Read more</a></p>\r\n\r\n        <hr style="border: 1px solid #dadada">\r\n    {% endfor %}\r\n    <p class="footer">\r\n        &mdash;<br>Reply to this email directly or view the complete thread on\r\n        <a href="{{ post[''link''] }}">{{ this.config.application.name }}</a>\r\n        Change your e-mail preferences <a href="{{this.config.application.publicUrl}}/settings">here</a>\r\n    </p>\r\n\r\n</body></html>\r\n<style type="text/css">\r\n    h1 {\r\n        font-size:22px;\r\n        color:#333;letter-spacing:-0.5px;\r\n        line-height:1.25;\r\n        font-weight:normal;\r\n        padding:16px 0;\r\n        border-bottom:1px solid #e2e2e2\r\n    }\r\n    a.title {\r\n        text-decoration:none;\r\n        display:block;font-size:20px;\r\n        color:#333;letter-spacing:-0.5px;\r\n        line-height:1.25;\r\n        font-weight:normal;\r\n        color:#155fad\r\n    }\r\n    p.footer {\r\n        font-size:small;\r\n        -webkit-text-size-adjust:none;\r\n        color:#717171;\r\n    }\r\n    a.read-more{\r\n        color:#155fad;\r\n    }\r\n\r\n</style>\r\n');
 
 -- --------------------------------------------------------
 
@@ -948,7 +951,7 @@ ALTER TABLE `subscribe`
 -- AUTO_INCREMENT for table `successLogins`
 --
 ALTER TABLE `successLogins`
-  MODIFY `id` int(15) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=45;
+  MODIFY `id` int(15) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=47;
 --
 -- AUTO_INCREMENT for table `tags`
 --
@@ -958,7 +961,7 @@ ALTER TABLE `tags`
 -- AUTO_INCREMENT for table `template`
 --
 ALTER TABLE `template`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `users`
 --
