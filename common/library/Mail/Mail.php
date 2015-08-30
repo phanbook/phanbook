@@ -63,6 +63,7 @@ class Mail extends Component
     {
         $body = $this->getTemplate($templateKey, $params);
         if (!$body) {
+            d('You need to create templates email in database');
             return false;
         }
 
