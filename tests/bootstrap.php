@@ -44,8 +44,8 @@ $di = new FactoryDefault();
  * Register the configuration itself as a service
  */
 $config = include ROOT_DIR .'/common/config/config.php';
-if (file_exists(__DIR__ . '/config.' . APPLICATION_ENV . '.php')) {
-    $overrideConfig = include __DIR__ . '/config.' . APPLICATION_ENV . '.php';
+if (file_exists(ROOT_DIR . '/common/config/config.' . APPLICATION_ENV . '.php')) {
+    $overrideConfig = include ROOT_DIR . '/common/config/config.' . APPLICATION_ENV . '.php';
     $config->merge($overrideConfig);
 }
 $di->set('config', $config, true);
@@ -341,19 +341,17 @@ if( !function_exists('t') ){
 }
 
 //Phalcon Debugger
-if ($config->application->debug) {
-    (new \Phalcon\Debug)->listen();
+(new \Phalcon\Debug)->listen();
 
-    if (!function_exists('d')) {
-        function d($object, $kill = true)
-        {
-            echo '<pre style="text-aling:left">';
-            print_r($object);
-            if ($kill) {
-                die('END');
-            }
-            echo '</pre>';
+if (!function_exists('d')) {
+    function d($object, $kill = true)
+    {
+        echo '<pre style="text-aling:left">';
+        print_r($object);
+        if ($kill) {
+            die('END');
         }
+        echo '</pre>';
     }
 }
 
