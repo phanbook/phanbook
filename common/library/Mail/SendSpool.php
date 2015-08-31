@@ -71,7 +71,7 @@ class SendSpool extends Injectable
                         'name' => $user->getInforUser(),
                         'link' => $link,
                         'subject' => $sitename,
-                        'content' => $content
+                        'content' => strip_tags($content)
                     ];
                     if (!$this->mail->send($to, 'sendspool', $params)) {
                         var_dump('false');
