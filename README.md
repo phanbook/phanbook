@@ -45,7 +45,7 @@ We want Phanbook to be the most powerful forum software out there, and we have a
 
   ```sh
   git clone --depth=1 https://github.com/phanbook/phanbook.git
-  chmod +x phanbook && ./phanbook up
+  cd phanbook && chmod +x phanbook && ./phanbook up
   ```
 
 3. Add an entry to your /etc/hosts file:
@@ -55,13 +55,12 @@ We want Phanbook to be the most powerful forum software out there, and we have a
 4. Visit phanbook.dev or 192.168.33.34 in a browser. To get full information how to setup that can see [here](https://github.com/phanbook/docs/blob/master/install.md)
 
 ## Docker
-To play Phanbook with Docker you just do follow command below:
+To play Phanbook with Docker you just do follow a command below:
 
 ```
-chmod +x phanbook
 ./phanbook docker #it will use default password is phanbook
 ```
-Visit 127.0.0.1 in a browser. If you use windown see more [here](https://github.com/phanbook/docs/blob/master/install.md)
+Visit 127.0.0.1 in a browser. If you use windown Os see more [here](https://github.com/phanbook/docs/blob/master/install.md)
 
 ## Default we have setup a user with:
 - Username: admin
