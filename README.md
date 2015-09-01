@@ -78,7 +78,7 @@ Before contributing to Phanbook:
 
 1. Please read the complete mission statements on phanbook.com. Yes we actually believe this stuff; you should too.
 2. Read and sign the Electronic Phanbook Forums Contribution License Agreement.
-3. Dig into [CONTRIBUTING.MD](https://github.com/phanbook/phanbook/blob/master/CONTRIBUTING.md)!, which covers submitting bugs, requesting new features, preparing your code for a pull request, etc.
+3. Dig into [CONTRIBUTING.md](https://github.com/phanbook/phanbook/blob/master/docs/CONTRIBUTING.md)!, which covers submitting bugs, requesting new features, preparing your code for a pull request, etc.
 4. Not sure what to work on? We've got some ideas.
 5. Please note that bug reports should go in [phanbook/phanbook](https://github.com/phanbook/phanbook/issues) or the [relevant extension repository](https://github.com/phanbook).
 
