@@ -11,7 +11,7 @@
 
 ## Build Status and Join chats us:
 
-[![Build Status](https://travis-ci.org/phanbook/phanbook.svg?branch=master)](https://travis-ci.org/phanbook/phanbook) [![Salck](https://img.shields.io/badge/slack-join%20chat%20%E2%86%92-brightgreen.svg?style=flat-square)](http://chat.phalcontip.com)
+[![Build Status](https://travis-ci.org/phanbook/phanbook.svg?branch=master)](https://travis-ci.org/phanbook/phanbook) [![Slack](https://img.shields.io/badge/slack-join%20chat%20%E2%86%92-brightgreen.svg?style=flat-square)](http://chat.phalcontip.com)
 
 ## Goals
 
@@ -25,7 +25,7 @@
 
 We want Phanbook to be the most powerful forum software out there, and we have a huge list of ideas that we want to implement. It will take time, but Phanbook’s flexible plugin system will mean we can release early and often. Here’s a snapshot of what we’ll be working on first:
 
-- Mutiple Theme
+- Multiple Theme
 - Spam Blocking
 - Markdown and rich text editing support
 - Powerful search with Elasticsearch
@@ -60,7 +60,7 @@ To play Phanbook with Docker you just do follow a command below:
 ```
 ./phanbook docker #it will use default password is phanbook
 ```
-Visit 127.0.0.1 in a browser. If you use windown Os see more [here](https://github.com/phanbook/docs/blob/master/install.md)
+Visit 127.0.0.1 in a browser. If you use Windows see more [here](https://github.com/phanbook/docs/blob/master/install.md)
 
 ## Default we have setup a user with:
 - Username: admin
@@ -78,7 +78,7 @@ Before contributing to Phanbook:
 
 1. Please read the complete mission statements on phanbook.com. Yes we actually believe this stuff; you should too.
 2. Read and sign the Electronic Phanbook Forums Contribution License Agreement.
-3. Dig into [CONTRIBUTING.MD](https://github.com/phanbook/phanbook/blob/master/CONTRIBUTING.md)!, which covers submitting bugs, requesting new features, preparing your code for a pull request, etc.
+3. Dig into [CONTRIBUTING.md](https://github.com/phanbook/phanbook/blob/master/docs/CONTRIBUTING.md)!, which covers submitting bugs, requesting new features, preparing your code for a pull request, etc.
 4. Not sure what to work on? We've got some ideas.
 5. Please note that bug reports should go in [phanbook/phanbook](https://github.com/phanbook/phanbook/issues) or the [relevant extension repository](https://github.com/phanbook).
 
