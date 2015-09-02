@@ -19,13 +19,15 @@ use Phalcon\DI\FactoryDefault;
 use Phalcon\Http\Response\Cookies;
 use Phalcon\Mvc\Collection\Manager;
 use Phalcon\Cache\Frontend\Data;
+use Phalcon\Cache\Frontend\None as FrontendNone;
+use Phalcon\Cache\Frontend\Output as FrontendOutput;
 use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Cache\Backend\Memcache;
+use Phalcon\Cache\Backend\Memory as MemoryBackend;
+use Phalcon\Cache\Backend\File as FileCache;
 use Phalcon\Mvc\Url as UrlResolver;
 use Phalcon\Translate\Adapter\Gettext;
-use Phalcon\Cache\Backend\Libmemcached;
 use Phalcon\Mvc\Model\Manager as ModelsManager;
-use Phalcon\Session\Adapter\Files as SessionAdapter;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\View\Engine\Volt;
@@ -58,7 +60,8 @@ if (file_exists(__DIR__ . '/config.' . APPLICATION_ENV . '.php')) {
 }
 
 $di->set('config', $config, true);
-//setup timezone
+
+// setup timezone
 date_default_timezone_set($di->get('config')->application->timezone ?: 'UTC');
 
 /**
@@ -128,21 +131,16 @@ $di->set(
     function () use ($di) {
         $config = $di->get('config');
         if ($config->application->debug) {
-            $frontCache = new FrontendNone();
-            return new MemoryBackend($frontCache);
+            return new MemoryBackend(new FrontendNone());
         } else {
-            //Cache data for one day by default
-            $frontCache = new FrontendOutput(
-                array(
-                "lifetime" => $config->cache->lifetime
-                )
-            );
+            // Cache data for one day by default
+            $frontCache = new FrontendOutput(['lifetime' => $config->cache->lifetime]);
             return new FileCache(
                 $frontCache,
-                array(
-                "cacheDir" => $config->cache->cacheDir,
-                "prefix"   => $config->cache->prefix
-                )
+                [
+                    'cacheDir' => $config->cache->cacheDir,
+                    'prefix'   => $config->cache->prefix
+                ]
             );
         }
     }
@@ -201,11 +199,12 @@ $di->set(
     'flashSession',
     function () {
         $flash = new Session(
-            array(
-            'error'   => 'alert alert-danger',
-            'success' => 'alert alert-success',
-            'notice'  => 'alert alert-info',
-            )
+            [
+                'error'   => 'alert alert-danger',
+                'success' => 'alert alert-success',
+                'notice'  => 'alert alert-info',
+                'warning' => 'alert alert-warning'
+            ]
         );
 
         return $flash;
@@ -218,14 +217,14 @@ $di->set(
     function () use ($di) {
         return new Mysql(
             [
-            'host'     => $di->get('config')->database->mysql->host,
-            'username' => $di->get('config')->database->mysql->username,
-            'password' => $di->get('config')->database->mysql->password,
-            'dbname'   => $di->get('config')->database->mysql->dbname,
-            //'schema'   => $di->get('config')->database->mysql->schema,
-            'options'  => array(
-                \PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES ' . $di->get('config')->database->mysql->charset
-            )
+                'host'     => $di->get('config')->database->mysql->host,
+                'username' => $di->get('config')->database->mysql->username,
+                'password' => $di->get('config')->database->mysql->password,
+                'dbname'   => $di->get('config')->database->mysql->dbname,
+                //'schema'   => $di->get('config')->database->mysql->schema,
+                'options'  => [
+                    \PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES ' . $di->get('config')->database->mysql->charset
+                ]
             ]
         );
     },
@@ -269,21 +268,16 @@ $di->set(
 $di->set(
     'modelsCache',
     function () {
+        // Cache data for one day by default
+        $frontCache = new Data(['lifetime' => 86400]);
 
-        //Cache data for one day by default
-        $frontCache = new Data(
-            array(
-            "lifetime" => 86400
-            )
-        );
-
-        //Memcached connection settings
+        // Memcached connection settings
         $cache = new Memcache(
             $frontCache,
-            array(
-            "host" => "localhost",
-            "port" => "11211"
-            )
+            [
+                'host' => 'localhost',
+                'port' => 11211
+            ]
         );
 
         return $cache;
@@ -383,11 +377,8 @@ if ($config->application->debug) {
 
     function d($object, $kill = true)
     {
-        echo '<pre style="text-aling:left">';
-        print_r($object);
-        if ($kill) {
-            die('END');
-        }
-        echo '</pre>';
+        echo '<pre style="text-aling:left">', print_r($object, true), '</pre>';
+
+        $kill && exit(1);
     }
 }
