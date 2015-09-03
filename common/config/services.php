@@ -17,18 +17,18 @@ use Phalcon\Mvc\Router;
 use Phalcon\Flash\Session;
 use Phalcon\DI\FactoryDefault;
 use Phalcon\Http\Response\Cookies;
-use Phalcon\Mvc\Collection\Manager;
+use Phalcon\Mvc\Collection\Manager     as CollectionManager;
 use Phalcon\Cache\Frontend\Data;
-use Phalcon\Cache\Frontend\None as FrontendNone;
-use Phalcon\Cache\Frontend\Output as FrontendOutput;
+use Phalcon\Cache\Frontend\None        as FrontendNone;
+use Phalcon\Cache\Frontend\Output      as FrontendOutput;
 use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Cache\Backend\Memcache;
-use Phalcon\Cache\Backend\Memory as MemoryBackend;
-use Phalcon\Cache\Backend\File as FileCache;
-use Phalcon\Mvc\Url as UrlResolver;
+use Phalcon\Cache\Backend\Memory       as MemoryBackend;
+use Phalcon\Cache\Backend\File         as FileCache;
+use Phalcon\Mvc\Url                    as UrlResolver;
 use Phalcon\Translate\Adapter\Gettext;
-use Phalcon\Mvc\Model\Manager as ModelsManager;
-use Phalcon\Events\Manager as EventsManager;
+use Phalcon\Mvc\Model\Manager          as ModelsManager;
+use Phalcon\Events\Manager             as EventsManager;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\View\Engine\Volt;
 use Phalcon\Queue\Beanstalk;
@@ -38,9 +38,9 @@ use Phanbook\Auth\Auth;
 use Phanbook\Mvc\View;
 use Phanbook\Queue\DummyServer;
 use Phanbook\Markdown\ParsedownExtra;
-use Phanbook\Plugins\Security as SecurityPlugin;
-use Phanbook\Plugins\NotFound as NotFoundPlugin;
-use Phanbook\Notifications\Checker as NotificationsChecker;
+use Phanbook\Plugins\Security          as SecurityPlugin;
+use Phanbook\Plugins\NotFound          as NotFoundPlugin;
+use Phanbook\Notifications\Checker     as NotificationsChecker;
 
 require ROOT_DIR .'common/View.php';
 
@@ -48,6 +48,9 @@ require ROOT_DIR .'common/View.php';
  * The FactoryDefault Dependency Injector automatically register the right services providing a full stack framework
  */
 $di = new FactoryDefault();
+
+// Create an event manager
+$eventsManager = new EventsManager();
 
 /**
  * Register the configuration itself as a service
@@ -112,20 +115,26 @@ $di->set(
  * This service controls the initialization of models, keeping record of relations
  * between the different models of the application.
  */
-$di->set(
+$di->setShared(
     'collectionManager',
-    function () {
-        return new Manager();
+    function () use ($eventsManager) {
+        $collectionManager = new CollectionManager();
+        $collectionManager->setEventsManager($eventsManager);
+
+        return $collectionManager;
     }
 );
-$di->set(
+$di->setShared(
     'modelsManager',
-    function () {
-        return new ModelsManager();
+    function () use ($eventsManager) {
+        $modelsManager = new ModelsManager();
+        $modelsManager->setEventsManager($eventsManager);
+
+        return $modelsManager;
     }
 );
 
-//Set the views cache service
+// Set the views cache service
 $di->set(
     'viewCache',
     function () use ($di) {
@@ -150,7 +159,7 @@ $di->set(
 //  Setting up the view component
 $di->set(
     'view',
-    function () use ($di) {
+    function () use ($di, $eventsManager) {
         $config = $di->get('config');
         $view = new View($config->toArray());
         $view->setViewsDir($config->application->view->viewsDir);
@@ -173,9 +182,6 @@ $di->set(
                 }
             ]
         );
-
-        // Create an event manager
-        $eventsManager = new EventsManager();
 
         // Attach a listener for type 'view'
         $eventsManager->attach(

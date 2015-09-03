@@ -45,8 +45,9 @@ try {
     $application->setDI($di);
 
     /**
-     * Include modules
+     * Sets the event manager
      */
+    $application->setEventsManager($eventsManager);
 
     echo $application->handle()->getContent();
 
