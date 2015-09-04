@@ -161,6 +161,7 @@ class ControllerAdminBase extends Controller
                 ->addJs('//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js', false)
                 ->addJs('backend/js/growl/jquery.growl.js')
                 ->addJs('backend/js/jquery.taginput.src.js')
+                ->addJs('backend/js/chosen/chosen.jquery.min.js')
                 ->addJs('backend/js/app.js')
                 ->addJs('backend/js/app.plugin-custom.js');
         } else {
@@ -177,6 +178,7 @@ class ControllerAdminBase extends Controller
                 ->addJs('//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js', false)
                 ->addJs('backend/js/growl/jquery.growl.js')
                 ->addJs('backend/js/jquery.taginput.src.js')
+                ->addJs('backend/js/chosen/chosen.jquery.min.js')
                 ->addJs('backend/js/app.js')
                 ->addJs('backend/js/app.plugin-custom.js');
         }
@@ -439,8 +441,9 @@ class ControllerAdminBase extends Controller
         }
 
         $this->view->disable();
+        $model = str_replace('admin', '', $this->router->getControllerName());
 
-        $class = 'Phanbook\Models\\' . ucfirst($this->router->getControllerName());
+        $class = 'Phanbook\Models\\' . ucfirst($model);
 
         if (!class_exists($class)) {
             return false;
@@ -590,9 +593,7 @@ class ControllerAdminBase extends Controller
         }
 
         $this->assets->addCss('backend/js/chosen/chosen.css');
-        $this->assets->addJs('backend/js/chosen/chosen.jquery.min.js')
-            ->addJs('backend/js/datatables/jquery.dataTables.min.js')
-            ->addJs('js/app.plugin-custom.js');
+        $this->assets->addJs('backend/js/datatables/jquery.dataTables.min.js');
 
         $paginator = new Paginator(
             [
