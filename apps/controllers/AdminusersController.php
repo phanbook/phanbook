@@ -12,6 +12,7 @@
  */
 namespace Phanbook\Controllers;
 
+use Phalcon\Mvc\View;
 use Phanbook\Models\Users;
 
 /**

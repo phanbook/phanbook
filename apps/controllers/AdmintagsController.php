@@ -12,6 +12,7 @@
  */
 namespace Phanbook\Controllers;
 
+use Phalcon\Mvc\View;
 use Phanbook\Forms\TagsForm;
 use Phanbook\Models\Tags;
 
@@ -70,7 +71,7 @@ class AdmintagsController extends ControllerAdminBase
         $this->tag->setTitle(t('List all tags'));
         if ($this->request->isAjax()) {
             $this->view->setRenderLevel(View::LEVEL_ACTION_VIEW);
-            $this->view->pick('partials/grid-admin');
+            $this->view->pick('partials/admin-grid');
         }
     }
 
