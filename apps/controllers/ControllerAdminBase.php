@@ -30,7 +30,7 @@ class ControllerAdminBase extends Controller
         ['controller' => 'admin'],
         ['controller' => 'template'],
         ['controller' => 'adminconfiguration'],
-        ['controller' => 'adminsticky'],
+        ['controller' => 'adminposts'],
         ['controller' => 'adminsetting'],
         ['controller' => 'adminpages'],
         ['controller' => 'adminusers'],

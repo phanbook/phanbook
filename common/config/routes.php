@@ -426,7 +426,14 @@ $router->add(
 $router->add(
     '/adminsticky',
     [
-    'controller' => 'adminsticky',
+    'controller' => 'adminposts',
+    'action'     => 'index'
+    ]
+);
+$router->add(
+    '/adminposts',
+    [
+    'controller' => 'adminposts',
     'action'     => 'index'
     ]
 );
