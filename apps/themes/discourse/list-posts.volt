@@ -71,7 +71,7 @@
                         {% if post.getSticked() == "Y" %}
                             <a href="" class="pushpin"><span class="icon-pushpin"></span>&nbsp;</a>
                         {% endif %}
-                        <a href="{{postLink}}" class="question-hyperlink">
+                        <a href="/{{postLink}}" class="question-hyperlink">
                         {{post.getTitle()}}
                         {% if post.getAcceptedAnswer() == "Y"%}
                             &nbsp;<span class="label label-success">SOLVED</span>

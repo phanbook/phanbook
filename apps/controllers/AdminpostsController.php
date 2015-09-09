@@ -19,7 +19,7 @@ use Phanbook\Models\Posts;
 /**
  * Class IndexController
  */
-class AdminstickyController extends ControllerAdminBase
+class AdminpostsController extends ControllerAdminBase
 {
     /**
      * Initiate grid
