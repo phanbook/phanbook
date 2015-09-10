@@ -116,4 +116,25 @@ class ZFunction
         }
         return strlen($str);
     }
+    /**
+     * Create a file in your project
+     *
+     * @param  string $file This full path file you want to created
+     * @return mixed|bool
+     */
+    public static function makeFile($file)
+    {
+        if (!file_exists($file)) {
+            if (!touch($file)) {
+                $message = "<p>You need to set permission for it, just add chmod
+                or chown in directory config, Also you can create file {$file} for that</p>";
+                $message .= "<code> chown -R nginx:nginx -R common/config</code>";
+                $message .= "or#<code> chown -R apache:apache -R common/config</code>";
+
+                throw new \Exception($message, 1);
+            }
+            return false;
+        }
+        return true;
+    }
 }

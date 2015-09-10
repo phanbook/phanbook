@@ -41,6 +41,10 @@ return new \Phalcon\Config(
              * The site name, you should change it to your name website
              */
             'name'                => 'Phanbook',
+            /**
+             * In a few words, explain what this site is about.
+             */
+            'tagline'             => 'A Q&A, Discussion PHP platform',
             'publicUrl'           => 'http://phanbook.com',
             /**
              * Change timezone if you want to it

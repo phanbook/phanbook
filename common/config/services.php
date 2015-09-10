@@ -61,6 +61,11 @@ if (file_exists(__DIR__ . '/config.' . APPLICATION_ENV . '.php')) {
     $overrideConfig = include __DIR__ . '/config.' . APPLICATION_ENV . '.php';
     $config->merge($overrideConfig);
 }
+//It crreated when save in admin dashboard
+if (file_exists(__DIR__ . '/options.php')) {
+    $overrideConfig = include __DIR__ . '/options.php';
+    $config->merge($overrideConfig);
+}
 
 $di->set('config', $config, true);
 

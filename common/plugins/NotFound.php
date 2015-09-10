@@ -34,7 +34,22 @@ class NotFound extends Plugin
      */
     public function beforeException(Event $event, MvcDispatcher $dispatcher, $exception)
     {
-        //controller or action doesn't exist
-        //d('Eception todo laster');
+        $object = $event->getData();
+        $this->view->setVar('message', $object->getMessage());
+        switch ($exception->getCode()) {
+            case Dispatcher::EXCEPTION_HANDLER_NOT_FOUND:
+            case Dispatcher::EXCEPTION_ACTION_NOT_FOUND:
+                $dispatcher->forward(array(
+                    'controller' => 'error',
+                    'action' => 'show404'
+                ));
+                return false;
+            case Dispatcher::EXCEPTION_CYCLIC_ROUTING:
+                $dispatcher->forward([
+                    'controller' => 'errors',
+                    'action' => 'reports',
+                ]);
+                return false;
+        }
     }
 }

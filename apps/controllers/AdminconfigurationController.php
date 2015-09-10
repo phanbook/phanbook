@@ -13,7 +13,7 @@
 namespace Phanbook\Controllers;
 
 use Phanbook\Models\Configuration;
-use Phanbook\Forms\ConfigurationForm;
+use Phanbook\Forms\ConfigurationsForm;
 use Phalcon\Mvc\View;
 
 /**
@@ -21,188 +21,48 @@ use Phalcon\Mvc\View;
  */
 class AdminconfigurationController extends ControllerAdminBase
 {
-    /**
-     * Initiate grid
-     */
-    protected static function setGrid()
-    {
-        parent::$grid = [
-            'grid'    =>
-                [
-                    'id'           => [
-                        'title'  => t('Id'),
-                        'order'  => true,
-                        'filter' => ['type' => 'input', 'sanitize' => 'int', 'style' => 'width: 60px;']
-                    ],
-                    'key'          => [
-                        'title'  => t('Key'),
-                        'order'  => true,
-                        'filter' => ['type' => 'input', 'sanitize' => 'string', 'style' => '']
-                    ],
-                    'type'         => [
-                        'title'  => t('Type'),
-                        'order'  => true,
-                        'filter' => [
-                            'type'     => 'select',
-                            'sanitize' => 'int',
-                            'using'    => null,
-                            'values'   => Configuration::getTypesWithLabels(),
-                            'style'    => 'width: 100px;'
-                        ]
-                    ],
-                    'value'        => [
-                        'title'  => t('Value'),
-                        'filter' => ['type' => 'input', 'sanitize' => 'number', 'style' => 'width : 90px;']
-                    ],
-                    'caption'      => [
-                        'title'          => t('Caption'),
-                        'filter'         => ['type' => 'input', 'sanitize' => 'string', 'style' => ''],
-                        'display_filter' => 'truncate'
-                    ],
-                    'null'         => ['title' => t('Actions')]
-                ],
-                // 'query'   => [
-                //     'columns' => [
-                //         'a.id',
-                //         'a.key',
-                //         'a.type',
-                //         'a.value',
-                //         'a.caption',
-                //         'o.name as organization'
-                //     ],
-                //     'joins'   => [
-                //         [
-                //             'type'  => 'leftJoin',
-                //             'model' => 'Phanbook\Models\Organization',
-                //             'on'    => 'a.idOrganization = o.id',
-                //             'alias' => 'o'
-                //         ]
-                //     ],
-                //     'groupBy' => 'a.id'
-                // ],
-                'actions' => [
-                'delete' => ['title' => t('Delete selected'), 'class' => 'btn btn-sm btn-danger']
-                ]
-        ];
-    }
 
     /**
      * indexAction function.
      *
-     * @access public
-     * @return void
+     * @return mixed
      */
     public function indexAction()
     {
-        if (empty(parent::$grid)) {
-            self::setGrid();
-        }
-
-        $this->renderGrid('Phanbook\Models\Configuration');
-        $this->view->setVars(['grid' => parent::$grid]);
-
-        if ($this->request->isAjax()) {
-            $this->view->setRenderLevel(View::LEVEL_ACTION_VIEW);
-            $this->view->pick('partials/grid');
-        }
+        $this->tag->setTitle(t('General Settings'));
+        $this->view->form = new ConfigurationsForm();
     }
-
-    public function gridAction()
-    {
-        if (empty(parent::$grid)) {
-            self::setGrid();
-        }
-
-        if ($this->request->getPost('action') && array_key_exists(
-            $this->request->getPost('action'),
-            $this->gridActions
-        )
-        ) {
-            $ids    = $this->request->getPost('checkboxes');
-            $method = $this->gridActions[$this->request->getPost('action')];
-            $this->view->disable();
-
-            return $this->$method($ids);
-        }
-
-        return parent::gridAction();
-    }
-
     /**
-     * Method editAction
+     * Make data configuration to file options.php inside directory config
+     *
+     * @return mixed
      */
-    public function editAction($id)
+    public function saveGeneralAction()
     {
-        if (!$object = Configuration::findFirstById($id)) {
-            $this->flashSession->error(t('Configuration doesn\'t exist.'));
-
-            return $this->response->redirect('configuration');
-        }
-
-        $this->assets->addCss('js/chosen/chosen.css');
-        $this->assets->addJs('js/chosen/chosen.jquery.min.js');
-
-        $this->view->configurationForm = new ConfigurationForm($object);
-        $this->view->object            = $object;
-        $this->view->pick($this->router->getControllerName() . '/item');
-    }
-
-    public function saveAction()
-    {
-        //  Is not $_POST
+        //Is not $_POST
         if (!$this->request->isPost()) {
-            $this->view->disable();
-
-            return $this->response->redirect($this->router->getControllerName());
+            return $this->currentRedirect();
         }
+        $filename = ROOT_DIR . 'common/config/options.php';
+        $makeFile = \Phanbook\Tools\ZFunction::makeFile($filename);
+        if ($makeFile) {
+            $name       = $this->request->getPost('name');
+            $tagline    = $this->request->getPost('tagline');
+            $publicUrl  = $this->request->getPost('publicUrl');
 
-        $id = $this->request->getPost('id', 'int', null);
-
-        if (!empty($id)) {
-            $object = Configuration::findFirstById($id);
-        } else {
-            $object = new Configuration();
-        }
-
-        $form = new ConfigurationForm($object);
-        $form->bind($_POST, $object);
-
-        //  Form isn't valid
-        if (!$form->isValid($this->request->getPost())) {
-            foreach ($form->getMessages() as $message) {
-                $this->flashSession->error($message->getMessage());
+            $data = "<?php return new \Phalcon\Config([
+                'application' => [
+                    'name'      => '{$name}',
+                    'tagline'   => '{$tagline}',
+                    'publicUrl' => '{$publicUrl}'
+                ],
+            ]);";
+            if (!file_put_contents($filename, $data)) {
+                throw new Exception("Data was not saved", 1);
             }
-
-            // Redirect to edit form if we have an ID in page, otherwise redirect to add a new item page
-            return $this->response->redirect(
-                $this->router->getControllerName() . (!is_null($id) ? '/edit/' . $id : '/new')
-            );
-        } else {
-            if (!$object->save()) {
-                foreach ($object->getMessages() as $message) {
-                    $this->flashSession->error($message->getMessage());
-                }
-
-                return $this->dispatcher->forward(
-                    ['controller' => $this->router->getControllerName(), 'action' => 'new']
-                );
-            } else {
-                $this->flashSession->success(t('Data was successfully saved'));
-
-                return $this->response->redirect($this->router->getControllerName());
-            }
+            $this->flashSession->success(t('Data was successfully deleted'));
+            return $this->currentRedirect();
         }
-    }
-
-    /**
-     * Add new configuration
-     */
-    public function newAction()
-    {
-        $this->assets->addCss('js/chosen/chosen.css');
-        $this->assets->addJs('js/chosen/chosen.jquery.min.js');
-
-        $this->view->configurationForm = new ConfigurationForm();
-        $this->view->pick($this->router->getControllerName() . '/item');
+        return $this->currentRedirect();
     }
 }
