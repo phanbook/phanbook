@@ -22,40 +22,21 @@ use Phalcon\Mvc\View;
 class AdminconfigurationController extends ControllerAdminBase
 {
 
-
     /**
      * indexAction function.
      *
-     * @access public
-     * @return void
+     * @return mixed
      */
     public function indexAction()
     {
         $this->tag->setTitle(t('General Settings'));
         $this->view->form = new ConfigurationsForm();
     }
-
-
-
     /**
-     * Method editAction
+     * Make data configuration to file options.php inside directory config
+     *
+     * @return mixed
      */
-    public function editAction($id)
-    {
-        if (!$object = Configuration::findFirstById($id)) {
-            $this->flashSession->error(t('Configuration doesn\'t exist.'));
-
-            return $this->response->redirect('configuration');
-        }
-
-        $this->assets->addCss('js/chosen/chosen.css');
-        $this->assets->addJs('js/chosen/chosen.jquery.min.js');
-
-        $this->view->configurationForm = new ConfigurationForm($object);
-        $this->view->object            = $object;
-        $this->view->pick($this->router->getControllerName() . '/item');
-    }
-
     public function saveGeneralAction()
     {
         //Is not $_POST
@@ -76,25 +57,12 @@ class AdminconfigurationController extends ControllerAdminBase
                     'publicUrl' => '{$publicUrl}'
                 ],
             ]);";
-           if (!file_put_contents($filename, $data)) {
-
-           }
+            if (!file_put_contents($filename, $data)) {
+                throw new Exception("Data was not saved", 1);
+            }
             $this->flashSession->success(t('Data was successfully deleted'));
             return $this->currentRedirect();
         }
         return $this->currentRedirect();
-
-    }
-
-    /**
-     * Add new configuration
-     */
-    public function newAction()
-    {
-        $this->assets->addCss('js/chosen/chosen.css');
-        $this->assets->addJs('js/chosen/chosen.jquery.min.js');
-
-        $this->view->configurationForm = new ConfigurationForm();
-        $this->view->pick($this->router->getControllerName() . '/item');
     }
 }
