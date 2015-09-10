@@ -17,7 +17,7 @@ use Phalcon\Mvc\Controller;
 /**
  * Frontend Error Controller
  */
-class ErrorController extends Controller
+class ErrorsController extends Controller
 {
     public function indexAction()
     {
@@ -38,5 +38,9 @@ class ErrorController extends Controller
     {
         $this->response->setStatusCode(503, 'Site is Down for Maintenance');
         $this->view->pick('error/503');
+    }
+    public function reportsAction()
+    {
+        $this->tag->setTitle(t('Reports error'));
     }
 }

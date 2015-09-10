@@ -145,7 +145,7 @@ class PostsController extends ControllerBase
                 $totalBuilder->where($monthConditions);
                 break;
             default:
-                $this->tag->setTitle('Community Questions and Tips ');
+                $this->tag->setTitle($this->config->application->tagline);
         }
 
         $notDeleteConditions = 'p.deleted = 0';

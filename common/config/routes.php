@@ -438,17 +438,24 @@ $router->add(
     ]
 );
 $router->add(
-    '/adminconfiguration',
+    '/admin/config-general',
     [
-    'controller' => 'adminconfiguration',
-    'action'     => 'index'
+        'controller' => 'adminconfiguration',
+        'action'     => 'index'
     ]
 );
 $router->add(
-    '/adminsetting',
+    '/admin/save-general',
     [
-    'controller' => 'adminsetting',
-    'action'     => 'index'
+        'controller' => 'adminconfiguration',
+        'action'     => 'saveGeneral'
+    ]
+);
+$router->add(
+    '/admin/setting',
+    [
+        'controller' => 'adminsetting',
+        'action'     => 'index'
     ]
 );
 $router->add(

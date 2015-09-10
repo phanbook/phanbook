@@ -16,14 +16,21 @@
                         'adminsticky': 'Sticky posts',
                         'admintemplate': 'Template', 'adminsetting': 'Site Settings',
                         'adminpages': 'Pages', 'adminusers': 'Users',
-                        'admintags':'Tags','adminconfiguration': 'Configurations', 'admin/update': 'Update Phanbook'
+                        'admintags':'Tags','admin/config-general': 'Settings', 'admin/update': 'Update Phanbook'
                     ] %}
 
                     {% for controller, label  in menuItems %}
                         <ul class="nav nav-main" data-ride="collapse">
                             <li {% if this.view.getControllerName() == controller %}class="active"{% endif %}>
                                 {{ link_to(controller, 'class' : 'auto', '<i class="fa fa-bars"></i><span class="font-bold">' ~ label ~ '</span>') }}
+                                {% if controller == 'adminconfiguration'%}
+                                    <ul class="nav nav-second-level collapse">
+                                        <li class="phanbook-first-item">{{link_to('#' , t('General'))}}</li>
+                                        <li class="phanbook-first-item">{{link_to('#' , t('Media'))}}</li>
+                                    </ul>
+                                {% endif %}
                             </li>
+
                         </ul>
                     {% endfor %}
                     <div class="line dk hidden-nav-xs"></div>
