@@ -31,8 +31,8 @@ class AdminController extends ControllerAdminBase
     public function updateAction()
     {
         $this->tag->setTitle(t('Phanbook Updates'));
-        if ($this->gitUpdate()) {
-            $this->view->output = $this->gitUpdate();
+        if (ZFunction::gitUpdate()) {
+            $this->view->output = ZFunction::gitUpdate();
             $this->flashSession->success(t('Phanbook upgraded successfully'));
         }
     }

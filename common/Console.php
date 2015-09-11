@@ -127,16 +127,15 @@ class Console extends CLIConsole
     {
         $loader = new \Phalcon\Loader();
         $loader->registerNamespaces(
-            array(
-            'Phanbook\Models'       => ROOT_DIR.'/common/models/',
-            'Phanbook\Search'       => ROOT_DIR.'/common/library/Search/',
-            'Phanbook\Mail'         => ROOT_DIR.'/common/library/Mail/',
-            'Phanbook\Cli\Tasks'    => ROOT_DIR.'/apps/cli/tasks/',
-            'Phanbook\Databases'    => ROOT_DIR.'/databases/',
-            'Phanbook'              => ROOT_DIR.'/common/library/',
-
-
-            )
+            [
+                'Phanbook'              => ROOT_DIR . '/common/library/',
+                'Phanbook\Mail'         => ROOT_DIR . '/common/library/Mail/',
+                'Phanbook\Tools'        => ROOT_DIR . '/common/tools/',
+                'Phanbook\Models'       => ROOT_DIR . '/common/models/',
+                'Phanbook\Search'       => ROOT_DIR . '/common/library/Search/',
+                'Phanbook\Cli\Tasks'    => ROOT_DIR . '/apps/cli/tasks/',
+                'Phanbook\Databases'    => ROOT_DIR . '/databases/'
+            ]
         )->register();
     }
 
