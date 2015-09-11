@@ -16,7 +16,7 @@
                         'adminsticky': 'Sticky posts',
                         'admintemplate': 'Template', 'adminsetting': 'Site Settings',
                         'adminpages': 'Pages', 'adminusers': 'Users',
-                        'admintags':'Tags','adminconfiguration': 'Settings', 'admin/update': 'Update Phanbook'
+                        'admintags':'Tags','adminconfiguration': 'Settings', 'admin/update': 'Updates'
                     ] %}
 
                     {% for controller, label  in menuItems %}
