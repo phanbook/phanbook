@@ -49,7 +49,7 @@
                     </div>
                     {{ content()}}
                 </section>
-                <footer class="footer bg-white b-t b-light"><p>&copy; {{ this.config.application.name ~ date('Y') }}</p></footer>
+                {{ partial('partials/admin-footer') }}
             </section>
             {{ partial('partials/admin-right-side') }}
 

@@ -12,6 +12,8 @@
  */
 namespace Phanbook\Controllers;
 
+use Phanbook\Tools\ZFunction;
+
 /**
  * Class IndexController
  */
@@ -28,11 +30,10 @@ class AdminController extends ControllerAdminBase
      */
     public function updateAction()
     {
-        $this->view->disable();
-        $bool = shell_exec("cd ../ && php cli.php Update");
-        if ($bool) {
+        $this->tag->setTitle(t('Phanbook Updates'));
+        if (ZFunction::gitUpdate()) {
+            $this->view->output = ZFunction::gitUpdate();
             $this->flashSession->success(t('Phanbook upgraded successfully'));
-            return $this->response->redirect($this->router->getControllerName());
         }
     }
 }
