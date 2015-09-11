@@ -1,11 +1,10 @@
-
 {{content()}}
 <div class="m-b-md">
     <h3 class="m-b-none">{{ t('General Settings') }}</h3>
 </div>
 <div class="panel-body">
 
-{{ form('admin/save-general', 'class' : 'form-horizontal') }}
+{{ form('admin/settings/save-general', 'class' : 'form-horizontal') }}
     <div class="form-group">
         <label class="col-sm-2 control-label" for="name">{{ t('Site Title') }}:</label>
         <div class="col-sm-10">
