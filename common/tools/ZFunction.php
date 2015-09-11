@@ -158,7 +158,7 @@ class ZFunction
         );
         // Run the commands for output
         $output = '';
-        foreach($commands AS $command){
+        foreach ($commands as $command) {
             // Run it
             $tmp = shell_exec($command);
             // Output
