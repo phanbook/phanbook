@@ -113,9 +113,15 @@ class AdminsettingsController extends ControllerAdminBase
                     // $image->resize(200, 200)->crop(100, 100);
                     // $image->save('images/thumb.jpg');
                     if ($file->getRealType() == "image/x-icon") {
-                        $file->moveTo('uploads/'. $name .'.ico');
+                        $result = $file->moveTo('uploads/'. $name .'.ico');
                     } else {
-                        $file->moveTo('uploads/'. $name .'.png');
+                        $result = $file->moveTo('uploads/'. $name .'.png');
+                    }
+                    if (!$result) {
+                        $this->flashSession->error(
+                            t('Data was not saved, you need to change permisson for directory upload')
+                        );
+                        return $this->currentRedirect();
                     }
                     $this->flashSession->success(t('Data was successfully saved'));
                 } else {
@@ -123,7 +129,7 @@ class AdminsettingsController extends ControllerAdminBase
                 }
             }
         }
-        return $this->response->redirect('adminsetting');
+        return $this->currentRedirect();
     }
     /**
      * Render form create site
