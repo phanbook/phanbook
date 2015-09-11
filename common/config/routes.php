@@ -427,7 +427,14 @@ $router->add(
     '/admin/posts/sticky',
     [
         'controller' => 'adminposts',
-        'action'     => 'index'
+        'action'     => 'indexSticky'
+    ]
+);
+$router->add(
+    '/admin/posts/new-sticky',
+    [
+        'controller' => 'adminposts',
+        'action'     => 'newSticky'
     ]
 );
 $router->add(
@@ -435,6 +442,20 @@ $router->add(
     [
         'controller' => 'adminposts',
         'action'     => 'index'
+    ]
+);
+$router->add(
+    '/admin/posts/save-sticky',
+    [
+        'controller' => 'adminposts',
+        'action'     => 'saveSticky'
+    ]
+);
+$router->add(
+    '/admin/posts/edit-sticky/{id:[0-9]+}',
+    [
+        'controller' => 'adminposts',
+        'action'     => 'editSticky'
     ]
 );
 $router->add(

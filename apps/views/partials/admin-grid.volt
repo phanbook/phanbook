@@ -1,5 +1,6 @@
 <section class="panel panel-default" id="grid">
-    {{ form(this.view.getControllerName() | lower ~ '/grid', 'id' : 'form-grid') }}
+    {% set controller = this.view.getControllerName() | lower, action = this.view.getActionName()%}
+    {{ form( controller ~ '/grid', 'id' : 'form-grid') }}
     <div class="row wrapper">
         <div class="col-sm-5">
             {% if grid['actions'] is defined %}
@@ -11,7 +12,11 @@
             {% endif %}
         </div>
         <div class="col-sm-7">
-            {{ link_to(this.view.getControllerName() | lower ~ '/new', '<i class="fa fa-plus text"></i> Add new','class' : 'btn btn-sm btn-primary pull-right') }}
+                {% set url = controller ~ '/new' %}
+                {% if action == 'indexSticky'%}
+                    {% set url = 'admin/posts/new-sticky'%}
+                {% endif %}
+            {{ link_to( url, '<i class="fa fa-plus text"></i> Add new','class' : 'btn btn-sm btn-primary pull-right') }}
         </div>
     </div>
     <div class="table-responsive">
@@ -120,9 +125,14 @@
                     {% endfor %}
                     <!-- end content -->
                     <td class="text-center">
-                        {{ link_to(this.view.getControllerName() | lower ~ '/edit/' ~ row['id'], '<i class="fa fa-edit"></i>', 'title' : t('Edit entry'), 'data-toggle' : 'tooltip', 'data-placement' : 'bottom') }}
-                        &nbsp;
-                        {{ link_to(this.view.getControllerName() | lower ~ '/delete/' ~ row['id'], '<i class="fa fa-trash-o"></i>', 'title' : t('Delete entry'), 'data-toggle' : 'tooltip', 'data-placement' : 'bottom', 'onclick' : "return confirm('Are you sure you want to delete this entry?')") }}
+                        {% if controller == 'adminposts' and action == 'indexSticky'%}
+                            {{ link_to('admin/posts/edit-sticky/' ~ row['id'], '<i class="fa fa-edit"></i>', 'title' : t('Edit entry'), 'data-toggle' : 'tooltip', 'data-placement' : 'bottom') }}
+                            &nbsp;
+                        {% else %}
+                            {{ link_to(controller ~ '/edit/' ~ row['id'], '<i class="fa fa-edit"></i>', 'title' : t('Edit entry'), 'data-toggle' : 'tooltip', 'data-placement' : 'bottom') }}
+                            &nbsp;
+                        {% endif %}
+                        {{ link_to(controller ~ '/delete/' ~ row['id'], '<i class="fa fa-trash-o"></i>', 'title' : t('Delete entry'), 'data-toggle' : 'tooltip', 'data-placement' : 'bottom', 'onclick' : "return confirm('Are you sure you want to delete this entry?')") }}
                     </td>
                 </tr>
             {% endfor %}

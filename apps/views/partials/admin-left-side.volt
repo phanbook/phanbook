@@ -13,8 +13,8 @@
                         </li>
                     </ul>
                     {% set menuItems = [
+                        'pages': 'Pages', 'users': 'Users',
                         'posts': 'Posts', 'template': 'Templates',
-                        'pages': 'Pages', 'adminusers': 'Users',
                         'tags' : 'Tags', 'settings': 'Settings', 'update': 'Updates'
                     ] %}
 

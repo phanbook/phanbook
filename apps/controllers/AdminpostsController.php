@@ -74,6 +74,27 @@ class AdminpostsController extends ControllerAdminBase
 
         $this->renderGrid('Phanbook\Models\Posts');
         $this->view->setVars(['grid' => parent::$grid]);
+        $this->tag->setTitle(t('List posts'));
+
+        if ($this->request->isAjax()) {
+            $this->view->setRenderLevel(View::LEVEL_ACTION_VIEW);
+            $this->view->pick('partials/admin-grid');
+        }
+    }
+    /**
+     * indexAction function.
+     *
+     * @access public
+     * @return void
+     */
+    public function indexStickyAction()
+    {
+        if (empty(parent::$grid)) {
+            self::setGrid();
+        }
+
+        $this->renderGrid('Phanbook\Models\Posts');
+        $this->view->setVars(['grid' => parent::$grid]);
         $this->tag->setTitle(t('Sticky at top of lists'));
 
         if ($this->request->isAjax()) {
@@ -81,19 +102,37 @@ class AdminpostsController extends ControllerAdminBase
             $this->view->pick('partials/admin-grid');
         }
     }
-    public function newAction()
+    public function newStickyAction()
     {
         $this->view->form = new StickyForm;
         $this->tag->setTitle('Adding sticked');
-        $this->view->pick('adminsticky/item');
+        $this->view->pick($this->router->getControllerName() . '/itemSticky');
+    }
+    /**
+     * Create a new post
+     * @todo
+     *
+     * @return [type] [description]
+     */
+    public function newAction()
+    {
+        $this->view->form = new StickyForm;
+        $this->tag->setTitle('Adding post');
+        $this->view->pick($this->router->getControllerName() . '/item');
+    }
+    public function editAction()
+    {
+        //@todo
+        $this->view->disable();
     }
     /**
      * @param $id
      *
      * @return \Phalcon\Http\ResponseInterface
      */
-    public function editAction($id)
+    public function editStickyAction()
     {
+        $id = $this->dispatcher->getParam('id');
         if (!$object = Posts::findFirstById($id)) {
             $this->flashSession->error(t('Posts doesn\'t exist.'));
 
@@ -103,9 +142,9 @@ class AdminpostsController extends ControllerAdminBase
         $this->view->form   = new StickyForm($object);
         $this->view->object = $object;
 
-        return $this->view->pick($this->router->getControllerName() . '/item');
+        return $this->view->pick($this->router->getControllerName() . '/itemSticky');
     }
-    public function saveAction()
+    public function saveStickyAction()
     {
         if (!$this->request->isPost()) {
             $this->flashSession->error(t('Hack attempt!!!'));
@@ -123,6 +162,6 @@ class AdminpostsController extends ControllerAdminBase
             return false;
         }
         $this->flashSession->success(t('Data was successfully saved'));
-        return $this->response->redirect($this->router->getControllerName());
+        return $this->response->redirect('admin/posts/sticky');
     }
 }
