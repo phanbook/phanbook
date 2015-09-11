@@ -13,22 +13,32 @@
                         </li>
                     </ul>
                     {% set menuItems = [
-                        'adminsticky': 'Sticky posts',
-                        'admintemplate': 'Template', 'adminsetting': 'Site Settings',
-                        'adminpages': 'Pages', 'adminusers': 'Users',
-                        'admintags':'Tags','adminconfiguration': 'Settings', 'admin/update': 'Updates'
+                        'posts': 'Posts', 'template': 'Templates',
+                        'pages': 'Pages', 'adminusers': 'Users',
+                        'tags' : 'Tags', 'settings': 'Settings', 'admin/update': 'Updates'
                     ] %}
 
-                    {% for controller, label  in menuItems %}
+                    {% for key, label  in menuItems %}
                         <ul class="nav nav-main" data-ride="collapse">
-                            <li {% if this.view.getControllerName() == controller %}class="active"{% endif %}>
-                                {{ link_to(controller, 'class' : 'auto', '<i class="fa fa-bars"></i><span class="font-bold">' ~ label ~ '</span>') }}
-                                {% if this.view.getControllerName() == 'adminconfiguration'%}
+                            <li {% if controller == 'admin' ~ key %}class="active"{% endif %}>
+                                {{ link_to('admin/' ~ key,
+                                 'class' : 'auto', '<i class="fa fa-bars"></i><span class="font-bold">'
+                                 ~ label ~ '</span>')
+                                }}
+                                {% if controller == 'adminsettings'%}
                                     <ul class="nav nav-second-level collapse">
                                         <li class="phanbook-first-item">
-                                            {{link_to('admin/config-general' , t('General'))}}
+                                            {{link_to('admin/settings/general' , t('General'))}}
                                         </li>
-                                        <li>{{link_to('admin/config-media' , t('Media'))}}</li>
+                                        <li>
+                                            {{link_to('admin/settings/logo' , t('Change Logo'))}}
+                                        </li>
+                                        <li>{{link_to('#' , t('Change Media'))}}</li>
+                                    </ul>
+                                {% endif %}
+                                {% if controller == 'adminposts'%}
+                                    <ul class="nav nav-second-level collapse">
+                                        <li>{{link_to('admin/posts/sticky' , t('Sticky posts'))}}</li>
                                     </ul>
                                 {% endif %}
                             </li>

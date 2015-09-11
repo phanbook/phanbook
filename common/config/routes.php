@@ -417,98 +417,98 @@ $router->add(
     ]
 );
 $router->add(
-    '/admintemplate',
+    '/admin/template',
     [
         'controller' => 'template',
         'action'     => 'index'
     ]
 );
 $router->add(
-    '/adminsticky',
+    '/admin/posts/sticky',
     [
         'controller' => 'adminposts',
         'action'     => 'index'
     ]
 );
 $router->add(
-    '/adminposts',
+    '/admin/posts',
     [
         'controller' => 'adminposts',
         'action'     => 'index'
     ]
 );
 $router->add(
-    '/admin/config-general',
+    '/admin/settings',
     [
-        'controller' => 'adminconfiguration',
-        'action'     => 'index'
+        'controller' => 'adminsettings',
+        'action'     => 'general'
     ]
 );
 $router->add(
-    '/adminconfiguration',
+    '/admin/settings/general',
     [
-        'controller' => 'adminconfiguration',
-        'action'     => 'index'
+        'controller' => 'adminsettings',
+        'action'     => 'general'
     ]
 );
 $router->add(
-    '/admin/save-general',
+    '/admin/settings/save-general',
     [
-        'controller' => 'adminconfiguration',
+        'controller' => 'adminsettings',
         'action'     => 'saveGeneral'
     ]
 );
 $router->add(
-    '/admin/setting',
+    '/admin/settings/logo',
     [
-        'controller' => 'adminsetting',
+        'controller' => 'adminsettings',
         'action'     => 'index'
     ]
 );
 $router->add(
-    '/adminsetting/logo__frontend',
+    '/admin/settings/logo-frontend',
     [
-        'controller' => 'adminsetting',
+        'controller' => 'adminsettings',
         'action'     => 'logoFrontend'
     ]
 );
 $router->add(
-    '/adminsetting/logo__backend',
+    '/admin/settings/logo-backend',
     [
-        'controller' => 'adminsetting',
+        'controller' => 'adminsettings',
         'action'     => 'logoBackend'
     ]
 );
 $router->add(
-    '/adminsetting/logo__loginpage',
+    '/admin/settings/logo-loginpage',
     [
-        'controller' => 'adminsetting',
+        'controller' => 'adminsettings',
         'action'     => 'logoLogin'
     ]
 );
 $router->add(
-    '/adminsetting/logo__favicon',
+    '/admin/settings/logo-favicon',
     [
-        'controller' => 'adminsetting',
+        'controller' => 'adminsettings',
         'action'     => 'logoFavicon'
     ]
 );
 $router->add(
-    '/adminpages',
+    '/admin/pages',
     [
         'controller' => 'adminpages',
         'action'     => 'index'
     ]
 );
 $router->add(
-    '/adminusers',
+    '/admin/users',
     [
         'controller' => 'adminusers',
         'action'     => 'index'
     ]
 );
 $router->add(
-    '/admintags',
+    '/admin/tags',
     [
         'controller' => 'admintags',
         'action'     => 'index'

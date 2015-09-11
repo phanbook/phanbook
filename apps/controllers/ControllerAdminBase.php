@@ -29,13 +29,11 @@ class ControllerAdminBase extends Controller
     private $securedRoutes = [
         ['controller' => 'admin'],
         ['controller' => 'template'],
-        ['controller' => 'adminconfiguration'],
         ['controller' => 'adminposts'],
-        ['controller' => 'adminsetting'],
+        ['controller' => 'adminsettings'],
         ['controller' => 'adminpages'],
         ['controller' => 'adminusers'],
         ['controller' => 'admintags']
-
     ];
     /**
      * @var array
