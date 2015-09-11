@@ -44,8 +44,10 @@ class AdminconfigurationController extends ControllerAdminBase
             return $this->currentRedirect();
         }
         $filename = ROOT_DIR . 'common/config/options.php';
-        $makeFile = \Phanbook\Tools\ZFunction::makeFile($filename);
-        if ($makeFile) {
+        if (!file_exists($filename)) {
+            $makeFile = \Phanbook\Tools\ZFunction::makeFile($filename);
+        }
+        if (file_exists($filename)) {
             $name       = $this->request->getPost('name');
             $tagline    = $this->request->getPost('tagline');
             $publicUrl  = $this->request->getPost('publicUrl');
@@ -58,7 +60,7 @@ class AdminconfigurationController extends ControllerAdminBase
                 ],
             ]);";
             if (!file_put_contents($filename, $data)) {
-                throw new Exception("Data was not saved", 1);
+                throw new \Exception("Data was not saved", 1);
             }
             $this->flashSession->success(t('Data was successfully deleted'));
             return $this->currentRedirect();
