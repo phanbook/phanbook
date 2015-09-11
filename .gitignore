@@ -3,6 +3,7 @@ vendor/
 common/cache
 common/config/config.local.php
 common/config/config.php
+common/config/options.php
 apps/frontend/cache/volt/*
 tests/_output
 PayPal.log
