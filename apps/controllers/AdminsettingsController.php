@@ -15,7 +15,6 @@ namespace Phanbook\Controllers;
 use Phanbook\Forms\LogoForm;
 use Phanbook\Forms\ConfigurationsForm;
 
-
 /**
  * Class IndexController
  */
