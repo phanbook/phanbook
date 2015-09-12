@@ -207,3 +207,30 @@ $(document).on('click', '.btn-add',function(e){
         e.preventDefault();
     return false;
 });
+
+/**
+ *
+ * Action when click in menu left of Admin panel. 
+ *
+ */
+var DELAY = 500, clicks = 0, timer = null;
+$(document).on('click', '.admin-left-menu > li > a', function(e){
+    clicks++;  //count clicks
+    e.preventDefault();  //cancel system click event
+    if(clicks === 1) {
+
+        timer = setTimeout(function() {            
+            clicks = 0;             //after action performed, reset counter
+
+        }, DELAY);
+
+    } else {
+
+        clearTimeout(timer);    //prevent single-click action
+        clicks = 0;             //after action performed, reset counter
+        window.location = $(this).attr("href");
+    }
+
+});
+
+

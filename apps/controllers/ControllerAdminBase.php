@@ -74,6 +74,14 @@ class ControllerAdminBase extends Controller
      */
     public $currentOrder = null;
 
+    /**
+     *
+     * @var array
+     * This variable will hold content of menu struct. Include main menu and sub-menu
+     *
+     */
+
+    public $menuStruct = [];
 
     /**
      * Check if we need to throw a json respone. For ajax calls.
@@ -136,6 +144,73 @@ class ControllerAdminBase extends Controller
         $this->view->currentOrder = $this->currentOrder;
         $this->view->setTemplateBefore('admin');
         $this->loadDefaultAssets();
+
+        /*============================================
+        =            Set menu struct data            =
+        ============================================*/
+        
+        /**
+         *
+         * In every menu (include sub-menu), we must have 3 element in array:
+         * @param code : name of controller, action assigned in controller
+         * @param name : name to show to user
+         * @param sub  : sub menu. let empty array if this menu hasn't sub menu
+         *
+         */
+        
+
+        $this->menuStruct[] = array("code" => "pages",
+                                    "name" => "Pages",
+                                    "sub" => []
+                                    );
+        $this->menuStruct[] = array("code" => "users",
+                                    "name" => "Users",
+                                    "sub" => []
+                                    );
+        $this->menuStruct[] = array("code" => "posts",
+                                    "name" => "Posts",
+                                    "sub" => 
+                                        [
+                                            [
+                                                "code"  =>  "sticky",
+                                                "name"  =>  "Sticky posts",
+                                                "sub"   =>  []
+                                            ]
+                                        ]
+                                    );
+        $this->menuStruct[] = array("code" => "template",
+                                    "name" => "Templates",
+                                    "sub" => []
+                                    );
+        $this->menuStruct[] = array("code" => "tags",
+                                    "name" => "Tags",
+                                    "sub" => []
+                                    );
+        $this->menuStruct[] = array("code" => "settings",
+                                    "name" => "Settings",
+                                    "sub" => 
+                                        [
+                                            [
+                                                "code" => "general",
+                                                "name" => "General",
+                                                "sub"  => []
+                                            ],
+                                            [
+                                                "code" => "logo",
+                                                "name" => "Change Logo",
+                                                "sub"  => []
+                                            ]
+                                        ]
+                                    );
+        $this->menuStruct[] = array("code" => "update",
+                                    "name" => "Updates",
+                                    "sub" => array()
+                                    );
+        $this->view->menuStruct = $this->menuStruct;
+        
+        /*=====  End of Set menu struct data  ======*/
+        
+
     }
     /**
      * loadDefaultAssets function.

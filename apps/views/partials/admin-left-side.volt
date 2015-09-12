@@ -12,33 +12,21 @@
                             {{ link_to('dashboard', 'class' : 'auto', '<i class="i i-statistics icon"></i><span class="font-bold">Dashboard</span>') }}
                         </li>
                     </ul>
-                    {% set menuItems = [
-                        'pages': 'Pages', 'users': 'Users',
-                        'posts': 'Posts', 'template': 'Templates',
-                        'tags' : 'Tags', 'settings': 'Settings', 'update': 'Updates'
-                    ] %}
 
-                    {% for key, label  in menuItems %}
-                        <ul class="nav nav-main" data-ride="collapse">
-                            <li {% if controller == 'admin' ~ key %}class="active"{% endif %}>
-                                {{ link_to('admin/' ~ key,
+                    {% for menu in menuStruct %}
+                        <ul class="nav nav-main admin-left-menu" data-ride="collapse">
+                            <li {% if controller == 'admin' ~ menu['code'] %}class="active"{% endif %}>
+                                {{ link_to('admin/' ~ menu['code'],
                                  'class' : 'auto', '<i class="fa fa-bars"></i><span class="font-bold">'
-                                 ~ label ~ '</span>')
+                                 ~ menu['name'] ~ '</span>')
                                 }}
-                                {% if controller == 'adminsettings'%}
+                                {% if menu['sub']|length > 0 %}
                                     <ul class="nav nav-second-level collapse">
-                                        <li class="phanbook-first-item">
-                                            {{link_to('admin/settings/general' , t('General'))}}
-                                        </li>
-                                        <li>
-                                            {{link_to('admin/settings/logo' , t('Change Logo'))}}
-                                        </li>
-                                        <li>{{link_to('#' , t('Change Media'))}}</li>
-                                    </ul>
-                                {% endif %}
-                                {% if controller == 'adminposts'%}
-                                    <ul class="nav nav-second-level collapse">
-                                        <li>{{link_to('admin/posts/sticky' , t('Sticky posts'))}}</li>
+                                    {% for sub in menu['sub']  %}
+                                            <li {% if this.view.getActionName() == sub['code'] %}class="active"{% endif %} >
+                                                {{link_to('admin/' ~ menu['code'] ~'/' ~ sub['code'] , t(sub['name']))}}
+                                            </li>
+                                    {% endfor %}
                                     </ul>
                                 {% endif %}
                             </li>
