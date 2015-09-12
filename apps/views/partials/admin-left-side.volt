@@ -13,9 +13,9 @@
                         </li>
                     </ul>
                     {% set menuItems = [
+                        'pages': 'Pages', 'users': 'Users',
                         'posts': 'Posts', 'template': 'Templates',
-                        'pages': 'Pages', 'adminusers': 'Users',
-                        'tags' : 'Tags', 'settings': 'Settings', 'admin/update': 'Updates'
+                        'tags' : 'Tags', 'settings': 'Settings', 'update': 'Updates'
                     ] %}
 
                     {% for key, label  in menuItems %}

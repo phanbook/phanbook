@@ -14,5 +14,6 @@ fi
 chmod 777 -R apps/logs
 chmod 777 -R apps/cache/volt
 chmod 777 -R public/uploads
-chmod nginx:nginx -R common/config
+
+chown nginx:nginx -R .
 
