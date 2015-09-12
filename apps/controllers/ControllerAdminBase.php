@@ -152,7 +152,8 @@ class ControllerAdminBase extends Controller
                 ->addCss('https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css', false)
                 ->addCss('backend/css/animate.css')
                 ->addCss('backend/css/icon.css')
-                ->addCss('backend/css/app.v1.css');
+                ->addCss('backend/css/app.v1.css')
+                ->addCss('backend/css/app-custom.css');
             $this->assets
                 ->addJs('//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js', false)
                 ->addJs('//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js', false)
@@ -169,7 +170,8 @@ class ControllerAdminBase extends Controller
                 ->addCss('https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css', false)
                 ->addCss('backend/css/animate.css')
                 ->addCss('backend/css/icon.css')
-                ->addCss('backend/css/app.v1.css');
+                ->addCss('backend/css/app.v1.css')
+                ->addCss('backend/css/app-custom.css');
             $this->assets
                 ->addJs('//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js', false)
                 ->addJs('//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js', false)
