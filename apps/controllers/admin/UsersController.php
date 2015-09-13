@@ -126,7 +126,7 @@ class UsersController extends ControllerBase
 
         if ($this->request->isAjax()) {
             $this->view->setRenderLevel(View::LEVEL_ACTION_VIEW);
-            $this->view->pick('partials/admin-grid');
+            $this->view->pick('partials/grid');
         }
     }
     public function newAction()

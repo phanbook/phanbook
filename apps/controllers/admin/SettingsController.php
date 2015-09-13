@@ -12,8 +12,11 @@
  */
 namespace Phanbook\Controllers\Admin;
 
+use Phalcon\Config\Adapter\Php as AdapterPhp;
 use Phanbook\Forms\LogoForm;
+use Phanbook\Forms\ThemeForm;
 use Phanbook\Forms\ConfigurationsForm;
+use Phanbook\Tools\ZFunction;
 
 /**
  * Class SettingsController
@@ -161,21 +164,62 @@ class SettingsController extends ControllerBase
         }
         $filename = ROOT_DIR . 'common/config/options.php';
         if (!file_exists($filename)) {
-            $makeFile = \Phanbook\Tools\ZFunction::makeFile($filename);
+            $makeFile = ZFunction::makeFile($filename);
         }
         if (file_exists($filename)) {
-            $name       = $this->request->getPost('name');
-            $tagline    = $this->request->getPost('tagline');
-            $publicUrl  = $this->request->getPost('publicUrl');
-
-            $data = "<?php return new \Phalcon\Config([
+            $application = [
                 'application' => [
-                    'name'      => '{$name}',
-                    'tagline'   => '{$tagline}',
-                    'publicUrl' => '{$publicUrl}'
-                ],
-            ]);";
-            if (!file_put_contents($filename, $data)) {
+                    'name'      => $this->request->getPost('name'),
+                    'tagline'   => $this->request->getPost('tagline'),
+                    'publicUrl' => $this->request->getPost('publicUrl')
+                ]
+            ];
+            $data   = new AdapterPhp($filename);
+            $result = array_merge($data->toArray(), $application);
+            $result ='<?php return ' . var_export($result, true) . ';';
+
+            if (!file_put_contents($filename, $result)) {
+                throw new \Exception("Data was not saved", 1);
+            }
+            $this->flashSession->success(t('Data was successfully deleted'));
+            return $this->currentRedirect();
+        }
+        return $this->currentRedirect();
+    }
+    /**
+     * Render form create site
+     *
+     * @return mixed
+     */
+    public function themeAction()
+    {
+        $this->tag->setTitle(t('Themes Settings'));
+        $this->view->form = new ThemeForm();
+    }
+    /**
+     * Make data configuration to file options.php inside directory config
+     *
+     * @return mixed
+     */
+    public function saveThemeAction()
+    {
+        //Is not $_POST
+        if (!$this->request->isPost()) {
+            return $this->currentRedirect();
+        }
+        $filename = ROOT_DIR . 'common/config/options.php';
+        if (!file_exists($filename)) {
+            $makeFile = ZFunction::makeFile($filename);
+        }
+        if (file_exists($filename)) {
+            $theme  = [
+                'theme' => $this->request->getPost('theme')
+            ];
+            $data   = new AdapterPhp($filename);
+            $result = array_merge($data->toArray(), $theme);
+            $result ='<?php return ' . var_export($result, true) . ';';
+
+            if (!file_put_contents($filename, $result)) {
                 throw new \Exception("Data was not saved", 1);
             }
             $this->flashSession->success(t('Data was successfully deleted'));

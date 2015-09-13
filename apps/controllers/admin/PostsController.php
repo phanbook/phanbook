@@ -78,7 +78,7 @@ class PostsController extends ControllerBase
 
         if ($this->request->isAjax()) {
             $this->view->setRenderLevel(View::LEVEL_ACTION_VIEW);
-            $this->view->pick('partials/admin-grid');
+            $this->view->pick('partials/grid');
         }
     }
     /**
@@ -87,7 +87,7 @@ class PostsController extends ControllerBase
      * @access public
      * @return void
      */
-    public function indexStickyAction()
+    public function stickyAction()
     {
         if (empty(parent::$grid)) {
             self::setGrid();
@@ -99,7 +99,7 @@ class PostsController extends ControllerBase
 
         if ($this->request->isAjax()) {
             $this->view->setRenderLevel(View::LEVEL_ACTION_VIEW);
-            $this->view->pick('partials/admin-grid');
+            $this->view->pick('partials/grid');
         }
     }
     public function newStickyAction()
@@ -130,13 +130,12 @@ class PostsController extends ControllerBase
      *
      * @return \Phalcon\Http\ResponseInterface
      */
-    public function editStickyAction()
+    public function editStickyAction($id)
     {
-        $id = $this->dispatcher->getParam('id');
         if (!$object = Posts::findFirstById($id)) {
             $this->flashSession->error(t('Posts doesn\'t exist.'));
 
-            return $this->response->redirect($this->router->getControllerName());
+            return $this->currentRedirect();
         }
         $this->tag->setTitle(t('Edit sticked'));
         $this->view->form   = new StickyForm($object);

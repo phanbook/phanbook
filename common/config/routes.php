@@ -396,6 +396,13 @@ $router->add(
 );
 /*Admin router*/
 $router->add(
+    '/admin',
+    [
+        'namespace' => 'Phanbook\Controllers\Admin',
+        'controller' => 'dashboard',
+    ]
+);
+$router->add(
     '/admin/:controller/:action/:params',
     [
         'namespace' => 'Phanbook\Controllers\Admin',

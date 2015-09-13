@@ -82,7 +82,7 @@ class TagsController extends ControllerBase
         if (!$object = Tags::findFirstById($id)) {
             $this->flashSession->error(t('Tag doesn\'t exist.'));
 
-            return $this->response->redirect('Tag');
+            return $this->currentRedirect();
         }
 
         $this->view->form = new TagsForm($object);
@@ -98,7 +98,7 @@ class TagsController extends ControllerBase
         if (!$this->request->isPost()) {
             $this->view->disable();
 
-            return $this->response->redirect($this->router->getControllerName());
+            return $this->currentRedirect();
         }
 
         $id = $this->request->getPost('id', 'int', null);
@@ -120,7 +120,7 @@ class TagsController extends ControllerBase
 
             // Redirect to edit form if we have an ID in page, otherwise redirect to add a new item page
             return $this->response->redirect(
-                $this->router->getControllerName() . (!is_null($id) ? '/edit/' . $id : '/new')
+                $this->getPathController() . (!is_null($id) ? '/edit/' . $id : '/new')
             );
         } else {
             if (!$object->save()) {
@@ -129,12 +129,12 @@ class TagsController extends ControllerBase
                 }
 
                 return $this->dispatcher->forward(
-                    ['controller' => $this->router->getControllerName(), 'action' => 'new']
+                    ['controller' => $this->getPathController(), 'action' => 'new']
                 );
             } else {
                 $this->flashSession->success(t('Data was successfully saved'));
 
-                return $this->response->redirect($this->router->getControllerName());
+                return $this->currentRedirect();
             }
         }
     }
@@ -156,6 +156,6 @@ class TagsController extends ControllerBase
             return $this->response->redirect('tag');
         }
         $this->flashSession->success(t('Data was successfully deleted'));
-        return $this->response->redirect($this->router->getControllerName());
+        return $this->currentRedirect();
     }
 }

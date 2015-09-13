@@ -35,6 +35,7 @@ class ControllerBase extends Controller
         ['controller' => 'users'],
         ['controller' => 'tags'],
         ['controller' => 'dashboard'],
+        ['controller' => 'update'],
         ['controller' => 'tests'],
 
     ];
@@ -76,7 +77,6 @@ class ControllerBase extends Controller
      * @var string
      */
     public $currentOrder = null;
-
 
     /**
      * Check if we need to throw a json respone. For ajax calls.
@@ -140,6 +140,7 @@ class ControllerBase extends Controller
         $this->view->currentOrder = $this->currentOrder;
         $this->view->setTemplateBefore('admin');
         $this->loadDefaultAssets();
+        $this->view->menuStruct = $this->config->menuStruct;
     }
     /**
      * loadDefaultAssets function.
@@ -427,11 +428,15 @@ class ControllerBase extends Controller
     }
     public function indexRedirect()
     {
-        return $this->response->redirect();
+        return $this->response->redirect($this->getPathController());
     }
     public function currentRedirect()
     {
         return $this->response->redirect($this->request->getHTTPReferer(), true);
+    }
+    public function getPathController()
+    {
+        return 'admin/' . $this->router->getControllerName();
     }
 
     //@todo : refactor gridAction !

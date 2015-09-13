@@ -4,7 +4,7 @@
 </div>
 <div class="panel-body">
 
-{{ form('admin/settings/save-general', 'class' : 'form-horizontal') }}
+{{ form('admin/settings/saveGeneral', 'class' : 'form-horizontal') }}
     <div class="form-group">
         <label class="col-sm-2 control-label" for="name">{{ t('Site Title') }}:</label>
         <div class="col-sm-10">
