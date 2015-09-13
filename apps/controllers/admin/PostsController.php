@@ -87,7 +87,7 @@ class PostsController extends ControllerBase
      * @access public
      * @return void
      */
-    public function indexStickyAction()
+    public function stickyAction()
     {
         if (empty(parent::$grid)) {
             self::setGrid();
