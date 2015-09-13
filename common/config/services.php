@@ -67,7 +67,10 @@ if (file_exists(__DIR__ . '/options.php')) {
     $overrideConfig = new AdapterPhp(__DIR__ . '/options.php');
     $config->merge($overrideConfig);
 }
-
+if (file_exists(__DIR__ . '/config.menu.php')) {
+    $overrideConfig = include __DIR__ . '/config.menu.php';
+    $config->merge($overrideConfig);
+}
 $di->set('config', $config, true);
 
 // setup timezone

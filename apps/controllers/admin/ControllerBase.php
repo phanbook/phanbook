@@ -140,6 +140,7 @@ class ControllerBase extends Controller
         $this->view->currentOrder = $this->currentOrder;
         $this->view->setTemplateBefore('admin');
         $this->loadDefaultAssets();
+        $this->view->menuStruct = $this->config->menuStruct;
     }
     /**
      * loadDefaultAssets function.
