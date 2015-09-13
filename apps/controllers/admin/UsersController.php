@@ -10,15 +10,15 @@
  * @since   1.0.0
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
-namespace Phanbook\Controllers;
+namespace Phanbook\Controllers\Admin;
 
 use Phalcon\Mvc\View;
 use Phanbook\Models\Users;
 
 /**
- * Class IndexController
+ * Class UsersController
  */
-class AdminusersController extends ControllerAdminBase
+class UsersController extends ControllerBase
 {
     /**
      * Initiate grid

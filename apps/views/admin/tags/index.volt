@@ -4,5 +4,5 @@
     <h3 class="m-b-none">{{ this.view.getControllerName() | capitalize }}</h3>
 </div>
 
-{{ partial('partials/admin-grid') }}
+{{ partial('partials/grid') }}
 

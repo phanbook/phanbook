@@ -15,15 +15,16 @@ $loader = new Phalcon\Loader();
  * We're a registering a set of directories taken from the configuration file
  */
 $loader->registerNamespaces(
-    array(
-        'Phanbook\Controllers'  => ROOT_DIR . 'apps/controllers/',
-        'Phanbook\Models'       => ROOT_DIR . 'common/models/',
-        'Phanbook\Validators'   => ROOT_DIR . 'common/validators/',
-        'Phanbook\Tools'        => ROOT_DIR . 'common/tools/',
-        'Phanbook\Forms'        => ROOT_DIR . 'apps/forms/',
-        'Phanbook\Plugins'      => ROOT_DIR . 'common/plugins/',
-        'Phanbook'              => ROOT_DIR . 'common/library/'
-    )
+    [
+        'Phanbook'                      => ROOT_DIR . 'common/library/',
+        'Phanbook\Tools'                => ROOT_DIR . 'common/tools/',
+        'Phanbook\Forms'                => ROOT_DIR . 'apps/forms/',
+        'Phanbook\Models'               => ROOT_DIR . 'common/models/',
+        'Phanbook\Plugins'              => ROOT_DIR . 'common/plugins/',
+        'Phanbook\Validators'           => ROOT_DIR . 'common/validators/',
+        'Phanbook\Controllers'          => ROOT_DIR . 'apps/controllers/',
+        'Phanbook\Controllers\Admin'    => ROOT_DIR . 'apps/controllers/admin'
+    ]
 );
 
 $loader->register();

@@ -396,143 +396,27 @@ $router->add(
 );
 /*Admin router*/
 $router->add(
-    '/admin',
+    '/admin/:controller/:action/:params',
     [
-        'controller' => 'admin',
-        'action'     => 'index'
+        'namespace' => 'Phanbook\Controllers\Admin',
+        'controller' => 1,
+        'action' => 2,
+        'params' => 3,
     ]
 );
 $router->add(
-    '/dashboard',
+    '/admin/:controller/:action',
     [
-        'controller' => 'admin',
-        'action'     => 'index'
+        'namespace' => 'Phanbook\Controllers\Admin',
+        'controller' => 1,
+        'action' => 2,
     ]
 );
 $router->add(
-    '/template',
+    '/admin/:controller',
     [
-        'controller' => 'template',
-        'action'     => 'index'
-    ]
-);
-$router->add(
-    '/admin/template',
-    [
-        'controller' => 'template',
-        'action'     => 'index'
-    ]
-);
-$router->add(
-    '/admin/posts/sticky',
-    [
-        'controller' => 'adminposts',
-        'action'     => 'indexSticky'
-    ]
-);
-$router->add(
-    '/admin/posts/new-sticky',
-    [
-        'controller' => 'adminposts',
-        'action'     => 'newSticky'
-    ]
-);
-$router->add(
-    '/admin/posts',
-    [
-        'controller' => 'adminposts',
-        'action'     => 'index'
-    ]
-);
-$router->add(
-    '/admin/posts/save-sticky',
-    [
-        'controller' => 'adminposts',
-        'action'     => 'saveSticky'
-    ]
-);
-$router->add(
-    '/admin/posts/edit-sticky/{id:[0-9]+}',
-    [
-        'controller' => 'adminposts',
-        'action'     => 'editSticky'
-    ]
-);
-$router->add(
-    '/admin/settings',
-    [
-        'controller' => 'adminsettings',
-        'action'     => 'general'
-    ]
-);
-$router->add(
-    '/admin/settings/general',
-    [
-        'controller' => 'adminsettings',
-        'action'     => 'general'
-    ]
-);
-$router->add(
-    '/admin/settings/save-general',
-    [
-        'controller' => 'adminsettings',
-        'action'     => 'saveGeneral'
-    ]
-);
-$router->add(
-    '/admin/settings/logo',
-    [
-        'controller' => 'adminsettings',
-        'action'     => 'index'
-    ]
-);
-$router->add(
-    '/admin/settings/logo-frontend',
-    [
-        'controller' => 'adminsettings',
-        'action'     => 'logoFrontend'
-    ]
-);
-$router->add(
-    '/admin/settings/logo-backend',
-    [
-        'controller' => 'adminsettings',
-        'action'     => 'logoBackend'
-    ]
-);
-$router->add(
-    '/admin/settings/logo-loginpage',
-    [
-        'controller' => 'adminsettings',
-        'action'     => 'logoLogin'
-    ]
-);
-$router->add(
-    '/admin/settings/logo-favicon',
-    [
-        'controller' => 'adminsettings',
-        'action'     => 'logoFavicon'
-    ]
-);
-$router->add(
-    '/admin/pages',
-    [
-        'controller' => 'adminpages',
-        'action'     => 'index'
-    ]
-);
-$router->add(
-    '/admin/users',
-    [
-        'controller' => 'adminusers',
-        'action'     => 'index'
-    ]
-);
-$router->add(
-    '/admin/tags',
-    [
-        'controller' => 'admintags',
-        'action'     => 'index'
+        'namespace' => 'Phanbook\Controllers\Admin',
+        'controller' => 1,
     ]
 );
 return $router;

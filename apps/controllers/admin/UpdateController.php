@@ -10,25 +10,22 @@
  * @since   1.0.0
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
-namespace Phanbook\Controllers;
+namespace Phanbook\Controllers\Admin;
 
 use Phanbook\Tools\ZFunction;
 
 /**
- * Class IndexController
+ * Class UpdateController
  */
-class AdminController extends ControllerAdminBase
+class UpdateController extends ControllerBase
 {
-    public function indexAction()
-    {
-        $this->tag->setTitle(t('Dashboard'));
-    }
+
     /**
      * Update core Phanbook
      *
      * @return mixed
      */
-    public function updateAction()
+    public function indexAction()
     {
         $this->tag->setTitle(t('Phanbook Updates'));
         if (ZFunction::gitUpdate()) {
