@@ -35,6 +35,7 @@ class ControllerBase extends Controller
         ['controller' => 'users'],
         ['controller' => 'tags'],
         ['controller' => 'dashboard'],
+        ['controller' => 'update'],
         ['controller' => 'tests'],
 
     ];
