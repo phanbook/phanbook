@@ -29,7 +29,7 @@
 
     {{ this.assets.outputCss() }}
     <script type="text/javascript">
-        var baseUri     = '{{ this.config.application.baseUri }}';
+        var baseUri     = '/admin/';
         var controller  = '{{ controller }}';
         var action      = '{{ action }}';
         var googleAnalytic = '{{ this.config.googleAnalytic }}';

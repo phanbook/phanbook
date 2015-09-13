@@ -69,7 +69,7 @@ class TemplateController extends ControllerBase
 
         if ($this->request->isAjax()) {
             $this->view->setRenderLevel(View::LEVEL_ACTION_VIEW);
-            $this->view->pick('partials/admin-grid');
+            $this->view->pick('partials/grid');
         }
     }
 
@@ -99,7 +99,7 @@ class TemplateController extends ControllerBase
         if (!$this->request->isPost()) {
             $this->view->disable();
 
-            return $this->response->redirect($this->router->getControllerName());
+            return $this->currentRedirect();
         }
 
         $id = $this->request->getPost('id', 'int', null);
@@ -121,7 +121,7 @@ class TemplateController extends ControllerBase
 
             // Redirect to edit form if we have an ID in page, otherwise redirect to add a new item page
             return $this->response->redirect(
-                $this->router->getControllerName() . (!is_null($id) ? '/edit/' . $id : '/new')
+                $this->getPathController() . (!is_null($id) ? '/edit/' . $id : '/new')
             );
         } else {
             if (!$object->save()) {
@@ -130,12 +130,11 @@ class TemplateController extends ControllerBase
                 }
 
                 return $this->dispatcher->forward(
-                    ['controller' => $this->router->getControllerName(), 'action' => 'new']
+                    ['controller' => $this->getPathController(), 'action' => 'new']
                 );
             } else {
                 $this->flashSession->success(t('Data was successfully saved'));
-
-                return $this->response->redirect($this->router->getControllerName());
+                return $this->indexRedirect();
             }
         }
     }

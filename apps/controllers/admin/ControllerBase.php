@@ -77,7 +77,6 @@ class ControllerBase extends Controller
      */
     public $currentOrder = null;
 
-
     /**
      * Check if we need to throw a json respone. For ajax calls.
      *
@@ -427,11 +426,15 @@ class ControllerBase extends Controller
     }
     public function indexRedirect()
     {
-        return $this->response->redirect();
+        return $this->response->redirect($this->getPathController());
     }
     public function currentRedirect()
     {
         return $this->response->redirect($this->request->getHTTPReferer(), true);
+    }
+    public function getPathController()
+    {
+        return 'admin/' . $this->router->getControllerName();
     }
 
     //@todo : refactor gridAction !

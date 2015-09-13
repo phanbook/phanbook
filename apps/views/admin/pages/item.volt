@@ -9,7 +9,7 @@
             {% endif %}
         </header>
         <div class="panel-body">
-            {{ form( this.view.getControllerName() | lower ~ '/save', 'class' : 'form-horizontal') }}
+            {{ form('admin/pages/save', 'class' : 'form-horizontal') }}
             {% if object is defined %}
                 {{ form.render('id') }}
             {% endif %}
