@@ -30,6 +30,6 @@ class DashboardController extends ControllerBase
      */
     public function indexAction()
     {
-
+        $this->tag->setTitle(t('Dashboard'));
     }
 }

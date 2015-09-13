@@ -27,28 +27,28 @@
 <div class="col-lg-2-4">
         <section class="panel panel-default">
             <div class="panel-body">
-            {{ link_to('admin/settings/logo-frontend' , t('Change Logo Frontend'))}}
+            {{ link_to('admin/settings/logoFrontend' , t('Change Logo Frontend'))}}
             </div>
         </section>
  </div>
 <div class="col-lg-2-4">
     <section class="panel panel-default">
         <div class="panel-body">
-        {{ link_to('admin/settings/logo-backend' , t('Change Logo Backend'))}}
+        {{ link_to('admin/settings/logoBackend' , t('Change Logo Backend'))}}
         </div>
     </section>
 </div>
 <div class="col-lg-2-4">
     <section class="panel panel-default">
         <div class="panel-body">
-        {{ link_to('admin/settings/logo-loginpage' , t('Change Logo Login Page'))}}
+        {{ link_to('admin/settings/logoLoginpage' , t('Change Logo Login Page'))}}
         </div>
     </section>
  </div>
 <div class="col-lg-2-4">
     <section class="panel panel-default">
         <div class="panel-body">
-        {{ link_to('admin/settings/logo-favicon' , t('Change Logo Favicon'))}}
+        {{ link_to('admin/settings/logoFavicon' , t('Change Logo Favicon'))}}
         </div>
     </section>
 </div>
