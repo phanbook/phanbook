@@ -10,54 +10,51 @@
  * @since   1.0.0
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
-namespace Phanbook\Controllers;
+namespace Phanbook\Controllers\Admin;
 
+use Phanbook\Forms\TemplateForm;
+use Phanbook\Models\Template;
 use Phalcon\Mvc\View;
-use Phanbook\Forms\TagsForm;
-use Phanbook\Models\Tags;
 
-/**
- * Class AdmintagsController
- */
-class AdmintagsController extends ControllerAdminBase
+class TemplateController extends ControllerBase
 {
+    /**
+     * Initiate grid
+     */
     protected static function setGrid()
     {
         parent::$grid = [
-            'grid' => [
-                'id'   => [
-                    'title'  => 'Id',
-                    'order'  => true,
-                    'filter' => ['type' => 'input', 'sanitize' => 'int', 'style' => 'width: 60px;']
-                ],
-                'name' => [
-                    'title'  => t('Name'),
-                    'order'  => true,
-                    'filter' => ['type' => 'input', 'sanitize' => 'string', 'style' => '']
-                ],
-                'slug' => [
-                    'title'  => t('Slug'),
-                    'order'  => true,
-                    'filter' => ['type' => 'input', 'sanitize' => 'string', 'style' => '']
-                ],
-                'description' => [
-                    'title'  => t('Description'),
-                    'order'  => true,
-                    'filter' => ['type' => 'input', 'sanitize' => 'string', 'style' => '']
-                ],
-                'numberPosts' => [
-                    'title'  => t('Number posts'),
-                    'order'  => true,
-                    'filter' => ['type' => 'input', 'sanitize' => 'string', 'style' => '']
-                ],
-                'null' => ['title' => t('Actions')]
-            ]
+            'grid' =>
+                [
+                    'id'      => [
+                        'title'  => 'Id',
+                        'order'  => true,
+                        'filter' => ['type' => 'input', 'sanitize' => 'int', 'style' => 'width: 60px;']
+                    ],
+                    'name'    => [
+                        'title'  => t('Name'),
+                        'order'  => true,
+                        'filter' => ['type' => 'input', 'sanitize' => 'string', 'style' => ''],
+                    ],
+                    'key'     => [
+                        'title'  => t('Key'),
+                        'order'  => true,
+                        'filter' => ['type' => 'input', 'sanitize' => 'string', 'style' => ''],
+                    ],
+                    'subject' => [
+                        'title'  => t('Subject'),
+                        'order'  => true,
+                        'filter' => ['type' => 'input', 'sanitize' => 'string', 'style' => ''],
+                    ],
+                    'null'    => ['title' => t('Actions')]
+                ]
         ];
     }
 
     /**
      * indexAction function.
      *
+     * @access public
      * @return void
      */
     public function indexAction()
@@ -66,9 +63,10 @@ class AdmintagsController extends ControllerAdminBase
             self::setGrid();
         }
 
-        $this->renderGrid('Phanbook\Models\Tags');
+        $this->renderGrid('Phanbook\Models\Template');
         $this->view->setVars(['grid' => parent::$grid]);
-        $this->tag->setTitle(t('List all tags'));
+        $this->tag->setTitle(t('Configuration templates'));
+
         if ($this->request->isAjax()) {
             $this->view->setRenderLevel(View::LEVEL_ACTION_VIEW);
             $this->view->pick('partials/admin-grid');
@@ -76,19 +74,21 @@ class AdmintagsController extends ControllerAdminBase
     }
 
     /**
-     * Method editAction
+     * @param $id
+     *
+     * @return \Phalcon\Http\ResponseInterface
      */
     public function editAction($id)
     {
-        if (!$object = Tags::findFirstById($id)) {
-            $this->flashSession->error(t('Tag doesn\'t exist.'));
+        if (!$object = Template::findFirstById($id)) {
+            $this->flashSession->error(t('Template doesn\'t exist.'));
 
-            return $this->response->redirect('Tag');
+            return $this->response->redirect('template');
         }
-
-        $this->view->form = new TagsForm($object);
+        $this->tag->setTitle(t('Edit template'));
+        $this->view->form   = new TemplateForm($object);
         $this->view->object = $object;
-        $this->tag->setTitle(t('Edit tag'));
+
         return $this->view->pick($this->router->getControllerName() . '/item');
     }
 
@@ -105,12 +105,12 @@ class AdmintagsController extends ControllerAdminBase
         $id = $this->request->getPost('id', 'int', null);
 
         if (!empty($id)) {
-            $object = Tags::findFirstById($id);
+            $object = Template::findFirstById($id);
         } else {
-            $object = new Tags;
+            $object = new Template();
         }
 
-        $form = new TagsForm($object);
+        $form = new TemplateForm($object);
         $form->bind($_POST, $object);
 
         //  Form isn't valid
@@ -140,23 +140,12 @@ class AdmintagsController extends ControllerAdminBase
         }
     }
 
+    /**
+     * Add new configuration
+     */
     public function newAction()
     {
-        $this->view->form = new TagsForm();
+        $this->view->form = new TemplateForm();
         $this->view->pick($this->router->getControllerName() . '/item');
-        $this->tag->setTitle(t('Add tag'));
-    }
-
-    public function deleteAction($id)
-    {
-        if (!$object = Tags::findFirstById($id)) {
-            $this->flashSession->error(t('Tag doesn\'t exist.'));
-            return $this->response->redirect('tag');
-        }
-        if (!$object->delete()) {
-            return $this->response->redirect('tag');
-        }
-        $this->flashSession->success(t('Data was successfully deleted'));
-        return $this->response->redirect($this->router->getControllerName());
     }
 }

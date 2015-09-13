@@ -10,7 +10,7 @@
  * @since   1.0.0
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
-namespace Phanbook\Controllers;
+namespace Phanbook\Controllers\Admin;
 
 use Phalcon\Mvc\View;
 use Phanbook\Forms\PagesForm;
@@ -19,7 +19,7 @@ use Phanbook\Models\Pages;
 /**
  * Class AdminpagesController
  */
-class AdminpagesController extends ControllerAdminBase
+class PagesController extends ControllerBase
 {
     /**
      * Initiate grid
@@ -72,7 +72,7 @@ class AdminpagesController extends ControllerAdminBase
 
         if ($this->request->isAjax()) {
             $this->view->setRenderLevel(View::LEVEL_ACTION_VIEW);
-            $this->view->pick('partials/admin-grid');
+            $this->view->pick('partials/grid');
         }
     }
     /**

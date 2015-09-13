@@ -10,7 +10,7 @@
  * @since   1.0.0
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
-namespace Phanbook\Controllers;
+namespace Phanbook\Controllers\Admin;
 
 use Phalcon\Mvc\Controller;
 use Phalcon\Mvc\Dispatcher;
@@ -21,7 +21,7 @@ use Phalcon\Paginator\Adapter\QueryBuilder as PaginatorQueryBuilder;
 /**
  * Class ControllerBase
  */
-class ControllerAdminBase extends Controller
+class ControllerBase extends Controller
 {
     /**
      * @var array
@@ -29,11 +29,14 @@ class ControllerAdminBase extends Controller
     private $securedRoutes = [
         ['controller' => 'admin'],
         ['controller' => 'template'],
-        ['controller' => 'adminposts'],
-        ['controller' => 'adminsettings'],
-        ['controller' => 'adminpages'],
-        ['controller' => 'adminusers'],
-        ['controller' => 'admintags']
+        ['controller' => 'posts'],
+        ['controller' => 'settings'],
+        ['controller' => 'pages'],
+        ['controller' => 'users'],
+        ['controller' => 'tags'],
+        ['controller' => 'dashboard'],
+        ['controller' => 'tests'],
+
     ];
     /**
      * @var array
@@ -129,6 +132,7 @@ class ControllerAdminBase extends Controller
             }
             echo $this->response->getContent();
         }
+        $this->view->setViewsDir($this->view->getViewsDir() . 'admin/');
     }
 
     public function initialize()

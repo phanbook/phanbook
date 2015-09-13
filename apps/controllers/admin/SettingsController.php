@@ -10,15 +10,15 @@
  * @since   1.0.0
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
-namespace Phanbook\Controllers;
+namespace Phanbook\Controllers\Admin;
 
 use Phanbook\Forms\LogoForm;
 use Phanbook\Forms\ConfigurationsForm;
 
 /**
- * Class IndexController
+ * Class SettingsController
  */
-class AdminsettingsController extends ControllerAdminBase
+class SettingsController extends ControllerBase
 {
     public function indexAction()
     {
@@ -26,7 +26,9 @@ class AdminsettingsController extends ControllerAdminBase
     }
 
     /**
-     * Replacing logo frontend page default, the urladminsetting/logo__frontend
+     * Replacing logo frontend page default
+     * @link admin/settings/logo-frontend
+     *
      * @return mixed
      */
     public function logoFrontendAction()
@@ -42,7 +44,9 @@ class AdminsettingsController extends ControllerAdminBase
         $this->tag->setTitle(t('Change Logo Frontend'));
     }
     /**
-     * Replacing logo backend page default, the urladminsetting/logo__backend
+     * Replacing logo backend page default
+     *
+     * @link   admin/settings/logo-backend
      * @return mixed
      */
     public function logoBackendAction()
@@ -58,7 +62,9 @@ class AdminsettingsController extends ControllerAdminBase
         $this->tag->setTitle(t('Change Logo Backend'));
     }
     /**
-     * Replacing logo login page default, the url /adminsetting/logo__login
+     * Replacing logo login page default
+     *
+     * @link   admin/settings/logo-login
      * @return mixed
      */
     public function logoLoginAction()
@@ -74,7 +80,9 @@ class AdminsettingsController extends ControllerAdminBase
         $this->tag->setTitle(t('Change Logo Login Page'));
     }
     /**
-     * Replacing logo favicon default, the url /adminsetting/logo__favicon
+     * Replacing logo favicon default
+     *
+     * @link   admin/settings/logo-favicon
      * @return mixed
      */
     public function logoFaviconAction()
