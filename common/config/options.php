@@ -1,1 +1,1 @@
-<?php return new \Phalcon\Config([]);
+<?php return [];
