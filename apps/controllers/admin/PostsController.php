@@ -10,7 +10,7 @@
  * @since   1.0.0
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
-namespace Phanbook\Controllers;
+namespace Phanbook\Controllers\Admin;
 
 use Phalcon\Mvc\View;
 use Phanbook\Forms\StickyForm;
@@ -19,7 +19,7 @@ use Phanbook\Models\Posts;
 /**
  * Class IndexController
  */
-class AdminpostsController extends ControllerAdminBase
+class PostsController extends ControllerBase
 {
     /**
      * Initiate grid
@@ -78,7 +78,7 @@ class AdminpostsController extends ControllerAdminBase
 
         if ($this->request->isAjax()) {
             $this->view->setRenderLevel(View::LEVEL_ACTION_VIEW);
-            $this->view->pick('partials/admin-grid');
+            $this->view->pick('partials/grid');
         }
     }
     /**
@@ -99,7 +99,7 @@ class AdminpostsController extends ControllerAdminBase
 
         if ($this->request->isAjax()) {
             $this->view->setRenderLevel(View::LEVEL_ACTION_VIEW);
-            $this->view->pick('partials/admin-grid');
+            $this->view->pick('partials/grid');
         }
     }
     public function newStickyAction()
@@ -130,13 +130,12 @@ class AdminpostsController extends ControllerAdminBase
      *
      * @return \Phalcon\Http\ResponseInterface
      */
-    public function editStickyAction()
+    public function editStickyAction($id)
     {
-        $id = $this->dispatcher->getParam('id');
         if (!$object = Posts::findFirstById($id)) {
             $this->flashSession->error(t('Posts doesn\'t exist.'));
 
-            return $this->response->redirect($this->router->getControllerName());
+            return $this->currentRedirect();
         }
         $this->tag->setTitle(t('Edit sticked'));
         $this->view->form   = new StickyForm($object);

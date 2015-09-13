@@ -32,6 +32,7 @@ use Phalcon\Events\Manager             as EventsManager;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\View\Engine\Volt;
 use Phalcon\Queue\Beanstalk;
+use Phalcon\Config\Adapter\Php        as AdapterPhp;
 
 use Phanbook\Mail\Mail;
 use Phanbook\Auth\Auth;
@@ -63,7 +64,7 @@ if (file_exists(__DIR__ . '/config.' . APPLICATION_ENV . '.php')) {
 }
 //It crreated when save in admin dashboard
 if (file_exists(__DIR__ . '/options.php')) {
-    $overrideConfig = include __DIR__ . '/options.php';
+    $overrideConfig = new AdapterPhp(__DIR__ . '/options.php');
     $config->merge($overrideConfig);
 }
 

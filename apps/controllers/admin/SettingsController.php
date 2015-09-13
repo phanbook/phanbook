@@ -10,15 +10,18 @@
  * @since   1.0.0
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
-namespace Phanbook\Controllers;
+namespace Phanbook\Controllers\Admin;
 
+use Phalcon\Config\Adapter\Php as AdapterPhp;
 use Phanbook\Forms\LogoForm;
+use Phanbook\Forms\ThemeForm;
 use Phanbook\Forms\ConfigurationsForm;
+use Phanbook\Tools\ZFunction;
 
 /**
- * Class IndexController
+ * Class SettingsController
  */
-class AdminsettingsController extends ControllerAdminBase
+class SettingsController extends ControllerBase
 {
     public function indexAction()
     {
@@ -26,7 +29,9 @@ class AdminsettingsController extends ControllerAdminBase
     }
 
     /**
-     * Replacing logo frontend page default, the urladminsetting/logo__frontend
+     * Replacing logo frontend page default
+     * @link admin/settings/logo-frontend
+     *
      * @return mixed
      */
     public function logoFrontendAction()
@@ -42,7 +47,9 @@ class AdminsettingsController extends ControllerAdminBase
         $this->tag->setTitle(t('Change Logo Frontend'));
     }
     /**
-     * Replacing logo backend page default, the urladminsetting/logo__backend
+     * Replacing logo backend page default
+     *
+     * @link   admin/settings/logo-backend
      * @return mixed
      */
     public function logoBackendAction()
@@ -58,7 +65,9 @@ class AdminsettingsController extends ControllerAdminBase
         $this->tag->setTitle(t('Change Logo Backend'));
     }
     /**
-     * Replacing logo login page default, the url /adminsetting/logo__login
+     * Replacing logo login page default
+     *
+     * @link   admin/settings/logo-login
      * @return mixed
      */
     public function logoLoginAction()
@@ -74,7 +83,9 @@ class AdminsettingsController extends ControllerAdminBase
         $this->tag->setTitle(t('Change Logo Login Page'));
     }
     /**
-     * Replacing logo favicon default, the url /adminsetting/logo__favicon
+     * Replacing logo favicon default
+     *
+     * @link   admin/settings/logo-favicon
      * @return mixed
      */
     public function logoFaviconAction()
@@ -153,21 +164,62 @@ class AdminsettingsController extends ControllerAdminBase
         }
         $filename = ROOT_DIR . 'common/config/options.php';
         if (!file_exists($filename)) {
-            $makeFile = \Phanbook\Tools\ZFunction::makeFile($filename);
+            $makeFile = ZFunction::makeFile($filename);
         }
         if (file_exists($filename)) {
-            $name       = $this->request->getPost('name');
-            $tagline    = $this->request->getPost('tagline');
-            $publicUrl  = $this->request->getPost('publicUrl');
-
-            $data = "<?php return new \Phalcon\Config([
+            $application = [
                 'application' => [
-                    'name'      => '{$name}',
-                    'tagline'   => '{$tagline}',
-                    'publicUrl' => '{$publicUrl}'
-                ],
-            ]);";
-            if (!file_put_contents($filename, $data)) {
+                    'name'      => $this->request->getPost('name'),
+                    'tagline'   => $this->request->getPost('tagline'),
+                    'publicUrl' => $this->request->getPost('publicUrl')
+                ]
+            ];
+            $data   = new AdapterPhp($filename);
+            $result = array_merge($data->toArray(), $application);
+            $result ='<?php return ' . var_export($result, true) . ';';
+
+            if (!file_put_contents($filename, $result)) {
+                throw new \Exception("Data was not saved", 1);
+            }
+            $this->flashSession->success(t('Data was successfully deleted'));
+            return $this->currentRedirect();
+        }
+        return $this->currentRedirect();
+    }
+    /**
+     * Render form create site
+     *
+     * @return mixed
+     */
+    public function themeAction()
+    {
+        $this->tag->setTitle(t('Themes Settings'));
+        $this->view->form = new ThemeForm();
+    }
+    /**
+     * Make data configuration to file options.php inside directory config
+     *
+     * @return mixed
+     */
+    public function saveThemeAction()
+    {
+        //Is not $_POST
+        if (!$this->request->isPost()) {
+            return $this->currentRedirect();
+        }
+        $filename = ROOT_DIR . 'common/config/options.php';
+        if (!file_exists($filename)) {
+            $makeFile = ZFunction::makeFile($filename);
+        }
+        if (file_exists($filename)) {
+            $theme  = [
+                'theme' => $this->request->getPost('theme')
+            ];
+            $data   = new AdapterPhp($filename);
+            $result = array_merge($data->toArray(), $theme);
+            $result ='<?php return ' . var_export($result, true) . ';';
+
+            if (!file_put_contents($filename, $result)) {
                 throw new \Exception("Data was not saved", 1);
             }
             $this->flashSession->success(t('Data was successfully deleted'));

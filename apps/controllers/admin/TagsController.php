@@ -10,16 +10,16 @@
  * @since   1.0.0
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
-namespace Phanbook\Controllers;
+namespace Phanbook\Controllers\Admin;
 
 use Phalcon\Mvc\View;
 use Phanbook\Forms\TagsForm;
 use Phanbook\Models\Tags;
 
 /**
- * Class AdmintagsController
+ * Class TagsController
  */
-class AdmintagsController extends ControllerAdminBase
+class TagsController extends ControllerBase
 {
     protected static function setGrid()
     {
@@ -65,13 +65,12 @@ class AdmintagsController extends ControllerAdminBase
         if (empty(parent::$grid)) {
             self::setGrid();
         }
-
         $this->renderGrid('Phanbook\Models\Tags');
         $this->view->setVars(['grid' => parent::$grid]);
         $this->tag->setTitle(t('List all tags'));
         if ($this->request->isAjax()) {
             $this->view->setRenderLevel(View::LEVEL_ACTION_VIEW);
-            $this->view->pick('partials/admin-grid');
+            $this->view->pick('partials/grid');
         }
     }
 
@@ -83,7 +82,7 @@ class AdmintagsController extends ControllerAdminBase
         if (!$object = Tags::findFirstById($id)) {
             $this->flashSession->error(t('Tag doesn\'t exist.'));
 
-            return $this->response->redirect('Tag');
+            return $this->currentRedirect();
         }
 
         $this->view->form = new TagsForm($object);
@@ -99,7 +98,7 @@ class AdmintagsController extends ControllerAdminBase
         if (!$this->request->isPost()) {
             $this->view->disable();
 
-            return $this->response->redirect($this->router->getControllerName());
+            return $this->currentRedirect();
         }
 
         $id = $this->request->getPost('id', 'int', null);
@@ -121,7 +120,7 @@ class AdmintagsController extends ControllerAdminBase
 
             // Redirect to edit form if we have an ID in page, otherwise redirect to add a new item page
             return $this->response->redirect(
-                $this->router->getControllerName() . (!is_null($id) ? '/edit/' . $id : '/new')
+                $this->getPathController() . (!is_null($id) ? '/edit/' . $id : '/new')
             );
         } else {
             if (!$object->save()) {
@@ -130,12 +129,12 @@ class AdmintagsController extends ControllerAdminBase
                 }
 
                 return $this->dispatcher->forward(
-                    ['controller' => $this->router->getControllerName(), 'action' => 'new']
+                    ['controller' => $this->getPathController(), 'action' => 'new']
                 );
             } else {
                 $this->flashSession->success(t('Data was successfully saved'));
 
-                return $this->response->redirect($this->router->getControllerName());
+                return $this->currentRedirect();
             }
         }
     }
@@ -157,6 +156,6 @@ class AdmintagsController extends ControllerAdminBase
             return $this->response->redirect('tag');
         }
         $this->flashSession->success(t('Data was successfully deleted'));
-        return $this->response->redirect($this->router->getControllerName());
+        return $this->currentRedirect();
     }
 }

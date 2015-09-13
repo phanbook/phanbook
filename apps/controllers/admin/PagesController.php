@@ -10,13 +10,16 @@
  * @since   1.0.0
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
-namespace Phanbook\Controllers;
+namespace Phanbook\Controllers\Admin;
 
-use Phanbook\Forms\TemplateForm;
-use Phanbook\Models\Template;
 use Phalcon\Mvc\View;
+use Phanbook\Forms\PagesForm;
+use Phanbook\Models\Pages;
 
-class TemplateController extends ControllerAdminBase
+/**
+ * Class AdminpagesController
+ */
+class PagesController extends ControllerBase
 {
     /**
      * Initiate grid
@@ -31,8 +34,8 @@ class TemplateController extends ControllerAdminBase
                         'order'  => true,
                         'filter' => ['type' => 'input', 'sanitize' => 'int', 'style' => 'width: 60px;']
                     ],
-                    'name'    => [
-                        'title'  => t('Name'),
+                    'title'    => [
+                        'title'  => t('Title'),
                         'order'  => true,
                         'filter' => ['type' => 'input', 'sanitize' => 'string', 'style' => ''],
                     ],
@@ -41,8 +44,8 @@ class TemplateController extends ControllerAdminBase
                         'order'  => true,
                         'filter' => ['type' => 'input', 'sanitize' => 'string', 'style' => ''],
                     ],
-                    'subject' => [
-                        'title'  => t('Subject'),
+                    'content' => [
+                        'title'  => t('Content'),
                         'order'  => true,
                         'filter' => ['type' => 'input', 'sanitize' => 'string', 'style' => ''],
                     ],
@@ -63,16 +66,24 @@ class TemplateController extends ControllerAdminBase
             self::setGrid();
         }
 
-        $this->renderGrid('Phanbook\Models\Template');
+        $this->renderGrid('Phanbook\Models\Pages');
         $this->view->setVars(['grid' => parent::$grid]);
-        $this->tag->setTitle(t('Configuration templates'));
+        $this->tag->setTitle(t('Pages'));
 
         if ($this->request->isAjax()) {
             $this->view->setRenderLevel(View::LEVEL_ACTION_VIEW);
-            $this->view->pick('partials/admin-grid');
+            $this->view->pick('partials/grid');
         }
     }
-
+    /**
+     * Add new configuration
+     */
+    public function newAction()
+    {
+        $this->view->form = new PagesForm();
+        $this->tag->setTitle(t('Adding page'));
+        $this->view->pick($this->router->getControllerName() . '/item');
+    }
     /**
      * @param $id
      *
@@ -80,37 +91,35 @@ class TemplateController extends ControllerAdminBase
      */
     public function editAction($id)
     {
-        if (!$object = Template::findFirstById($id)) {
-            $this->flashSession->error(t('Template doesn\'t exist.'));
+        if (!$object = Pages::findFirstById($id)) {
+            $this->flashSession->error(t('Pages doesn\'t exist.'));
 
-            return $this->response->redirect('template');
+            return $this->currentRedirect();
         }
-        $this->tag->setTitle(t('Edit template'));
-        $this->view->form   = new TemplateForm($object);
+        $this->tag->setTitle(t('Edit page'));
+        $this->view->form   = new PagesForm($object);
         $this->view->object = $object;
 
         return $this->view->pick($this->router->getControllerName() . '/item');
     }
-
-
     public function saveAction()
     {
         //  Is not $_POST
         if (!$this->request->isPost()) {
             $this->view->disable();
 
-            return $this->response->redirect($this->router->getControllerName());
+            return $this->currentRedirect();
         }
 
         $id = $this->request->getPost('id', 'int', null);
 
         if (!empty($id)) {
-            $object = Template::findFirstById($id);
+            $object = Pages::findFirstById($id);
         } else {
-            $object = new Template();
+            $object = new Pages();
         }
 
-        $form = new TemplateForm($object);
+        $form = new PagesForm($object);
         $form->bind($_POST, $object);
 
         //  Form isn't valid
@@ -121,7 +130,7 @@ class TemplateController extends ControllerAdminBase
 
             // Redirect to edit form if we have an ID in page, otherwise redirect to add a new item page
             return $this->response->redirect(
-                $this->router->getControllerName() . (!is_null($id) ? '/edit/' . $id : '/new')
+                $this->getPathController() . (!is_null($id) ? '/edit/' . $id : '/new')
             );
         } else {
             if (!$object->save()) {
@@ -130,22 +139,13 @@ class TemplateController extends ControllerAdminBase
                 }
 
                 return $this->dispatcher->forward(
-                    ['controller' => $this->router->getControllerName(), 'action' => 'new']
+                    ['controller' => $this->getPathController(), 'action' => 'new']
                 );
             } else {
                 $this->flashSession->success(t('Data was successfully saved'));
 
-                return $this->response->redirect($this->router->getControllerName());
+                return $this->response->redirect($this->getPathController());
             }
         }
-    }
-
-    /**
-     * Add new configuration
-     */
-    public function newAction()
-    {
-        $this->view->form = new TemplateForm();
-        $this->view->pick($this->router->getControllerName() . '/item');
     }
 }
