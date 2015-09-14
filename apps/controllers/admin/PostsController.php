@@ -18,7 +18,6 @@ use Phanbook\Forms\PostsForm;
 use Phanbook\Models\Posts;
 use Phanbook\Utils\Slug;
 
-
 /**
  * Class IndexController
  */
