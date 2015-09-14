@@ -29,7 +29,7 @@ class ErrorsController extends Controller
     {
         // Send a HTTP 404 response header
         $this->response->setStatusCode(404, 'Page Not Found');
-        $this->view->pick('error/404');
+        $this->view->pick('errors/404');
     }
     /**
      * 503 page
@@ -37,7 +37,7 @@ class ErrorsController extends Controller
     public function show503Action()
     {
         $this->response->setStatusCode(503, 'Site is Down for Maintenance');
-        $this->view->pick('error/503');
+        $this->view->pick('errors/503');
     }
     public function reportsAction()
     {
