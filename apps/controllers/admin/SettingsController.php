@@ -158,6 +158,7 @@ class SettingsController extends ControllerBase
      */
     public function saveGeneralAction()
     {
+        $this->view->disable();
         //Is not $_POST
         if (!$this->request->isPost()) {
             return $this->currentRedirect();
