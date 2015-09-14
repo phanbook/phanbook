@@ -15,8 +15,9 @@ namespace Phanbook\Controllers\Admin;
 use Phalcon\Config\Adapter\Php as AdapterPhp;
 use Phanbook\Forms\LogoForm;
 use Phanbook\Forms\ThemeForm;
-use Phanbook\Forms\ConfigurationsForm;
 use Phanbook\Tools\ZFunction;
+use Phanbook\Forms\ConfigurationsForm;
+use Phanbook\Forms\GoogleAnalyticForm;
 
 /**
  * Class SettingsController
@@ -28,6 +29,11 @@ class SettingsController extends ControllerBase
         $this->tag->setTitle(t('Site Settings'));
     }
 
+    public function logoAction()
+    {
+        $this->tag->setTitle(t('Logo Settings'));
+        $this->view->pick('settings/index');
+    }
     /**
      * Replacing logo frontend page default
      * @link admin/settings/logo-frontend
@@ -204,6 +210,7 @@ class SettingsController extends ControllerBase
      */
     public function saveThemeAction()
     {
+        $this->view->disable();
         //Is not $_POST
         if (!$this->request->isPost()) {
             return $this->currentRedirect();
@@ -218,6 +225,48 @@ class SettingsController extends ControllerBase
             ];
             $data   = new AdapterPhp($filename);
             $result = array_merge($data->toArray(), $theme);
+            $result ='<?php return ' . var_export($result, true) . ';';
+
+            if (!file_put_contents($filename, $result)) {
+                throw new \Exception("Data was not saved", 1);
+            }
+            $this->flashSession->success(t('Data was successfully deleted'));
+            return $this->currentRedirect();
+        }
+        return $this->currentRedirect();
+    }
+    /**
+     * Render form setting google GoogleAnalytic
+     *
+     * @return mixed
+     */
+    public function analyticAction()
+    {
+        $this->tag->setTitle(t('Google Analytic Settings'));
+        $this->view->form = new GoogleAnalyticForm();
+    }
+    /**
+     * Make data configuration to file options.php inside directory config
+     *
+     * @return mixed
+     */
+    public function saveAnalyticAction()
+    {
+        $this->view->disable();
+        //Is not $_POST
+        if (!$this->request->isPost()) {
+            return $this->currentRedirect();
+        }
+        $filename = ROOT_DIR . 'common/config/options.php';
+        if (!file_exists($filename)) {
+            $makeFile = ZFunction::makeFile($filename);
+        }
+        if (file_exists($filename)) {
+            $analytic  = [
+                'googleAnalytic' => $this->request->getPost('analytic')
+            ];
+            $data   = new AdapterPhp($filename);
+            $result = array_merge($data->toArray(), $analytic);
             $result ='<?php return ' . var_export($result, true) . ';';
 
             if (!file_put_contents($filename, $result)) {

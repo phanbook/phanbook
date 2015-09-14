@@ -77,6 +77,11 @@ return new \Phalcon\Config(
                                     "code" => "theme",
                                     "name" => "Change Theme",
                                     "sub"  => []
+                                ],
+                                [
+                                    "code" => "analytic",
+                                    "name" => "Google analytic",
+                                    "sub"  => []
                                 ]
                             ]
             ],
