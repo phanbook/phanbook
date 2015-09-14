@@ -9,10 +9,10 @@
                     <div class="text-muted text-sm hidden-nav-xs padder m-t-sm m-b-sm">Start</div>
                     <ul class="nav nav-main" data-ride="collapse">
                         <li {% if this.view.getControllerName() == 'index' %}class="active"{% endif %}>
-                            {{ link_to('dashboard', 'class' : 'auto', '<i class="i i-statistics icon"></i><span class="font-bold">Dashboard</span>') }}
+                            {{ link_to('admin/dashboard', 'class' : 'auto', '<i class="i i-statistics icon"></i><span class="font-bold">Dashboard</span>') }}
                         </li>
                     </ul>
-                    
+
                     {% for menu in menuStruct %}
                         <ul class="nav nav-main admin-left-menu" data-ride="collapse">
                             <li {% if controller ==  menu['code'] %}class="active"{% endif %}>

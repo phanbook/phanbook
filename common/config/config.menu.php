@@ -41,6 +41,11 @@ return new \Phalcon\Config(
                                     "code"  =>  "sticky",
                                     "name"  =>  "Sticky posts",
                                     "sub"   =>  []
+                                ],
+                                [
+                                    "code"  =>  "index",
+                                    "name"  =>  "Edit posts",
+                                    "sub"   =>  []
                                 ]
                             ]
             ],
@@ -67,6 +72,16 @@ return new \Phalcon\Config(
                                     "code" => "logo",
                                     "name" => "Change Logo",
                                     "sub"  => []
+                                ],
+                                [
+                                    "code" => "theme",
+                                    "name" => "Change Theme",
+                                    "sub"  => []
+                                ],
+                                [
+                                    "code" => "analytic",
+                                    "name" => "Google analytic",
+                                    "sub"  => []
                                 ]
                             ]
             ],
@@ -74,8 +89,8 @@ return new \Phalcon\Config(
                 'code'  =>  'update',
                 'name'  =>  'Updates',
                 'sub'   =>  []
-            ],
+            ]
         ]
-        
+
     ]
 );
