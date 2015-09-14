@@ -15,7 +15,7 @@
 
                     {% for menu in menuStruct %}
                         <ul class="nav nav-main admin-left-menu" data-ride="collapse">
-                            <li {% if controller == 'admin' ~ menu['code'] %}class="active"{% endif %}>
+                            <li {% if controller ==  menu['code'] %}class="active"{% endif %}>
                                 {{ link_to('admin/' ~ menu['code'],
                                  'class' : 'auto', '<i class="fa fa-bars"></i><span class="font-bold">'
                                  ~ menu['name'] ~ '</span>')
