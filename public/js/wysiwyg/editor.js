@@ -1172,7 +1172,7 @@
             form.appendChild(cancelButton);
 
             util.addEvent(doc.body, "keydown", checkEscape);
-            dialog.style.top = "50%";
+            dialog.style.top = "40%";
             dialog.style.left = "50%";
             dialog.style.display = "block";
             if (uaSniffed.isIE_5or6) {
