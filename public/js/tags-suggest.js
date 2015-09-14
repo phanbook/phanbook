@@ -57,16 +57,24 @@ $(document).ready(function() {
         $("#tag-input").val("");
     });
     //Separate each tag
-    $("#tag-input").keypress(function(event){
+    $("#tag-input").keyup(function(event){
         if(event.which == 32){
             tag = $(this).val();
             tag = tag.replace(/\s+/g, '');
-            if(window.list_tag.indexOf(tag) == -1){
-                window.list_tag.push(tag);
+            if(tag.length > 0){
+                if(window.list_tag.indexOf(tag) == -1){
+                    window.list_tag.push(tag);
+                }
+                updateTags();
             }
-            updateTags();
             $(this).val("");
 
+        }
+        if(event.which == 8){
+            if($(this).val() == ""){
+                window.list_tag.pop();
+                updateTags();
+            }
         }
     });
     //Remove lats item comma when edit a posts
