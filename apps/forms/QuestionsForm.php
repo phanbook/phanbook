@@ -36,7 +36,7 @@ class QuestionsForm extends Form
         $title = new Text(
             'title',
             array(
-            'placeholder' => t('title'),
+            'placeholder' => t('Title of this question'),
             'class'       => 'form-control',
             'required'    => true
             )

@@ -2820,6 +2820,7 @@ div.snippet-hidden div.snippet-currently-hidden {
     margin: 5px 0;
     padding: 3px;
     transition: none 0s ease 0s ;
+    text-indent: 5px;
 }
 .topbar .topbar-wrapper {
     height: 45px;
