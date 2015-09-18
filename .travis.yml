@@ -43,7 +43,7 @@ after_script:
   #- mysql -e 'DROP DATABASE phanbook;' -uroot -ppassword__phanbook
 
 script:
-  - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 --ignore=core/library/Markdown  core/
+  - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 --ignore=core/common/library/Markdown  core/
   - vendor/bin/codecept build
   - vendor/bin/codecept run
 
