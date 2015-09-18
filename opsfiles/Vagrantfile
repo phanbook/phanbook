@@ -21,7 +21,7 @@ Vagrant.require_version ">= 1.6.0"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.define "ubuntu", autostart: true
     config.vm.define "centos", autostart: false
-    config.vm.synced_folder "../", "/usr/share/nginx/html/www", \
+    config.vm.synced_folder "../", "/usr/share/nginx/html/phanbook", \
       :create         => true, \
       :owner          => 'vagrant', \
       :group          => 'vagrant', \

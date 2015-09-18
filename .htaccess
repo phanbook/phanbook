@@ -3,7 +3,10 @@ Options +FollowSymLinks -MultiViews -Indexes
 DirectoryIndex index.html index.php
 
 <IfModule mod_rewrite.c>
-    RewriteEngine on
-    RewriteRule  ^$ public/    [L]
-    RewriteRule  (.*) public/$1 [L]
+    RewriteEngine On
+    RewriteBase /
+    RewriteRule ^index\.php$ - [L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule . /index.php [L]
 </IfModule>

@@ -9,12 +9,10 @@ fi
 if [[ ! -d "vendor" && "$ENV" == "development" ]]; then
     php composer.phar install --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader
 fi
-if [[ ! -f "common/config/config.php" ]]; then
-    cp common/config/config.example.php common/config/config.php
+if [[ ! -f "core/config/config.php" ]]; then
+    cp core/config/config.example.php core/config/config.php
 fi
-sed -i "s/'host'     => 'db'/'host'     => 'localhost'/" common/config/config.php
+sed -i "s/'host'     => 'db'/'host'     => 'localhost'/" core/config/config.php
 
-chmod 777 -R apps/logs
-chmod 777 -R apps/cache/volt
-chmod 777 -R public/uploads
+chmod 777 -R content
 

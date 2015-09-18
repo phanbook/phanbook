@@ -1,0 +1,354 @@
+html {
+    font-family: Helvetica,Arial,sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.4;
+}
+body {
+    background: #282434;
+    color: #333;
+    font-size: 13px;
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: scroll;
+    word-wrap: break-word;
+    margin: 0;
+}
+a {
+    color: #2b6dad;
+    text-decoration: none;
+}
+a {
+    background: none repeat scroll 0 0 transparent;
+}
+a:hover{
+    text-decoration: underline;
+}
+ul, ol {
+    list-style: outside none none;
+}
+h1, h2, h3, h4, h5, h6, ul, ol, li {
+    margin: 0;
+    padding: 0;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-size: inherit;
+    margin: 0;
+}
+.home {
+    margin: 0;
+}
+.signup-login {
+    bottom: 0;
+    height: 400px;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 650px;
+}
+.signup-login .logo img{
+    float: left;
+    height: 75px;
+    width: 168px;
+}
+.signup-login .tagline {
+    color: rgba(175, 175, 175, 0.95);
+    float: left;
+    font-size: 19px;
+    line-height: 1.3;
+    margin-left: 16px;
+    margin-top: 10px;
+}
+.signup-login .tagline h1 {
+    color: #fff;
+    display: block;
+    font-size: 26px;
+    font-weight: bold;
+}
+.signup-login .tagline h2 {
+    font-weight: 400;
+}
+.signup-login .spacer {
+    clear: both;
+}
+.signup-login .container {
+    background: none repeat scroll 0 0 #fff;
+    border-radius: 3px;
+    box-sizing: border-box;
+    margin-top: 20px;
+    padding: 22px;
+    width: 100%;
+}
+.signup-login .container::before,
+.signup-login .container::after {
+    content: "";
+    display: table;
+}
+.signup-login .container::after {
+    clear: both;
+}
+.signup-login .container .signup,
+.signup-login .container .login {
+    box-sizing: border-box;
+    float: left;
+    width:50%;
+}
+.signup-login .container h2,
+.signup-login .container .title {
+    border-bottom: 0 none;
+    color: #666;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    text-transform: uppercase;
+}
+.signup-login .container .signup {
+    border-right: 1px solid #e2e2e2;
+    padding-right: 32px;
+}
+.connect-buttons .submit-button{
+    border-radius: 4px;
+    display: block;
+    font-size: 18px;
+    margin-bottom: 16px;
+    padding: 12px 19px;
+}
+.connect-buttons .submit-button.before {
+    background-size: 24px 24px;
+    height: 24px;
+    width: 24px;
+}
+.connect-buttons .google-button::before {
+    background-image: url("../images/google1.png");
+    background-size: 24px 24px;
+    height: 24px;
+    width: 24px;
+}
+ .connect-buttons .facebook-button::before {
+    background-image: url("../images/facebook.png");
+    background-size: 24px 24px;
+    height: 24px;
+    width: 24px;
+}
+ .connect-buttons .twiter-button::before {
+    background-image: url("../images/twitter.png");
+    background-size: 24px 24px;
+    height: 24px;
+    width: 24px;
+}
+ .connect-buttons .gitbub-button::before {
+    background-image: url("../images/github.png");
+    background-size: 24px 24px;
+    height: 24px;
+    width: 24px;
+}
+
+.google-button, .facebook-button, .twiter-button, .gitbub-button {
+    background: none repeat scroll 0 0 #3b5998;
+    border-color: #2d4373;
+    text-align: left;
+}
+.google-button:hover, .facebook-button:hover, .twiter-button:hover, .gitbub-button {
+    border-color: #147bc9;
+}
+.google-button::before, .facebook-button::before, .twiter-button::before , .gitbub-button::before{
+    background-size: 16px 16px;
+    content: "";
+    display: inline-block;
+    float: left;
+    height: 16px;
+    margin-right: 8px;
+    width: 16px;
+}
+.google-button::before {
+    background-image: url("../images/google.png");
+}
+.submit-button, .primary-button {
+    color: #fff;
+    cursor: pointer;
+    font-weight: 500;
+    /*text-align: center;*/
+}
+
+.container .login {
+    padding-left: 32px;
+    position: relative;
+}
+.regular-login .forgot-password {
+    color: #999;
+}
+.regular-login .text-box {
+    font-size: 15px;
+    line-height: 1.4;
+    margin-bottom: 8px;
+    min-height: 32px;
+    padding-left: 8px;
+    padding-right: 8px;
+    width: 100%;
+}
+
+input[type="text"]:focus, input[type="password"]:focus{
+    border-color: #2b6dad;
+}
+input[type="text"], input[type="password"] {
+    height: 15px;
+    padding: 3px;
+    width: 150px;
+}
+input[type="text"], input[type="number"], input[type="password"], textarea,
+.fake_editor, .qtext_editor_content {
+    background: none repeat scroll 0 0 #fff;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    box-shadow: 0 1px 1px rgba(200, 200, 200, 0.3) inset;
+    box-sizing: border-box;
+    min-height: 27px;
+    outline: 0 none;
+    transition: border-color 0.2s ease 0s;
+}
+input[type="text"], input.text {
+    outline: 0 none;
+}
+input[type="text"], input.text {
+    outline: 0 none;
+}
+button, input, optgroup, select, textarea {
+    color: #333;
+}
+input {
+    line-height: normal;
+}
+button, input, optgroup, select, textarea {
+    color: inherit;
+    font: inherit;
+    margin: 0;
+}
+input::-moz-placeholder {
+    color: #999;
+}
+
+.regular-login input[type="password"] {
+    margin-top: 16px;
+}
+.regular-login .submit-button {
+    float: right;
+    font-size: 15px;
+    line-height: 1.4;
+    margin-top: 8px;
+}
+/*Phan footer*/
+.footer-nav {
+    margin-top: 16px;
+    padding-left: 180px;
+}
+.footer-nav li {
+    float: left;
+    margin-right: 16px;
+}
+.footer-nav li a {
+    color: rgba(175, 175, 175, 0.95);
+}
+
+/*///////////*/
+
+.term, .tos-disclaimer a{
+    color: #999;
+    font-size: 13px;
+}
+.signup-email{
+    color: #538dc2;
+}
+
+/*nut login*/
+.submit-button-login {
+    float: right;
+    font-size: 15px;
+    background: none repeat scroll 0 0 #2b6dad;
+    border: 1px solid #4f5863;
+    border-radius: 3px;
+    box-shadow: 0 1px 1px 0 rgba(200, 200, 200, 0.2);
+    color: #fff;
+    padding: 3px 7px 4px;
+    cursor: pointer;
+}
+
+.signup-botom{
+    float: right;
+}
+.submit-button-signup{
+    font-size: 15px;
+    background: none repeat scroll 0 0 #2b6dad;
+    border: 1px solid #4f5863;
+    border-radius: 3px;
+    box-shadow: 0 1px 1px 0 rgba(200, 200, 200, 0.2);
+    color: #fff;
+    padding: 3px 7px 4px;
+    cursor: pointer;
+}
+
+.alert{
+    background: #fff;
+    padding: 12px 0px;
+}
+.signup-form label{
+    font-size: 14px;
+}
+.signup-form .form-column{
+    padding-bottom: 20px;
+}
+.signup-form .text-box {
+    float: right;
+    width: 70%;
+}
+.term-1{
+    float: left;
+    padding: 5px 0 10px 0;
+}
+
+@media screen and (max-device-width: 620px),(max-width: 620px) {
+    /*body{
+        background: red;
+    }*/
+    .signup-login .logo img{
+       display: none;
+
+    }
+    .signup-login .tagline h2{
+        width: 300px;
+    }
+    .signup-login .container {
+        background: none repeat scroll 0 0 #fff;
+        width: 55%;
+    }
+    /*.signup-login{
+        width: 500px;
+    }*/
+    .signup-login .container .signup,
+    .signup-login .container .login {
+        float: none;
+        width: 95%;
+        height: 100%;
+    }
+    .container .login {
+        padding-left: 0;
+        margin-top: 25px;
+    }
+    .signup-login .container .signup {
+        border-right: 0;
+        padding-right: 0;
+    }
+    .login-form{
+        margin-top: 20px;
+    }
+    .footer-nav{
+        padding-left: 0;
+    }
+    .signup-form-1{
+        width: 50%;
+    }
+
+}

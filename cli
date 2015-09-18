@@ -15,10 +15,10 @@ date_default_timezone_set('UTC');
 
 // Necessary requires to get things going
 require ROOT_DIR . '/vendor/autoload.php';
-require ROOT_DIR . '/common/tools/cli/PhpError.php';
-require ROOT_DIR . '/common/tools/cli/IRun.php';
-require ROOT_DIR . '/common/tools/cli/Output.php';
-require ROOT_DIR . '/common/Console.php';
+require ROOT_DIR . '/core/common/tools/cli/PhpError.php';
+require ROOT_DIR . '/core/common/tools/cli/IRun.php';
+require ROOT_DIR . '/core/common/tools/cli/Output.php';
+require ROOT_DIR . '/core/common/Console.php';
 
 use Phalcon\DI\FactoryDefault\CLI;
 use Phanbook\Console as ConsoleApp;

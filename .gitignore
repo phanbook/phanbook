@@ -1,9 +1,7 @@
 .idea/
 vendor/
-common/cache
-common/config/config.local.php
-common/config/config.php
-common/config/options.php
+core/config/config.local.php
+core/config/config.php
 apps/frontend/cache/volt/*
 tests/_output
 PayPal.log
@@ -13,7 +11,16 @@ public/.DS_Store
 public/images/.DS_Store
 opsfiles/.vagrant
 /Dockerfile
-
+/content/tmp/*
+/content/data/*
+/content/themes/*
+!/content/themes/README.md
+/content/images/*
+/content/uploads/*
+!/content/themes/default/
+!/content/uploads/README.md
+!/README.md/*
+content/options/options.php
 #css
 #public/css/custom.css
 

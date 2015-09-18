@@ -8,7 +8,7 @@ else
 fi
 # echo ">>> Installing MySQL Server"
 sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
-sudo add-apt-repository 'deb http://mariadb.biz.net.id//repo/5.5/ubuntu trusty main'
+sudo add-apt-repository ' deb http://mariadb.mirror.aasaam.ir/pub/mariadb/repo/10.0/ubuntu trusty main'
 
 echo $MYSQL_PASSWORD
 echo $DB_NAME
@@ -28,10 +28,10 @@ mysqladmin -u root  create $DB_NAME
 # Import database
 
 if [ "$ENV" == "production" ]; then
-   mysql -u root $DB_NAME <  "${ROOT_DIR}databases/phanbook_prd.sql"
+   mysql -u root $DB_NAME <  "${ROOT_DIR}schema/phanbook_prd.sql"
 fi
 
 if [ "$ENV" == "development" ]; then
-   mysql -u root  $DB_NAME <  "${ROOT_DIR}databases/phanbook.sql"
+   mysql -u root  $DB_NAME <  "${ROOT_DIR}schema/phanbook.sql"
 fi
 
