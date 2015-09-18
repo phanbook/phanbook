@@ -18,6 +18,7 @@ use Phanbook\Models\Users;
 use Phanbook\Models\Karma;
 use Phanbook\Models\RememberTokens;
 use Phanbook\Models\NotificationsBounces;
+
 /**
  * Class TestsController
  *

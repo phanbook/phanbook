@@ -40,14 +40,13 @@ class Mail extends Component
         //Set views layout
         $this->view->setViewsDir(ROOT_DIR . '/core/data/');
         $html = $this->view->getRender(
-                    //We only put tempates into templates directory
-                    'templates',
-                    $key,
-                    $params,
-                    function ($view) {
-                        $view->setRenderLevel(View::LEVEL_LAYOUT);
-                    }
-                );
+            'templates',
+            $key,
+            $params,
+            function ($view) {
+                $view->setRenderLevel(View::LEVEL_LAYOUT);
+            }
+        );
         return $html;
         //return $this->view->getContent();
     }

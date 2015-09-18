@@ -16,7 +16,6 @@ use Phalcon\CLI\Task;
 use Phanbook\Mail\Digest;
 use Phanbook\Tools\Cli\Output;
 
-
 class SendDigestTask extends Task
 {
     public function mainAction()

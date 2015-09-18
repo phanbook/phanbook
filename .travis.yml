@@ -32,18 +32,18 @@ install:
 
 before_script:
   - echo "USE mysql;\nUPDATE user SET password=PASSWORD('password__phanbook') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
-  - cp ./common/config/config.example.php ./common/config/config.php
-  - cp ./tests/config.travis.php ./common/config/config.travis.php
+  - cp ./core/config/config.example.php ./core/config/config.php
+  - cp ./tests/config.travis.php ./core/config/config.travis.php
   - mysql -e 'CREATE DATABASE phanbook CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;' -uroot -ppassword__phanbook
   - cat databases/phanbook.sql | mysql -uroot phanbook -ppassword__phanbook
   #- (cd ./scripts/ && php random-entries.php > /dev/null)
-  - php -S 127.0.0.1:8000 -t public/ .htrouter.php >/dev/null 2>&1 &
+  - php -S 127.0.0.1:8000 -t . .htrouter.php >/dev/null 2>&1 &
 
 after_script:
   #- mysql -e 'DROP DATABASE phanbook;' -uroot -ppassword__phanbook
 
 script:
-  - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 --ignore=/apps/views,apps/cache,/common/library/Markdown apps/controllers/ common/ apps/forms/
+  - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 --ignore=core/library/Markdown  core/
   - vendor/bin/codecept build
   - vendor/bin/codecept run
 

@@ -30,7 +30,7 @@ class PagesController extends ControllerBase
     }
     public function indexAction()
     {
-      $this->view->page = $this->phanbook->getPageByTitle('About');
+        $this->view->page = $this->phanbook->getPageByTitle('About');
     }
     public function rulesAction()
     {

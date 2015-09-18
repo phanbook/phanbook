@@ -16,7 +16,6 @@ use Phalcon\CLI\Task;
 use Phanbook\Tools\ZFunction;
 use Phanbook\Tools\Cli\Output;
 
-
 class UpdateTask extends Task
 {
     /**

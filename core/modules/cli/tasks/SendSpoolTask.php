@@ -16,7 +16,6 @@ use Phalcon\CLI\Task;
 use Phanbook\Mail\SendSpool;
 use Phanbook\Tools\Cli\Output;
 
-
 class SendSpoolTask extends Task
 {
     public function mainAction()

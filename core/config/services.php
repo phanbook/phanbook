@@ -417,8 +417,9 @@ $di->set(
  *
  * @return mixed
  */
-if(!function_exists('t') ){
-    function t($string) {
+if (!function_exists('t')) {
+    function t($string)
+    {
         $translation = DI::getDefault()->get('translation');
         return $translation->_($string);
     }
@@ -427,7 +428,8 @@ if(!function_exists('t') ){
 if ($config->application->debug) {
     (new \Phalcon\Debug)->listen();
     if (function_exists('d')) {
-        function d($object, $kill = true) {
+        function d($object, $kill = true)
+        {
             echo '<pre style="text-aling:left">', print_r($object, true), '</pre>';
             $kill && exit(1);
         }
