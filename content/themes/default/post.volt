@@ -1,5 +1,5 @@
 {% extends 'layouts/layout.volt' %}
-{% block title %}Dashboard{% endblock %}
+{% block title %}{{ this.config.application.tagline }}{% endblock %}
 {% block content %}
     {{ partial('partials/right-side') }}
     {{ partial('partials/list-posts')}}

@@ -1,5 +1,5 @@
 {% extends 'layouts/layout.volt' %}
-{% block title %}{% if page %} {{page.getTitle()}}{% endif %}{% endblock %}
+{% block title %}{{ post.getTitle() ? post.getTitle() : 'Phanbook'}}{% endblock %}
 {% block content %}
     {% if page %}
         <div class="container help">

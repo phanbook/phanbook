@@ -1,5 +1,5 @@
 {% extends 'layouts/layout.volt' %}
-{% block title %}{% endblock %}
+{% block title %}{{ post.getTitle() ? post.getTitle() : 'Phanbook'}}{% endblock %}
 {% block content %}
     {% if post is defined %}
         {{ partial('partials/right-side', ['post' : post]) }}
