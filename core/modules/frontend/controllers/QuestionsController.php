@@ -49,7 +49,7 @@ class QuestionsController extends ControllerBase
         /* @var \Phalcon\Mvc\Model\Query\BuilderInterface $itemBuilder */
         /* @var \Phalcon\Mvc\Model\Query\BuilderInterface $totalBuilder */
         $tab = $this->request->getQuery('tab');
-        if ($order == "answers") {
+        if ($tab == "answers") {
             $join = [
                 'type'  => 'join',
                 'model' => 'Phanbook\\Models\\PostsReply',
