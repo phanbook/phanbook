@@ -16,7 +16,7 @@ use Phalcon\Mvc\Router;
 $router = new Router(false);
 $router->setDefaults([
     'module'     => 'frontend',
-    'controller' => 'questions',
+    'controller' => 'posts',
     'action'     => 'index'
 ]);
 
@@ -56,7 +56,7 @@ $router->mount($frontend);
 /**
  * Define routes for each module
  */
-$modules = ['oauth', 'backend', 'blog'];
+$modules = ['oauth', 'backend'];
 foreach ($modules as $module) {
     $group = new Group([
         'module' => $module,
@@ -104,4 +104,5 @@ $router->add('/oauth/facebook/access_token', [
     'controller' => 'login',
     'action'     => 'tokenFacebook'
 ]);
+
 return $router;
