@@ -50,6 +50,19 @@ $frontend->add('/posts/:int/{slug:[a-z\-]+}', [
 $frontend->add('/:controller[/]?', [
     'controller' => 1,
 ]);
+$frontend->add('/blog/{id:[0-9]+}/{slug:[a-z\-]+}', [
+    'controller' => 'posts',
+    'action' => 'view'
+]);
+$frontend->add('/questions/{id:[0-9]+}/{slug:[a-z\-]+}', [
+    'controller' => 'posts',
+    'action' => 'view'
+]);
+$frontend->add('/questions/new', [
+    'controller' => 'posts',
+    'action' => 'new'
+]);
+
 $frontend->add('/');
 $router->mount($frontend);
 

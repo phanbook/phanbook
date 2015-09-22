@@ -635,7 +635,7 @@
     .post-editor label, #post-editor .wmd-panel, .post-answer .save-post, .post-answer .bottom-notice{
         margin: 0 10px 0px 57px;
     }
-    .questions .bottom-notice {
+    .posts .bottom-notice {
         margin-top: 45px;
     }
     .post-editor label{
