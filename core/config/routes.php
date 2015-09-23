@@ -19,6 +19,7 @@ $router->setDefaults([
     'controller' => 'posts',
     'action'     => 'index'
 ]);
+$router->removeExtraSlashes(true);
 
 /*
  * All defined routes are traversed in reverse order until Phalcon\Mvc\Router
@@ -117,5 +118,28 @@ $router->add('/oauth/facebook/access_token', [
     'controller' => 'login',
     'action'     => 'tokenFacebook'
 ]);
+
+$router->add('/questions', [
+    'module'     => 'frontend',
+    'controller' => 'posts',
+]);
+/**
+ * @link https://docs.phalconphp.com/en/latest/reference/routing.html#match-callbacks
+ */
+$router->add('/{router}', [
+    'module'     => 'frontend',
+    'controller' => 'router',
+])->beforeMatch( function($uri, $route) {
+    if ($uri == '/questions') {
+       return false;
+    }
+    if ($uri == '/backend') {
+       return false;
+    }
+    if ($uri == '/') {
+       return false;
+    }
+    return true;
+});
 
 return $router;

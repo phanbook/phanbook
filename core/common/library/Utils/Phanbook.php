@@ -124,7 +124,7 @@ class Phanbook
      * Retrieve a page give its title
      *
      * @param  string       $page_title Page title
-     * @return object on success or empty  on failure
+     * @return object on success or null on failure
      */
     public function getPageByTitle($title)
     {
@@ -135,6 +135,25 @@ class Phanbook
         if (Posts::findFirst($param)) {
             return Posts::findFirst($param);
         }
-        return false;
+        return null;
+    }
+    /**
+     * Retrieves the directory name of the current theme, without the trailing slash.
+     *
+     * @return string
+     */
+    public function getTemplate()
+    {
+        return ROOT_DIR . 'content/themes/' . $this->theme;
+    }
+    /**
+     * Retrieves the file name of the current theme with url.
+     * /about it will return such as content/themes/default/page-about.volt
+     *
+     * @return string
+     */
+    public function getPageFile($name)
+    {
+        return ROOT_DIR . 'content/themes/' . $this->theme . '/page-'. $name . '.volt';
     }
 }

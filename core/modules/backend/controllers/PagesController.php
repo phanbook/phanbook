@@ -123,13 +123,12 @@ class PagesController extends ControllerBase
         $id = $this->request->getPost('id');
         if (!empty($id)) {
             $object = Posts::findFirstById($id);
-            $object->setSlug(Slug::generate($this->request->getPost('title')));
-
         } else {
             $object = new Posts();
-            //@todo
         }
-
+        $object->setSlug(Slug::generate($this->request->getPost('title')));
+        $object->setUsersId($this->auth->getAuth()['id']);
+        $object->setType(Posts::POST_PAGE);
         $form = new PostsForm($object);
         $form->bind($_POST, $object);
 
@@ -149,7 +148,7 @@ class PagesController extends ControllerBase
             } else {
                 $this->flashSession->success(t('Data was successfully saved'));
 
-                return $this->currentRedirect();
+                return $this->indexRedirect();
             }
         }
     }

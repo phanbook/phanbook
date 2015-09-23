@@ -477,11 +477,11 @@ class ControllerBase extends Controller
         ))->getPaginate();
         $this->view->setVars(
             [
-            'currentOrder'  => $model['currentOrder'],
-            'object'        => $paginator->items,
-            'canonical'     => '',
-            'totalPages'    => $paginator->total_pages,
-            'currentPage'   => $page,
+                'tab'           => $model['currentOrder'],
+                'object'        => $paginator->items,
+                'canonical'     => '',
+                'totalPages'    => $paginator->total_pages,
+                'currentPage'   => $page,
             ]
         );
     }

@@ -1,5 +1,5 @@
 {% extends 'layouts/layout.volt' %}
-{% block title %}{{ page is defined ? page.getTitle() : 'Phanbook'}}{% endblock %}
+{% block title %}{{ page is defined ? page.getTitle() : name }}{% endblock %}
 {% block content %}
     {% if page is defined %}
         <div class="container help">

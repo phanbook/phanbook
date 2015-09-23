@@ -22,10 +22,11 @@ use Phanbook\Models\PostsNotifications;
 class Posts extends ModelBase
 {
 
-    const POST_QUESTIONS = 'questions';
-    const POST_BLOG      = 'blog';
-    const POST_HACKERNEWS= 'hackernews';
     const POST_ALL       = 'all';
+    const POST_BLOG      = 'blog';
+    const POST_PAGE      = 'pages';
+    const POST_QUESTIONS = 'questions';
+    const POST_HACKERNEWS= 'hackernews';
     /**
      *
      * @var integer
