@@ -129,15 +129,15 @@ $router->add('/questions', [
 $router->add('/{router}', [
     'module'     => 'frontend',
     'controller' => 'router',
-])->beforeMatch( function($uri, $route) {
+])->beforeMatch(function ($uri, $route) {
     if ($uri == '/questions') {
-       return false;
+        return false;
     }
     if ($uri == '/backend') {
-       return false;
+        return false;
     }
     if ($uri == '/') {
-       return false;
+        return false;
     }
     return true;
 });
