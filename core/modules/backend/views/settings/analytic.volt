@@ -9,10 +9,17 @@
 
 {{ form('settings/saveAnalytic', 'class' : 'form-horizontal') }}
     <div class="form-group">
-        <label class="col-sm-2 control-label" for="analytic">{{ t('analytic') }}:</label>
+        <label class="col-sm-2 control-label" for="clientID">{{ t('Client ID') }}:</label>
         <div class="col-sm-10">
-            {{ form.render('analytic', ['class':'form-control input-sm']) }}
-            <small>Enter the google analytic of your"</small>
+            {{ form.render('clientID', ['class':'form-control input-sm']) }}
+            <small>Enter google client ID"</small>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label" for="clientSecret">{{ t('Client Secret') }}:</label>
+        <div class="col-sm-10">
+            {{ form.render('clientSecret', ['class':'form-control input-sm']) }}
+            <small>Enter google client Secret"</small>
         </div>
     </div>
     <div class="form-group">

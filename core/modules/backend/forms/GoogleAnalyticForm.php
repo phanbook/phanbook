@@ -23,16 +23,28 @@ class GoogleAnalyticForm extends Form
     public function initialize()
     {
 
-        $analytic = new Text(
-            'analytic',
+        /* Google client ID */
+        
+        $clientID = new Text(
+            'clientID',
             [
-                'placeholder' => t('Google Analytic'),
-                'class'       => 'form-control',
-                'value'       => $this->config->googleAnalytic
+                'placeholder'   =>  t('Client ID'),
+                'class'         =>  'form-control',
+                'value'         =>  $this->config->google->clientId
             ]
         );
+        $this->add($clientID);
 
-        $this->add($analytic);
+        $clientSecret = new Text(
+            'clientSecret',
+            [
+                'placeholder'   =>  t('Client Secret'),
+                'class'         =>  'form-control',
+                'value'         =>  $this->config->google->clientSecret
+            ]
+        );
+        $this->add($clientSecret);
+
         // CSRF
         $csrf = new Hidden('csrf');
         $csrf->addValidator(

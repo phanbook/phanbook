@@ -18,6 +18,8 @@
         "swiftmailer/swiftmailer": "@stable",
         "league/oauth2-client": "0.10.*@dev",
         "league/fractal": "0.7.*",
-        "elasticsearch/elasticsearch": "~1.0"
+        "elasticsearch/elasticsearch": "~1.0",
+        "google/apiclient": "1.0.*@beta"
+
     }
 }

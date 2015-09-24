@@ -103,6 +103,19 @@ return new \Phalcon\Config(
         'beanstalk' => [
             'disabled' => true,
             'host'     => '127.0.0.1'
+        ],
+        /**
+         * Your client ID and client secret keys come from
+         *
+         * @link https://developers.google.com/console/help/new/
+         */
+        'google' => [
+            'clientId'          => '432349956614-40edas1b3nsuqblqcm0io50qjiqmnced.apps.googleusercontent.com',
+            'clientSecret'      => '4xkQM9jjjckKjRtoQKEoDyKw',
+            'redirectAnalytic'  =>  'http://dev.phanbook.com/backend/dashboard/googleAnalytic',
+            'redirectDashboard' =>  'http://dev.phanbook.com/backend/dashboard',
+            'redirectUri'       => 'http://dev.phanbook.com/auth/google/access_token',
+            'projectId'         =>  '104463261'
         ]
     ]
 );

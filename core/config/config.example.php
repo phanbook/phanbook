@@ -92,16 +92,7 @@ return new \Phalcon\Config(
             'redirectUri'  => 'http://dev.phanbook.com/auth/github/access_token',
             'scopes'       => ['user', 'email']
         ],
-        /**
-         * Your client ID and client secret keys come from
-         *
-         * @link https://developers.google.com/console/help/new/
-         */
-        'google' => [
-            'clientId' => '90283109318-91hci2ivgtsdgq1n5c6qqv4fetj3dl11.apps.googleusercontent.com',
-            'clientSecret' => 'nI2o4hhEcL79PIGQ3jHtXMd8',
-            'redirectUri'  => 'http://dev.phanbook.com/auth/google/access_token'
-        ],
+        
         /**
          * Your client ID and client secret keys come from
          *
@@ -129,6 +120,5 @@ return new \Phalcon\Config(
          *
          * @link http://www.google.com/analytics/
          */
-        'googleAnalytic' => 'UA-47328645-4'
     ]
 );
