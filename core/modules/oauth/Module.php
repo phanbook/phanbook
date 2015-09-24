@@ -76,7 +76,7 @@ class Module implements ModuleDefinitionInterface
          */
         $di->set(
             'view',
-            function () use ($config) {
+            function () {
                 $view = new View();
                 $view->setViewsDir(__DIR__ . '/views/');
                 $view->disableLevel([View::LEVEL_MAIN_LAYOUT => true, View::LEVEL_LAYOUT => true]);
