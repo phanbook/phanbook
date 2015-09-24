@@ -83,7 +83,7 @@
 							<div class="form-column">
 								{{ loginForm.render('password')}}
 								<div>
-									<a class="forgot-password" href="/oauth/login/forgotpassword">Forgot Password?</a>
+									<a class="forgot-password" href="/oauth/register/forgotpassword">Forgot Password?</a>
 								</div>
 							</div>
 							{{ loginForm.render('login')}}
