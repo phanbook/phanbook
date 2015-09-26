@@ -23,6 +23,13 @@
         </div>
     </div>
     <div class="form-group">
+        <label class="col-sm-2 control-label" for="clientID">{{ t('Analytic') }}:</label>
+        <div class="col-sm-10">
+            {{ form.render('analytic', ['class':'form-control input-sm']) }}
+            <small>Enter google analytic"</small>
+        </div>
+    </div>
+    <div class="form-group">
         <div class="col-lg-offset-2 col-lg-10">
             {{ form.render('save') }}
         </div>

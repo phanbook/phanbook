@@ -23,6 +23,15 @@ class GoogleAnalyticForm extends Form
     public function initialize()
     {
 
+        $analytic = new Text(
+            'analytic',
+            [
+                'placeholder' => t('Google Analytic'),
+                'class'       => 'form-control',
+                'value'       => $this->config->googleAnalytic
+            ]
+        );
+        $this->add($analytic);
         /* Google client ID */
         
         $clientID = new Text(
