@@ -38,12 +38,19 @@ if [ "destroy" == "$1" ]; then
     cd opsfiles && vagrant destroy
 fi
 
+
 #Docker setup
 if [ "docker" == "$1" ]; then
     if ! which docker > /dev/null; then
         echo "Docker doesn't seem to be installed. Please download and install it"
         echo "from http://www.docker.io/downloads.html and re-run phanbook."
         exit 3
+    fi
+    if [[ "destroy" == "$2" ]]; then
+        # Stop and remove any existing containers
+        docker rm -f $(docker ps -a -q)
+        # Delete all images
+        docker rmi -f $(docker images -q)
     fi
     if ! which docker-compose > /dev/null; then
         curl -L https://github.com/docker/compose/releases/download/1.3.3/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
