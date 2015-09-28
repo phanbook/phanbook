@@ -32,6 +32,7 @@
     <div class="form-group">
         <div class="col-lg-offset-2 col-lg-10">
             {{ form.render('save') }}
+            {{ form.render('requestAccess') }}
         </div>
     </div>
     {{ form.render('csrf', ['value': this.security.getToken()]) }}

@@ -110,12 +110,12 @@ return new \Phalcon\Config(
          * @link https://developers.google.com/console/help/new/
          */
         'google' => [
-            'clientId'          => '432349956614-40edas1b3nsuqblqcm0io50qjiqmnced.apps.googleusercontent.com',
-            'clientSecret'      => '4xkQM9jjjckKjRtoQKEoDyKw',
-            'redirectAnalytic'  =>  'http://dev.phanbook.com/backend/dashboard/googleAnalytic',
-            'redirectDashboard' =>  'http://dev.phanbook.com/backend/dashboard',
+            'clientId'          => '432349956614-nn8d7cj0dnqot52u01f3q5flij7c3jsl.apps.googleusercontent.com',
+            'clientSecret'      => 'iupVGUyOZZJWTffeFkjxOmRr',
             'redirectUri'       => 'http://dev.phanbook.com/auth/google/access_token',
-            'projectId'         =>  '104463261'
+            'redirectAnalytic'  =>  'http://dev.phanbook.com/backend/settings/googleAnalytic',
+            'projectId'         =>  '104463261',
+            'googleAnalytic'    =>  'UA-47328645-4'
         ]
     ]
 );

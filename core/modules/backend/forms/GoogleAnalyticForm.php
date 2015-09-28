@@ -28,7 +28,7 @@ class GoogleAnalyticForm extends Form
             [
                 'placeholder' => t('Google Analytic'),
                 'class'       => 'form-control',
-                'value'       => $this->config->googleAnalytic
+                'value'       => $this->config->google->googleAnalytic
             ]
         );
         $this->add($analytic);
@@ -70,7 +70,17 @@ class GoogleAnalyticForm extends Form
             new Submit(
                 'save',
                 [
-                'value' => 'Change analytic',
+                'value' => 'Save',
+                'class' => 'btn btn-sm btn-info'
+                ]
+            )
+        );
+        $this->add(
+            new Submit(
+                'requestAccess',
+                [
+                'name'  =>  'requestAccess',
+                'value' => 'Request Access',
                 'class' => 'btn btn-sm btn-info'
                 ]
             )

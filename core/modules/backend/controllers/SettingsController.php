@@ -19,6 +19,8 @@ use Phanbook\Backend\Forms\ThemeForm;
 use Phanbook\Tools\ZFunction;
 use Phanbook\Backend\Forms\ConfigurationsForm;
 use Phanbook\Backend\Forms\GoogleAnalyticForm;
+use Phanbook\Models\Settings;
+use Phanbook\Google\Analytic;
 
 /**
  * Class SettingsController
@@ -227,7 +229,11 @@ class SettingsController extends ControllerBase
         }
         if (file_exists($filename)) {
             $analytic  = [
-                'googleAnalytic' => $this->request->getPost('analytic')
+                'google'    =>  [
+                    'clientId'  =>  $this->request->getPost('clientID'),
+                    'clientSecret'  =>  $this->request->getPost('clientSecret'),
+                    'googleAnalytic'  =>  $this->request->getPost('analytic')
+                ]
             ];
             $data   = new AdapterPhp($filename);
             $result = array_merge($data->toArray(), $analytic);
@@ -236,9 +242,109 @@ class SettingsController extends ControllerBase
             if (!file_put_contents($filename, $result)) {
                 throw new \Exception("Data was not saved", 1);
             }
-            $this->flashSession->success(t('Data was successfully deleted'));
-            return $this->currentRedirect();
+            if(!$this->request->getPost('requestAccess'))
+                $this->flashSession->success(t('Data was successfully saved'));
+        }
+        if($this->request->getPost('requestAccess')){
+            return $this->setAnalyticRequest();
         }
         return $this->currentRedirect();
+    }
+    /**
+     * Check if google analytic's accept. If not, send request for authen
+     */
+    public function setAnalyticRequest(){
+        $analytics = new Analytic();
+
+        // If the user has already authorized this app then get an access token
+        // else redirect to ask the user to authorize access to Google Analytics.
+        $check = $analytics->checkAccessToken();
+        if ($check == "OK") {
+
+            $this->flashSession->success(t('Connected to googleAnalytic'));
+            //$this->response->redirect("settings/analytic");
+            // Set the access token on the client.
+            
+            // Create an authorized analytics service object.
+            // $service = new \Google_Service_Analytics($client);
+
+            // $projectId = $this->config->google->projectId;          //ID of phanbook project
+            // if( $this->checkGoogleAnalyticHasProject($service, $projectId)){
+            //     // dimensions
+            //     $_params[] = 'visits';
+            //     $_params[] = 'pageviews';
+            //     $_params[] = 'bounces';
+            //     $_params[] = 'entrance_bounce_rate';
+            //     $_params[] = 'visit_bounce_rate';
+            //     $_params[] = 'avg_time_on_site';
+
+            //     $from = date('Y-m-d', time()-30*24*60*60);; // 30 days
+            //     $to = date('Y-m-d'); // today
+
+            //     $metrics = 'ga:visits,ga:pageviews,ga:bounces,ga:entranceBounceRate,ga:visitBounceRate,ga:avgTimeOnSite';
+            //     $data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics);
+                
+            // }
+            // else
+            //     echo "Don't have permission";
+            
+        } 
+        else if ($check == "EXPIRED") {
+            if($analytics->refreshGoogleToken()){
+                $this->flashSession->success(t('Connected to googleAnalytic'));
+            }
+            else
+                $this->flashSession->error(t('An error occured when refresh google access token'));
+            //$this->response->redirect("settings/analytic");
+        }
+
+        else {
+            $redirect_uri = $this->config->google->redirectAnalytic;
+            header('Location: ' . filter_var($redirect_uri, FILTER_SANITIZE_URL));
+        }
+    }
+
+    private function setGoogleClient(){
+        $client = new \Google_Client();
+        $client->setClientId($this->config->google->clientId);
+        $client->setClientSecret($this->config->google->clientSecret);
+        $client->setRedirectUri($this->config->google->redirectAnalytic);
+        $client->addScope(\Google_Service_Analytics::ANALYTICS_READONLY);
+
+        /* Set offline for using google analytic even when google user offline */
+        
+        $client->setAccessType("offline");
+        return $client;
+    }
+
+    private function checkGoogleAnalyticHasProject($googleAnalyticObj, $currentProjectID){
+        $accounts = $googleAnalyticObj->management_accounts->listManagementAccounts();
+        if (count($accounts->getItems()) > 0) {
+            $accounts = $accounts->getItems();
+            foreach ($accounts as $key => $acc) {
+                $props = $googleAnalyticObj->management_webproperties->listManagementWebproperties($acc->getId());
+                foreach($props['items'] as $item){
+                    if($item['defaultProfileId'] == $currentProjectID)
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+    public function googleAnalyticAction()
+    {
+        $analytic = new Analytic();
+
+        $code = $this->request->get('code');
+        if (! isset($code)) 
+            header('Location: ' . filter_var($analytic->getAuthURL(), FILTER_SANITIZE_URL));
+        else {
+            $result = $analytic->saveGoogleToken($code);
+            if($result['state']) 
+                $this->flashSession->success(t($result['message']));
+            else
+                $this->flashSession->error(t($result['message']));
+            $this->response->redirect("settings/analytic");
+        }
     }
 }
