@@ -3,14 +3,6 @@
 # Executes setup.rb using the Ruby bundled with Vagrant.
 #
 
-# These paths assume Vagrant was installed from the vendor-supplied packages
-# if [ "$(uname)" == "Darwin" ]; then
-#     ruby=/Applications/Vagrant/embedded/bin/ruby
-# else
-#     ruby=/opt/vagrant/embedded/bin/ruby
-# fi
-
-
 #Setup some dependency
 #rm -rf opsfiles
 if [ ! -d "opsfiles" ]; then
