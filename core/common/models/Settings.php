@@ -39,6 +39,13 @@ class Settings extends ModelBase
      */
     protected $note;
 
+    public function initialize()
+    {
+        \Phalcon\Mvc\Model::setup([
+           'notNullValidations' => false
+        ]);
+    }
+
     /**
      * Method to set the value of field id
      *

@@ -435,6 +435,3 @@ if ($config->application->debug) {
         }
     }
 }
-\Phalcon\Mvc\Model::setup([
-    'notNullValidations' => false
-]);
