@@ -178,5 +178,117 @@ class Settings extends ModelBase
             'note' => 'note'
         );
     }
+    /**
+     *
+     * Get google access token from database
+     * @return string google access token
+     *
+     */
 
+    public static function getAccessToken()
+    {
+        $accessToken = Settings::findFirstByName("googleAnalyticAccessToken");
+        if($accessToken && $accessToken->value)
+            return $accessToken->value;
+        return null;
+    }
+
+    /**
+     *
+     * Get google refresh code from database
+     * @return string google access token
+     *
+     */
+
+    public static function getRefreshToken()
+    {
+        $refreshToken = Settings::findFirstByName("googleAnalyticRefreshToken");
+        if($refreshToken && $refreshToken->value)
+            return $refreshToken->value;
+        return null;
+    }
+
+    /**
+     *
+     * Set google access code to database
+     * @param string $code google analytic access code
+     * @return boolean true if all ok. other wise, false
+     *
+     */
+
+
+    public static function setAccessToken($code)
+    {
+        $accessToken = Settings::findFirstByName("googleAnalyticAccessToken");
+        if($accessToken){
+            $accessToken->value = $code;
+            if($accessToken->save())
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     *
+     * Set google refresh code to database
+     * @param string $code google analytic access code
+     * @return boolean true if all ok. other wise, false
+     *
+     */
+
+
+    public static function setRefreshToken($code)
+    {
+        $refreshToken = Settings::findFirstByName("googleAnalyticRefreshToken");
+        if($refreshToken){
+            $refreshToken->value = $code;
+            if($refreshToken->save())
+                return true;
+        }
+        return false;
+    }
+
+    public static function clearAuth()
+    {
+        Settings::setAccessToken("");
+        Settings::setRefreshToken("");
+    }
+
+    public static function setAnalyticProfileID($profileID)
+    {
+        $profileObj = Settings::findFirstByName("googleAnalyticProfileId");
+        if($profileObj){
+            $profileObj->value = $profileID;
+            if($profileObj->save())
+                return true;
+        }
+        return false;
+    }
+
+    public static function getAnalyticProfileID()
+    {
+        $profileObj = Settings::findFirstByName("googleAnalyticProfileId");
+        if($profileObj && $profileObj->value)
+            return $profileObj->value;
+        return null;
+    }
+
+    public static function setAnalyticAccountID($accountID)
+    {
+        $accountObj = Settings::findFirstByName("googleAnalyticAccountId");
+        if($accountObj){
+            $accountObj->value = $accountID;
+            if($accountObj->save())
+                return true;
+        }
+        return false;
+    }
+
+    public static function getAnalyticAccountID()
+    {
+        $accountObj = Settings::findFirstByName("googleAnalyticAccountId");
+        if($accountObj && $accountObj->value)
+            return $accountObj->value;
+        return null;
+    }
 }

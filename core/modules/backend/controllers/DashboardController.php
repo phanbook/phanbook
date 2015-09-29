@@ -15,6 +15,8 @@ namespace Phanbook\Backend\Controllers;
 use Phalcon\Mvc\View;
 use Phanbook\Forms\PagesForm;
 use Phanbook\Models\Pages;
+use Phanbook\Google\Analytic;
+use Phanbook\Backend\Forms\DashboardForm;
 /**
  * Class TestsController
  *
@@ -29,9 +31,15 @@ class DashboardController extends ControllerBase
      */
     public function indexAction()
     {
-    	
 		//$this->view->disable();
+        $analytic = new Analytic();
+        // We check if user authorization
+        if($analytic->checkAccessToken())
+            $this->view->isLogged = true;
+        else
+            $this->view->isLogged = false;
         $this->tag->setTitle(t('Dashboard'));
+        $this->view->form = new DashboardForm();
     }
-    
+
 }

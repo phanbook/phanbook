@@ -16,44 +16,17 @@ use Phalcon\Forms\Form;
 use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Element\Hidden;
 use Phalcon\Forms\Element\Submit;
+use Phalcon\Forms\Element\Select;
 use Phalcon\Validation\Validator\Identical;
+use Phanbook\Models\Settings;
 
 class GoogleAnalyticForm extends Form
 {
-    public function initialize()
+    public function initialize($para, $analytic)
     {
 
-        $analytic = new Text(
-            'analytic',
-            [
-                'placeholder' => t('Google Analytic'),
-                'class'       => 'form-control',
-                'value'       => $this->config->google->googleAnalytic
-            ]
-        );
-        $this->add($analytic);
-        /* Google client ID */
-        
-        $clientID = new Text(
-            'clientID',
-            [
-                'placeholder'   =>  t('Client ID'),
-                'class'         =>  'form-control',
-                'value'         =>  $this->config->google->clientId
-            ]
-        );
-        $this->add($clientID);
-
-        $clientSecret = new Text(
-            'clientSecret',
-            [
-                'placeholder'   =>  t('Client Secret'),
-                'class'         =>  'form-control',
-                'value'         =>  $this->config->google->clientSecret
-            ]
-        );
-        $this->add($clientSecret);
-
+        $profileID = Settings::getAnalyticProfileID();
+        $accountID = Settings::getAnalyticAccountID();
         // CSRF
         $csrf = new Hidden('csrf');
         $csrf->addValidator(
@@ -70,20 +43,64 @@ class GoogleAnalyticForm extends Form
             new Submit(
                 'save',
                 [
-                'value' => 'Save',
-                'class' => 'btn btn-sm btn-info'
+                    'name'  =>  'save',
+                    'value' => 'Save Changes',
+                    'class' => 'btn btn-sm btn-info'
                 ]
             )
         );
-        $this->add(
-            new Submit(
-                'requestAccess',
-                [
-                'name'  =>  'requestAccess',
-                'value' => 'Request Access',
+        $author = new Submit(
+            'author',
+            [
+                'name'  =>  'author',
+                'value' => 'Authorization',
                 'class' => 'btn btn-sm btn-info'
-                ]
-            )
+            ]
         );
+        $author->setLabel("Authorization this feature with Google");
+        $this->add($author);
+
+        $unauthor = new Submit(
+            'unauthor',
+            [
+                'name'  =>  'unauthor',
+                'value' => 'Clear Authorization',
+                'class' => 'btn btn-sm btn-warning'
+            ]
+        );
+        $unauthor->setLabel("This feature had been actived. Clear authorization ?");
+        $this->add($unauthor);
+
+        $accessCode = new Text(
+            'accessCode',
+            [
+                'placeholder' => t('Access Code'),
+                'class'       => 'form-control',
+                'value'       => ''
+            ]
+        );
+        $accessCode->setLabel('Access Code');
+        $this->add($accessCode);
+        $listView = $analytic->getListView();
+        $listViewDisplay = [];
+        if($listView['state']){
+            foreach ($listView['listView'] as $view) {
+                $parse = parse_url($view['profileURL']);
+                $listViewDisplay[$view['webPropertyId']."_._".$view['accountID']] = $parse['host']." => ". $view['profileName'] ;
+            }
+        }
+        $selectView = new Select(
+            "selectView",
+            $listViewDisplay,
+            [
+                'class' =>  'form-control',
+                'useEmpty' => true,
+                'emptyText' => 'Please, choose one...'
+            ]
+        );
+        $selectView->setLabel('Select View ');
+        $selectView->setDefault($profileID."_._".$accountID);
+        $this->add($selectView);
+
     }
 }

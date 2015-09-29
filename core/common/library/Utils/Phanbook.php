@@ -15,6 +15,8 @@ namespace Phanbook\Utils;
 use Phanbook\Models\Tags;
 use Phanbook\Models\PostsTags;
 use Phanbook\Models\Posts;
+use Phanbook\Tools\ZFunction;
+use Phalcon\Config\Adapter\Php as AdapterPhp;
 
 /**
  *
@@ -155,5 +157,26 @@ class Phanbook
     public function getPageFile($name)
     {
         return ROOT_DIR . 'content/themes/' . $this->theme . '/page-'. $name . '.volt';
+    }
+
+    public static function saveConfig($arrayConfig)
+    {
+        $filename = ROOT_DIR . 'content/options/options.php';
+        if (!file_exists($filename)) {
+            $makeFile = ZFunction::makeFile($filename);
+            file_put_contents($filename, "<?php return [];");
+        }
+        if (file_exists($filename))
+        {
+            $data   = new AdapterPhp($filename);
+            $result = array_merge($data->toArray(), $arrayConfig);
+            $result ='<?php return ' . var_export($result, true) . ';';
+
+            if (!file_put_contents($filename, $result))
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

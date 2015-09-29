@@ -13,13 +13,12 @@
  */
 namespace Phanbook\Backend\Controllers;
 
-use Phalcon\Config\Adapter\Php as AdapterPhp;
 use Phanbook\Backend\Forms\LogoForm;
 use Phanbook\Backend\Forms\ThemeForm;
-use Phanbook\Tools\ZFunction;
 use Phanbook\Backend\Forms\ConfigurationsForm;
 use Phanbook\Backend\Forms\GoogleAnalyticForm;
 use Phanbook\Models\Settings;
+use Phanbook\Utils\Phanbook;
 use Phanbook\Google\Analytic;
 
 /**
@@ -171,32 +170,19 @@ class SettingsController extends ControllerBase
     {
         $this->view->disable();
         //Is not $_POST
-        if (!$this->request->isPost()) {
+        if (!$this->request->isPost())
             return $this->currentRedirect();
-        }
-        $filename = ROOT_DIR . 'content/options/options.php';
-        if (!file_exists($filename)) {
-            $makeFile = ZFunction::makeFile($filename);
-            file_put_contents($filename, "<?php return [];");
-        }
-        if (file_exists($filename)) {
-            $application = [
+        $application = [
                 'application' => [
                     'name'      => $this->request->getPost('name'),
                     'tagline'   => $this->request->getPost('tagline'),
                     'publicUrl' => $this->request->getPost('publicUrl')
                 ]
             ];
-            $data   = new AdapterPhp($filename);
-            $result = array_merge($data->toArray(), $application);
-            $result ='<?php return ' . var_export($result, true) . ';';
-
-            if (!file_put_contents($filename, $result)) {
-                throw new \Exception("Data was not saved", 1);
-            }
+        if(Phanbook::saveConfig($application))
             $this->flashSession->success(t('Data was successfully deleted'));
-            return $this->currentRedirect();
-        }
+        else
+            $this->flashSession->error(t('Data was not saved'));
         return $this->currentRedirect();
     }
 
@@ -207,144 +193,113 @@ class SettingsController extends ControllerBase
      */
     public function analyticAction()
     {
-        $this->tag->setTitle(t('Google Analytic Settings'));
-        $this->view->form = new GoogleAnalyticForm();
-    }
-    /**
-     * Make data configuration to file options.php inside directory config
-     *
-     * @return mixed
-     */
-    public function saveAnalyticAction()
-    {
-        $this->view->disable();
-        //Is not $_POST
-        if (!$this->request->isPost()) {
-            return $this->currentRedirect();
-        }
-        $filename = ROOT_DIR . 'content/options/options.php';
-        if (!file_exists($filename)) {
-            $makeFile = ZFunction::makeFile($filename);
-            file_put_contents($filename, "<?php return [];");
-        }
-        if (file_exists($filename)) {
-            $analytic  = [
-                'google'    =>  [
-                    'clientId'  =>  $this->request->getPost('clientID'),
-                    'clientSecret'  =>  $this->request->getPost('clientSecret'),
-                    'googleAnalytic'  =>  $this->request->getPost('analytic')
-                ]
-            ];
-            $data   = new AdapterPhp($filename);
-            $result = array_merge($data->toArray(), $analytic);
-            $result ='<?php return ' . var_export($result, true) . ';';
-
-            if (!file_put_contents($filename, $result)) {
-                throw new \Exception("Data was not saved", 1);
-            }
-            if(!$this->request->getPost('requestAccess'))
-                $this->flashSession->success(t('Data was successfully saved'));
-        }
-        if($this->request->getPost('requestAccess')){
-            return $this->setAnalyticRequest();
-        }
-        return $this->currentRedirect();
-    }
-    /**
-     * Check if google analytic's accept. If not, send request for authen
-     */
-    public function setAnalyticRequest(){
-        $analytics = new Analytic();
-
-        // If the user has already authorized this app then get an access token
-        // else redirect to ask the user to authorize access to Google Analytics.
-        $check = $analytics->checkAccessToken();
-        if ($check == "OK") {
-
-            $this->flashSession->success(t('Connected to googleAnalytic'));
-            //$this->response->redirect("settings/analytic");
-            // Set the access token on the client.
-            
-            // Create an authorized analytics service object.
-            // $service = new \Google_Service_Analytics($client);
-
-            // $projectId = $this->config->google->projectId;          //ID of phanbook project
-            // if( $this->checkGoogleAnalyticHasProject($service, $projectId)){
-            //     // dimensions
-            //     $_params[] = 'visits';
-            //     $_params[] = 'pageviews';
-            //     $_params[] = 'bounces';
-            //     $_params[] = 'entrance_bounce_rate';
-            //     $_params[] = 'visit_bounce_rate';
-            //     $_params[] = 'avg_time_on_site';
-
-            //     $from = date('Y-m-d', time()-30*24*60*60);; // 30 days
-            //     $to = date('Y-m-d'); // today
-
-            //     $metrics = 'ga:visits,ga:pageviews,ga:bounces,ga:entranceBounceRate,ga:visitBounceRate,ga:avgTimeOnSite';
-            //     $data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics);
-                
-            // }
-            // else
-            //     echo "Don't have permission";
-            
-        } 
-        else if ($check == "EXPIRED") {
-            if($analytics->refreshGoogleToken()){
-                $this->flashSession->success(t('Connected to googleAnalytic'));
+        $analytic = new Analytic();
+        $this->view->isLogged = false;
+        // We check if user authorization
+        if($analytic->checkAccessToken())
+            $this->view->isLogged = true;
+        $profileID = Settings::getAnalyticProfileID();
+        $accountID = Settings::getAnalyticAccountID();
+        $this->view->isConfigured = false;
+        if($accountID)
+        {
+            $profile = $analytic->getViewInfo($accountID,$profileID);
+            if($profile['state'])
+            {
+                $this->view->isConfigured = true;
+                $this->view->profile = $profile['profile'];
             }
             else
-                $this->flashSession->error(t('An error occured when refresh google access token'));
-            //$this->response->redirect("settings/analytic");
+                $this->flashSession->warning(t("We can't configure your analytic profile"));
         }
-
-        else {
-            $redirect_uri = $this->config->google->redirectAnalytic;
-            header('Location: ' . filter_var($redirect_uri, FILTER_SANITIZE_URL));
-        }
+        $this->tag->setTitle(t('Google Analytic Settings'));
+        $this->view->form = new GoogleAnalyticForm(null, $analytic);
     }
 
-    private function setGoogleClient(){
-        $client = new \Google_Client();
-        $client->setClientId($this->config->google->clientId);
-        $client->setClientSecret($this->config->google->clientSecret);
-        $client->setRedirectUri($this->config->google->redirectAnalytic);
-        $client->addScope(\Google_Service_Analytics::ANALYTICS_READONLY);
+    /**
+     * Verify access token and save to database
+     * @return Redirect to calling action
+     */
 
-        /* Set offline for using google analytic even when google user offline */
-        
-        $client->setAccessType("offline");
-        return $client;
-    }
-
-    private function checkGoogleAnalyticHasProject($googleAnalyticObj, $currentProjectID){
-        $accounts = $googleAnalyticObj->management_accounts->listManagementAccounts();
-        if (count($accounts->getItems()) > 0) {
-            $accounts = $accounts->getItems();
-            foreach ($accounts as $key => $acc) {
-                $props = $googleAnalyticObj->management_webproperties->listManagementWebproperties($acc->getId());
-                foreach($props['items'] as $item){
-                    if($item['defaultProfileId'] == $currentProjectID)
-                        return true;
+    public function authorizationAction()
+    {
+        $this->view->disable();
+        if($this->request->getPost('save'))
+        {
+            $accessCode = $this->request->getPost('accessCode');
+            if($accessCode)
+            {
+                $analytic = new Analytic();
+                if($analytic->setAccessCode($accessCode))
+                {
+                    $this->flashSession->success(t('Connected to google analytic service!'));
+                    return $this->currentRedirect();
                 }
             }
         }
-        return false;
+        $this->flashSession->error(t('An error occured when verify access code!'));
+        return $this->currentRedirect();
     }
-    public function googleAnalyticAction()
-    {
-        $analytic = new Analytic();
+    /**
+     * Request to google authorization page
+     */
 
-        $code = $this->request->get('code');
-        if (! isset($code)) 
-            header('Location: ' . filter_var($analytic->getAuthURL(), FILTER_SANITIZE_URL));
-        else {
-            $result = $analytic->saveGoogleToken($code);
-            if($result['state']) 
-                $this->flashSession->success(t($result['message']));
-            else
-                $this->flashSession->error(t($result['message']));
-            $this->response->redirect("settings/analytic");
+    public function requestAuthAction()
+    {
+        $this->view->disable();
+        if($this->request->getPost('author'))
+        {
+            $analytic = new Analytic();
+            $authURL = $analytic->getAuthURL();
+            header('Location: ' . filter_var($authURL, FILTER_SANITIZE_URL));
         }
     }
+    /**
+     *
+     * Clean current connected google account
+     *
+     */
+
+    public function cleanAuthAction()
+    {
+        $this->view->disable();
+        $analytic = new Analytic();
+        $analytic->clearAuth();
+        Settings::clearAuth();
+        $this->flashSession->error(t('Clear Authorization Success!'));
+        return $this->currentRedirect();
+    }
+    /**
+     *
+     * Save change analytic setting
+     *
+     */
+
+    public function analyticSettingAction()
+    {
+        $this->view->disable();
+        if($this->request->getPost('save'))
+        {
+            $obj = explode("_._", $this->request->getPost('selectView'));
+            $profileID = $obj[0];
+            $accountID = $obj[1];
+            if(Settings::setAnalyticProfileID($profileID))
+                if(Settings::setAnalyticAccountID($accountID)){
+                    $analytic = new Analytic();
+                    $profile = $analytic->getViewInfo($accountID,$profileID);
+                    if($profile['state']){
+                        if(Phanbook::saveConfig(['googleAnalytic' => $profile['profile']['trackingID']]))
+                            $this->flashSession->success(t('Save Analytic setting success!'));
+                        else
+                            $this->flashSession->error(t('An error occured, We can\'t save tracking ID!'));
+                    }
+                    else
+                        $this->flashSession->error(t('An error occured, We can\'t find Profile information!'));
+                    return $this->currentRedirect();
+                }
+            $this->flashSession->error(t('An error occured when save setting!'));
+        }
+        return $this->currentRedirect();
+    }
+
 }

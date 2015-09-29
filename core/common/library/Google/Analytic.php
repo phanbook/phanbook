@@ -14,95 +14,147 @@ namespace Phanbook\Google;
 use Phanbook\Models\Settings;
 
 /**
-* 
+*
 */
-class Analytic extends AnotherClass
+class Analytic extends \Phalcon\DI\Injectable
 {
 	private $client;
 	private $clientId;
 	private $clientSecret;
-	private $redirectAnalytic;
-	private $accessToken;
-	private $refreshToken
-	
-	function __construct($clientId, $clientSecret, $redirectAnalytic)
+
+	function __construct()
 	{
 		$this->client = new \Google_Client();
-		$this->clientId = $clientId;
-		$this->clientSecret = $clientSecret;
-		$this->redirectAnalytic = $redirectAnalytic;
-		$this->setGoogleClient();
+        $this->setGoogleClient($this->config->google->clientId, $this->config->google->clientSecret);
 	}
-	public function setGoogleClient(){
-        $this->client->setClientId($this->clientId);
-        $this->client->setClientSecret($this->clientSecret);
-        $this->client->setRedirectUri($this->redirectAnalytic);
+	public function setGoogleClient($clientId, $clientSecret)
+    {
+        $redirectUrl = "urn:ietf:wg:oauth:2.0:oob";
+        $this->client->setClientId($clientId);
+        $this->client->setClientSecret($clientSecret);
         $this->client->addScope(\Google_Service_Analytics::ANALYTICS_READONLY);
-
+        $this->client->setRedirectUri($redirectUrl);
         /* Set offline for using google analytic even when google user offline */
-        
+
         $this->client->setAccessType("offline");
-
-        $googleAnalytic = Settings::findFirst("name = 'googleAnalyticAccessToken'");
-        $this->accessToken = $googleAnalytic->value;
-        $googleAnalytic = Settings::findFirst("name = 'googleAnalyticRefreshToken'");
-        $this->refreshToken = $googleAnalytic->value;
-    }
-    public function refreshGoogleToken(){
-
-    }
-    public function checkAccessToken(){
-    	if (isset($this->accessToken) && $this->accessToken){
-    		$this->client->setAccessToken($access_token);
-    		if($this->client->isAccessTokenExpired()){
-    			return "EXPIRED";
-    		}
-    		return "OK";
-    	}
-    	return "ERROR";
-    }
-    public function saveGoogleToken($code){
-
-    	$this->client->authenticate($code);
-
-        $googleAnalytic = Settings::findFirst("name = 'googleAnalyticAccessToken'");
-
-        if($googleAnalytic) {
-
-            // Get access token
-            $googleAnalytic->value = $client->getAccessToken();
-
-            // Get refresh token if have
-            $authObj = json_decode($googleAnalytic->value);
-
-            if(isset($authObj->refresh_token)){
-                $refreshToken = Settings::findFirst("name = 'googleAnalyticRefreshToken'");
-                $refreshToken->value = $authObj->refresh_token;
-                if(!$refreshToken->save())
-                	return ["state"	=>	false, "message" => t('An error occured when save google refresh token')];
-            }
-            if($googleAnalytic->save())
-                
-                return ["state"	=>	true, "message"	=>	t('Connected to googleAnalytic')];
-
-            else
-
-            	return ["state"	=>	false, "message" => t('An error occured when save google access token')];
-     
+        $access_token = Settings::getAccessToken();
+        if($access_token){
+            $this->client->setAccessToken($access_token);
         }
-        return ["state"	=>	false, "message" => t('An error occured when find googleAnayticAccessToken')];
     }
+    public function setAccessCode($code)
+    {
+        try {
+            $oauthParams = $this->client->authenticate($code);
+        } catch (\Exception $e) {
+            return false;
+        }
+        $oauth = json_decode($oauthParams);
+        if(!Settings::setAccessToken($oauthParams))
+            return false;
+        if(isset($oauth->refresh_token))
+            Settings::setRefreshToken($oauth->refresh_token);
+        return true;
+    }
+    public function checkAccessToken()
+    {
+        if(!Settings::getAccessToken())
+            return false;
+        if($this->client->isAccessTokenExpired())
+        {
+            if($this->refreshToken())
+                return true;
+            else return false;
+        }
+    	return true;
+    }
+    public function getAuthURL()
+    {
+        return $this->client->createAuthUrl();
+    }
+    public function clearAuth()
+    {
+        $this->client->revokeToken();
+    }
+    public function refreshToken()
+    {
+        $refreshToken = Settings::getRefreshToken();
+        if(!$refreshToken)
+            return false;
+        if($this->client->isAccessTokenExpired()){
+            $this->client->refreshToken($refreshToken);
+            $newtoken = $this->client->getAccessToken();
+            if(Settings::setAccessToken($newtoken))
+                return true;
+        }
+    }
+    public function getAnalyticData($arrayGA)
+    {
 
-    public function getClientObject(){
-    	return $this->client;
     }
-    public function getAuthURL(){
-    	return $this->client->createAuthUrl();
+    /**
+     *
+     * Get list of projects connected to logged account
+     * @return array list project
+     *
+     */
+
+    public function getListView()
+    {
+        if($this->checkAccessToken()){
+            $service = new \Google_Service_Analytics($this->client);
+            $listView = [];
+            try {
+                $result = $service->management_accounts->listManagementAccounts();
+                $accounts = $result->items;
+                foreach ($accounts as $account) {
+                    try {
+                        $profiles = $service->management_profiles->listManagementProfiles($account->id,'~all');
+                        foreach ($profiles->getItems() as $profile) {
+                            $listView[] = [
+                                "accountName"   =>  $account->name,
+                                "accountID"     =>  $account->id,
+                                "profileURL"    =>  $profile->websiteUrl,
+                                "profileID"     =>  $profile->id,
+                                "profileName"   =>  $profile->name,
+                                "timezone"      =>  $profile->timezone,
+                                "webPropertyId" =>  $profile->webPropertyId
+                            ];
+                        }
+                    }
+                    catch (\Exception $e) {
+
+                    }
+                }
+            } catch (\Exception $e) {
+                return ["state" => false, "message" => "User doesn't have any Google Analytics Account"];
+            }
+            return ["state" => true, "listView" => $listView];
+        }
     }
-    public function getAccessToken(){
-    	return $this->accessToken;
-    }
-    public function getrefreshToken(){
-    	return $this->refreshToken;
+    /**
+     * Get profile information form google analytic
+     * @param string $accountID account analytic ID
+     * @param string $profileID webPropertyID
+     * @return mixed
+     */
+
+    public function getViewInfo($accountID, $profileID)
+    {
+        $service = new \Google_Service_Analytics($this->client);
+        try {
+            $profiles = $service->management_profiles->listManagementProfiles($accountID, $profileID);
+            foreach ($profiles->getItems() as $profile) {
+                $result = [
+                    "profileURL"    =>  $profile->websiteUrl,
+                    "profileName"   =>  $profile->name,
+                    "timeZone"      =>  $profile->timezone,
+                    "trackingID"    =>  $profile->webPropertyId
+                ];
+            }
+            return ["state" =>  true, "profile"     =>  $result];
+        } catch (\Exception $e) {
+            return ["state" =>  false, "message"    =>  "Exception when get profile : ".print_r($e)];
+        }
     }
 }
