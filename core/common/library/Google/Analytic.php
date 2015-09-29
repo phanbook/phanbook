@@ -13,11 +13,12 @@
 namespace Phanbook\Google;
 
 use Phanbook\Models\Settings;
+use \Phalcon\DI\Injectable;
 
 /**
 *
 */
-class Analytic extends \Phalcon\DI\Injectable
+class Analytic extends Injectable
 {
     private $client;
     private $clientId;
