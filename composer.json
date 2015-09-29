@@ -12,7 +12,7 @@
     "require-dev": {
         "fzaninotto/faker": "1.5.*@dev",
         "squizlabs/php_codesniffer": "1.*",
-        "codeception/codeception": "*"
+        "codeception/codeception": "2.1.2"
     },
     "require": {
         "swiftmailer/swiftmailer": "@stable",
