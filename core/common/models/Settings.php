@@ -42,7 +42,7 @@ class Settings extends ModelBase
     /**
      * Method to set the value of field id
      *
-     * @param integer $id
+     * @param  integer $id
      * @return $this
      */
     public function setId($id)
@@ -55,7 +55,7 @@ class Settings extends ModelBase
     /**
      * Method to set the value of field name
      *
-     * @param string $name
+     * @param  string $name
      * @return $this
      */
     public function setName($name)
@@ -68,7 +68,7 @@ class Settings extends ModelBase
     /**
      * Method to set the value of field value
      *
-     * @param string $value
+     * @param  string $value
      * @return $this
      */
     public function setValue($value)
@@ -81,7 +81,7 @@ class Settings extends ModelBase
     /**
      * Method to set the value of field note
      *
-     * @param string $note
+     * @param  string $note
      * @return $this
      */
     public function setNote($note)
@@ -144,7 +144,7 @@ class Settings extends ModelBase
     /**
      * Allows to query a set of records that match the specified conditions
      *
-     * @param mixed $parameters
+     * @param  mixed $parameters
      * @return Settings[]
      */
     public static function find($parameters = null)
@@ -155,7 +155,7 @@ class Settings extends ModelBase
     /**
      * Allows to query the first record that match the specified conditions
      *
-     * @param mixed $parameters
+     * @param  mixed $parameters
      * @return Settings
      */
     public static function findFirst($parameters = null)
@@ -179,71 +179,67 @@ class Settings extends ModelBase
         );
     }
     /**
-     *
      * Get google access token from database
      * @return string google access token
-     *
      */
 
     public static function getAccessToken()
     {
         $accessToken = Settings::findFirstByName("googleAnalyticAccessToken");
-        if($accessToken && $accessToken->value)
+        if ($accessToken && $accessToken->value) {
             return $accessToken->value;
+        }
         return null;
     }
 
     /**
-     *
      * Get google refresh code from database
      * @return string google access token
-     *
      */
 
     public static function getRefreshToken()
     {
         $refreshToken = Settings::findFirstByName("googleAnalyticRefreshToken");
-        if($refreshToken && $refreshToken->value)
+        if ($refreshToken && $refreshToken->value) {
             return $refreshToken->value;
+        }
         return null;
     }
 
     /**
-     *
      * Set google access code to database
      * @param string $code google analytic access code
      * @return boolean true if all ok. other wise, false
-     *
      */
 
 
     public static function setAccessToken($code)
     {
         $accessToken = Settings::findFirstByName("googleAnalyticAccessToken");
-        if($accessToken){
+        if ($accessToken) {
             $accessToken->value = $code;
-            if($accessToken->save())
+            if ($accessToken->save()) {
                 return true;
+            }
         }
         return false;
     }
 
     /**
-     *
      * Set google refresh code to database
      * @param string $code google analytic access code
      * @return boolean true if all ok. other wise, false
-     *
      */
 
 
     public static function setRefreshToken($code)
     {
         $refreshToken = Settings::findFirstByName("googleAnalyticRefreshToken");
-        if($refreshToken){
+        if ($refreshToken) {
             $refreshToken->value = $code;
-            if($refreshToken->save())
+            if ($refreshToken->save()) {
                 return true;
+            }
         }
         return false;
     }
@@ -259,10 +255,11 @@ class Settings extends ModelBase
     public static function setAnalyticProfileID($profileID)
     {
         $profileObj = Settings::findFirstByName("googleAnalyticProfileId");
-        if($profileObj){
+        if ($profileObj) {
             $profileObj->value = $profileID;
-            if($profileObj->save())
+            if ($profileObj->save()) {
                 return true;
+            }
         }
         return false;
     }
@@ -270,18 +267,20 @@ class Settings extends ModelBase
     public static function getAnalyticProfileID()
     {
         $profileObj = Settings::findFirstByName("googleAnalyticProfileId");
-        if($profileObj && $profileObj->value)
+        if ($profileObj && $profileObj->value) {
             return $profileObj->value;
+        }
         return null;
     }
 
     public static function setAnalyticAccountID($accountID)
     {
         $accountObj = Settings::findFirstByName("googleAnalyticAccountId");
-        if($accountObj){
+        if ($accountObj) {
             $accountObj->value = $accountID;
-            if($accountObj->save())
+            if ($accountObj->save()) {
                 return true;
+            }
         }
         return false;
     }
@@ -289,8 +288,9 @@ class Settings extends ModelBase
     public static function getAnalyticAccountID()
     {
         $accountObj = Settings::findFirstByName("googleAnalyticAccountId");
-        if($accountObj && $accountObj->value)
+        if ($accountObj && $accountObj->value) {
             return $accountObj->value;
+        }
         return null;
     }
 }

@@ -125,7 +125,7 @@ class Phanbook
     /**
      * Retrieve a page give its title
      *
-     * @param  string       $page_title Page title
+     * @param  string $page_title Page title
      * @return object on success or null on failure
      */
     public function getPageByTitle($title)
@@ -166,14 +166,12 @@ class Phanbook
             $makeFile = ZFunction::makeFile($filename);
             file_put_contents($filename, "<?php return [];");
         }
-        if (file_exists($filename))
-        {
+        if (file_exists($filename)) {
             $data   = new AdapterPhp($filename);
             $result = array_merge($data->toArray(), $arrayConfig);
             $result ='<?php return ' . var_export($result, true) . ';';
 
-            if (!file_put_contents($filename, $result))
-            {
+            if (!file_put_contents($filename, $result)) {
                 return false;
             }
             return true;

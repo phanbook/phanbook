@@ -170,8 +170,9 @@ class SettingsController extends ControllerBase
     {
         $this->view->disable();
         //Is not $_POST
-        if (!$this->request->isPost())
+        if (!$this->request->isPost()) {
             return $this->currentRedirect();
+        }
         $application = [
                 'application' => [
                     'name'      => $this->request->getPost('name'),
@@ -179,10 +180,11 @@ class SettingsController extends ControllerBase
                     'publicUrl' => $this->request->getPost('publicUrl')
                 ]
             ];
-        if(Phanbook::saveConfig($application))
+        if (Phanbook::saveConfig($application)) {
             $this->flashSession->success(t('Data was successfully deleted'));
-        else
+        } else {
             $this->flashSession->error(t('Data was not saved'));
+        }
         return $this->currentRedirect();
     }
 
@@ -196,21 +198,20 @@ class SettingsController extends ControllerBase
         $analytic = new Analytic();
         $this->view->isLogged = false;
         // We check if user authorization
-        if($analytic->checkAccessToken())
+        if ($analytic->checkAccessToken()) {
             $this->view->isLogged = true;
+        }
         $profileID = Settings::getAnalyticProfileID();
         $accountID = Settings::getAnalyticAccountID();
         $this->view->isConfigured = false;
-        if($accountID)
-        {
-            $profile = $analytic->getViewInfo($accountID,$profileID);
-            if($profile['state'])
-            {
+        if ($accountID) {
+            $profile = $analytic->getViewInfo($accountID, $profileID);
+            if ($profile['state']) {
                 $this->view->isConfigured = true;
                 $this->view->profile = $profile['profile'];
-            }
-            else
+            } else {
                 $this->flashSession->warning(t("We can't configure your analytic profile"));
+            }
         }
         $this->tag->setTitle(t('Google Analytic Settings'));
         $this->view->form = new GoogleAnalyticForm(null, $analytic);
@@ -224,14 +225,11 @@ class SettingsController extends ControllerBase
     public function authorizationAction()
     {
         $this->view->disable();
-        if($this->request->getPost('save'))
-        {
+        if ($this->request->getPost('save')) {
             $accessCode = $this->request->getPost('accessCode');
-            if($accessCode)
-            {
+            if ($accessCode) {
                 $analytic = new Analytic();
-                if($analytic->setAccessCode($accessCode))
-                {
+                if ($analytic->setAccessCode($accessCode)) {
                     $this->flashSession->success(t('Connected to google analytic service!'));
                     return $this->currentRedirect();
                 }
@@ -247,8 +245,7 @@ class SettingsController extends ControllerBase
     public function requestAuthAction()
     {
         $this->view->disable();
-        if($this->request->getPost('author'))
-        {
+        if ($this->request->getPost('author')) {
             $analytic = new Analytic();
             $authURL = $analytic->getAuthURL();
             header('Location: ' . filter_var($authURL, FILTER_SANITIZE_URL));
@@ -278,28 +275,28 @@ class SettingsController extends ControllerBase
     public function analyticSettingAction()
     {
         $this->view->disable();
-        if($this->request->getPost('save'))
-        {
+        if ($this->request->getPost('save')) {
             $obj = explode("_._", $this->request->getPost('selectView'));
             $profileID = $obj[0];
             $accountID = $obj[1];
-            if(Settings::setAnalyticProfileID($profileID))
-                if(Settings::setAnalyticAccountID($accountID)){
+            if (Settings::setAnalyticProfileID($profileID)) {
+                if (Settings::setAnalyticAccountID($accountID)) {
                     $analytic = new Analytic();
-                    $profile = $analytic->getViewInfo($accountID,$profileID);
-                    if($profile['state']){
-                        if(Phanbook::saveConfig(['googleAnalytic' => $profile['profile']['trackingID']]))
+                    $profile = $analytic->getViewInfo($accountID, $profileID);
+                    if ($profile['state']) {
+                        if (Phanbook::saveConfig(['googleAnalytic' => $profile['profile']['trackingID']])) {
                             $this->flashSession->success(t('Save Analytic setting success!'));
-                        else
+                        } else {
                             $this->flashSession->error(t('An error occured, We can\'t save tracking ID!'));
-                    }
-                    else
+                        }
+                    } else {
                         $this->flashSession->error(t('An error occured, We can\'t find Profile information!'));
+                    }
                     return $this->currentRedirect();
                 }
+            }
             $this->flashSession->error(t('An error occured when save setting!'));
         }
         return $this->currentRedirect();
     }
-
 }

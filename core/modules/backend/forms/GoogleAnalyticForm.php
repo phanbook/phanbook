@@ -83,7 +83,7 @@ class GoogleAnalyticForm extends Form
         $this->add($accessCode);
         $listView = $analytic->getListView();
         $listViewDisplay = [];
-        if($listView['state']){
+        if ($listView['state']) {
             foreach ($listView['listView'] as $view) {
                 $parse = parse_url($view['profileURL']);
                 $listViewDisplay[$view['webPropertyId']."_._".$view['accountID']] = $parse['host']." => ". $view['profileName'] ;

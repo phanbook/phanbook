@@ -11,6 +11,7 @@
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
 namespace Phanbook\Google;
+
 use Phanbook\Models\Settings;
 
 /**
@@ -18,16 +19,16 @@ use Phanbook\Models\Settings;
 */
 class Analytic extends \Phalcon\DI\Injectable
 {
-	private $client;
-	private $clientId;
-	private $clientSecret;
+    private $client;
+    private $clientId;
+    private $clientSecret;
 
-	function __construct()
-	{
-		$this->client = new \Google_Client();
+    public function __construct()
+    {
+        $this->client = new \Google_Client();
         $this->setGoogleClient($this->config->google->clientId, $this->config->google->clientSecret);
-	}
-	public function setGoogleClient($clientId, $clientSecret)
+    }
+    public function setGoogleClient($clientId, $clientSecret)
     {
         $redirectUrl = "urn:ietf:wg:oauth:2.0:oob";
         $this->client->setClientId($clientId);
@@ -38,7 +39,7 @@ class Analytic extends \Phalcon\DI\Injectable
 
         $this->client->setAccessType("offline");
         $access_token = Settings::getAccessToken();
-        if($access_token){
+        if ($access_token) {
             $this->client->setAccessToken($access_token);
         }
     }
@@ -50,23 +51,27 @@ class Analytic extends \Phalcon\DI\Injectable
             return false;
         }
         $oauth = json_decode($oauthParams);
-        if(!Settings::setAccessToken($oauthParams))
+        if (!Settings::setAccessToken($oauthParams)) {
             return false;
-        if(isset($oauth->refresh_token))
+        }
+        if (isset($oauth->refresh_token)) {
             Settings::setRefreshToken($oauth->refresh_token);
+        }
         return true;
     }
     public function checkAccessToken()
     {
-        if(!Settings::getAccessToken())
+        if (!Settings::getAccessToken()) {
             return false;
-        if($this->client->isAccessTokenExpired())
-        {
-            if($this->refreshToken())
-                return true;
-            else return false;
         }
-    	return true;
+        if ($this->client->isAccessTokenExpired()) {
+            if ($this->refreshToken()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return true;
     }
     public function getAuthURL()
     {
@@ -79,13 +84,15 @@ class Analytic extends \Phalcon\DI\Injectable
     public function refreshToken()
     {
         $refreshToken = Settings::getRefreshToken();
-        if(!$refreshToken)
+        if (!$refreshToken) {
             return false;
-        if($this->client->isAccessTokenExpired()){
+        }
+        if ($this->client->isAccessTokenExpired()) {
             $this->client->refreshToken($refreshToken);
             $newtoken = $this->client->getAccessToken();
-            if(Settings::setAccessToken($newtoken))
+            if (Settings::setAccessToken($newtoken)) {
                 return true;
+            }
         }
     }
     public function getAnalyticData($arrayGA)
@@ -93,15 +100,13 @@ class Analytic extends \Phalcon\DI\Injectable
 
     }
     /**
-     *
      * Get list of projects connected to logged account
      * @return array list project
-     *
      */
 
     public function getListView()
     {
-        if($this->checkAccessToken()){
+        if ($this->checkAccessToken()) {
             $service = new \Google_Service_Analytics($this->client);
             $listView = [];
             try {
@@ -109,7 +114,7 @@ class Analytic extends \Phalcon\DI\Injectable
                 $accounts = $result->items;
                 foreach ($accounts as $account) {
                     try {
-                        $profiles = $service->management_profiles->listManagementProfiles($account->id,'~all');
+                        $profiles = $service->management_profiles->listManagementProfiles($account->id, '~all');
                         foreach ($profiles->getItems() as $profile) {
                             $listView[] = [
                                 "accountName"   =>  $account->name,
@@ -121,8 +126,7 @@ class Analytic extends \Phalcon\DI\Injectable
                                 "webPropertyId" =>  $profile->webPropertyId
                             ];
                         }
-                    }
-                    catch (\Exception $e) {
+                    } catch (\Exception $e) {
 
                     }
                 }
