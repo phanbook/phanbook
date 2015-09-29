@@ -252,6 +252,8 @@ class Settings extends ModelBase
     {
         Settings::setAccessToken("");
         Settings::setRefreshToken("");
+        Settings::setAnalyticAccountID("");
+        Settings::setAnalyticProfileID("");
     }
 
     public static function setAnalyticProfileID($profileID)
