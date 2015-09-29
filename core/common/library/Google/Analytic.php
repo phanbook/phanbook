@@ -13,15 +13,29 @@
 namespace Phanbook\Google;
 
 use Phanbook\Models\Settings;
-use \Phalcon\DI\Injectable;
+use Phalcon\DI\Injectable;
 
 /**
-*
-*/
+ *
+ */
 class Analytic extends Injectable
 {
+    /**
+     *
+     * @var string
+     */
     private $client;
+
+    /**
+     *
+     * @var string
+     */
     private $clientId;
+
+    /**
+     *
+     * @var string
+     */
     private $clientSecret;
 
     public function __construct()
@@ -128,7 +142,6 @@ class Analytic extends Injectable
                             ];
                         }
                     } catch (\Exception $e) {
-
                     }
                 }
             } catch (\Exception $e) {
@@ -143,7 +156,6 @@ class Analytic extends Injectable
      * @param string $profileID webPropertyID
      * @return mixed
      */
-
     public function getViewInfo($accountID, $profileID)
     {
         $service = new \Google_Service_Analytics($this->client);
