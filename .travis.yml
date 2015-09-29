@@ -35,7 +35,7 @@ before_script:
   - cp ./core/config/config.example.php ./core/config/config.php
   - cp ./tests/config.travis.php ./core/config/config.travis.php
   - mysql -e 'CREATE DATABASE phanbook CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;' -uroot -ppassword__phanbook
-  - cat databases/phanbook.sql | mysql -uroot phanbook -ppassword__phanbook
+  - cat schema/phanbook.sql | mysql -uroot phanbook -ppassword__phanbook
   #- (cd ./scripts/ && php random-entries.php > /dev/null)
   - php -S 127.0.0.1:8000 -t . .htrouter.php >/dev/null 2>&1 &
 
