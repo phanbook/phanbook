@@ -174,4 +174,15 @@ class Analytic extends Injectable
             return ["state" =>  false, "message"    =>  "Exception when get profile : ".print_r($e)];
         }
     }
+
+    public function getAnalyticData($accountID, $profileID)
+    {
+        $service = new \Google_Service_Analytics($this->client);
+
+        $from = date('Y-m-d', time()-30*24*60*60);; // 30 days
+        $to = date('Y-m-d'); // today
+
+        $metrics = 'ga:visits,ga:pageviews,ga:bounces,ga:entranceBounceRate,ga:visitBounceRate,ga:avgTimeOnSite';
+        $data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics);
+    }
 }
