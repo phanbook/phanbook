@@ -159,7 +159,7 @@ class Phanbook
         return ROOT_DIR . 'content/themes/' . $this->theme . '/page-'. $name . '.volt';
     }
 
-    public static function saveConfig($arrayConfig)
+    public function saveConfig($arrayConfig)
     {
         $filename = ROOT_DIR . 'content/options/options.php';
         if (!file_exists($filename)) {

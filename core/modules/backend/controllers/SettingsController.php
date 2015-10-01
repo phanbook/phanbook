@@ -18,7 +18,6 @@ use Phanbook\Backend\Forms\ThemeForm;
 use Phanbook\Backend\Forms\ConfigurationsForm;
 use Phanbook\Backend\Forms\GoogleAnalyticForm;
 use Phanbook\Models\Settings;
-use Phanbook\Utils\Phanbook;
 use Phanbook\Google\Analytic;
 
 /**
@@ -180,7 +179,7 @@ class SettingsController extends ControllerBase
                     'publicUrl' => $this->request->getPost('publicUrl')
                 ]
             ];
-        if (Phanbook::saveConfig($application)) {
+        if ($this->phanbook->saveConfig($application)) {
             $this->flashSession->success(t('Data was successfully deleted'));
         } else {
             $this->flashSession->error(t('Data was not saved'));
@@ -284,7 +283,7 @@ class SettingsController extends ControllerBase
                     $analytic = new Analytic();
                     $profile = $analytic->getViewInfo($accountID, $profileID);
                     if ($profile['state']) {
-                        if (Phanbook::saveConfig(['googleAnalytic' => $profile['profile']['trackingID']])) {
+                        if ($this->phanbook->saveConfig(['googleAnalytic' => $profile['profile']['trackingID']])) {
                             $this->flashSession->success(t('Save Analytic setting success!'));
                         } else {
                             $this->flashSession->error(t('An error occured, We can\'t save tracking ID!'));
