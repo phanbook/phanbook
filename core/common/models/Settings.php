@@ -178,12 +178,12 @@ class Settings extends ModelBase
      */
     public function columnMap()
     {
-        return array(
+        return [
             'id' => 'id',
             'name' => 'name',
             'value' => 'value',
             'note' => 'note'
-        );
+        ];
     }
     /**
      * Get google access token from database
