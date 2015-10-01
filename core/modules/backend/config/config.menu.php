@@ -26,15 +26,18 @@ return new \Phalcon\Config(
             [
                 'code'  =>  'pages',
                 'name'  =>  'Pages',
+                'icon'  =>  'fa fa-television',
                 'sub'   =>  [
                     [
                         "code"  =>  "index",
                         "name"  =>  "All pages",
+                        'icon'  =>  'fa fa-bars',
                         "sub"   =>  []
                     ],
                     [
                         "code"  =>  "new",
                         "name"  =>  "Add new",
+                        'icon'  =>  'fa fa-bars',
                         "sub"   =>  []
                     ]
                 ]
@@ -42,30 +45,36 @@ return new \Phalcon\Config(
             [
                 'code'  =>  'users',
                 'name'  =>  'Users',
+                'icon'  =>  'fa fa-users',
                 'sub'   =>  []
             ],
             [
                 'code'  =>  'posts',
                 'name'  =>  'Posts',
+                'icon'  =>  'fa fa-clone',
                 'sub'   =>  [
                     [
                         "code"  =>  "sticky",
                         "name"  =>  "Sticky posts",
+                        'icon'  =>  'fa fa-bookmark-o',
                         "sub"   =>  []
                     ],
                     [
                         "code"  =>  "index",
                         "name"  =>  "Edit posts",
+                        'icon'  =>  'fa fa-bars',
                         "sub"   =>  []
                     ],
                     [
                         "code"  =>  "newSticky",
                         "name"  =>  "Add Sticky",
+                        'icon'  =>  'fa fa-bars',
                         "sub"   =>  []
                     ],
                     [
                         "code"  =>  "new",
                         "name"  =>  "Add Post",
+                        'icon'  =>  'fa fa-bars',
                         "sub"   =>  []
                     ]
                 ]
@@ -73,15 +82,18 @@ return new \Phalcon\Config(
             [
                 'code' => 'themes',
                 'name' => 'Appearance',
+                'icon'  =>  'fa fa-edit',
                 'sub'  => [
                     [
                         'code' => 'index',
                         'name' => 'Themes',
+                        'icon'  =>  'fa fa-diamond',
                         'sub' => []
                     ],
                     [
                         'code' => 'index',
                         'name' => 'Customize',
+                        'icon'  =>  'fa fa-bars',
                         'sub' => []
                     ]
                 ]
@@ -89,30 +101,36 @@ return new \Phalcon\Config(
             [
                 'code'  =>  'template',
                 'name'  =>  'Template',
+                'icon'  =>  'fa fa-file',
                 'sub'   =>  []
             ],
             [
                 'code'  =>  'tags',
                 'name'  =>  'Tags',
+                'icon'  =>  'fa fa-tags',
                 'sub'   =>  []
             ],
             [
                 "code"  =>  "settings",
                 "name"  =>  "Settings",
+                'icon'  =>  'fa fa-cog',
                 "sub"   =>  [
                     [
                         "code" => "general",
                         "name" => "General",
+                        'icon'  =>  'fa fa-bars',
                         "sub"  => []
                     ],
                     [
                         "code" => "logo",
                         "name" => "Change Logo",
+                        'icon'  =>  'fa fa-bars',
                         "sub"  => []
                     ],
                     [
                         "code" => "analytic",
                         "name" => "Google analytic",
+                        'icon'  =>  'fa fa-area-chart',
                         "sub"  => []
                     ]
                 ]
@@ -120,6 +138,7 @@ return new \Phalcon\Config(
             [
                 'code'  =>  'update',
                 'name'  =>  'Updates',
+                'icon'  =>  'fa fa-refresh',
                 'sub'   =>  []
             ]
         ]

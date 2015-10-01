@@ -10,7 +10,7 @@
     {% if isLogged == false %}
         {{ form('settings/requestAuth', 'class' : 'form-horizontal' ,  'target' : "_blank") }}
             <div class="form-group">
-                <label class="col-sm-5 control-label" for="author">{{ form.label('author') }}:</label>
+                <label class="col-sm-5 control-label" for="author">{{ form.label('author') }}</label>
                 <div class="col-sm-7">
                     {{ form.render('author') }}
                 </div>
@@ -19,7 +19,7 @@
         {{end_form()}}
         {{ form('settings/authorization', 'class' : 'form-horizontal') }}
             <div class="form-group">
-                <label class="col-sm-5 control-label" for="accessCode">{{ form.label('accessCode') }}:</label>
+                <label class="col-sm-5 control-label" for="accessCode">{{ form.label('accessCode') }}</label>
                 <div class="col-sm-4">
                     {{ form.render('accessCode') }}
                 </div>
@@ -34,7 +34,7 @@
     {% else %}
         {{ form('settings/cleanAuth', 'class' : 'form-horizontal' ) }}
             <div class="form-group">
-                <label class="col-sm-5 control-label" for="author">{{ form.label('unauthor') }}:</label>
+                <label class="col-sm-5 control-label" for="author">{{ form.label('unauthor') }}</label>
                 <div class="col-sm-7">
                     {{ form.render('unauthor') }}
                 </div>

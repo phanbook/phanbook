@@ -33,11 +33,16 @@ class DashboardController extends ControllerBase
     public function indexAction()
     {
         $analytic = new Analytic();
+        $this->view->isLogged = false;
         // We check if user authorization
         if ($analytic->checkAccessToken()) {
             $this->view->isLogged = true;
-        } else {
-            $this->view->isLogged = false;
+            $listGA = [
+                "ga:visits",
+                "ga:pageviews",
+                "ga:timeOnPage"
+            ];
+            $this->view->analyticData = $analytic->getAnalyticData($listGA, 30);
         }
         $this->tag->setTitle(t('Dashboard'));
         $this->view->form = new DashboardForm();

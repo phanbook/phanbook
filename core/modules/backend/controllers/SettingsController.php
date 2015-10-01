@@ -248,7 +248,7 @@ class SettingsController extends ControllerBase
         if ($this->request->getPost('author')) {
             $analytic = new Analytic();
             $authURL = $analytic->getAuthURL();
-            header('Location: ' . filter_var($authURL, FILTER_SANITIZE_URL));
+            $this->response->redirect(filter_var($authURL, FILTER_SANITIZE_URL));
         }
     }
     /**

@@ -110,10 +110,6 @@ class Analytic extends Injectable
             }
         }
     }
-    public function getAnalyticData($arrayGA)
-    {
-
-    }
     /**
      * Get list of projects connected to logged account
      * @return array list project
@@ -166,7 +162,8 @@ class Analytic extends Injectable
                     "profileURL"    =>  $profile->websiteUrl,
                     "profileName"   =>  $profile->name,
                     "timeZone"      =>  $profile->timezone,
-                    "trackingID"    =>  $profile->webPropertyId
+                    "trackingID"    =>  $profile->webPropertyId,
+                    "profileID"     =>  $profile->id,
                 ];
             }
             return ["state" =>  true, "profile"     =>  $result];
@@ -175,14 +172,24 @@ class Analytic extends Injectable
         }
     }
 
-    public function getAnalyticData($accountID, $profileID)
+    public function getAnalyticData($listGA, $numbDate)
     {
-        $service = new \Google_Service_Analytics($this->client);
+        $profileID = Settings::getAnalyticProfileID();
+        if ($profileID) {
+            $accountID = Settings::getAnalyticAccountID();
+            $profileObj = $this->getViewInfo($accountID, $profileID);
+            if ($profileObj["state"]) {
+                $service = new \Google_Service_Analytics($this->client);
 
-        $from = date('Y-m-d', time()-30*24*60*60);; // 30 days
-        $to = date('Y-m-d'); // today
+                $from = date('Y-m-d', time()-$numbDate*24*60*60);
+                $to = date('Y-m-d'); // today
+                $metrics = implode(',', $listGA);
+                //$metrics = 'ga:visits,ga:pageviews,ga:bounces,ga:entranceBounceRate,ga:visitBounceRate,ga:avgTimeOnSite';
+                $data = $service->data_ga->get('ga:'.$profileObj['profile']['profileID'], $from, $to, $metrics);
+                return $data['rows'][0];
+            }
+        }
+        return false;
 
-        $metrics = 'ga:visits,ga:pageviews,ga:bounces,ga:entranceBounceRate,ga:visitBounceRate,ga:avgTimeOnSite';
-        $data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics);
     }
 }

@@ -15,55 +15,68 @@
                     Information and statistics
                 </div>
                 {% if isLogged == true %}
-                    <div id="analytic" class="panel-body">
-                        <div class="row">
-                            <div class="col-md-3 text-center">
-                                <div class="small">
-                                    <i class="fa fa-bolt"></i> Page views
+                    {% if analyticData != false %}
+                        <div id="analytic" class="panel-body">
+                            <div class="row">
+                                <div class="col-md-3 text-center">
+                                    <div class="small">
+                                        <i class="fa fa-bolt"></i> Page views
+                                    </div>
+                                    <div>
+                                        <h1 class="font-extra-bold m-t-xl m-b-xs">
+                                            {{analyticData[1]}}
+                                        </h1>
+                                        <small>Page views in last 30 day</small>
+                                    </div>
+                                    <div class="small m-t-xl">
+                                        <i class="fa fa-clock-o"></i> Data from January
+                                    </div>
                                 </div>
-                                <div>
-                                    <h1 class="font-extra-bold m-t-xl m-b-xs">
-                                        226,802
-                                    </h1>
-                                    <small>Page views in last month</small>
+                                <div class="col-md-6">
+                                    <div class="text-center small">
+                                        <i class="fa fa-laptop"></i> Active users in current month (December)
+                                    </div>
                                 </div>
-                                <div class="small m-t-xl">
-                                    <i class="fa fa-clock-o"></i> Data from January
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="text-center small">
-                                    <i class="fa fa-laptop"></i> Active users in current month (December)
-                                </div>
-                            </div>
-                            <div class="col-md-3 text-center">
-                                <div class="small">
-                                    <i class="fa fa-clock-o"></i> Active duration
-                                </div>
-                                <div>
-                                    <h1 class="font-extra-bold m-t-xl m-b-xs">
-                                        10 Months
-                                    </h1>
-                                    <small>And four weeks</small>
-                                </div>
-                                <div class="small m-t-xl">
-                                    <i class="fa fa-clock-o"></i> Last active in 12.10.2015
+                                <div class="col-md-3 text-center">
+                                    <div class="small">
+                                        <i class="fa fa-clock-o"></i> Active duration
+                                    </div>
+                                    <div>
+                                        <h1 class="font-extra-bold m-t-xl m-b-xs">
+                                            {{analyticData[2]}}
+                                        </h1>
+                                        <small>And four weeks</small>
+                                    </div>
+                                    <div class="small m-t-xl">
+                                        <i class="fa fa-clock-o"></i> Last active in 12.10.2015
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    {% else %}
+                        <div id="analytic" class="panel-body">
+                            {{ form('settings/analytic', 'class' : 'form-horizontal') }}
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label" for="profile">{{form.label('profile')}}</label>
+                                    <div class="col-sm-7">
+                                        {{ form.render('profile') }}
+                                    </div>
+                                </div>
+                                {{ form.render('csrf', ['value': this.security.getToken()]) }}
+                            {{end_form()}}
+                        </div>
+                    {% endif %}
                 {% else %}
                     <div id="analytic" class="panel-body">
                         {{ form('settings/analytic', 'class' : 'form-horizontal') }}
-                        <div class="form-group">
-                            <label class="col-sm-5 control-label" for="unauthor">{{t("This feature need to be configured ")}}</label>
-                            <div class="col-sm-7">
-                                {{ form.render('unauthor') }}
+                            <div class="form-group">
+                                <label class="col-sm-5 control-label" for="unauthor">{{form.label('unauthor')}}</label>
+                                <div class="col-sm-7">
+                                    {{ form.render('unauthor') }}
+                                </div>
                             </div>
-                        </div>
-                        {{ form.render('csrf', ['value': this.security.getToken()]) }}
-                    {{end_form()}}
-
+                            {{ form.render('csrf', ['value': this.security.getToken()]) }}
+                        {{end_form()}}
                     </div>
                 {% endif %}
                 <div class="panel-footer">

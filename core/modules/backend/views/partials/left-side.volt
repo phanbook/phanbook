@@ -6,10 +6,20 @@
 
                 <!-- nav -->
                 <nav class="nav-primary hidden-xs">
-                    <div class="text-muted text-sm hidden-nav-xs padder m-t-sm m-b-sm">Start</div>
+                    <div class="user-panel">
+                        <span class="pull-left image thumb-sm avatar" style="width: 42px;">
+                            {{ image(getUrlAvatar(this.auth.getAuth()['email'], 48) , 'class': 'img-rounded', false)}}
+                        </span>
+                        <div class="pull-left info">
+                            <p>{{ this.auth.getFullName() }}</p>
+                            <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                        </div>
+                    </div>
+                    <div class="line dk hidden-nav-xs"></div>
+                    <div class="text-muted text-xs hidden-nav-xs padder m-t-sm m-b-sm">MAIN NAVIGATION</div>
                     <ul class="nav nav-main" data-ride="collapse">
-                        <li {% if this.view.getControllerName() == 'index' %}class="active"{% endif %}>
-                            {{ link_to('dashboard', 'class' : 'auto', '<i class="i i-statistics icon"></i><span class="font-bold">Dashboard</span>') }}
+                        <li {% if controller == 'dashboard' %}class="active"{% endif %}>
+                            {{ link_to('dashboard', 'class' : 'auto', '<i class="fa fa-dashboard"></i><span>Dashboard</span>') }}
                         </li>
                     </ul>
 
@@ -17,14 +27,14 @@
                         <ul class="nav nav-main admin-left-menu" data-ride="collapse">
                             <li {% if controller ==  menu['code'] %}class="active"{% endif %}>
                                 {{ link_to(menu['code'],
-                                 'class' : 'auto', '<i class="fa fa-bars"></i><span class="font-bold">'
-                                 ~ menu['name'] ~ '</span>')
+                                 'class' : 'auto', '<i class="' ~ menu['icon'] ~ '"></i><span>'
+                                 ~ t(menu['name']) ~ '</span>')
                                 }}
                                 {% if menu['sub']|length > 0 %}
                                     <ul class="nav nav-second-level collapse">
                                     {% for sub in menu['sub']  %}
                                             <li {% if this.view.getActionName() == sub['code'] %}class="active"{% endif %} >
-                                                {{link_to( menu['code'] ~'/' ~ sub['code'] , t(sub['name']))}}
+                                                {{link_to( menu['code'] ~'/' ~ sub['code'] , '<i class="' ~ sub['icon'] ~ '"></i><span>' ~ t(sub['name']) ~ '</span>')}}
                                             </li>
                                     {% endfor %}
                                     </ul>
@@ -38,13 +48,13 @@
                     <ul class="nav">
                         <li>
                             <a href="/">
-                                <i class="i i-circle-sm text-info-dk"></i>
+                                <i class="fa fa-circle-o"></i>
                                 <span>Work space</span>
                             </a>
                         </li>
                         <li>
                             <a href="#">
-                                <i class="i i-circle-sm text-success-dk"></i>
+                                <i class="fa fa-circle-o"></i>
                                 <span>Connection</span>
                             </a>
                         </li>

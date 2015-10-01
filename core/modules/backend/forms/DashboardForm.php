@@ -47,5 +47,16 @@ class DashboardForm extends Form
         $unauthor->setLabel("This feature need to be configured");
         $this->add($unauthor);
 
+        $profile = new Submit(
+            'profile',
+            [
+                'name'  =>  'profile',
+                'value' => 'Go to setting',
+                'class' => 'btn btn-sm btn-warning'
+            ]
+        );
+        $profile->setLabel("You must select view before use this feature");
+        $this->add($profile);
+
     }
 }
