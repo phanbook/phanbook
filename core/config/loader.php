@@ -20,7 +20,7 @@ $loader->registerNamespaces(
         'Phanbook\Tools'                => ROOT_DIR . 'core/common/tools/',
         'Phanbook\Models'               => ROOT_DIR . 'core/common/models/',
         'Phanbook\Plugins'              => ROOT_DIR . 'core/common/plugins/',
-        'Phanbook\Validators'           => ROOT_DIR . 'core/common/validators/',
+        'Phanbook\Validators'           => ROOT_DIR . 'core/common/validators/'
     ]
 );
 

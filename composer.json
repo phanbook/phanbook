@@ -12,12 +12,14 @@
     "require-dev": {
         "fzaninotto/faker": "1.5.*@dev",
         "squizlabs/php_codesniffer": "1.*",
-        "codeception/codeception": "*"
+        "codeception/codeception": "2.1.2"
     },
     "require": {
         "swiftmailer/swiftmailer": "@stable",
         "league/oauth2-client": "0.10.*@dev",
         "league/fractal": "0.7.*",
-        "elasticsearch/elasticsearch": "~1.0"
+        "elasticsearch/elasticsearch": "~1.0",
+        "google/apiclient": "1.0.*@beta"
+
     }
 }

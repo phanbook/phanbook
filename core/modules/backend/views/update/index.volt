@@ -1,9 +1,6 @@
 {% extends 'layouts/layout.volt' %}
 {% block title %}Update core{% endblock %}
 {% block content %}
-    <div class="m-b-md">
-        <h3 class="m-b-none">{{ t('Phanbook Updates') }}</h3>
-    </div>
     <div class="panel-body">
 
     <pre>

@@ -1,5 +1,5 @@
 <header class="bg-white header header-md navbar navbar-fixed-top-xs box-shadow">
-    <div class="navbar-header aside-md dk">
+    <div class="navbar-header aside dk">
         <a class="btn btn-link visible-xs" data-toggle="class:nav-off-screen,open" data-target="#nav,html">
             <i class="fa fa-bars"></i>
         </a>
@@ -85,17 +85,17 @@
     <form class="navbar-form navbar-left input-s-lg m-t m-l-n-xs hidden-xs" role="search">
         <div class="form-group">
             <div class="input-group">
-            <span class="input-group-btn">
-              <button type="submit" class="btn btn-sm bg-white b-white btn-icon"><i class="fa fa-search"></i></button>
-            </span>
-                <input type="text" class="form-control input-sm no-border" placeholder="Search apps, projects...">
+                <input type="text" class="form-control input-sm" placeholder="Search apps, projects...">
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-sm bg-white b-white btn-icon"><i class="fa fa-search"></i></button>
+                </span>
             </div>
         </div>
     </form>
     <ul class="nav navbar-nav navbar-right m-n hidden-xs nav-user user">
         <li class="hidden-xs">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <i class="i i-chat3"></i>
+                <i class="fa fa-bell-o fa-lg"></i>
                 <span class="badge badge-sm up bg-danger count">0</span>
             </a>
             <section class="dropdown-menu aside-xl animated flipInY">
@@ -106,7 +106,7 @@
                     <div class="list-group list-group-alt">
                         <a href="#" class="media list-group-item">
                   <span class="pull-left thumb-sm">
-                    <img src="/images/u/a0.png" alt="..." class="img-circle">
+                    <!-- <img src="/images/u/a0.png" alt="..." class="img-circle"> -->
                   </span>
                   <span class="media-body block m-b-none">
                     Use awesome Phalcon Jobs<br>
