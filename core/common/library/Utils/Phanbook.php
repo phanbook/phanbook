@@ -125,7 +125,8 @@ class Phanbook
     /**
      * Retrieve a page give its title
      *
-     * @param  string $page_title Page title
+     * @param  string $title Page title
+     *
      * @return object on success or null on failure
      */
     public function getPageByTitle($title)

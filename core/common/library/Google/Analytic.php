@@ -76,17 +76,12 @@ class Analytic extends Injectable
     }
     public function checkAccessToken()
     {
-        if (!Settings::getAccessToken()) {
-            return false;
-        }
-        if ($this->client->isAccessTokenExpired()) {
+        if (Settings::getAccessToken()) {
             if ($this->refreshToken()) {
                 return true;
-            } else {
-                return false;
             }
         }
-        return true;
+        return false;
     }
     public function getAuthURL()
     {
