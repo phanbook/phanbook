@@ -139,6 +139,9 @@ $router->add('/{router}', [
     if ($uri == '/') {
         return false;
     }
+    if ($uri == '/posts') {
+        return false;
+    }
     return true;
 });
 
