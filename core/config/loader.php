@@ -19,6 +19,7 @@ $loader->registerNamespaces(
         'Phanbook'                      => ROOT_DIR . 'core/common/library/',
         'Phanbook\Tools'                => ROOT_DIR . 'core/common/tools/',
         'Phanbook\Models'               => ROOT_DIR . 'core/common/models/',
+        'Phanbook\Factory'              => ROOT_DIR . 'core/common/factory',
         'Phanbook\Plugins'              => ROOT_DIR . 'core/common/plugins/',
         'Phanbook\Validators'           => ROOT_DIR . 'core/common/validators/'
     ]

@@ -13,7 +13,7 @@
 namespace Phanbook\Models;
 use Phanbook\Google\Analytic;
 use Phanbook\Models\Settings;
-use Phanbook\Models\TopDashboardFactory;
+use Phanbook\Factory\TopDashboardFactory;
 
 class Dashboard extends ModelBase
 {
