@@ -200,6 +200,8 @@ class SettingsController extends ControllerBase
         if ($analytic->checkAccessToken()) {
             $this->view->isLogged = true;
         }
+        $this->assets->addCss('assets/css/bootstrap-multiselect.css');
+        $this->assets->addJs('assets/js/bootstrap-multiselect.js');
         $profileID = Settings::getAnalyticProfileID();
         $accountID = Settings::getAnalyticAccountID();
         $this->view->isConfigured = false;
@@ -267,7 +269,7 @@ class SettingsController extends ControllerBase
     }
     /**
      *
-     * Save change analytic setting
+     * Save changes analytic setting
      *
      */
 
@@ -295,6 +297,25 @@ class SettingsController extends ControllerBase
                 }
             }
             $this->flashSession->error(t('An error occured when save setting!'));
+        }
+        return $this->currentRedirect();
+    }
+    /**
+     *
+     * Save changes about what analytic module will display on dashboard
+     *
+     */
+
+    public function moduleDisplayAction()
+    {
+        $this->view->disable();
+        if ($this->request->getPost('save')) {
+            $listActivity = $this->request->getPost('topActivity');
+            if (Settings::setListTopActivity($listActivity)) {
+                $this->flashSession->success(t('Save Analytic module(s) position success!'));
+            } else {
+                $this->flashSession->error(t('An error occured, We can\'t save this change!'));
+            }
         }
         return $this->currentRedirect();
     }

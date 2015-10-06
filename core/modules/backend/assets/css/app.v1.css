@@ -8910,40 +8910,6 @@ button.close {
  * http://applemusic.tumblr.com/
  */
 
-/** Ultra Light */
-@font-face {
-  font-family: "San Francisco";
-  font-weight: 100;
-  src: url("../fonts/sanfrancisco/sanfranciscodisplay-ultralight-webfont.woff2");
-}
-
-/** Thin */
-@font-face {
-  font-family: "San Francisco";
-  font-weight: 200;
-  src: url("../fonts/sanfrancisco/sanfranciscodisplay-thin-webfont.woff2");
-}
-
-/** Medium */
-@font-face {
-  font-family: "San Francisco";
-  font-weight: normal;
-  src: url("../fonts/sanfrancisco/sanfranciscodisplay-medium-webfont.woff2");
-}
-
-/** Semi Bold */
-@font-face {
-  font-family: "San Francisco";
-  font-weight: 500;
-  src: url("../fonts/sanfrancisco/sanfranciscodisplay-semibold-webfont.woff2");
-}
-
-/** Bold */
-@font-face {
-  font-family: "San Francisco";
-  font-weight: bold;
-  src: url("../fonts/sanfrancisco/sanfranciscodisplay-bold-webfont.woff2");
-}
 
 html {
     background-color: #f2f4f8;
@@ -8951,7 +8917,7 @@ html {
 }
 
 body {
-    font-family: "San Francisco" ,"Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 13px;
     color: #788288;
     background-color: transparent;
@@ -9377,6 +9343,10 @@ a.list-group-item:hover, a.list-group-item:focus {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     border: 1px solid #ddd;
     border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+ul.nav.nav-second-level.collapse {
+    background-color: #222d32;
 }
 
 .dropdown-menu.pull-left {
@@ -10388,34 +10358,6 @@ body.container {
     box-shadow: none;
 }
 
-.btn-default {
-    color: #788288 !important;
-    background-color: #fcfcfd;
-    border-color: #d2dae1;
-    border-bottom-color: #cbd5dd;
-    -webkit-box-shadow: 0 1px 1px rgba(90, 90, 90, 0.1);
-    box-shadow: 0 1px 1px rgba(90, 90, 90, 0.1);
-}
-
-.btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active, .open .dropdown-toggle.btn-default {
-    color: #788288 !important;
-    background-color: #ebeef4;
-    border-color: #b9c6d0;
-}
-
-.btn-default:active, .btn-default.active, .open .dropdown-toggle.btn-default {
-    background-image: none;
-}
-
-.btn-default.disabled, .btn-default.disabled:hover, .btn-default.disabled:focus, .btn-default.disabled:active, .btn-default.disabled.active, .btn-default[disabled], .btn-default[disabled]:hover, .btn-default[disabled]:focus, .btn-default[disabled]:active, .btn-default[disabled].active, fieldset[disabled] .btn-default, fieldset[disabled] .btn-default:hover, fieldset[disabled] .btn-default:focus, fieldset[disabled] .btn-default:active, fieldset[disabled] .btn-default.active {
-    background-color: #fcfcfd;
-    border-color: #d2dae1;
-}
-
-.btn-default.btn-bg {
-    border-color: rgba(0, 0, 0, 0.1);
-    background-clip: padding-box;
-}
 
 .btn-primary {
     color: #fff !important;
@@ -10541,11 +10483,6 @@ body.container {
 .btn-dark.disabled, .btn-dark.disabled:hover, .btn-dark.disabled:focus, .btn-dark.disabled:active, .btn-dark.disabled.active, .btn-dark[disabled], .btn-dark[disabled]:hover, .btn-dark[disabled]:focus, .btn-dark[disabled]:active, .btn-dark[disabled].active, fieldset[disabled] .btn-dark, fieldset[disabled] .btn-dark:hover, fieldset[disabled] .btn-dark:focus, fieldset[disabled] .btn-dark:active, fieldset[disabled] .btn-dark.active {
     background-color: #222733;
     border-color: #222733;
-}
-
-.btn {
-    font-weight: 500;
-    border-radius: 2px;
 }
 
 .btn-icon {
@@ -12059,7 +11996,7 @@ body.container {
 }
 
 .line {
-    *width: 100%;
+    width: 100%;
     height: 2px;
     margin: 10px 0;
     font-size: 0;
@@ -12960,4 +12897,81 @@ body.container {
     .wrapper-lg {
         padding: 15px;
     }
+}
+
+.ibox {
+    clear: both;
+    margin-bottom: 25px;
+    margin-top: 0;
+    padding: 0;
+}
+.ibox:after, .ibox:before {
+    display: table;
+}
+.ibox-title {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #ffffff;
+    border-color: #e7eaec;
+    border-image: none;
+    border-style: solid solid none;
+    border-width: 3px 0 0;
+    color: inherit;
+    margin-bottom: 0;
+    padding: 14px 15px 7px;
+    min-height: 48px;
+}
+.ibox-title .label {
+    float: left;
+    margin-left: 4px;
+}
+.label-success, .badge-success {
+    background-color: #1c84c6;
+    color: #FFFFFF;
+}
+.label {
+    background-color: #d1dade;
+    color: #5e5e5e;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 8px;
+    text-shadow: none;
+}
+.ibox-title h5 {
+    display: inline-block;
+    font-size: 14px;
+    margin: 0 0 7px;
+    padding: 0;
+    text-overflow: ellipsis;
+    float: left;
+}
+.ibox-content {
+    clear: both;
+}
+.ibox-content {
+    background-color: #ffffff;
+    color: inherit;
+    padding: 15px 20px 20px 20px;
+    border-color: #e7eaec;
+    border-image: none;
+    border-style: solid solid none;
+    border-width: 1px 0px;
+}
+.no-margins {
+    margin: 0 !important;
+}
+.text-success {
+    color: #1c84c6;
+}
+.font-bold {
+    font-weight: 600;
+}
+.stat-percent {
+    float: right;
+}
+.label-success, .badge-success {
+    background-color: #1c84c6;
+    color: #FFFFFF;
 }

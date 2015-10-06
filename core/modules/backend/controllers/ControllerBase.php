@@ -111,8 +111,6 @@ class ControllerBase extends Controller
      */
     public function beforeExecuteRoute(Dispatcher $dispatcher)
     {
-        return true;
-        // @todo something
         if ($this->auth->isAdmin() && $this->isSecuredRoute($dispatcher)) {
             return true;
         }

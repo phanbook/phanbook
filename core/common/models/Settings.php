@@ -300,4 +300,39 @@ class Settings extends ModelBase
         }
         return null;
     }
+
+    public static function getListTopActivity()
+    {
+        $activitiesObj = Settings::findFirstByName("googleAnalyticTopActivities");
+        if ($activitiesObj && $activitiesObj->value) {
+            return json_decode($activitiesObj->value);
+        }
+    }
+
+    public static function setItem($name, $value)
+    {
+        $obj = Settings::findFirstByName($name);
+        if ($obj) {
+            $obj->value = $value;
+            if ($obj->save()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static function setListTopActivity($arrayTop)
+    {
+        $listTopActivity = Settings::getListTopActivity();
+        for ($i = 0; $i < count($listTopActivity); $i++) {
+            $listTopActivity[$i]->default = 0;
+            foreach ($arrayTop as $key => $element) {
+                if ($listTopActivity[$i]->code == $element) {
+                    $listTopActivity[$i]->default = 1;
+                }
+            }
+        }
+        $listTopActivity = json_encode($listTopActivity);
+        return Settings::setItem("googleAnalyticTopActivities", $listTopActivity);
+    }
 }

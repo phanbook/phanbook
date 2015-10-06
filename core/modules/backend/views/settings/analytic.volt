@@ -46,38 +46,68 @@
 </section>
 {% if isLogged == true %}
     <section class="panel panel-default">
-    <header class="panel-heading font-bold">
-        Google Analytics Setting
-    </header>
-    <div class="panel-body">
-    {{ form('settings/analyticSetting', 'class' : 'form-horizontal') }}
-        <div class="form-group">
-            <label class="col-sm-3 control-label" for="selectView">{{ form.label('selectView') }}:</label>
-            <div class="col-sm-4">
-                {{ form.render('selectView') }}
+        <header class="panel-heading font-bold">
+            Google Analytics Setting
+        </header>
+        <div class="panel-body">
+        {{ form('settings/analyticSetting', 'class' : 'form-horizontal') }}
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="selectView">{{ form.label('selectView') }}:</label>
+                <div class="col-sm-4">
+                    {{ form.render('selectView') }}
+                </div>
             </div>
-        </div>
-        {% if isConfigured == true %}
-            <dl class="dl-horizontal col-sm-offset-1">
-                <dt>View Name:</dt>
-                <dd>{{ profile['profileName'] }}</dd>
-                <dt>Tracking ID:</dt>
-                <dd>{{ profile['trackingID'] }}</dd>
-                <dt>Default URL:</dt>
-                <dd>{{ profile['profileURL'] }}</dd>
-                <dt>Time Zone:</dt>
-                <dd>{{ profile['timeZone'] }}</dd>
-            </dl>
+            {% if isConfigured == true %}
+                <dl class="dl-horizontal col-sm-offset-1">
+                    <dt>View Name:</dt>
+                    <dd>{{ profile['profileName'] }}</dd>
+                    <dt>Tracking ID:</dt>
+                    <dd>{{ profile['trackingID'] }}</dd>
+                    <dt>Default URL:</dt>
+                    <dd>{{ profile['profileURL'] }}</dd>
+                    <dt>Time Zone:</dt>
+                    <dd>{{ profile['timeZone'] }}</dd>
+                </dl>
 
-        {% endif %}
-        <div class="form-group">
-            <div class="col-sm-offset-3 col-lg-10">
-                {{ form.render('save') }}
+            {% endif %}
+            <div class="form-group">
+                <div class="col-sm-offset-3 col-lg-10">
+                    {{ form.render('save') }}
+                </div>
             </div>
+            {{ form.render('csrf', ['value': this.security.getToken()]) }}
+        {{end_form()}}
         </div>
-        {{ form.render('csrf', ['value': this.security.getToken()]) }}
-    {{end_form()}}
-    </div>
-</section>
+    </section>
 {% endif %}
+{% if isConfigured == true %}
+    <section class="panel panel-default">
+        <header class="panel-heading font-bold">
+            Select module to display on dashboard
+        </header>
+        <div class="panel-body">
+            {{ form('settings/moduleDisplay', 'class' : 'form-horizontal') }}
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" for="topActivity">{{ form.label('topActivity') }}</label>
+                    <div class="col-sm-4">
+                        {{ form.render('topActivity') }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-lg-10">
+                        {{ form.render('save') }}
+                    </div>
+                </div>
+            {{ form.render('csrf', ['value': this.security.getToken()]) }}
+        {{end_form()}}
+        </div>
+    </section>
+{% endif %}
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#topActivity').multiselect();
+        });
+    </script>
 {% endblock %}

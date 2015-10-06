@@ -103,7 +103,9 @@ class Analytic extends Injectable
             if (Settings::setAccessToken($newtoken)) {
                 return true;
             }
+            return false;
         }
+        return true;
     }
     /**
      * Get list of projects connected to logged account
@@ -178,7 +180,11 @@ class Analytic extends Injectable
 
                 $from = date('Y-m-d', time()-$numbDate*24*60*60);
                 $to = date('Y-m-d'); // today
-                $metrics = implode(',', $listGA);
+                if (is_array($listGA)) {
+                    $metrics = implode(',', $listGA);
+                } else {
+                    $metrics = $listGA;
+                }
                 //$metrics = 'ga:visits,ga:pageviews,ga:bounces,ga:entranceBounceRate,ga:visitBounceRate,ga:avgTimeOnSite';
                 $data = $service->data_ga->get('ga:'.$profileObj['profile']['profileID'], $from, $to, $metrics);
                 return $data['rows'][0];
