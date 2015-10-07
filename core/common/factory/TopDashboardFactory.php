@@ -24,16 +24,16 @@ class TopDashboardFactory extends TopDashboardFactoryMethod
     protected function createTopDashboard($dimension)
     {
         switch ($dimension) {
-            case parent::Visits:
+            case "visits":
                 return new Visits();
                 break;
-            case parent::PageViews:
+            case "pageviews":
                 return new PageViews();
                 break;
-            case parent::TimeOnPage:
+            case "timeOnPage":
                 return new TimeOnPage();
                 break;
-            case parent::BounceRate:
+            case "bounceRate":
                 return new BounceRate();
                 break;
             default:
@@ -56,11 +56,3 @@ class TopDashboardFactory extends TopDashboardFactoryMethod
         return $result;
     }
 }
-
-
-
-
-
-
-
-

@@ -11,6 +11,7 @@
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
 namespace Phanbook\Factory;
+
 use Phanbook\Google\Analytic;
 
 /*
@@ -18,11 +19,6 @@ use Phanbook\Google\Analytic;
 */
 abstract class TopDashboardFactoryMethod
 {
-    const Visits = "visits";
-    const PageViews = "pageviews";
-    const TimeOnPage = "timeOnPage";
-    const BounceRate = "bounceRate";
-
     abstract protected function createTopDashboard($dimension);
     abstract protected function create($dimension);
 }

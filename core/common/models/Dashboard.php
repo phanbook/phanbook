@@ -11,6 +11,7 @@
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
 namespace Phanbook\Models;
+
 use Phanbook\Google\Analytic;
 use Phanbook\Models\Settings;
 use Phanbook\Factory\TopDashboardFactory;
@@ -42,12 +43,10 @@ class Dashboard extends ModelBase
         $batchResult = $topDashboardFactory->executeBatch();
         for ($i=0; $i < count($response); $i++) {
             foreach ($batchResult as $key => $value) {
-                if ("response-ga:".$response[$i]->dimension."_now" == $key)
-                {
+                if ("response-ga:".$response[$i]->dimension."_now" == $key) {
                     $response[$i]->setAnalyticValue($value['rows'][0][0]);
                 }
-                if ("response-ga:".$response[$i]->dimension."_prev" == $key)
-                {
+                if ("response-ga:".$response[$i]->dimension."_prev" == $key) {
                     $response[$i]->setRatio($value['rows'][0][0]);
                 }
             }
