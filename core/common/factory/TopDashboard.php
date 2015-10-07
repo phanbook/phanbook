@@ -11,6 +11,7 @@
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
 namespace Phanbook\Factory;
+
 /**
  * This class'll declare product (analytic dimension) for TopDashboardFactory
  */
