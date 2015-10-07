@@ -2,9 +2,6 @@
 {% block title %}Chane logo{% endblock %}
 {% block content %}
 
-<div class="m-b-md">
-    <h3 class="m-b-none">{{ t('General Settings') }}</h3>
-</div>
 <div class="panel-body">
 
 {{ form('settings/saveGeneral', 'class' : 'form-horizontal') }}

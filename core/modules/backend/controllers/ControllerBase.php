@@ -157,7 +157,7 @@ class ControllerBase extends Controller
             ->addCss('//fonts.googleapis.com/css?family=Open+Sans', false)
             ->addCss('https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css', false)
             ->addCss('assets/css/animate.css')
-            ->addCss('assets/css/icon.css')
+            ->addCss('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css', false)
             ->addCss('assets/css/app.v1.css')
             ->addCss('assets/css/app-custom.css');
         $this->assets

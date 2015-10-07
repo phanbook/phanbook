@@ -234,6 +234,16 @@ class Auth extends Component
      *
      * @return string
      */
+    public function getFullName()
+    {
+        $identity = $this->session->get('auth');
+        return $identity['fullname'];
+    }
+    /**
+     * Returns the current identity
+     *
+     * @return string
+     */
     public function getUsername()
     {
         $identity = $this->session->get('auth');
@@ -355,6 +365,7 @@ class Auth extends Component
             'moderator' => $object->getModerator(),
             'theme'     => $object->getTheme(),
             'name'      => $object->getInforUser(),
+            'fullname'  => $object->getFullNameUser(),
             'username'  => $object->getUsername(),
             'email'     => $object->getEmail()
             )

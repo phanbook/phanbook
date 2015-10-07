@@ -427,7 +427,7 @@ if (!function_exists('t')) {
 //Phalcon Debugger
 if ($config->application->debug) {
     (new \Phalcon\Debug)->listen();
-    if (function_exists('d')) {
+    if (!function_exists('d')) {
         function d($object, $kill = true)
         {
             echo '<pre style="text-aling:left">', print_r($object, true), '</pre>';

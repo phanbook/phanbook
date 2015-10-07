@@ -29,7 +29,7 @@ use Phanbook\Frontend\Forms\QuestionsForm;
  * Class QuestionsController.
  *
  */
-class QuestionsController extends ControllerBase
+class PostsController extends ControllerBase
 {
     /**
      * This initializes the timezone in each request
@@ -49,7 +49,7 @@ class QuestionsController extends ControllerBase
         /* @var \Phalcon\Mvc\Model\Query\BuilderInterface $itemBuilder */
         /* @var \Phalcon\Mvc\Model\Query\BuilderInterface $totalBuilder */
         $tab = $this->request->getQuery('tab');
-        if ($order == "answers") {
+        if ($tab == "answers") {
             $join = [
                 'type'  => 'join',
                 'model' => 'Phanbook\\Models\\PostsReply',
@@ -99,11 +99,30 @@ class QuestionsController extends ControllerBase
                 $itemBuilder->where($monthConditions);
                 $totalBuilder->where($monthConditions);
                 break;
+            case 'questions':
+                $this->tag->setTitle('Questions');
+                $questionConditions = 'p.type = "questions"';
+                $itemBuilder->where($questionConditions);
+                $totalBuilder->where($questionConditions);
+                break;
+            case 'blog':
+                $this->tag->setTitle('Blogs');
+                $blogConditions = 'p.type = "blog"';
+                $itemBuilder->where($blogConditions);
+                $totalBuilder->where($blogConditions);
+                break;
+            case 'hackernews':
+                $this->tag->setTitle('Hacker News');
+                $tipConditions = 'p.type = "hackernews"';
+                $itemBuilder->where($tipConditions);
+                $totalBuilder->where($tipConditions);
+                break;
+
             default:
                 $this->tag->setTitle($this->config->application->tagline);
         }
 
-        $conditions = 'p.deleted = 0 AND p.type = "questions"';
+        $conditions = 'p.deleted = 0';
         $itemBuilder->andWhere($conditions);
         $totalBuilder->andWhere($conditions);
         //order like tabs sort
@@ -120,7 +139,7 @@ class QuestionsController extends ControllerBase
         $this->view->setVars(
             [
                 'tab'         => $tab,
-                'type'        => Posts::POST_QUESTIONS,
+                'type'        => Posts::POST_ALL,
                 'posts'       => $itemBuilder->getQuery()->execute($params),
                 'totalPages'  => $totalPages,
                 'currentPage' => $page
@@ -148,8 +167,6 @@ class QuestionsController extends ControllerBase
             $this->flashSession->error(t('You don\'t have permission'));
             return $this->currentRedirect();
         }
-
-
 
         $this->view->setVars(
             [
@@ -333,7 +350,6 @@ class QuestionsController extends ControllerBase
             'bind' => [$id, $ipAddress]
         ];
         $viewed = PostsViews::count($parameters);
-
         //A view is stored by ipaddress
         if (!$viewed) {
             //Increase the number of views in the post
@@ -355,7 +371,9 @@ class QuestionsController extends ControllerBase
                     }
                 }
             }
-
+            if (!$object->save()) {
+                $this->saveLoger($object->getMessages());
+            }
             $postView = new PostsViews();
             $postView->setPostsId($id);
             $postView->setIpaddress($ipAddress);

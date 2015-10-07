@@ -16,9 +16,10 @@ use Phalcon\Mvc\Router;
 $router = new Router(false);
 $router->setDefaults([
     'module'     => 'frontend',
-    'controller' => 'questions',
+    'controller' => 'posts',
     'action'     => 'index'
 ]);
+$router->removeExtraSlashes(true);
 
 /*
  * All defined routes are traversed in reverse order until Phalcon\Mvc\Router
@@ -50,13 +51,26 @@ $frontend->add('/posts/:int/{slug:[a-z\-]+}', [
 $frontend->add('/:controller[/]?', [
     'controller' => 1,
 ]);
+$frontend->add('/blog/{id:[0-9]+}/{slug:[a-z\-]+}', [
+    'controller' => 'posts',
+    'action' => 'view'
+]);
+$frontend->add('/questions/{id:[0-9]+}/{slug:[a-z\-]+}', [
+    'controller' => 'posts',
+    'action' => 'view'
+]);
+$frontend->add('/questions/new', [
+    'controller' => 'posts',
+    'action' => 'new'
+]);
+
 $frontend->add('/');
 $router->mount($frontend);
 
 /**
  * Define routes for each module
  */
-$modules = ['oauth', 'backend', 'blog'];
+$modules = ['oauth', 'backend'];
 foreach ($modules as $module) {
     $group = new Group([
         'module' => $module,
@@ -104,4 +118,31 @@ $router->add('/oauth/facebook/access_token', [
     'controller' => 'login',
     'action'     => 'tokenFacebook'
 ]);
+
+$router->add('/questions', [
+    'module'     => 'frontend',
+    'controller' => 'posts',
+]);
+/**
+ * @link https://docs.phalconphp.com/en/latest/reference/routing.html#match-callbacks
+ */
+$router->add('/{router}', [
+    'module'     => 'frontend',
+    'controller' => 'router',
+])->beforeMatch(function ($uri, $route) {
+    if ($uri == '/questions') {
+        return false;
+    }
+    if ($uri == '/backend') {
+        return false;
+    }
+    if ($uri == '/') {
+        return false;
+    }
+    if ($uri == '/posts') {
+        return false;
+    }
+    return true;
+});
+
 return $router;

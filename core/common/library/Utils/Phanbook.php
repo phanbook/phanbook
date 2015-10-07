@@ -15,6 +15,8 @@ namespace Phanbook\Utils;
 use Phanbook\Models\Tags;
 use Phanbook\Models\PostsTags;
 use Phanbook\Models\Posts;
+use Phanbook\Tools\ZFunction;
+use Phalcon\Config\Adapter\Php as AdapterPhp;
 
 /**
  *
@@ -123,8 +125,9 @@ class Phanbook
     /**
      * Retrieve a page give its title
      *
-     * @param  string       $page_title Page title
-     * @return object on success or empty  on failure
+     * @param  string $title Page title
+     *
+     * @return object on success or null on failure
      */
     public function getPageByTitle($title)
     {
@@ -135,6 +138,44 @@ class Phanbook
         if (Posts::findFirst($param)) {
             return Posts::findFirst($param);
         }
-        return false;
+        return null;
+    }
+    /**
+     * Retrieves the directory name of the current theme, without the trailing slash.
+     *
+     * @return string
+     */
+    public function getTemplate()
+    {
+        return ROOT_DIR . 'content/themes/' . $this->theme;
+    }
+    /**
+     * Retrieves the file name of the current theme with url.
+     * /about it will return such as content/themes/default/page-about.volt
+     *
+     * @return string
+     */
+    public function getPageFile($name)
+    {
+        return ROOT_DIR . 'content/themes/' . $this->theme . '/page-'. $name . '.volt';
+    }
+
+    public function saveConfig($arrayConfig)
+    {
+        $filename = ROOT_DIR . 'content/options/options.php';
+        if (!file_exists($filename)) {
+            $makeFile = ZFunction::makeFile($filename);
+            file_put_contents($filename, "<?php return [];");
+        }
+        if (file_exists($filename)) {
+            $data   = new AdapterPhp($filename);
+            $result = array_merge($data->toArray(), $arrayConfig);
+            $result ='<?php return ' . var_export($result, true) . ';';
+
+            if (!file_put_contents($filename, $result)) {
+                return false;
+            }
+            return true;
+        }
     }
 }
