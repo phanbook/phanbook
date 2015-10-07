@@ -55,7 +55,7 @@ class TopDashboard implements TopDashboardInterface
     public function setAnalyticValue($value)
     {
         if ($value && is_numeric($value)) {
-            $this->analyticValue = round($value,2);
+            $this->analyticValue = round($value, 2);
         }
     }
     public function setTitle($title)

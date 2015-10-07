@@ -44,5 +44,4 @@ class TimeOnPage extends TopDashboard
         $s -= $m * 60;
         return $h.':'.sprintf('%02d', $m).':'.sprintf('%02d', $s);
     }
-
 }
