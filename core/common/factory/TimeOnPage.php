@@ -17,8 +17,7 @@ class TimeOnPage extends TopDashboard
     /**
      * Override function create
      * Change special detail for each dimension
-     * @param  string $dimension dimension to get metrics
-     * @return
+     * @return mixed
      */
     public function create()
     {

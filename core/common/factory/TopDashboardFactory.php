@@ -12,6 +12,9 @@
  */
 namespace Phanbook\Factory;
 
+/**
+ * This class'll determining which product (analytic dimension) will produce
+ */
 class TopDashboardFactory extends TopDashboardFactoryMethod
 {
     private $batchAnalytic;

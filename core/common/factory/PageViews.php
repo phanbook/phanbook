@@ -13,7 +13,7 @@
 namespace Phanbook\Factory;
 
 /**
- * This class declare TopDashboard Factory
+ * This class'll declare special think in PageViews dimension
  */
 class PageViews extends TopDashboard
 {
