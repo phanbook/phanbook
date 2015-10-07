@@ -21,7 +21,28 @@ class TopDashboard implements TopDashboardInterface
     public $timeRanger;
     public $description;
     public $status;
+    public $ratio;
+    public $notice;
+    public $dimension;
 
+    public function initialize()
+    {
+
+    }
+    /**
+     * Set display warning level in dashboard
+     * @param int $type set invert
+     */
+    public function setNotice($type = 0)
+    {
+        if ($type == 1) {
+            $this->ratio = -$this->ratio;
+        }
+    }
+    public function setDimension($dimension)
+    {
+        $this->dimension = $dimension;
+    }
     public function setAnalytic($analytic)
     {
         $this->analytic = $analytic;
@@ -29,10 +50,13 @@ class TopDashboard implements TopDashboardInterface
     public function setNumbDate($numbDate)
     {
         $this->numbDate = $numbDate;
+        $this->setTimeRanger();
     }
     public function setAnalyticValue($value)
     {
-        $this->analyticValue = $value;
+        if ($value && is_numeric($value)) {
+            $this->analyticValue = round($value,2);
+        }
     }
     public function setTitle($title)
     {
@@ -60,7 +84,28 @@ class TopDashboard implements TopDashboardInterface
     {
         $this->status = $status;
     }
-    public function create($dimension)
+    /**
+     * Check if number is increase or decrease
+     * @param percent $ratio
+     */
+    public function setRatio($valuePrev)
+    {
+        if ($valuePrev && is_numeric($valuePrev) && $this->analyticValue) {
+            $this->ratio = round($this->analyticValue/$valuePrev - 1, 2)*100;
+            $this->setStatus(true);
+        } else {
+            $this->setStatus(false);
+        }
+        unset($this->analytic);
+    }
+    public function create()
+    {
+        // get analytic from now
+        $this->analytic->getAnalyticDataFromNow("ga:". $this->dimension, $this->numbDate);
+        //get analytic from last ranger time
+        $this->analytic->getAnalyticDataFromPrev("ga:". $this->dimension, $this->numbDate);
+    }
+    public function fixValue()
     {
 
     }

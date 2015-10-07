@@ -47,11 +47,6 @@ class DashboardController extends ControllerBase
         if ($this->analytic->checkAccessToken()) {
             $this->view->isLogged = true;
             $this->view->analyticTopActivity = $this->model->getAnalyticData();
-            $listGA = [
-                "ga:visits",
-                "ga:pageviews",
-                "ga:timeOnPage"
-            ];
             $this->view->analyticData = true;
         }
         $this->tag->setTitle(t('Dashboard'));

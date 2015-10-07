@@ -21,14 +21,8 @@ abstract class TopDashboardFactoryMethod
     const Visits = "visits";
     const PageViews = "pageviews";
     const TimeOnPage = "timeOnPage";
+    const BounceRate = "bounceRate";
 
     abstract protected function createTopDashboard($dimension);
-
-    public function create($dimension)
-    {
-        $obj = $this->createTopDashboard($dimension);
-        $obj->setAnalytic(new Analytic());
-        $obj->create($dimension);
-        return $obj;
-    }
+    abstract protected function create($dimension);
 }

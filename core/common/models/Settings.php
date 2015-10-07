@@ -257,6 +257,7 @@ class Settings extends ModelBase
         Settings::setRefreshToken("");
         Settings::setAnalyticAccountID("");
         Settings::setAnalyticProfileID("");
+        Settings::setAnalyticTrackingID("");
     }
 
     public static function setAnalyticProfileID($profileID)
@@ -269,6 +270,27 @@ class Settings extends ModelBase
             }
         }
         return false;
+    }
+
+    public static function setAnalyticTrackingID($trackingID)
+    {
+        $trackingObj = Settings::findFirstByName("googleAnalyticTrackingId");
+        if ($trackingObj) {
+            $trackingObj->value = $trackingID;
+            if ($trackingObj->save()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static function getAnalyticTrackingID()
+    {
+        $trackingObj = Settings::findFirstByName("googleAnalyticTrackingId");
+        if ($trackingObj && $trackingObj->value) {
+            return $trackingObj->value;
+        }
+        return null;
     }
 
     public static function getAnalyticProfileID()

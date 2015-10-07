@@ -14,18 +14,35 @@ namespace Phanbook\Factory;
 
 class TimeOnPage extends TopDashboard
 {
-    public function create($dimension)
+    /**
+     * Override function create
+     * Change special detail for each dimension
+     * @param  string $dimension dimension to get metrics
+     * @return
+     */
+    public function create()
     {
-        $this->setNumbDate(30);
-        $this->setTimeRanger();
+        $this->setNumbDate(1);
         $this->setTitle("Time On Page");
         $this->setDescription("Total Time On Page");
-        $temp = $this->analytic->getAnalyticData("ga:". $dimension, $this->numbDate);
-        if ($temp != false) {
-            $this->setAnalyticValue($temp[0]);
-            $this->setStatus(true);
-        } else {
-            $this->setStatus(false);
-        }
+        parent::create();
     }
+    public function fixValue()
+    {
+        $this->analyticValue = $this->secondsToTime($this->analyticValue);
+    }
+    /**
+     * Convert seconds to time string
+     * @param  int $s seconds
+     * @return string    Time string
+     */
+    private function secondsToTime($s)
+    {
+        $h = floor($s / 3600);
+        $s -= $h * 3600;
+        $m = floor($s / 60);
+        $s -= $m * 60;
+        return $h.':'.sprintf('%02d', $m).':'.sprintf('%02d', $s);
+    }
+
 }

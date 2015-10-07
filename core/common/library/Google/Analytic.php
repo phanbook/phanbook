@@ -38,9 +38,16 @@ class Analytic extends Injectable
      */
     private $clientSecret;
 
+    private $batch;
+
+    private $useBatch;
+
+    private $profileID;
+
     public function __construct()
     {
         $this->client = new \Google_Client();
+        $this->useBatch = false;
         $this->setGoogleClient($this->config->google->clientId, $this->config->google->clientSecret);
     }
     public function setGoogleClient($clientId, $clientSecret)
@@ -149,11 +156,11 @@ class Analytic extends Injectable
      * @param string $profileID webPropertyID
      * @return mixed
      */
-    public function getViewInfo($accountID, $profileID)
+    public function getViewInfo($accountID, $trackingID)
     {
         $service = new \Google_Service_Analytics($this->client);
         try {
-            $profiles = $service->management_profiles->listManagementProfiles($accountID, $profileID);
+            $profiles = $service->management_profiles->listManagementProfiles($accountID, $trackingID);
             foreach ($profiles->getItems() as $profile) {
                 $result = [
                     "profileURL"    =>  $profile->websiteUrl,
@@ -169,28 +176,61 @@ class Analytic extends Injectable
         }
     }
 
-    public function getAnalyticData($listGA, $numbDate)
+    public function getAnalyticData($listGA, $from, $to, $prefix)
     {
         $profileID = Settings::getAnalyticProfileID();
         if ($profileID) {
             $accountID = Settings::getAnalyticAccountID();
-            $profileObj = $this->getViewInfo($accountID, $profileID);
-            if ($profileObj["state"]) {
-                $service = new \Google_Service_Analytics($this->client);
-
-                $from = date('Y-m-d', time()-$numbDate*24*60*60);
-                $to = date('Y-m-d'); // today
-                if (is_array($listGA)) {
-                    $metrics = implode(',', $listGA);
-                } else {
-                    $metrics = $listGA;
-                }
-                //$metrics = 'ga:visits,ga:pageviews,ga:bounces,ga:entranceBounceRate,ga:visitBounceRate,ga:avgTimeOnSite';
-                $data = $service->data_ga->get('ga:'.$profileObj['profile']['profileID'], $from, $to, $metrics);
+            $service = new \Google_Service_Analytics($this->client);
+            if (is_array($listGA)) {
+                $metrics = implode(',', $listGA);
+            } else {
+                $metrics = $listGA;
+            }
+            //$metrics = 'ga:visits,ga:pageviews,ga:bounces,ga:entranceBounceRate,ga:visitBounceRate,ga:avgTimeOnSite';
+            if ($this->useBatch) {
+                $data = $service->data_ga->get('ga:'.$profileID, $from, $to, $metrics);
+                $this->batch->add($data, $metrics.$prefix);
+                return true;
+            } else {
+                $data = $service->data_ga->get('ga:'.$profileID, $from, $to, $metrics);
                 return $data['rows'][0];
             }
+
         }
         return false;
+    }
 
+    public function getAnalyticDataFromNow($listGA, $numbDate)
+    {
+        $from = date('Y-m-d', time()-$numbDate*24*60*60);
+        $to = date('Y-m-d'); // today
+
+        return $this->getAnalyticData($listGA, $from, $to, "_now");
+    }
+
+    public function getAnalyticDataFromPrev($listGA, $numbDate)
+    {
+        $from = date('Y-m-d', time()-2*$numbDate*24*60*60);
+        $to = date('Y-m-d', time()-$numbDate*24*60*60);
+
+        return $this->getAnalyticData($listGA, $from, $to, "_prev");
+    }
+
+    public function setUseBatch($use = false)
+    {
+        if ($use == true) {
+            $this->useBatch = true;
+            $this->client->setUseBatch(true);
+            $this->batch = new \Google_Http_Batch($this->client);
+        } else {
+            $this->useBatch = false;
+            $this->client->setUseBatch(false);
+        }
+
+    }
+    public function batchExecute()
+    {
+        return $this->batch->execute();
     }
 }

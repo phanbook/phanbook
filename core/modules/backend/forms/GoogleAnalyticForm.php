@@ -25,7 +25,7 @@ class GoogleAnalyticForm extends Form
     public function initialize($para, $analytic)
     {
 
-        $profileID = Settings::getAnalyticProfileID();
+        $trackingID = Settings::getAnalyticTrackingID();
         $accountID = Settings::getAnalyticAccountID();
         // CSRF
         $csrf = new Hidden('csrf');
@@ -99,7 +99,7 @@ class GoogleAnalyticForm extends Form
             ]
         );
         $selectView->setLabel('Select View ');
-        $selectView->setDefault($profileID."_._".$accountID);
+        $selectView->setDefault($trackingID."_._".$accountID);
         $this->add($selectView);
 
         $data = Settings::getListTopActivity();

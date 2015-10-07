@@ -202,11 +202,11 @@ class SettingsController extends ControllerBase
         }
         $this->assets->addCss('assets/css/bootstrap-multiselect.css');
         $this->assets->addJs('assets/js/bootstrap-multiselect.js');
-        $profileID = Settings::getAnalyticProfileID();
+        $trackingID = Settings::getAnalyticTrackingID();
         $accountID = Settings::getAnalyticAccountID();
         $this->view->isConfigured = false;
         if ($accountID) {
-            $profile = $analytic->getViewInfo($accountID, $profileID);
+            $profile = $analytic->getViewInfo($accountID, $trackingID);
             if ($profile['state']) {
                 $this->view->isConfigured = true;
                 $this->view->profile = $profile['profile'];
@@ -278,15 +278,17 @@ class SettingsController extends ControllerBase
         $this->view->disable();
         if ($this->request->getPost('save')) {
             $obj = explode("_._", $this->request->getPost('selectView'));
-            $profileID = $obj[0];
+            $trackingID = $obj[0];
             $accountID = $obj[1];
-            if (Settings::setAnalyticProfileID($profileID)) {
+            if (Settings::setAnalyticTrackingID($trackingID)) {
                 if (Settings::setAnalyticAccountID($accountID)) {
                     $analytic = new Analytic();
-                    $profile = $analytic->getViewInfo($accountID, $profileID);
+                    $profile = $analytic->getViewInfo($accountID, $trackingID);
                     if ($profile['state']) {
                         if ($this->phanbook->saveConfig(['googleAnalytic' => $profile['profile']['trackingID']])) {
-                            $this->flashSession->success(t('Save Analytic setting success!'));
+                            if (Settings::setAnalyticProfileID($profile['profile']['profileID'])) {
+                                $this->flashSession->success(t('Save Analytic setting success!'));
+                            }
                         } else {
                             $this->flashSession->error(t('An error occured, We can\'t save tracking ID!'));
                         }

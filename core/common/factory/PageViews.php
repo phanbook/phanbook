@@ -11,21 +11,22 @@
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
 namespace Phanbook\Factory;
-
+/**
+ * This class declare TopDashboard Factory
+ */
 class PageViews extends TopDashboard
 {
-    public function create($dimension)
+    /**
+     * Override function create
+     * Change special detail for each dimension
+     * @param  string $dimension google analytic metric
+     * @return
+     */
+    public function create()
     {
         $this->setNumbDate(30);
-        $this->setTimeRanger();
         $this->setTitle("Page Views");
         $this->setDescription("Total Page Views");
-        $temp = $this->analytic->getAnalyticData("ga:". $dimension, $this->numbDate);
-        if ($temp != false) {
-            $this->setAnalyticValue($temp[0]);
-            $this->setStatus(true);
-        } else {
-            $this->setStatus(false);
-        }
+        parent::create();
     }
 }

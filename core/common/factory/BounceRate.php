@@ -11,19 +11,23 @@
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
 namespace Phanbook\Factory;
-
-class Visits extends TopDashboard
+/**
+ * This class declare TopDashboard Factory
+ */
+class BounceRate extends TopDashboard
 {
     /**
-     *
-     * @param  [type] $dimension [description]
-     * @return [type]            [description]
+     * Override function create
+     * Change special detail for each dimension
+     * @param  string $dimension google analytic metric
+     * @return
      */
     public function create()
     {
-        $this->setNumbDate(1);
-        $this->setTitle("Visits");
-        $this->setDescription("Total Visits");
+        $this->setNumbDate(30);
+        $this->setTitle("Bounce Rate");
+        $this->setDescription("Percent Rate");
         parent::create();
+        $this->analyticValue = $this->analyticValue. " %";
     }
 }

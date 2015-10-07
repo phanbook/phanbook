@@ -12962,9 +12962,6 @@ body.container {
 .no-margins {
     margin: 0 !important;
 }
-.text-success {
-    color: #1c84c6;
-}
 .font-bold {
     font-weight: 600;
 }
@@ -12974,4 +12971,20 @@ body.container {
 .label-success, .badge-success {
     background-color: #1c84c6;
     color: #FFFFFF;
+}
+.label-primary, .badge-primary {
+    background-color: #1ab394;
+    color: #FFFFFF;
+}
+.label-info, .badge-info {
+    background-color: #23c6c8;
+    color: #FFFFFF;
+}
+.label-danger, .badge-success {
+    background-color: #e33244;
+    color: #FFFFFF;
+}
+.label-warning, .badge-success {
+    background-color: #fcc633;
+    color: #5e5e5e;
 }

@@ -21,5 +21,5 @@ interface TopDashboardInterface
     public function setTimeRanger();
     public function setDescription($description);
     public function setStatus($status);
-    public function create($dimension);
+    public function create();
 }

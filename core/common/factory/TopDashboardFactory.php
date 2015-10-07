@@ -14,6 +14,13 @@ namespace Phanbook\Factory;
 
 class TopDashboardFactory extends TopDashboardFactoryMethod
 {
+    private $batchAnalytic;
+    private $analyticClient;
+    public function setAnalytic($analyticClient)
+    {
+        $this->analyticClient = $analyticClient;
+        $this->analyticClient->setUseBatch(true);
+    }
     protected function createTopDashboard($dimension)
     {
         switch ($dimension) {
@@ -26,10 +33,27 @@ class TopDashboardFactory extends TopDashboardFactoryMethod
             case parent::TimeOnPage:
                 return new TimeOnPage();
                 break;
+            case parent::BounceRate:
+                return new BounceRate();
+                break;
             default:
                 return null;
                 break;
         }
+    }
+    public function create($dimension)
+    {
+        $obj = $this->createTopDashboard($dimension);
+        $obj->setAnalytic($this->analyticClient);
+        $obj->setDimension($dimension);
+        $obj->create();
+        return $obj;
+    }
+    public function executeBatch()
+    {
+        $result = $this->analyticClient->batchExecute();
+        $this->analyticClient->setUseBatch(false);
+        return $result;
     }
 }
 
