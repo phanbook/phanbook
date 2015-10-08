@@ -14,12 +14,43 @@ namespace Phanbook\Factory;
 
 interface TopDashboardInterface
 {
+    /**
+     * Set object Phanbook\Google\Analytic to target class
+     * @param Analytic $analytic analytic object
+     */
     public function setAnalytic($analytic);
+    /**
+     * Set ranger date to get dimension from google analytic
+     * @param int $numbDate number date (days)
+     */
     public function setNumbDate($numbDate);
+    /**
+     * Set main value to target class
+     * @param mixed $value
+     */
     public function setAnalyticValue($value);
+    /**
+     * Set title will display in box on top of dashboard
+     * @param string $title title of main value
+     */
     public function setTitle($title);
+    /**
+     * Set time ranger (string) base on setNumbDate
+     */
     public function setTimeRanger();
+    /**
+     * Description of main value
+     * @param string $description
+     */
     public function setDescription($description);
+    /**
+     * Status of target class
+     * @param boolean $status true if all ok. otherwise, false
+     */
     public function setStatus($status);
+    /**
+     * Fix main value (If necessary)
+     */
+    public function fixValue();
     public function create();
 }

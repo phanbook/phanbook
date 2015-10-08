@@ -14,11 +14,6 @@ namespace Phanbook\Factory;
 
 class Visits extends TopDashboard
 {
-    /**
-     *
-     * @param  [type] $dimension [description]
-     * @return [type]            [description]
-     */
     public function create()
     {
         $this->setNumbDate(1);

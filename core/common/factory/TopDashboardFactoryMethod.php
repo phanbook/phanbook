@@ -15,7 +15,7 @@ namespace Phanbook\Factory;
 use Phanbook\Google\Analytic;
 
 /*
-*   class FactoryMethod
+*   class FactoryMethod, decide which method must be have
 */
 abstract class TopDashboardFactoryMethod
 {

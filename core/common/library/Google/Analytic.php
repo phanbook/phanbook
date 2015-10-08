@@ -21,27 +21,38 @@ use Phalcon\DI\Injectable;
 class Analytic extends Injectable
 {
     /**
-     *
-     * @var string
+     * @var Google_Client object
      */
     private $client;
 
     /**
-     *
+     * Google Analytic client ID
      * @var string
      */
     private $clientId;
 
     /**
-     *
+     * Google Analytic client Secret
      * @var string
      */
     private $clientSecret;
 
+    /**
+     * Use batch to execute multi query to get analytic data in same time
+     * Reduce time execute
+     * @var Google_Http_Batch object
+     */
     private $batch;
-
+    /**
+     * True if use Batch. Otherwise, false
+     * @var boolean
+     */
     private $useBatch;
 
+    /**
+     * Google Analytic selected profile ID
+     * @var string
+     */
     private $profileID;
 
     public function __construct()
@@ -50,21 +61,46 @@ class Analytic extends Injectable
         $this->useBatch = false;
         $this->setGoogleClient($this->config->google->clientId, $this->config->google->clientSecret);
     }
+    /**
+     * Set basic config for google Analytic
+     * @param [type] $clientId     Your client ID
+     * @param [type] $clientSecret Your client Secret
+     */
     public function setGoogleClient($clientId, $clientSecret)
     {
-        $redirectUrl = "urn:ietf:wg:oauth:2.0:oob";
         $this->client->setClientId($clientId);
         $this->client->setClientSecret($clientSecret);
+        /**
+         * Set use Google API for Google Analytic
+         */
         $this->client->addScope(\Google_Service_Analytics::ANALYTICS_READONLY);
-        $this->client->setRedirectUri($redirectUrl);
-        /* Set offline for using google analytic even when google user offline */
 
+        /**
+         * Use variable $redirectUrl to redirect to google auth page
+         */
+        $redirectUrl = "urn:ietf:wg:oauth:2.0:oob";
+        $this->client->setRedirectUri($redirectUrl);
+
+        /* Set offline for using google analytic even when google user offline */
         $this->client->setAccessType("offline");
+
+        /**
+         * Get access token from database (if have)
+         */
         $access_token = Settings::getAccessToken();
+
+        /**
+         * If have access token, set it to google client
+         */
         if ($access_token) {
             $this->client->setAccessToken($access_token);
         }
     }
+    /**
+     * Authenticate given access code to get access token and refresh token
+     * Save those to database
+     * @param string $code access code
+     */
     public function setAccessCode($code)
     {
         try {
@@ -98,6 +134,12 @@ class Analytic extends Injectable
     {
         $this->client->revokeToken();
     }
+
+    /**
+     * Access token has time live. After time live is expired, We need to get new access token
+     * by using refresh token
+     * @return boolean true if refresh success, otherwise, false
+     */
     public function refreshToken()
     {
         $refreshToken = Settings::getRefreshToken();
@@ -176,6 +218,15 @@ class Analytic extends Injectable
         }
     }
 
+    /**
+     * Get google Analytic data from google.
+     * If we use google batch, each query to get data will move to batch queue
+     * @param  array/string $listGA google dimensions
+     * @param  datetime $from   start time to get analytic data
+     * @param  datetime $to     end time to get analytic data
+     * @param  string $prefix [for batch]. separate different query
+     * @return [mixed]
+     */
     public function getAnalyticData($listGA, $from, $to, $prefix)
     {
         $profileID = Settings::getAnalyticProfileID();
@@ -187,7 +238,6 @@ class Analytic extends Injectable
             } else {
                 $metrics = $listGA;
             }
-            //$metrics = 'ga:visits,ga:pageviews,ga:bounces,ga:entranceBounceRate,ga:visitBounceRate,ga:avgTimeOnSite';
             if ($this->useBatch) {
                 $data = $service->data_ga->get('ga:'.$profileID, $from, $to, $metrics);
                 $this->batch->add($data, $metrics.$prefix);
@@ -201,6 +251,12 @@ class Analytic extends Injectable
         return false;
     }
 
+    /**
+     * Get analytic data since $numbDate days until now
+     * @param  array/string $listGA   google dimensions
+     * @param  int $numbDate number date
+     * @return mixed
+     */
     public function getAnalyticDataFromNow($listGA, $numbDate)
     {
         $from = date('Y-m-d', time()-$numbDate*24*60*60);
@@ -209,6 +265,12 @@ class Analytic extends Injectable
         return $this->getAnalyticData($listGA, $from, $to, "_now");
     }
 
+    /**
+     * Get analytic data from 2*$numbDate to (now - $numbDate)
+     * @param  array/string $listGA   google dimensions
+     * @param  int $numbDate number date
+     * @return mixed
+     */
     public function getAnalyticDataFromPrev($listGA, $numbDate)
     {
         $from = date('Y-m-d', time()-2*$numbDate*24*60*60);

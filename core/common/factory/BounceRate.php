@@ -29,6 +29,9 @@ class BounceRate extends TopDashboard
         $this->setTitle("Bounce Rate");
         $this->setDescription("Percent Rate");
         parent::create();
+    }
+    public function fixValue()
+    {
         $this->analyticValue = $this->analyticValue. " %";
     }
 }

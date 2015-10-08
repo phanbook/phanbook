@@ -27,13 +27,14 @@ class TopDashboard implements TopDashboardInterface
     public $ratio;
     public $notice;
     public $dimension;
+    public $analyticPrevValue;
 
     public function initialize()
     {
 
     }
     /**
-     * Set display warning level in dashboard
+     * Set invert display warning level in dashboard
      * @param int $type set invert
      */
     public function setNotice($type = 0)
@@ -88,19 +89,29 @@ class TopDashboard implements TopDashboardInterface
         $this->status = $status;
     }
     /**
-     * Check if number is increase or decrease
-     * @param percent $ratio
+     * Check if main value is increase or decrease
+     * If ratio > 0, main value's increase. Otherwise, main value's decrease
      */
-    public function setRatio($valuePrev)
+    public function setRatio()
     {
-        if ($valuePrev && is_numeric($valuePrev) && $this->analyticValue) {
-            $this->ratio = round($this->analyticValue/$valuePrev - 1, 2)*100;
+        if ($this->analyticPrevValue && $this->analyticValue) {
+            $this->ratio = round($this->analyticValue/$this->analyticPrevValue - 1, 2)*100;
             $this->setStatus(true);
         } else {
             $this->setStatus(false);
         }
         unset($this->analytic);
     }
+    public function setAnalyticPrevValue($prevValue)
+    {
+        if ($prevValue && is_numeric($valuePrev)) {
+            $this->analyticPrevValue = $valuePrev;
+        }
+    }
+    /**
+     * [create description]
+     * @return [type] [description]
+     */
     public function create()
     {
         // get analytic from now

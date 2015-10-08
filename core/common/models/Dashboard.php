@@ -28,7 +28,11 @@ class Dashboard extends ModelBase
     {
         return $this->analytic;
     }
-
+    /**
+     * Get data analytic from google Analytic
+     * Using Factory Method pattern to create each of dimensions
+     * @return array list of object TopDashboard
+     */
     public function getAnalyticData()
     {
         $listTopActivity = Settings::getListTopActivity();
@@ -43,6 +47,10 @@ class Dashboard extends ModelBase
         $batchResult = $topDashboardFactory->executeBatch();
         for ($i=0; $i < count($response); $i++) {
             foreach ($batchResult as $key => $value) {
+                /**
+                 * Do not change the order of If conditions below
+                 * It related to function create in class TopDashboard
+                 */
                 if ("response-ga:".$response[$i]->dimension."_now" == $key) {
                     $response[$i]->setAnalyticValue($value['rows'][0][0]);
                 }
