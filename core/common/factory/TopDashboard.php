@@ -104,8 +104,9 @@ class TopDashboard implements TopDashboardInterface
     }
     public function setAnalyticPrevValue($prevValue)
     {
-        if ($prevValue && is_numeric($valuePrev)) {
-            $this->analyticPrevValue = $valuePrev;
+        if ($prevValue && is_numeric($prevValue)) {
+            $this->analyticPrevValue = $prevValue;
+            $this->setRatio();
         }
     }
     /**

@@ -55,7 +55,7 @@ class Dashboard extends ModelBase
                     $response[$i]->setAnalyticValue($value['rows'][0][0]);
                 }
                 if ("response-ga:".$response[$i]->dimension."_prev" == $key) {
-                    $response[$i]->setRatio($value['rows'][0][0]);
+                    $response[$i]->setAnalyticPrevValue($value['rows'][0][0]);
                 }
             }
             $response[$i]->fixValue();
