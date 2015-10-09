@@ -25,7 +25,7 @@ class GoogleAnalyticForm extends Form
     public function initialize($para, $analytic)
     {
 
-        $profileID = Settings::getAnalyticProfileID();
+        $trackingID = Settings::getAnalyticTrackingID();
         $accountID = Settings::getAnalyticAccountID();
         // CSRF
         $csrf = new Hidden('csrf');
@@ -99,8 +99,31 @@ class GoogleAnalyticForm extends Form
             ]
         );
         $selectView->setLabel('Select View ');
-        $selectView->setDefault($profileID."_._".$accountID);
+        $selectView->setDefault($trackingID."_._".$accountID);
         $this->add($selectView);
+
+        $data = Settings::getListTopActivity();
+        $listTopActivity = [];
+        $listDefaultActivity = [];
+        foreach ($data as $activity) {
+            $listTopActivity[$activity->code]   =  $activity->name;
+            if ($activity->default == 1) {
+                $listDefaultActivity[] = $activity->code;
+            }
+        }
+
+        $topActivity = new Select(
+            "topActivity",
+            $listTopActivity,
+            [
+                'name'  =>  'topActivity[]',
+                'class' =>  'form-control',
+                'multiple'  =>  'multiple'
+            ]
+        );
+        $topActivity->setLabel('Select 4 activity on top of dashboard');
+        $topActivity->setDefault($listDefaultActivity);
+        $this->add($topActivity);
 
     }
 }

@@ -1,6 +1,9 @@
 {% extends 'layouts/layout.volt' %}
 {% block title %}Dashboard{% endblock %}
 {% block content %}
+    <div class="row">
+        {{ partial('dashboard/topItem') }}
+    </div>
     <section class="panel panel-default">
     <div class="row">
         <div class="col-lg-12 animated fadeInDown">
