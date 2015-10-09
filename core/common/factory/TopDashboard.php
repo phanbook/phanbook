@@ -19,16 +19,60 @@ use Phanbook\Models\Settings;
  */
 class TopDashboard implements TopDashboardInterface
 {
+    /**
+     * @var Phanbook\Google\Analytic object
+     */
     public $analytic;
+
+    /**
+     * @var integer
+     */
     public $numbDate;
+
+    /**
+     * @var mixed
+     */
     public $analyticValue;
+
+    /**
+     * @var string
+     */
     public $title;
+
+    /**
+     *
+     * @var string
+     */
     public $timeRanger;
+
+    /**
+     *
+     * @var string
+     */
     public $description;
+
+    /**
+     *
+     * @var boolean
+     */
     public $status;
+
+    /**
+     *
+     * @var float
+     */
     public $ratio;
-    public $notice;
+
+    /**
+     *
+     * @var google dimension
+     */
     public $dimension;
+
+    /**
+     *
+     * @var mixed
+     */
     public $analyticPrevValue;
 
     public function initialize()

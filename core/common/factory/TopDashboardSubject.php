@@ -16,8 +16,22 @@ use Phanbook\Google\Analytic;
 
 class TopDashboardSubject extends AbstractSubject
 {
+    /**
+     * List observers
+     * @var array
+     */
     private $observers;
+
+    /**
+     *
+     * @var mixed
+     */
     private $value;
+
+    /**
+     *
+     * @var string
+     */
     private $key;
 
     public function __construct()
@@ -27,14 +41,14 @@ class TopDashboardSubject extends AbstractSubject
         $this->key = "";
     }
 
-    public function attach(TopDashboardInterface $observer_in)
+    public function attach(TopDashboardInterface $observer)
     {
-        $this->observers[] = $observer_in;
+        $this->observers[] = $observer;
     }
-    public function detach(TopDashboardInterface $observer_in)
+    public function detach(TopDashboardInterface $observer)
     {
         foreach ($this->observers as $okey => $oval) {
-            if ($oval == $observer_in) {
+            if ($oval == $observer) {
                 unset($this->observers[$okey]);
             }
         }

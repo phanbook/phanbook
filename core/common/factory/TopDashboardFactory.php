@@ -17,7 +17,10 @@ namespace Phanbook\Factory;
  */
 class TopDashboardFactory extends FactoryMethod
 {
-    private $batchAnalytic;
+    /**
+     *
+     * @var Phanbook\Google\Analytic object
+     */
     private $analyticClient;
     public function setAnalytic($analyticClient)
     {
