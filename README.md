@@ -7,7 +7,6 @@
 [Discourse Theme](http://discourse.phanbook.com) -
 [Phalcon Theme](http://meta.phanbook.com) -
 [Contact](mailto:hello@phanbook.com) -
-[Donate](http://phanbook.com/donate)
 
 ## Build Status and Join chats us:
 
@@ -25,7 +24,7 @@
 
 We want Phanbook to be the most powerful forum software out there, and we have a huge list of ideas that we want to implement. It will take time, but Phanbook’s flexible plugin system will mean we can release early and often. Here’s a snapshot of what we’ll be working on first:
 
-- Multiple Theme
+- Multiple Themes
 - Spam Blocking
 - Markdown and rich text editing support
 - Powerful search with Elasticsearch
@@ -35,6 +34,7 @@ We want Phanbook to be the most powerful forum software out there, and we have a
 - Post flagging/reporting and an intelligent auto-moderation system
 - Rewards, badges, and gamification
 - Q&A format and voting
+- Simple CMS
 
 ## Installation
 
@@ -83,6 +83,12 @@ Before contributing to Phanbook:
 5. Please note that bug reports should go in [phanbook/phanbook](https://github.com/phanbook/phanbook/issues) or the [relevant extension repository](https://github.com/phanbook).
 
 We are look forward to seeing your pull requests!
+
+## Donating
+
+Support this project via [gratipay](http:://gratipay.com/hphanbook).
+
+[![Support via Gratipay](https://cdn.rawgit.com/gratipay/gratipay-badge/2.3.0/dist/gratipay.png)](https://gratipay.com/phanbook)
 
 ## The Phanbook Team
 
