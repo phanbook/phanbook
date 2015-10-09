@@ -12,9 +12,9 @@
  */
 namespace Phanbook\Factory;
 
-abstract class AbstractSubject {
-    abstract function attach(TopDashboardInterface $observer_in);
-    abstract function detach(TopDashboardInterface $observer_in);
-    abstract function notify();
+abstract class AbstractSubject
+{
+    abstract public function attach(TopDashboardInterface $observer_in);
+    abstract public function detach(TopDashboardInterface $observer_in);
+    abstract public function notify();
 }
-
