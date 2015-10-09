@@ -6,7 +6,7 @@
 [Development Forum](http://meta.phanbook.com) -
 [Discourse Theme](http://discourse.phanbook.com) -
 [Phalcon Theme](http://meta.phanbook.com) -
-[Contact](mailto:hello@phanbook.com) -
+[Contact](mailto:hello@phanbook.com)
 
 ## Build Status and Join chats us:
 
@@ -86,7 +86,7 @@ We are look forward to seeing your pull requests!
 
 ## Donating
 
-Support this project via [gratipay](http:://gratipay.com/hphanbook).
+Support this project via [gratipay](https://gratipay.com/phanbook).
 
 [![Support via Gratipay](https://cdn.rawgit.com/gratipay/gratipay-badge/2.3.0/dist/gratipay.png)](https://gratipay.com/phanbook)
 
