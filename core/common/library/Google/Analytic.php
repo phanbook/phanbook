@@ -257,12 +257,12 @@ class Analytic extends Injectable
      * @param  int $numbDate number date
      * @return mixed
      */
-    public function getAnalyticDataFromNow($listGA, $numbDate)
+    public function getAnalyticDataFromNow($listGA, $numbDate, $prefix = "_now")
     {
         $from = date('Y-m-d', time()-$numbDate*24*60*60);
         $to = date('Y-m-d'); // today
 
-        return $this->getAnalyticData($listGA, $from, $to, "_now");
+        return $this->getAnalyticData($listGA, $from, $to, $prefix);
     }
 
     /**
@@ -271,12 +271,12 @@ class Analytic extends Injectable
      * @param  int $numbDate number date
      * @return mixed
      */
-    public function getAnalyticDataFromPrev($listGA, $numbDate)
+    public function getAnalyticDataFromPrev($listGA, $numbDate, $prefix = "_prev")
     {
         $from = date('Y-m-d', time()-2*$numbDate*24*60*60);
         $to = date('Y-m-d', time()-$numbDate*24*60*60);
 
-        return $this->getAnalyticData($listGA, $from, $to, "_prev");
+        return $this->getAnalyticData($listGA, $from, $to, $prefix);
     }
 
     public function setUseBatch($use = false)

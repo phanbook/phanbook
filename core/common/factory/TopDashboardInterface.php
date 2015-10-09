@@ -52,5 +52,11 @@ interface TopDashboardInterface
      * Fix main value (If necessary)
      */
     public function fixValue();
+    /**
+     * Observar Pattern
+     * Update value to target class
+     * @param  AbstractSubject $subject object parrent
+     */
+    public function update(AbstractSubject $subject);
     public function create();
 }

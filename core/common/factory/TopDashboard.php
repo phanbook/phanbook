@@ -12,6 +12,8 @@
  */
 namespace Phanbook\Factory;
 
+use Phanbook\Models\Settings;
+
 /**
  * This class'll declare product (analytic dimension) for TopDashboardFactory
  */
@@ -46,6 +48,12 @@ class TopDashboard implements TopDashboardInterface
     public function setDimension($dimension)
     {
         $this->dimension = $dimension;
+        $topActivities = Settings::getListTopActivity();
+        foreach ($topActivities as $activity) {
+            if ($activity->code == $this->dimension) {
+                $this->setTitle($activity->name);
+            }
+        }
     }
     public function setAnalytic($analytic)
     {
@@ -58,7 +66,7 @@ class TopDashboard implements TopDashboardInterface
     }
     public function setAnalyticValue($value)
     {
-        if ($value && is_numeric($value)) {
+        if (is_numeric($value)) {
             $this->analyticValue = round($value, 2);
         }
     }
@@ -94,7 +102,7 @@ class TopDashboard implements TopDashboardInterface
      */
     public function setRatio()
     {
-        if ($this->analyticPrevValue && $this->analyticValue) {
+        if (is_numeric($this->analyticPrevValue) && is_numeric($this->analyticValue)) {
             $this->ratio = round($this->analyticValue/$this->analyticPrevValue - 1, 2)*100;
             $this->setStatus(true);
         } else {
@@ -104,9 +112,8 @@ class TopDashboard implements TopDashboardInterface
     }
     public function setAnalyticPrevValue($prevValue)
     {
-        if ($prevValue && is_numeric($prevValue)) {
+        if (is_numeric($prevValue)) {
             $this->analyticPrevValue = $prevValue;
-            $this->setRatio();
         }
     }
     /**
@@ -116,12 +123,39 @@ class TopDashboard implements TopDashboardInterface
     public function create()
     {
         // get analytic from now
-        $this->analytic->getAnalyticDataFromNow("ga:". $this->dimension, $this->numbDate);
+        $this->analytic->getAnalyticDataFromNow("ga:". $this->dimension, $this->numbDate, "_now");
         //get analytic from last ranger time
-        $this->analytic->getAnalyticDataFromPrev("ga:". $this->dimension, $this->numbDate);
+        $this->analytic->getAnalyticDataFromPrev("ga:". $this->dimension, $this->numbDate, "_prev");
+    }
+    public function update(AbstractSubject $subject)
+    {
+        if ($subject->compareKey("response-ga:".$this->dimension."_now") || $subject->compareKey("response-ga:".$this->dimension."_prev")) {
+            if ($subject->compareKey("response-ga:".$this->dimension."_now")) {
+                $this->setAnalyticValue($subject->getValue()['ga:'.$this->dimension]);
+            } else {
+                $this->setAnalyticPrevValue($subject->getValue()['ga:'.$this->dimension]);
+            }
+            if (is_numeric($this->analyticValue) && is_numeric($this->analyticPrevValue)) {
+                $this->setRatio();
+                $this->fixValue();
+            }
+        }
     }
     public function fixValue()
     {
-
+    }
+    /**
+     * Convert seconds to time string
+     * @param  int $s seconds
+     * @return string    Time string
+     */
+    protected function convertToTime()
+    {
+        $s = $this->analyticValue;
+        $h = floor($s / 3600);
+        $s -= $h * 3600;
+        $m = floor($s / 60);
+        $s -= $m * 60;
+        $this->analyticValue = $h.':'.sprintf('%02d', $m).':'.sprintf('%02d', $s);
     }
 }

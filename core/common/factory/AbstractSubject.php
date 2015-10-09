@@ -12,13 +12,9 @@
  */
 namespace Phanbook\Factory;
 
-use Phanbook\Google\Analytic;
-
-/*
-*   class FactoryMethod, decide which method must be have
-*/
-abstract class TopDashboardFactoryMethod
-{
-    abstract protected function createTopDashboard($dimension);
-    abstract protected function create($dimension);
+abstract class AbstractSubject {
+    abstract function attach(TopDashboardInterface $observer_in);
+    abstract function detach(TopDashboardInterface $observer_in);
+    abstract function notify();
 }
+

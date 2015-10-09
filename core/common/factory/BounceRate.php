@@ -26,7 +26,6 @@ class BounceRate extends TopDashboard
     public function create()
     {
         $this->setNumbDate(30);
-        $this->setTitle("Bounce Rate");
         $this->setDescription("Percent Rate");
         parent::create();
     }

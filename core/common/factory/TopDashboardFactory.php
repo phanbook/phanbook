@@ -15,7 +15,7 @@ namespace Phanbook\Factory;
 /**
  * This class'll determining which product (analytic dimension) will produce
  */
-class TopDashboardFactory extends TopDashboardFactoryMethod
+class TopDashboardFactory extends FactoryMethod
 {
     private $batchAnalytic;
     private $analyticClient;
@@ -24,7 +24,7 @@ class TopDashboardFactory extends TopDashboardFactoryMethod
         $this->analyticClient = $analyticClient;
         $this->analyticClient->setUseBatch(true);
     }
-    protected function createTopDashboard($dimension)
+    protected function createObject($dimension)
     {
         switch ($dimension) {
             case "visits":
@@ -39,6 +39,9 @@ class TopDashboardFactory extends TopDashboardFactoryMethod
             case "bounceRate":
                 return new BounceRate();
                 break;
+            case 'avgSessionDuration':
+                return new AvgSessionDuration();
+                break;
             default:
                 return null;
                 break;
@@ -46,7 +49,7 @@ class TopDashboardFactory extends TopDashboardFactoryMethod
     }
     public function create($dimension)
     {
-        $obj = $this->createTopDashboard($dimension);
+        $obj = $this->createObject($dimension);
         $obj->setAnalytic($this->analyticClient);
         $obj->setDimension($dimension);
         $obj->create();

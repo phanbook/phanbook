@@ -26,7 +26,6 @@ class PageViews extends TopDashboard
     public function create()
     {
         $this->setNumbDate(30);
-        $this->setTitle("Page Views");
         $this->setDescription("Total Page Views");
         parent::create();
     }

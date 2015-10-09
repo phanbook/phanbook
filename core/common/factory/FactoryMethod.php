@@ -12,21 +12,11 @@
  */
 namespace Phanbook\Factory;
 
-class TimeOnPage extends TopDashboard
+/*
+*   class FactoryMethod, decide which method must be have
+*/
+abstract class FactoryMethod
 {
-    /**
-     * Override function create
-     * Change special detail for each dimension
-     * @return mixed
-     */
-    public function create()
-    {
-        $this->setNumbDate(1);
-        $this->setDescription("Total Time On Page");
-        parent::create();
-    }
-    public function fixValue()
-    {
-        $this->convertToTime();
-    }
+    abstract protected function createObject($dimension);
+    abstract protected function create($dimension);
 }

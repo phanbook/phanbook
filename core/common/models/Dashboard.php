@@ -15,6 +15,7 @@ namespace Phanbook\Models;
 use Phanbook\Google\Analytic;
 use Phanbook\Models\Settings;
 use Phanbook\Factory\TopDashboardFactory;
+use Phanbook\Factory\TopDashboardSubject;
 
 class Dashboard extends ModelBase
 {
@@ -36,30 +37,22 @@ class Dashboard extends ModelBase
     public function getAnalyticData()
     {
         $listTopActivity = Settings::getListTopActivity();
-        $response = [];
+        $objectSubject = new TopDashboardSubject();
         $topDashboardFactory = new TopDashboardFactory();
         $topDashboardFactory->setAnalytic($this->analytic);
+
         foreach ($listTopActivity as $activity) {
             if ($activity->default == 1) {
-                $response[] = $topDashboardFactory->create($activity->code);
+                $topDashboardObj = $topDashboardFactory->create($activity->code);
+                $objectSubject->attach($topDashboardObj);
             }
         }
         $batchResult = $topDashboardFactory->executeBatch();
-        for ($i=0; $i < count($response); $i++) {
-            foreach ($batchResult as $key => $value) {
-                /**
-                 * Do not change the order of If conditions below
-                 * It related to function create in class TopDashboard
-                 */
-                if ("response-ga:".$response[$i]->dimension."_now" == $key) {
-                    $response[$i]->setAnalyticValue($value['rows'][0][0]);
-                }
-                if ("response-ga:".$response[$i]->dimension."_prev" == $key) {
-                    $response[$i]->setAnalyticPrevValue($value['rows'][0][0]);
-                }
-            }
-            $response[$i]->fixValue();
+        foreach ($batchResult as $objectName => $objectValue) {
+            $objectSubject->setKey($objectName);
+            $objectSubject->setValue($objectValue['totalsForAllResults']);
+            $objectSubject->notify();
         }
-        return $response;
+        return $objectSubject->getObservers();
     }
 }

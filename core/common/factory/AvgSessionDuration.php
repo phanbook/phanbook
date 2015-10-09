@@ -12,17 +12,21 @@
  */
 namespace Phanbook\Factory;
 
-class TimeOnPage extends TopDashboard
+/**
+ * This class declare TopDashboard Factory
+ */
+class AvgSessionDuration extends TopDashboard
 {
     /**
      * Override function create
      * Change special detail for each dimension
-     * @return mixed
+     * @param  string $dimension google analytic metric
+     * @return
      */
     public function create()
     {
-        $this->setNumbDate(1);
-        $this->setDescription("Total Time On Page");
+        $this->setNumbDate(30);
+        $this->setDescription("Session Duration");
         parent::create();
     }
     public function fixValue()
