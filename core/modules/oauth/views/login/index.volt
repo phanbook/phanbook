@@ -17,7 +17,7 @@
 			<div class="signup">
 				<div id="signup-form" style="display:block">
 					<div class="connect-buttons">
-						<a href="/auth/google">
+						<a href="/oauth/login/google">
 							<span class="google-button submit-button">Sign Up With Google</span>
 						</a>
 						<!-- <a href="/auth/twiter">
