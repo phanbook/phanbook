@@ -114,7 +114,8 @@ class ControllerBase extends Controller
         if ($this->auth->isAdmin() && $this->isSecuredRoute($dispatcher)) {
             return true;
         }
-        return $this->response->redirect();
+        header('Location:/oauth/login');
+        exit;
     }
 
 
