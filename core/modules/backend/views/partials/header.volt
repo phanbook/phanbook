@@ -155,7 +155,7 @@
                 <li class="divider"></li>
                 <li>{{ link_to('users/disableaccount', 'Cancel my account') }}</li>
                 <li class="divider"></li>
-                <li>{{ link_to('auth/logout', 'Logout') }}</li>
+                <li>{{ link_to('oauth/logout', 'Logout') }}</li>
             </ul>
         </li>
     </ul>
