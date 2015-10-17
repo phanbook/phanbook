@@ -33,8 +33,8 @@ class TagsController extends ControllerBase
         ];
         //Create a Model paginator
         $this->paginatorQueryBuilder($model, $page);
-        $this->assets->addCss('core/assets/css/help.css');
         $this->tag->setTitle(t('All tags'));
+        $this->view->pick('tag');
     }
 
     public function tagSuggestAction()
@@ -98,12 +98,13 @@ class TagsController extends ControllerBase
 
         $this->view->setVars(
             [
-                'tab'  => 'tags',
-                'object'        => $itemBuilder->getQuery()->execute(),
-                'totalPages'    => $totalPages,
-                'currentPage'   => $page,
-                'slugName'      => $slugName,
-                'hotPosts'      => Posts::getHotPosts()
+                'tab'         => 'tags',
+                'type'        => Posts::POST_ALL,
+                'posts'       => $itemBuilder->getQuery()->execute(),
+                'totalPages'  => $totalPages,
+                'currentPage' => $page,
+                'slugName'    => $slugName,
+                'tags'        => Tags::find()
             ]
         );
         $this->tag->setTitle(t('These posts fillter by tags'));

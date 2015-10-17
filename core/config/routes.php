@@ -145,4 +145,8 @@ $router->add('/{router}', [
     return true;
 });
 
+$router->add('/tags/{id:[0-9]+}/{slug}', [
+    'controller' => 'tags',
+    'action' => 'postByTag'
+]);
 return $router;

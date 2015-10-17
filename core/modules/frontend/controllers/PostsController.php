@@ -18,6 +18,7 @@ use Phanbook\Models\Vote;
 use Phanbook\Models\Comment;
 use Phanbook\Models\Karma;
 use Phanbook\Models\Users;
+use Phanbook\Models\Tags;
 use Phanbook\Models\PostsViews;
 use Phanbook\Models\PostsReply;
 use Phanbook\Models\PostsHistory;
@@ -142,7 +143,8 @@ class PostsController extends ControllerBase
                 'type'        => Posts::POST_ALL,
                 'posts'       => $itemBuilder->getQuery()->execute($params),
                 'totalPages'  => $totalPages,
-                'currentPage' => $page
+                'currentPage' => $page,
+                'tags'        => Tags::find()
             ]
         );
         return $this->view->pick('post');
