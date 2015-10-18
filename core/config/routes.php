@@ -142,6 +142,9 @@ $router->add('/{router}', [
     if ($uri == '/posts') {
         return false;
     }
+    if ($uri == '/tags') {
+        return false;
+    }
     return true;
 });
 

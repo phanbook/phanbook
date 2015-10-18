@@ -16,7 +16,6 @@ use Phalcon\Mvc\Controller;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Db\Adapter\Pdo;
 use Phalcon\Logger\Adapter\File as Logger;
-use Phalcon\Paginator\Adapter\QueryBuilder as PaginatorQueryBuilder;
 use Phanbook\Models\Vote;
 use Phanbook\Models\Users;
 use Phanbook\Models\Karma;
@@ -24,7 +23,10 @@ use Phanbook\Models\Posts;
 use Phanbook\Models\Comment;
 use Phanbook\Models\PostsReply;
 use Phanbook\Forms\CommentForm;
+use Phanbook\Models\ModelBase;
 use Phanbook\Models\ActivityNotifications;
+use Phalcon\Paginator\Adapter\QueryBuilder as PaginatorQueryBuilder;
+use Phalcon\Paginator\Adapter\NativeArray  as PaginatorNativeArray;
 
 /**
  * Class ControllerBase
@@ -57,6 +59,10 @@ class ControllerBase extends Controller
      */
     public $currentOrder = null;
 
+    /**
+     * @var int
+     */
+    public $numberPage = 1;
 
     /**
      * Check if we need to throw a json respone. For ajax calls.
@@ -418,7 +424,6 @@ class ControllerBase extends Controller
      */
     protected function prepareQueries($join, $where, $limit = 15)
     {
-
         /**
          *
          * @var \Phalcon\Mvc\Model\Query\BuilderInterface $itemBuilder
@@ -447,43 +452,37 @@ class ControllerBase extends Controller
 
         return array($itemBuilder, $totalBuilder);
     }
+
     /**
-     * Create a QueryBuilder paginator, show 15 rows by page starting from $page
+     * Create a paginator default use adapter PaginatorQueryBuilder,
+     * show 30 rows by page starting from $page
      *
-     * @param array $model The model need to retrieve and someoption {code} $mode = [ 'name'      => 'Phanbook\Models\Users' 'orderBy'   => 'username' 'currentOrder'=> 'users'// mean adding class for menu ] {/code}
-     * {code}
-     *      $mode = [
-     *          'name'      => 'Phanbook\Models\Users'
-     *          'orderBy'   => 'username'
-     *          'currentOrder'=> 'users'// mean adding class for menu
-     *      ]
-     * {/code}
-     * @param int   $page  Current page to show
-     *
+     * @param  int   $page  Current page to show
      * @return array the conatainer object...
      */
-    public function paginatorQueryBuilder($model, $page)
+    public function paginator($query, $page, $adapter = null)
     {
-        $builder = $this->modelsManager->createBuilder()
-            ->from($model['name'])
-            ->orderBy($model['orderBy']);
-        //Create a Model paginator, show 15 rows by page starting from $page
-        $paginator   = (new PaginatorQueryBuilder(
-            [
-                'builder'  => $builder,
-                'limit'     => self::ITEM_IN_PAGE,
-                'page'      => $page
-            ]
-        ))->getPaginate();
-        $this->view->setVars(
-            [
-                'tab'           => $model['currentOrder'],
-                'object'        => $paginator->items,
-                'canonical'     => '',
-                'totalPages'    => $paginator->total_pages,
-                'currentPage'   => $page,
-            ]
-        );
+        $builder        = ModelBase::modelQuery($query);
+        $numberPage     = isset($page) ? $page : $this->numberPage;
+
+        if (is_null($adapter)) {
+            $paginator  = new PaginatorQueryBuilder(
+                [
+                    'builder'  => $builder,
+                    'limit'     => self::ITEM_IN_PAGE,
+                    'page'      => $page
+                ]
+            );
+        } else {
+            $paginator = new PaginatorNativeArray(
+                [
+                    'data'  => $builder->getQuery()->execute()->toArray(),
+                    'limit' => self::ITEM_IN_PAGE,
+                    'page'  => $numberPage
+                ]
+            );
+        }
+        return $paginator;
     }
     public function indexRedirect()
     {
@@ -619,7 +618,7 @@ class ControllerBase extends Controller
     public function saveLoger($e)
     {
         //error_log($e);
-        $logger = new Logger(ROOT_DIR . 'apps/logs/error.log');
+        $logger = new Logger(ROOT_DIR . 'content/logs/error.log');
         if (is_object($e)) {
             //d($e);
             $logger->error($e[0]->getMessage());
