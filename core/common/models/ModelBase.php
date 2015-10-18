@@ -167,7 +167,7 @@ class ModelBase extends Model
     public function saveLoger($e)
     {
         //error_log($e);
-        $logger = new Logger(ROOT_DIR . 'apps/logs/error.log');
+        $logger = new Logger(ROOT_DIR . 'content/logs/error.log');
         if (is_object($e)) {
             $logger->error($e->getMessage());
             $logger->error($e->getTraceAsString());
@@ -180,7 +180,63 @@ class ModelBase extends Model
         if (is_string($e)) {
             $logger->error($e);
         }
-
         //return $this->indexRedirect();
+    }
+    /**
+     * Get data via method Query Builder Phalcon
+     * {code}
+     * $sql =[
+     *  'model' => 'Phanbook\Models\Posts'
+     *  'columns' => ['a.id', 'a.title']
+     *  'joins' => [
+     *      [
+     *          'type' => 'join'
+     *          'model' => 'Phanbook\Models\PostsReply'
+     *          'on' => 'a.id = pr.postsId'
+     *          'alias' => 'pr'
+     *      ]
+     *      [
+     *          //like above
+     *      ]
+     *   ],
+     *   'where' => ''
+     * ];
+     * {/code}
+     * 
+     * {code}
+     * $sql = [
+     *      'model' => 'Phanbook\Models\Tags',
+     *      'joins' => []
+     *
+     *  ];
+     * {/code}
+     * @param  array
+     * @return Phalcon\Mvc\Model\Query\BuilderInterface
+     */
+    public static function modelQuery($query)
+    {
+        $builder = self::getBuilder();
+        if (!empty($query['model'])) {
+            $builder->from(['a' => $query['model']]);
+        }
+
+        if (!empty($query['columns'])) {
+            $builder->columns($query['columns']);
+        }
+        foreach ($query['joins'] as $join) {
+            if (in_array($join['type'], ['innerJoin', 'leftJoin', 'rightJoin', 'join'])) {
+                $builder->$join['type']($join['model'], $join['on'], $join['alias']);
+            }
+        }
+        if (!empty($query['groupBy'])) {
+            $builder->groupBy($query['groupBy']);
+        }
+        if (!empty($query['orderBy'])) {
+            $builder->orderBy($query['orderBy']);
+        }
+        if (!empty($query['where'])) {
+            $builder->where($query['where']);
+        }
+        return $builder;
     }
 }

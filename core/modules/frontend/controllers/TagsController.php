@@ -25,16 +25,23 @@ class TagsController extends ControllerBase
 {
     public function indexAction()
     {
-        $page  = isset($_GET['page'])?(int)$_GET['page']:1;
-        $model = [
-            'name'      => 'Phanbook\Models\Tags',
-            'orderBy'   => 'id',
-            'currentOrder' => 'tags'
+        $page  = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $sql = [
+            'model' => 'Phanbook\Models\Tags',
+            'joins' => []
+
         ];
         //Create a Model paginator
-        $this->paginatorQueryBuilder($model, $page);
-        $this->assets->addCss('core/assets/css/help.css');
+        $data = $this->paginator($sql, $page);
+        $this->view->setVars(
+            [
+                'paginator' => $data->getPaginate(),
+                'tab'  => 'tags',
+                'tags' => Tags::find()
+            ]
+        );
         $this->tag->setTitle(t('All tags'));
+        $this->view->pick('tag');
     }
 
     public function tagSuggestAction()
@@ -85,8 +92,8 @@ class TagsController extends ControllerBase
 
         ];
         /**@Todo later for security*/
-        $Where  = 'p.deleted = 0 AND pt.tagsId = ' .$id;
-        list($itemBuilder, $totalBuilder) = $this->prepareQueries($join, $Where, self::ITEM_IN_PAGE);
+        $where  = 'p.deleted = 0 AND pt.tagsId = ' .$id;
+        list($itemBuilder, $totalBuilder) = $this->prepareQueries($join, $where, self::ITEM_IN_PAGE);
         //$itemBuilder->andWhere($conditions);
         $page       = isset($_GET['page'])?(int)$_GET['page']:1;
         $totalPosts = $totalBuilder->getQuery()->setUniqueRow(true)->execute();
@@ -96,14 +103,16 @@ class TagsController extends ControllerBase
             $itemBuilder->offset((int) $page);
         }
 
+        //@todo refacttor
         $this->view->setVars(
             [
-                'tab'  => 'tags',
-                'object'        => $itemBuilder->getQuery()->execute(),
-                'totalPages'    => $totalPages,
-                'currentPage'   => $page,
-                'slugName'      => $slugName,
-                'hotPosts'      => Posts::getHotPosts()
+                'tab'         => 'tags',
+                'type'        => Posts::POST_ALL,
+                'posts'       => $itemBuilder->getQuery()->execute(),
+                'totalPages'  => $totalPages,
+                'currentPage' => $page,
+                'slugName'    => $slugName,
+                'tags'        => Tags::find()
             ]
         );
         $this->tag->setTitle(t('These posts fillter by tags'));
