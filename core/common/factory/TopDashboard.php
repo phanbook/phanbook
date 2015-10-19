@@ -116,25 +116,25 @@ class TopDashboard implements TopDashboardInterface
     }
     public function setTitle($title)
     {
-        $this->title = $title;
+        $this->title = t($title);
     }
     public function setTimeRanger()
     {
         switch ($this->numbDate) {
             case 1:
-                $this->timeRanger = "Today";
+                $this->timeRanger = t("Today");
                 break;
             case 30:
-                $this->timeRanger = "Last Month";
+                $this->timeRanger = t("Last Month");
                 break;
             default:
-                $this->timeRanger = "Last ".$numbDate." days";
+                $this->timeRanger = t("Last ".$numbDate." days");
                 break;
         }
     }
     public function setDescription($description)
     {
-        $this->description = $description;
+        $this->description = t($description);
     }
     public function setStatus($status)
     {
