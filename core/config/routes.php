@@ -142,7 +142,14 @@ $router->add('/{router}', [
     if ($uri == '/posts') {
         return false;
     }
+    if ($uri == '/tags') {
+        return false;
+    }
     return true;
 });
 
+$router->add('/tags/{id:[0-9]+}/{slug}', [
+    'controller' => 'tags',
+    'action' => 'postByTag'
+]);
 return $router;
