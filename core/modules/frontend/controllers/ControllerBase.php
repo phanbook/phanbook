@@ -35,10 +35,7 @@ use Phalcon\Paginator\Adapter\NativeArray  as PaginatorNativeArray;
  */
 class ControllerBase extends Controller
 {
-    /**
-     * Display item in a page
-     */
-    const ITEM_IN_PAGE = 30;
+
     /**
      * @var array
      */
@@ -63,6 +60,11 @@ class ControllerBase extends Controller
      * @var int
      */
     public $numberPage = 1;
+
+    /**
+     * @var int
+     */
+    public $perPage = 30;
 
     /**
      * Check if we need to throw a json respone. For ajax calls.
@@ -122,6 +124,9 @@ class ControllerBase extends Controller
     public function initialize()
     {
         $this->view->tab = $this->currentOrder;
+        if (isset($this->config->perPage)) {
+            $this->perPage = $this->config->perPage;
+        }
     }
 
 
@@ -469,7 +474,7 @@ class ControllerBase extends Controller
             $paginator  = new PaginatorQueryBuilder(
                 [
                     'builder'  => $builder,
-                    'limit'     => self::ITEM_IN_PAGE,
+                    'limit'     => $this->perPage,
                     'page'      => $page
                 ]
             );
@@ -477,7 +482,7 @@ class ControllerBase extends Controller
             $paginator = new PaginatorNativeArray(
                 [
                     'data'  => $builder->getQuery()->execute()->toArray(),
-                    'limit' => self::ITEM_IN_PAGE,
+                    'limit' => $this->perPage,
                     'page'  => $numberPage
                 ]
             );
@@ -633,5 +638,16 @@ class ControllerBase extends Controller
         }
 
         return $this->indexRedirect();
+    }
+    /**
+     * Transfer values from the controller to views
+     *
+     * @param array $parmas
+     */
+    public function setViewVariable($parmas)
+    {
+        foreach ($parmas as $key => $value) {
+            $this->view->setVar($key, $value);
+        }
     }
 }
