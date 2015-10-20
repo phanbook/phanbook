@@ -59,7 +59,7 @@ class Analytic extends Injectable
     {
         $this->client = new \Google_Client();
         $this->useBatch = false;
-        $this->setGoogleClient($this->config->google->clientId, $this->config->google->clientSecret);
+        $this->setGoogleClient($this->config->analytic->clientId, $this->config->analytic->clientSecret);
     }
     /**
      * Set basic config for google Analytic
