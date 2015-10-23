@@ -59,11 +59,11 @@ class PostsController extends ControllerBase
 
             ];
             list($itemBuilder, $totalBuilder) =
-                $this->prepareQueries($join, false, self::ITEM_IN_PAGE);
+                $this->prepareQueries($join, false, $this->perPage);
             $itemBuilder->groupBy(array('p.id'));
         } else {
             list($itemBuilder, $totalBuilder) =
-                $this->prepareQueries('', false, self::ITEM_IN_PAGE);
+                $this->prepareQueries('', false, $this->perPage);
         }
         $userId = $this->auth->getAuth();
 
@@ -133,7 +133,7 @@ class PostsController extends ControllerBase
         $page       = isset($_GET['page'])?(int)$_GET['page']:1;
         $totalPosts = $totalBuilder->getQuery()->setUniqueRow(true)->execute($params);
         //$perPage    = isset($_GET['number'])?(int)$_GET['number']:5;
-        $totalPages = ceil($totalPosts->count / self::ITEM_IN_PAGE);
+        $totalPages = ceil($totalPosts->count / $this->perPage);
         if ($page > 1) {
             $itemBuilder->offset((int) $page);
         }

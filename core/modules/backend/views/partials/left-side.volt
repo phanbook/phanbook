@@ -43,6 +43,13 @@
 
                         </ul>
                     {% endfor %}
+
+                    <ul class="nav nav-main" data-ride="collapse">
+                        <li {% if controller == 'store' %}class="active"{% endif %}>
+                            {{ link_to('store', 'class' : 'auto', '<i class="fa fa-play"></i><span>Store</span>') }}
+                        </li>
+                    </ul>
+
                     <div class="line dk hidden-nav-xs"></div>
                     <div class="text-muted text-xs hidden-nav-xs padder m-t-sm m-b-sm">Lables</div>
                     <ul class="nav">

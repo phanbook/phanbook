@@ -93,11 +93,11 @@ class TagsController extends ControllerBase
         ];
         /**@Todo later for security*/
         $where  = 'p.deleted = 0 AND pt.tagsId = ' .$id;
-        list($itemBuilder, $totalBuilder) = $this->prepareQueries($join, $where, self::ITEM_IN_PAGE);
+        list($itemBuilder, $totalBuilder) = $this->prepareQueries($join, $where, $this->perPage);
         //$itemBuilder->andWhere($conditions);
         $page       = isset($_GET['page'])?(int)$_GET['page']:1;
         $totalPosts = $totalBuilder->getQuery()->setUniqueRow(true)->execute();
-        $totalPages = ceil($totalPosts->count / self::ITEM_IN_PAGE);
+        $totalPages = ceil($totalPosts->count / $this->perPage);
 
         if ($page > 1) {
             $itemBuilder->offset((int) $page);

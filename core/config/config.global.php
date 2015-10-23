@@ -103,6 +103,10 @@ return new \Phalcon\Config(
         'beanstalk' => [
             'disabled' => true,
             'host'     => '127.0.0.1'
+        ],
+        'analytic'  =>  [
+            'clientId'  =>  '432349956614-nn8d7cj0dnqot52u01f3q5flij7c3jsl.apps.googleusercontent.com',
+            'clientSecret'  =>  'iupVGUyOZZJWTffeFkjxOmRr'
         ]
     ]
 );
