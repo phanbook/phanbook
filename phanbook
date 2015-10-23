@@ -29,7 +29,7 @@ if [ "provision" == "$1" ]; then
     cd opsfiles && vagrant provision
 fi
 if [ "ssh" == "$1" ]; then
-    cd opsfiles && vagrant ssh ubuntu
+    cd opsfiles && vagrant ssh
 fi
 if [ "halt" == "$1" ]; then
     cd opsfiles && vagrant halt

@@ -1,9 +1,17 @@
 
 # Install PHP
 # -qq implies -y --force-yes
+sudo add-apt-repository -y  ppa:ondrej/php5-5.6
+sudo apt-key -y update
 sudo apt-get -y update
-sudo apt-get install -y php5-cli php5-fpm php5-mysql php5-curl
-# Set PHP FPM to listen on TCP instead of Socket
+
+# Install PHP
+# -qq implies -y --force-yes
+sudo apt-get install -qq php5-cli php5-fpm php5-mysql \
+php5-pgsql php5-sqlite php5-curl php5-gd php5-gmp php5-mcrypt \
+php5-memcached php5-imagick php5-intl php5-xdebug
+
+    # Set PHP FPM to listen on TCP instead of Socket
 #sudo sed -i "s/listen =.*/listen = /var/run/php5-fpm.sock/" /etc/php5/fpm/pool.d/www.conf
 sudo sed -i "s|listen = 127.0.0.1:9000|listen = /var/run/php5-fpm.sock|g" /etc/php5/fpm/pool.d/www.conf
 # Set PHP FPM allowed clients IP address
