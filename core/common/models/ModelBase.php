@@ -248,4 +248,5 @@ class ModelBase extends Model
     {
         $this->addBehavior(new ModelBlameable());
         $this->keepSnapshots(true);
-}   }
+    }   
+}

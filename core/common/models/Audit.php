@@ -220,13 +220,13 @@ class Audit extends ModelBase
     {
         return parent::findFirst($parameters);
     }
+    /**
+     * Hook Phalcon
+     * 
+     */
     public function initialize()
     {
-        $this->hasMany(
-        	'id', __NAMESPACE__ .'\AuditDetail',
-        	'auditId',
-        	['alias' => 'details']
-       	);
+        $this->hasMany('id', __NAMESPACE__ . '\AuditDetail', 'auditId', ['alias' => 'details']);
     }
     /**
      * Independent Column Mapping.

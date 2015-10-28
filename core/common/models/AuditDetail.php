@@ -215,5 +215,4 @@ class Auditdetail extends ModelBase
             'newValue' => 'newValue'
         ];
     }
-
 }
