@@ -56,7 +56,9 @@ class Blameable extends Behavior implements BehaviorInterface
     {
         //Get the session service
         $auth    = $model->getDI()->getAuth();
-
+        if (!isset($auth)) {
+            return false;
+        }
         //Get the request service
         $request = $model->getDI()->getRequest();
         $random  = new Random();
@@ -89,6 +91,9 @@ class Blameable extends Behavior implements BehaviorInterface
     {
         //Create a new audit
         $audit    = $this->createAudit('C', $model);
+        if (!is_object($audit)) {
+            return false;
+        }
         $metaData = $model->getModelsMetaData();
         $fields   = $metaData->getAttributes($model);
         $details  = array();
@@ -103,8 +108,10 @@ class Blameable extends Behavior implements BehaviorInterface
         }
 
         $audit->details = $details;
-
-        return $audit->save();
+        if (!$audit->save()) {
+            $this->saveLoger($audit->getMessages());
+        }
+        return true;
     }
 
     /**
@@ -123,7 +130,9 @@ class Blameable extends Behavior implements BehaviorInterface
 
         //Create a new audit
         $audit = $this->createAudit('U', $model);
-
+        if (!is_object($audit)) {
+            return false;
+        }
         //Date the model had before modifications
         $originalData = $model->getSnapshotData();
 
@@ -145,8 +154,9 @@ class Blameable extends Behavior implements BehaviorInterface
         return true;
     }
     /**
+     * Tracking logs to a files
      *
-     * @return mixed
+     * @return bool
      */
     public function saveLoger($e)
     {
