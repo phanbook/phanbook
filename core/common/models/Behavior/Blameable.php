@@ -142,6 +142,27 @@ class Blameable extends Behavior implements BehaviorInterface
         if (!$audit->save()) {
             $this->saveLoger($audit->getMessages());
         }
-        return $audit->save();
+        return true;
+    }
+    /**
+     *
+     * @return mixed
+     */
+    public function saveLoger($e)
+    {
+        $logger = new Logger(ROOT_DIR . 'content/logs/error.log');
+        if (is_object($e)) {
+            $logger->error($e[0]->getMessages());
+            $logger->error($e[0]->getTraceAsString());
+        }
+        if (is_array($e)) {
+            foreach ($e as $message) {
+                $logger->error($message->getMessage());
+            }
+        }
+        if (is_string($e)) {
+            $logger->error($e);
+        }
+        return false;
     }
 }
