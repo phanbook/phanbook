@@ -10,7 +10,7 @@
             {% endif %}
         </header>
         <div class="panel-body">
-            {{ form('admin/posts/saveSticky', 'class' : 'form-horizontal') }}
+            {{ form('posts/saveSticky', 'class' : 'form-horizontal') }}
             {% if object is defined %}
                 {{ form.render('id') }}
             {% else %}
