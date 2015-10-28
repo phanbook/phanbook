@@ -222,7 +222,7 @@ class Audit extends ModelBase
     }
     /**
      * Hook Phalcon
-     * 
+     *
      */
     public function initialize()
     {
@@ -245,5 +245,4 @@ class Audit extends ModelBase
             'modelName' => 'modelName'
         ];
     }
-
 }

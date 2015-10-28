@@ -203,7 +203,7 @@ class ModelBase extends Model
      *   'where' => ''
      * ];
      * {/code}
-     * 
+     *
      * {code}
      * $sql = [
      *      'model' => 'Phanbook\Models\Tags',
@@ -242,11 +242,11 @@ class ModelBase extends Model
     }
     /**
      * Hook Phalcon PHP
-     * 
+     *
      */
     public function initialize()
     {
         $this->addBehavior(new ModelBlameable());
         $this->keepSnapshots(true);
-    }   
+    }
 }

@@ -192,7 +192,7 @@ class Auditdetail extends ModelBase
         return parent::findFirst($parameters);
     }
     /**
-     * 
+     *
      * Hook Phalcon
      */
     public function initialize()

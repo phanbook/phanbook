@@ -1039,7 +1039,7 @@ class Users extends ModelBase
     {
         if ($this->firstname && $this->lastname) {
             return $this->firstname . " " . $this->lastname;
-        } else if ($this->firstname) {
+        } elseif ($this->firstname) {
             return $this->firstname;
         }
         return $this->lastname;

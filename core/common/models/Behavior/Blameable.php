@@ -19,9 +19,10 @@ use Phalcon\Security\Random;
 
 use Phanbook\Models\Audit;
 use Phanbook\Models\AuditDetail;
+
 /**
  * Phanbook\Model\Behavior\Blameable
- * 
+ *
  */
 class Blameable extends Behavior implements BehaviorInterface
 {
