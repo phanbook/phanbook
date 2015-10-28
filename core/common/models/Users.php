@@ -961,6 +961,7 @@ class Users extends ModelBase
     }
     public function initialize()
     {
+        parent::initialize();
         $this->hasMany(
             'id',
             __NAMESPACE__ . '\UsersBadges',

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 23, 2015 at 12:50 PM
+-- Generation Time: Oct 28, 2015 at 10:21 AM
 -- Server version: 5.5.44-MariaDB
 -- PHP Version: 5.6.14
 
@@ -61,6 +61,35 @@ CREATE TABLE IF NOT EXISTS `activityNotifications` (
   `wasRead` char(1) COLLATE utf8_unicode_ci NOT NULL,
   `extra` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `audit`
+--
+
+CREATE TABLE IF NOT EXISTS `audit` (
+  `id` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `userId` mediumint(8) unsigned NOT NULL,
+  `ipaddress` int(10) unsigned NOT NULL,
+  `type` char(1) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `createdAt` datetime NOT NULL,
+  `modelName` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `auditDetail`
+--
+
+CREATE TABLE IF NOT EXISTS `auditDetail` (
+  `id` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `auditId` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `fieldName` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `oldValue` text CHARACTER SET utf8 COLLATE utf8_unicode_ci,
+  `newValue` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -632,6 +661,18 @@ ALTER TABLE `activities`
 ALTER TABLE `activityNotifications`
   ADD PRIMARY KEY (`id`),
   ADD KEY `usersId` (`usersId`,`wasRead`);
+
+--
+-- Indexes for table `audit`
+--
+ALTER TABLE `audit`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `auditDetail`
+--
+ALTER TABLE `auditDetail`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `categories`

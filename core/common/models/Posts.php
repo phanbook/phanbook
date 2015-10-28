@@ -584,6 +584,7 @@ class Posts extends ModelBase
      */
     public function initialize()
     {
+        parent::initialize();
         $this->useDynamicUpdate(true);
         $this->belongsTo('id', __NAMESPACE__ . '\PostsHistory', 'postsId', ['alias' => 'postHistory']);
         $this->belongsTo('usersId', __NAMESPACE__ . '\Users', 'id', ['alias' => 'user', 'reusable' => true]);

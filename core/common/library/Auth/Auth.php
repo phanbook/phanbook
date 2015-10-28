@@ -45,7 +45,6 @@ class Auth extends Component
         if (!$this->security->checkHash($credentials['password'], $user->getPasswd())) {
             //$this->registerUserThrottling($user->id);
             $this->flashSession->error(t('Wrong email/password combination!'));
-            return $this->response->redirect('login');
         }
 
         // Check if the user was flagged
@@ -60,7 +59,7 @@ class Auth extends Component
         }
 
         $this->setSession($user);
-        return $this->response->redirect();
+        return true;
     }
 
     /**
@@ -228,6 +227,16 @@ class Auth extends Component
     {
         $identity = $this->session->get('auth');
         return $identity['name'];
+    }
+    /**
+     * Returns the current user id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        $identity = $this->session->get('auth');
+        return $identity['id'];
     }
     /**
      * Returns the current identity

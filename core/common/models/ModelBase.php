@@ -19,6 +19,7 @@ use Phalcon\Mvc\Model\Resultset\Simple as Resultset;
 
 use Phanbook\Models\PostsReply;
 use Phanbook\Models\Vote;
+use Phanbook\Models\Behavior\Blameable as ModelBlameable;
 
 /**
  * Class ModelBase
@@ -239,4 +240,12 @@ class ModelBase extends Model
         }
         return $builder;
     }
-}
+    /**
+     * Hook Phalcon PHP
+     * 
+     */
+    public function initialize()
+    {
+        $this->addBehavior(new ModelBlameable());
+        $this->keepSnapshots(true);
+}   }
