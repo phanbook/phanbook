@@ -16,6 +16,7 @@ use Phalcon\Mvc\Model\Behavior;
 use Phalcon\Mvc\Model\BehaviorInterface;
 use Phalcon\Mvc\ModelInterface;
 use Phalcon\Security\Random;
+use Phalcon\Logger\Adapter\File as Logger;
 
 use Phanbook\Models\Audit;
 use Phanbook\Models\AuditDetail;
@@ -56,7 +57,7 @@ class Blameable extends Behavior implements BehaviorInterface
     {
         //Get the session service
         $auth    = $model->getDI()->getAuth();
-        if (!isset($auth)) {
+        if (empty($auth->getUserId())) {
             return false;
         }
         //Get the request service
@@ -65,7 +66,7 @@ class Blameable extends Behavior implements BehaviorInterface
         $audit   = new Audit();
 
         $audit->setId($random->uuid());
-        $audit->setUserId($auth->getId());
+        $audit->setUserId($auth->getUserId());
         //The model who performed the action
         $audit->setModelname(get_class($model));
 
