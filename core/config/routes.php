@@ -37,13 +37,13 @@ $frontend->add('/:controller/:int', [
     'controller' => 1,
     'id' => 2,
 ]);
-$frontend->add('/:controller/:int/{slug:[a-z\-]+}', [
+$frontend->add('/:controller/:int/{slug}', [
     'controller' => 1,
     'id' => 2,
     'slug' => 3,
     'action' => 'view'
 ]);
-$frontend->add('/posts/:int/{slug:[a-z\-]+}', [
+$frontend->add('/posts/:int/{slug}', [
     'id'        => 1,
     'slug'      => 2,
     'action'    => 'view'
@@ -51,11 +51,11 @@ $frontend->add('/posts/:int/{slug:[a-z\-]+}', [
 $frontend->add('/:controller[/]?', [
     'controller' => 1,
 ]);
-$frontend->add('/blog/{id:[0-9]+}/{slug:[a-z\-]+}', [
+$frontend->add('/blog/{id:[0-9]+}/{slug}', [
     'controller' => 'posts',
     'action' => 'view'
 ]);
-$frontend->add('/questions/{id:[0-9]+}/{slug:[a-z\-]+}', [
+$frontend->add('/questions/{id:[0-9]+}/{slug}', [
     'controller' => 'posts',
     'action' => 'view'
 ]);
@@ -88,7 +88,7 @@ foreach ($modules as $module) {
     $group->add('/:controller[/]?', [
         'controller' => 1,
     ]);
-    $frontend->add('/:controller/:int/{slug:[a-z\-]+}', [
+    $frontend->add('/:controller/:int/{slug}', [
         'controller' => 1,
         'id'    => 2,
         'slug'  => 3,

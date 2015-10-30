@@ -91,7 +91,7 @@ class ZFunction
             return $str;
         }
         if ($breakWords) {
-            while ($maxLen < $strLength AND preg_match('/^\pL$/', mb_substr($str, $maxLen, 1))) {
+            while ($maxLen < $strLength && preg_match('/^\pL$/', mb_substr($str, $maxLen, 1))) {
                 $maxLen++;
             }
         }
