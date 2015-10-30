@@ -15,6 +15,7 @@ namespace Phanbook\Frontend\Controllers;
 use Phalcon\Mvc\View;
 use Phanbook\Models\Tags;
 use Phanbook\Models\Posts;
+use Phanbook\Models\ModelBase;
 
 /**
  * Class HelpController
@@ -93,14 +94,15 @@ class TagsController extends ControllerBase
         ];
         /**@Todo later for security*/
         $where  = 'p.deleted = 0 AND pt.tagsId = ' .$id;
-        list($itemBuilder, $totalBuilder) = $this->prepareQueries($join, $where, $this->perPage);
+        list($itemBuilder, $totalBuilder) = ModelBase::prepareQueriesPosts($join, $where, $this->perPage);
         //$itemBuilder->andWhere($conditions);
         $page       = isset($_GET['page'])?(int)$_GET['page']:1;
         $totalPosts = $totalBuilder->getQuery()->setUniqueRow(true)->execute();
         $totalPages = ceil($totalPosts->count / $this->perPage);
+        $offset     = ($page - 1) * $this->perPage + 1;
 
         if ($page > 1) {
-            $itemBuilder->offset((int) $page);
+            $itemBuilder->offset((int) $offset);
         }
 
         //@todo refacttor

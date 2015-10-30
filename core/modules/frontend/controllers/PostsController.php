@@ -18,6 +18,7 @@ use Phanbook\Models\Vote;
 use Phanbook\Models\Comment;
 use Phanbook\Models\Karma;
 use Phanbook\Models\Users;
+use Phanbook\Models\ModelBase;
 use Phanbook\Models\Tags;
 use Phanbook\Models\PostsViews;
 use Phanbook\Models\PostsReply;
@@ -59,11 +60,11 @@ class PostsController extends ControllerBase
 
             ];
             list($itemBuilder, $totalBuilder) =
-                $this->prepareQueries($join, false, $this->perPage);
+                ModelBase::prepareQueriesPosts($join, false, $this->perPage);
             $itemBuilder->groupBy(array('p.id'));
         } else {
             list($itemBuilder, $totalBuilder) =
-                $this->prepareQueries('', false, $this->perPage);
+                ModelBase::prepareQueriesPosts('', false, $this->perPage);
         }
         $userId = $this->auth->getAuth();
 
@@ -122,20 +123,20 @@ class PostsController extends ControllerBase
             default:
                 $this->tag->setTitle($this->config->application->tagline);
         }
-
-        $conditions = 'p.deleted = 0';
+        $type = Posts::POST_PAGE;
+        $conditions = "p.deleted = 0 AND p.type != '{$type}'";
         $itemBuilder->andWhere($conditions);
         $totalBuilder->andWhere($conditions);
         //order like tabs sort
         if (!$tab) {
             $tab = 'hot';
         }
-        $page       = isset($_GET['page'])?(int)$_GET['page']:1;
+        $page       = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $totalPosts = $totalBuilder->getQuery()->setUniqueRow(true)->execute($params);
-        //$perPage    = isset($_GET['number'])?(int)$_GET['number']:5;
         $totalPages = ceil($totalPosts->count / $this->perPage);
+        $offset     = ($page - 1) * $this->perPage + 1;
         if ($page > 1) {
-            $itemBuilder->offset((int) $page);
+            $itemBuilder->offset($offset);
         }
         $this->view->setVars(
             [

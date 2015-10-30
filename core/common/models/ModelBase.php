@@ -241,6 +241,51 @@ class ModelBase extends Model
         return $builder;
     }
     /**
+     * This method prepares the queries to be executed in each list of posts
+     * The returned builders are used as base in the search, tagged list and index lists.
+     *
+     * @param array  $join  The Model need to join {code} $join = [ 'type'  => 'join', 'model' => 'Phanbook\\Models\\PostsReply', 'on'    => 'r.postsId = p.id', 'alias' => 'r' ]; {/code} {code} $join = [ 'type'  => 'join', 'model' => 'Phanbook\\Models\\PostsReply', 'on'    => 'r.postsId = p.id', 'alias' => 'r' ]; {/code}
+     * {code}
+     * $join = [
+     *   'type'  => 'join',
+     *   'model' => 'Phanbook\\Models\\PostsReply',
+     *   'on'    => 'r.postsId = p.id',
+     *   'alias' => 'r'
+     * ];
+     * {/code}
+     * @param string $where The condition you want to get.
+     * @param int    $limit The option limit post in a page.
+     *
+     * @return array It return two object
+     */
+    public static function prepareQueriesPosts($join, $where, $limit = 15)
+    {
+        /**
+         *
+         * @var \Phalcon\Mvc\Model\Query\BuilderInterface $itemBuilder
+         */
+        $itemBuilder = self::getBuilder()
+            ->from(['p' => 'Phanbook\Models\Posts'])
+            ->orderBy('p.sticked DESC, p.createdAt DESC');
+        if (isset($join) && is_array($join)) {
+            $itemBuilder->$join['type']($join['model'], $join['on'], $join['alias']);
+        }
+        if (isset($where)) {
+            $itemBuilder->where($where);
+        }
+
+        $totalBuilder = clone $itemBuilder;
+
+        $itemBuilder
+            ->columns(array('p.*'))
+            ->limit($limit);
+
+        $totalBuilder
+            ->columns('COUNT(*) AS count');
+
+        return array($itemBuilder, $totalBuilder);
+    }
+    /**
      * Hook Phalcon PHP
      *
      */
