@@ -63,7 +63,10 @@ $frontend->add('/questions/new', [
     'controller' => 'posts',
     'action' => 'new'
 ]);
-
+$frontend->add('/questions/edit/{id:[0-9]+}', [
+    'controller' => 'posts',
+    'action' => 'edit'
+]);
 $frontend->add('/');
 $router->mount($frontend);
 
