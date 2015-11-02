@@ -222,7 +222,6 @@ class SettingsController extends ControllerBase
      * Verify access token and save to database
      * @return Redirect to calling action
      */
-
     public function authorizationAction()
     {
         $this->view->disable();
@@ -242,7 +241,6 @@ class SettingsController extends ControllerBase
     /**
      * Request to google authorization page
      */
-
     public function requestAuthAction()
     {
         $this->view->disable();
@@ -257,7 +255,6 @@ class SettingsController extends ControllerBase
      * Clean current connected google account
      *
      */
-
     public function cleanAuthAction()
     {
         $this->view->disable();
@@ -272,7 +269,6 @@ class SettingsController extends ControllerBase
      * Save changes analytic setting
      *
      */
-
     public function analyticSettingAction()
     {
         $this->view->disable();
@@ -307,7 +303,6 @@ class SettingsController extends ControllerBase
      * Save changes about what analytic module will display on dashboard
      *
      */
-
     public function moduleDisplayAction()
     {
         $this->view->disable();

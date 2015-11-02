@@ -12,6 +12,8 @@
  */
 namespace Phanbook\Models;
 
+use  Phalcon\Mvc\Model\Exception as ModelException;
+
 class Settings extends ModelBase
 {
 
@@ -44,6 +46,7 @@ class Settings extends ModelBase
         \Phalcon\Mvc\Model::setup([
            'notNullValidations' => false
         ]);
+        $this->checkName();
     }
 
     /**
@@ -218,8 +221,6 @@ class Settings extends ModelBase
      * @param string $code google analytic access code
      * @return boolean true if all ok. other wise, false
      */
-
-
     public static function setAccessToken($code)
     {
         $accessToken = Settings::findFirstByName("googleAnalyticAccessToken");
@@ -237,8 +238,6 @@ class Settings extends ModelBase
      * @param string $code google analytic access code
      * @return boolean true if all ok. other wise, false
      */
-
-
     public static function setRefreshToken($code)
     {
         $refreshToken = Settings::findFirstByName("googleAnalyticRefreshToken");
@@ -253,11 +252,11 @@ class Settings extends ModelBase
 
     public static function clearAuth()
     {
-        Settings::setAccessToken("");
-        Settings::setRefreshToken("");
-        Settings::setAnalyticAccountID("");
-        Settings::setAnalyticProfileID("");
-        Settings::setAnalyticTrackingID("");
+        self::setAccessToken("");
+        self::setRefreshToken("");
+        self::setAnalyticAccountID("");
+        self::setAnalyticProfileID("");
+        self::setAnalyticTrackingID("");
     }
 
     public static function setAnalyticProfileID($profileID)
@@ -356,5 +355,32 @@ class Settings extends ModelBase
         }
         $listTopActivity = json_encode($listTopActivity);
         return Settings::setItem("googleAnalyticTopActivities", $listTopActivity);
+    }
+    /**
+     * It will check value name in table setting
+     *
+     * @return mixed
+     */
+    public function checkName()
+    {
+        $array = [
+            'googleAnalyticAccessToken',
+            'googleAnalyticRefreshToken',
+            'googleAnalyticProfileId',
+            'googleAnalyticAccountId',
+            'googleAnalyticTrackingId',
+            'googleAnalyticTopActivities',
+        ];
+        foreach ($array as $key => $value) {
+            $result = self::findFirstByName($value);
+            if (!$result) {
+                $view = $this->getDI()->getView();
+                $menuStruct = $this->getDI()->get('menuStruct');
+                $view->partial(
+                    'errors/model',
+                    ['name' => $value ,'menuStruct' =>$menuStruct, 'model' => __CLASS__]
+                );
+            }
+        }
     }
 }
