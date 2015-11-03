@@ -18,9 +18,9 @@
 # Don't use `:all`, it's a meta role.
 
 # role :app, %w{deploy@example.com}, my_property: :my_value
-role :web, %w{root@128.199.134.72}
-server '128.199.134.72', user: 'root', roles: %w{web}
-set :deploy_to, '/usr/share/nginx/html/forum-cap'
+role :web, %w{root@dev.phanbook.com}
+server 'dev.phanbook.com', user: 'root', roles: %w{web}
+set :deploy_to, '/usr/share/nginx/html/phanbook.devel'
 
 # role :db,  %w{deploy@example.com}
 
