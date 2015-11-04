@@ -45,11 +45,6 @@
     </section>
     </section>
     {{ this.assets.outputJs() }}
-<script type="text/javascript" src="/backend/assets/js/editor.js"></script>
-<script type="text/javascript" src="http://lab.lepture.com/editor/marked.js"></script>
     {% block scripts %}{% endblock %}
-    <script type="text/javascript">
-        $("#content").markdown({autofocus:false,savable:false})
-    </script>
 </body>
 </html>
