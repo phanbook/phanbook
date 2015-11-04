@@ -24,4 +24,5 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  capistrano (~> 3.4.0)
   slackistrano

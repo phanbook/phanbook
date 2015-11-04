@@ -1,15 +1,15 @@
 # config valid only for current version of Capistrano
-lock '3.4.0'
+#lock '3.4.0'
 
-set :application, 'forum'
-set :repo_url, 'git@github.com:duythien/forum.git'
+set :application, 'phanbook'
+set :repo_url, 'git@github.com:phanbook/phanbook.git'
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Default deploy_to directory is /var/www/my_app_name
-set :deploy_to, '/usr/share/nginx/html/forum'
-set :log_path,  '/var/log/forum'
+set :deploy_to, '/usr/share/nginx/html/phanbook.devel'
+set :log_path,  '/var/log/phanbook'
 
 # Default value for :scm is :git
 set :scm, :git
@@ -24,8 +24,8 @@ set :branch,        'master'
 # Default value for :pty is false
 set :pty, true
 #Set option for slack
-set :server_name, 'phalcontip.com'
-set :slack_webhook, -> { nil }
+set :server_name, 'dev.phanbook.com'
+set :slack_webhook, -> { 'https://hooks.slack.com/services/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' }
 set :slack_icon_url,         -> { 'http://gravatar.com/avatar/885e1c523b7975c4003de162d8ee8fee?r=g&s=40' }
 set :slack_icon_emoji,       -> { ":)" } # will override icon_url, Must be a string (ex: ':shipit:')
 #set :slack_channel,          -> { '#general' }
