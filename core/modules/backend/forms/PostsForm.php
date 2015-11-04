@@ -66,14 +66,12 @@ class PostsForm extends Form
         //content
         $content = new Textarea(
             'content',
-            array(
-            'placeholder' => t('Please be sure to answer the question. Provide details and share your research!'),
-            'class'       => 'wmd-input',
-            'id'          => 'wmd-input',
-            'required'    => true,
-            'rows'  =>10
-
-            )
+            [
+                'data-provide'=> 'markdown',
+                'data-iconlibrary' => 'fa',
+                'required'    => true,
+                'rows'  =>15
+            ]
         );
         $content->addValidator(
             new PresenceOf(
@@ -83,7 +81,15 @@ class PostsForm extends Form
             )
         );
         $this->add($content);
-
+        $tags = new Text(
+            'tags',
+            [
+                'placeholder' => t('Tags'),
+                'class'       => 'form-control',
+                'required'    => true
+            ]
+        );
+        $this->add($tags);
         $this->add(new Hidden('object'));
 
         // To compare the post is question or tip
@@ -96,9 +102,18 @@ class PostsForm extends Form
             new Submit(
                 'save',
                 array(
-                'class' => 'btn btn-sm btn-success',
+                'class' => 'btn btn-sm btn-success pull-right',
                 'value' => t('Submit Post')
                 )
+            )
+        );
+        $this->add(
+            new Submit(
+                'saveDraft',
+                [
+                    'class' => 'btn btn-sm btn-primary pull-left',
+                    'value' => t('Save Draft')
+                ]
             )
         );
     }

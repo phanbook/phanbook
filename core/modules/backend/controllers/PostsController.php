@@ -123,14 +123,15 @@ class PostsController extends ControllerBase
     }
     /**
      * Create a new post
-     * @todo
      *
-     * @return [type] [description]
+     * @return mixed
      */
     public function newAction()
     {
         $this->view->form = new PostsForm;
         $this->tag->setTitle('Adding post');
+        $this->assets->addCss('assets/css/editor.css');
+        $this->assets->addJs('assets/js/editor.js');
         $this->view->pick($this->router->getControllerName() . '/item');
     }
     public function editAction($id)
@@ -143,6 +144,9 @@ class PostsController extends ControllerBase
         $this->tag->setTitle(t('Edit posts'));
         $this->view->form   = new PostsForm($object);
         $this->view->object = $object;
+        $this->assets
+            ->addCss('assets/css/editor.css');
+        $this->assets->addJs('assets/js/editor.js');
 
         return $this->view->pick($this->router->getControllerName() . '/item');
     }
