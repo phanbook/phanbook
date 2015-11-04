@@ -67,6 +67,11 @@ class Posts extends ModelBase
 
     /**
      *
+     * @var string
+     */
+    protected $excerpt;
+    /**
+     *
      * @var integer
      */
     protected $numberViews;
@@ -205,6 +210,18 @@ class Posts extends ModelBase
     public function setContent($content)
     {
         $this->content = $content;
+
+        return $this;
+    }
+    /**
+     * Method to set the value of field excerpt
+     *
+     * @param  string $excerpt
+     * @return $this
+     */
+    public function setExcerpt($excerpt)
+    {
+        $this->excerpt = $excerpt;
 
         return $this;
     }
@@ -397,6 +414,15 @@ class Posts extends ModelBase
     {
         return $this->content;
     }
+    /**
+     * Returns the value of field content
+     *
+     * @return string
+     */
+    public function getExcerpt()
+    {
+        return $this->excerpt;
+    }
 
     /**
      * Returns the value of field numberViews
@@ -527,6 +553,7 @@ class Posts extends ModelBase
             'link'  => 'link',
             'slug' => 'slug',
             'content' => 'content',
+            'excerpt' => 'excerpt',
             'numberViews' => 'numberViews',
             'numberReply' => 'numberReply',
             'sticked' => 'sticked',
@@ -584,6 +611,7 @@ class Posts extends ModelBase
      */
     public function initialize()
     {
+        parent::initialize();
         $this->useDynamicUpdate(true);
         $this->belongsTo('id', __NAMESPACE__ . '\PostsHistory', 'postsId', ['alias' => 'postHistory']);
         $this->belongsTo('usersId', __NAMESPACE__ . '\Users', 'id', ['alias' => 'user', 'reusable' => true]);

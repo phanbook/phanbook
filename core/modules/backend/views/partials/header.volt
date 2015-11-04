@@ -138,10 +138,10 @@
             <ul class="dropdown-menu animated fadeInRight">
                 <li>
                     <span class="arrow top"></span>
-                    {{ link_to('users/changepassword', t('Change my password')) }}
+                    <a href="/users/changepassword">{{t('Change my password')}}</a>
                 </li>
                 <li>
-                    {{ link_to('users/profile', 'Profile') }}
+                <a href="/users/profile"> {{t('Profile')}}</a>
                 </li>
                 <li>
                     <a href="#">
@@ -153,9 +153,8 @@
                 {{ link_to('help', t('Help'))}}
                 </li>
                 <li class="divider"></li>
-                <li>{{ link_to('users/disableaccount', 'Cancel my account') }}</li>
-                <li class="divider"></li>
-                <li>{{ link_to('oauth/logout', 'Logout') }}</li>
+                <li> <a href="#">{{t('Cancel my account')}}</a></li>
+                <li> <a href="/oauth/logout">{{t('Logout')}}</a></li>
             </ul>
         </li>
     </ul>

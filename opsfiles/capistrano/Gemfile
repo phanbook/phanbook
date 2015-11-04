@@ -2,3 +2,4 @@
 source "http://rubygems.org"
 
 gem 'slackistrano', require: false
+gem 'capistrano', '~> 3.4.0'

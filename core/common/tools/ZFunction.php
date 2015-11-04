@@ -80,19 +80,22 @@ class ZFunction
      * @static
      * @param  mixed  $str
      *
-     * @param int    $maxLen (default: 35)
-     *
+     * @param  int    $maxLen (default: 35)
+     * @param  bool
      * @param  string $suffix (default: '...')
      * @return void
      */
-    public static function truncate($str, $maxLen = 35, $suffix = '...')
-    {
-        if (self::strlen($str) <= $maxLen) {
+    public static function truncate($str, $maxLen = 35, $breakWords = true, $suffix = '...')
+    {   $strLength = self::strlen($str);
+        if ($strLength <= $maxLen) {
             return $str;
         }
-
-        $str = utf8_decode($str);
-        return (utf8_encode(substr($str, 0, $maxLen - self::strlen($suffix)).$suffix));
+        if ($breakWords) {
+            while ($maxLen < $strLength && preg_match('/^\pL$/', mb_substr($str, $maxLen, 1))) {
+                $maxLen++;
+            }
+        }
+        return mb_substr($str, 0, $maxLen) . $suffix;
     }
 
     /**

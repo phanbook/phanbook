@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Aug 30, 2015 at 06:40 AM
--- Server version: 5.5.41-MariaDB
--- PHP Version: 5.4.16
+-- Generation Time: Oct 28, 2015 at 10:21 AM
+-- Server version: 5.5.44-MariaDB
+-- PHP Version: 5.6.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -65,6 +65,35 @@ CREATE TABLE IF NOT EXISTS `activityNotifications` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `audit`
+--
+
+CREATE TABLE IF NOT EXISTS `audit` (
+  `id` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `userId` mediumint(8) unsigned NOT NULL,
+  `ipaddress` int(10) unsigned NOT NULL,
+  `type` char(1) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `createdAt` datetime NOT NULL,
+  `modelName` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `auditDetail`
+--
+
+CREATE TABLE IF NOT EXISTS `auditDetail` (
+  `id` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `auditId` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `fieldName` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `oldValue` text CHARACTER SET utf8 COLLATE utf8_unicode_ci,
+  `newValue` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `categories`
 --
 
@@ -93,31 +122,6 @@ CREATE TABLE IF NOT EXISTS `comment` (
   `createdAt` int(11) NOT NULL,
   `modifiedAt` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `configuration`
---
-
-CREATE TABLE IF NOT EXISTS `configuration` (
-  `id` int(11) unsigned NOT NULL,
-  `idOrganization` int(11) unsigned NOT NULL DEFAULT '0',
-  `key` varchar(64) NOT NULL,
-  `type` enum('bool','string','int','array') NOT NULL DEFAULT 'string',
-  `value` text,
-  `caption` text NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `configuration`
---
-
-INSERT INTO `configuration` (`id`, `idOrganization`, `key`, `type`, `value`, `caption`) VALUES
-(1, 0, 'ITEMS_PER_PAGE', 'array', '10;20;50;100;150;200', 'Number of rows displayed on a listing page. ; it''s the separating values'),
-(2, 0, 'PASSWORD_RESET_INTERVAL', 'int', '10', 'Password reset interval '),
-(3, 3, 'TASK', 'string', 'Task', 'Label for "task"'),
-(4, 1, 'TASK', 'string', 'Item', 'Label for "task"');
 
 -- --------------------------------------------------------
 
@@ -178,33 +182,6 @@ CREATE TABLE IF NOT EXISTS `notificationsBounces` (
   `createdAt` int(10) unsigned NOT NULL,
   `reported` char(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `pages`
---
-
-CREATE TABLE IF NOT EXISTS `pages` (
-  `id` int(12) NOT NULL,
-  `key` varchar(64) NOT NULL DEFAULT '',
-  `title` varchar(255) DEFAULT NULL,
-  `content` text,
-  `createdAt` int(11) DEFAULT NULL,
-  `editedAt` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `pages`
---
-
-INSERT INTO `pages` (`id`, `key`, `title`, `content`, `createdAt`, `editedAt`) VALUES
-(1, 'help', 'Helper  of Phanbook', '<div>\r\n        <p class="info">\r\n            Phanbook is a pretty open platform and free speech place, but there are a few rules:\r\n        </p>\r\n            <ol class="rule-list">\r\n                <li class="first-rule" id="spam">\r\n                    <div class="help-category-box help-category-big-box">\r\n                        <h3>Asking</h3>\r\n                        <ul>\r\n                                <li><a href="/help/on-topic">\r\n                                            <span class="help-post-pin"></span>\r\n                                        What topics can I ask about here?\r\n                                    </a></li>\r\n                                <li><a href="/help/dont-ask">\r\n                                            <span class="help-post-pin"></span>\r\n                                        What types of questions should I avoid asking?\r\n                                    </a></li>\r\n                                <li><a href="/help/closed-questions">\r\n                                            <span class="help-post-pin"></span>\r\n                                        What does it mean if a question is "closed" or "on hold"?\r\n                                    </a></li>\r\n                                <li><a href="/help/asking-rate-limited">\r\n                                        Why is the system asking me to wait a day or more before asking another question?\r\n                                    </a></li>\r\n                                <li><a href="/help/how-to-ask">\r\n                                        How do I ask a good question?\r\n                                    </a></li>\r\n                        </ul>\r\n                    </div>\r\n                </li>\r\n                <li>\r\n                    <div class="help-category-box help-category-big-box">\r\n                        <h3>Our model</h3>\r\n                        <ul>\r\n                                <li><a href="/help/be-nice">\r\n                                            <span class="help-post-pin"></span>\r\n                                        Be nice.\r\n                                    </a></li>\r\n                                <li><a href="/help/behavior">\r\n                                            <span class="help-post-pin"></span>\r\n                                        What kind of behavior is expected of users?\r\n                                    </a></li>\r\n                                <li><a href="/help/interesting-topics">\r\n                                            <span class="help-post-pin"></span>\r\n                                        How do I find topics I''m interested in?\r\n                                    </a></li>\r\n                                <li><a href="/help/searching">\r\n                                        How do I search?\r\n                                    </a></li>\r\n                                <li><a href="/help/whats-beta">\r\n                                        What does "beta" mean?\r\n                                    </a></li>\r\n                        </ul>\r\n                    </div>\r\n                </li>\r\n                <li>\r\n                    <div class="help-category-box help-category-big-box">\r\n                        <h3>Reputation & Moderation</h3>\r\n                        <ul>\r\n                                <li><a href="/help/site-moderators">\r\n                                            <span class="help-post-pin"></span>\r\n                                        Who are the site moderators, and what is their role here?\r\n                                    </a></li>\r\n                                <li><a href="/help/why-vote">\r\n                                            <span class="help-post-pin"></span>\r\n                                        Why is voting important?\r\n                                    </a></li>\r\n                                <li><a href="/help/whats-reputation">\r\n                                            <span class="help-post-pin"></span>\r\n                                        What is reputation? How do I earn (and lose) it?\r\n                                    </a></li>\r\n                                <li><a href="/help/serial-voting-reversed">\r\n                                        Why do I have a reputation change on my reputation page that says "voting corrected"?\r\n                                    </a></li>\r\n                                <li><a href="/help/user-was-removed">\r\n                                        Why do I have a reputation change on my reputation page that says ''User was removed''?\r\n                                    </a></li>\r\n                        </ul>\r\n                    </div>\r\n                </li>\r\n                <li>\r\n                    <div class="help-category-box help-category-big-box">\r\n                                <h3>Answering</h3>\r\n                                <ul>\r\n                                        <li><a href="/help/accepted-answer">\r\n                                                    <span class="help-post-pin"></span>\r\n                                                What does it mean when an answer is "accepted"?\r\n                                            </a></li>\r\n                                        <li><a href="/help/deleted-answers">\r\n                                                Why and how are some answers deleted?\r\n                                            </a></li>\r\n                                        <li><a href="/help/how-to-answer">\r\n                                                How do I write a good answer?\r\n                                            </a></li>\r\n                                        <li><a href="/help/self-answer">\r\n                                                Can I answer my own question?\r\n                                            </a></li>\r\n                                        <li><a href="/help/referencing">\r\n                                                How to reference material written by others\r\n                                            </a></li>\r\n                                </ul>\r\n                    </div>\r\n                </li>\r\n                <li>\r\n                    <div class="help-category-box">\r\n                        <h3>Badges && Privileges</h3>\r\n                        <ul>\r\n                            <li><a href="/help/badges">View a full list of badges you can earn</a></li>\r\n\r\n                            <li><a href="/help/privileges">View a full list of privileges you can earn</a></li>\r\n                        </ul>\r\n                    </div>\r\n                </li>\r\n                <li>\r\n                    <div class="help-category-box help-category-big-box">\r\n                        <h3>My Account</h3>\r\n                        <ul>\r\n                                <li><a href="/help/merging-accounts">\r\n                                            <span class="help-post-pin"></span>\r\n                                        I accidentally created two accounts; how do I merge them?\r\n                                    </a></li>\r\n                                <li><a href="/help/edit-credentials">\r\n                                            <span class="help-post-pin"></span>\r\n                                        How do I add or remove login credentials from my account?\r\n                                    </a></li>\r\n                                <li><a href="/help/reset-password">\r\n                                            <span class="help-post-pin"></span>\r\n                                        I lost my password; how do I reset it?\r\n                                    </a></li>\r\n                                <li><a href="/help/deleting-account">\r\n                                            <span class="help-post-pin"></span>\r\n                                        How do I delete my account?\r\n                                    </a></li>\r\n                                <li><a href="/help/question-limited">\r\n                                        Why have I been limited to one question per week?\r\n                                    </a></li>\r\n                        </ul>\r\n                    </div>\r\n                </li>\r\n                </div>\r\n            </ol>\r\n        </div>', 1437716250, 1437717686),
-(2, 'rule', 'Rules of Phanbook', '<div class="sub-title">\r\n                <p class="info">Phanbook  is a pretty open platform and free speech place, but there are a few rules:</p>\r\n                <ol class="rule-list">\r\n                    <li class="first-rule" id="spam">\r\n                        <p>Don''t <a href="http://phanbook.com/wiki/faq#wiki_what_constitutes_spam.3F">spam</a>.</p>\r\n                        <div class="examples">\r\n                            <p class="expander"><em class="toggle">[+]</em> What is spam?</p>\r\n                            <div style="display:none;" class="rule-examples">\r\n                                <ul>\r\n                                    <li class="example bad-example"><em>NOT OK:</em> Submitting only links to your blog or personal website.</li>\r\n                                    <li class="example good-example"><em>OK:</em> Submitting links from a variety of sites and sources.</li>\r\n                                    <li class="example good-example"><em>OK:</em> Submitting links from your own site, talking with redditors in the comments, and also submitting cool stuff from other sites.</li>\r\n                                    <li class="example bad-example"><em>NOT OK:</em> Posting the same comment repeatedly in multiple subreddits.</li>\r\n                                </ul>\r\n                            </div>\r\n                        </div>\r\n                    </li>\r\n                    <li id="votecheating">\r\n                        <p>Don''t ask for votes or engage in <a href="http://phanbook.com/wiki/faq#wiki_what_constitutes_vote_cheating_and_vote_manipulation.3F">vote manipulation</a>.</p>\r\n                        <div class="examples">\r\n                            <p class="expander"><em class="toggle">[+]</em> What does vote manipulation look like?</p>\r\n                            <div style="display:none" class="rule-examples">\r\n                                <ul>\r\n                                    <li class="example bad-example"><em>NOT OK:</em> Buying votes or using services to vote.</li>\r\n                                    <li class="example good-example"><em>OK:</em> Sharing reddit links with your friends.</li>\r\n                                    <li class="example bad-example"><em>NOT OK:</em> Sharing links with your friends or coworkers and asking them to vote.</li>\r\n                                    <li class="example bad-example"><em>NOT OK:</em> Creating submissions such as "For every upvote I will ..." or "... please upvote this!", regardless of the cause.</li>\r\n                                </ul>\r\n                            </div>\r\n                        </div>\r\n                    </li>\r\n                    <li id="personalinfo">\r\n                        <p>Don''t post <a href="">personal information</a>.</p>\r\n                        <div class="examples">\r\n                            <p class="expander"><em class="toggle">[+]</em> What might be personal information?</p>\r\n                            <div style="display:none" class="rule-examples">\r\n                                <ul>\r\n                                    <li class="example bad-example"><em>NOT OK:</em> Posting a link to your friend''s facebook profile.</li>\r\n                                    <li class="example good-example"><em>OK:</em> Posting your senator''s publicly available contact information</li>\r\n                                    <li class="example bad-example"><em>NOT OK:</em> Posting the full name, employer, or other real-life details of another redditor</li>\r\n                                    <li class="example good-example"><em>OK:</em> Posting a link to a public page maintained by a celebrity.</li>\r\n                                </ul>\r\n                            </div>\r\n                        </div>\r\n                    </li>\r\n                    <li id="minors">\r\n                        <p>No <a rel="nofollow" href="http://www.missingkids.com/Exploitation/FAQ">child pornography</a> or <a rel="nofollow" href="http://phanbook.com/r/blog/comments/pmj7f/a_necessary_change_in_policy/">sexually suggestive content featuring minors</a>.</p>\r\n                    </li>\r\n                    <li id="breakthesite">\r\n                        <p>Don''t break the site or do anything that interferes with normal use of the site.</p>\r\n                        <div class="examples">\r\n                            <p class="expander"><em class="toggle">[+]</em> Tell me more.</p>\r\n                            <div style="display:none" class="rule-examples">\r\n                                <ul>\r\n                                    <li class="example bad-example"><em>NOT OK:</em> Creating programs that request information more than once every 2 seconds or violate any of our other<a href="https://github.com/reddit/reddit/wiki/API"> API rules</a>.</li>\r\n                                    <li class="example good-example"><em>AWESOME:</em> Responsibly<a href="/wiki/whitehat"> reporting security </a>issues to us.</li>\r\n                                </ul>\r\n                            </div>\r\n                        </div>\r\n                    </li>\r\n                    <!-- Also, ''reddit'' is STRICTLY lowercase -->\r\n                    <li id="ask">\r\n                        <p>Get answers to practical, detailed questions</p>\r\n                        <div class="examples">\r\n                            <p class="expander"><em class="toggle">[+]</em> What is spam?</p>\r\n                            <div style="display: none;" class="rule-examples">\r\n                                <ul>\r\n                                    <li class="example bad-example"><em>NOT OK:</em> Questions you haven''t tried to find an answer for (show your work!)</li>\r\n                                    <li class="example good-example"><em>OK:</em> Specific programming problems</li>\r\n                                    <li class="example good-example"><em>OK:</em> Software algorithms</li>\r\n                                    <li class="example bad-example"><em>NOT OK:</em> Product or service recommendations or comparisons</li>\r\n                                    <li class="example good-example"><em>NOT OK:</em> Software development tools</li>\r\n                                </ul>\r\n                            </div>\r\n                        </div>\r\n                    </li>\r\n                </ol>\r\n            </div>\r\n            <div class="info" id="followreddiquette">\r\n                <p>You should also be mindful of<a href="/wiki/reddiquette"> reddiquette</a>, an <em>informal</em> expression of {{this.config.application.name}} is community values as written by the community itself. Please abide by it the best you can.</p>\r\n            </div>\r\n            <div class="info">\r\n                <img src="/images/dog.jpg" alt="this dog has no semantic value" title="here at reddit, we inscribe our rules on a dog. screw tablets." class="bottom" id="dog">\r\n            </div>', 1437716733, 1437806769),
-(3, 'about', 'About us', '<p>\r\n            		Phanbook is an open source project and depends on volunteer efforts.\r\n            		If you want to improve this forum please submit a\r\n            		<a href="https://help.github.com/articles/creating-a-pull-request">pull request</a>\r\n            		to its <a href="https://github.com/phanbook/phanbook">repository</a>.\r\n            	</p>', 1437719274, 1437719299),
-(4, 'markdown', 'Markdown', '<p>\r\n            		This forum allows you to use Markdown as markup language when creating posts or adding comments. Markdown\r\n            		is also used by Github so it''s probably familiar to you. The following guide explain its basic syntax:\r\n            	</p>\r\n\r\n            	<p>\r\n            		<h3>Bold and Italics</h3>\r\n            	</p>\r\n\r\n            <p>\r\n            		<pre>\r\n            *single asterisks*\r\n\r\n            _single underscores_\r\n\r\n            **double asterisks**\r\n\r\n            __double underscores__\r\n            </pre>\r\n            </p>\r\n\r\n\r\n            	<p>\r\n            		<h3>Headings</h3>\r\n            		H1 is underlined using equal signs, and H2 is underlined using dashes.\r\n            	</p>\r\n            	<p>\r\n            		<pre>\r\n            Header 1\r\n            ========\r\n\r\n            Header 2</pre>\r\n            	</p>\r\n\r\n            	<p>\r\n            		<h3>Headings</h3>\r\n            		Atx-style headers use 1-6 hash characters at the start of the line.\r\n            	</p>\r\n            	<p>\r\n            		<pre>\r\n            # Header 1\r\n            ## Header 2\r\n            ### Header 3\r\n            #### Header 4\r\n            ##### Header 5\r\n            ###### Header 6\r\n            </pre>\r\n            	</p>\r\n\r\n            	<p>\r\n            		<h3>Paragraphs</h3>\r\n            		A paragraph is simply one or more consecutive lines of text, separated by one or more blank lines.\r\n            	</p>\r\n\r\n            <p>\r\n            <pre>\r\n            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla neque nisl, fringilla sed blandit non, pretium eu odio.\r\n\r\n            Lorem ipsum dolor sit amet, consectetur adipiscing elit.\r\n            Nulla neque nisl, fringilla sed blandit non, pretium eu odio.\r\n            </pre>\r\n            </p>\r\n\r\n            	<p>\r\n            		<h3>Unordered Lists</h3>\r\n            		Start each line with hyphens, asterisks or pluses.\r\n            	</p>\r\n\r\n            <p>\r\n            <pre>\r\n            * one\r\n            * two\r\n            * three\r\n            </pre>\r\n            </p>\r\n\r\n            	<p>\r\n            		<h3>Ordered Lists Core</h3>\r\n            		Start each line with number and a period.\r\n            	</p>\r\n\r\n            <p>\r\n            <pre>\r\n            1. one\r\n            2. two\r\n            3. three\r\n            </pre>\r\n            </p>\r\n\r\n            	<p>\r\n            		<h3>Code Blocks</h3>\r\n            	</p>\r\n\r\n            **Preferred method**\r\n            <p>\r\n            <pre>\r\n            ```php\r\n            &lt;?php\r\n\r\n            require __DIR__ . ''/vendor/autoload.php'';\r\n            ```\r\n            </pre>\r\n            </p>\r\n\r\n            <p>\r\n            <pre>\r\n            ```\r\n            $ cd cphalcon/build\r\n            $ sudo ./install\r\n            ```\r\n            </pre>\r\n            </p>\r\n\r\n            <p>\r\n            <pre>\r\n            Lorem ipsum dolor sit amet\r\n\r\n                consectetur adipiscing elit.\r\n                Nulla neque nisl, fringilla sed blandit non, pretium eu odio.\r\n            </pre>\r\n            </p>\r\n\r\n\r\n\r\n\r\n            <p>\r\n            	<h3>Inline Code</h3>\r\n            </p>\r\n\r\n            <p>\r\n            <pre>\r\n            Don''t forget to add `echo $foo;`.\r\n\r\n            Please replace `&lt;b&gt;` to `&lt;strong&gt;`.\r\n            </pre>\r\n            </p>\r\n\r\n            <p>\r\n            	<h3>Horizontal Rules</h3>\r\n            </p>\r\n\r\n            <p>\r\n            <pre>\r\n            * * *\r\n\r\n            *******\r\n\r\n            - - - -\r\n\r\n            --------\r\n            </pre>\r\n            </p>\r\n\r\n            <p>\r\n            	<h3>Inline Links</h3>\r\n            </p>\r\n\r\n            <p>\r\n            <pre>\r\n            This is an [inline link](http://example.com).\r\n\r\n            This [link](http://example.com "example website") has title attribute.\r\n            </pre>\r\n            </p>\r\n\r\n            <p>\r\n            <pre>\r\n            This is an [reference style link][id1].\r\n\r\n            This [link][id2] has title attribute.\r\n\r\n            [id1]: http://example.com/\r\n            [id2]: http://example.com/ "example website"\r\n            </pre>\r\n            </p>\r\n\r\n            <p>\r\n            	<h3>Inline Images</h3>\r\n            </p>\r\n\r\n            <p>\r\n            <pre>\r\n            ![Alt text](/path/to/image.png)\r\n\r\n            ![Alt text](/path/to/image.png "Title")\r\n            </pre>\r\n            </p>\r\n\r\n            <p>\r\n            	<h3>Tables</h3>\r\n            </p>\r\n\r\n            <p>\r\n            <pre>\r\n            | head | head |\r\n            |------|------|\r\n            | body | body |\r\n            </pre>\r\n            </p>\r\n\r\n            </div>', 1437806442, 1437806442),
-(5, 'moderation', 'Moderation', '<p>\r\n            		Moderators have special authority, they are community facilitators, they can edit or delete your posts or comments.\r\n            		In order to maintain our community, moderators reserve the right to remove any content and any user account for any reason at any time.\r\n            	</p>\r\n\r\n            	<p>\r\n            		Most of the time, moderation will be limited to correcting small details in posts or comments, improve grammar,\r\n            		fix occasional details in the code, fix links, etc.\r\n            	</p>\r\n\r\n            	<p>\r\n            		A moderator is not required to answer questions or make decisions.\r\n            	</p>', 1437806487, 1437806487),
-(6, 'vote', 'Vote', '<p>\r\n            		Posts and comments can be voted up or down. Voting enable the community to\r\n            		collectively identify the best (and worst) contributions. However, votes aren''t unlimited.\r\n            		Every time you win 50 points of karma the forum assing you a vote.\r\n            		You can only vote once every post or comment. You can spend\r\n            		your votes by voting positively or negatively posts and comments in the forum.\r\n            	</p>\r\n\r\n            	<p>\r\n            		When your posts or comments have been voted your karma is increased or decreased depending on the karma of who you get the vote.\r\n            		When you receive votes from the original poster you get an extra number of points on your karma.\r\n            	</p>\r\n\r\n            	<p>\r\n            		You can see how many votes you have on your  <a href =''http://phanbook.com''> settings</a> page.\r\n            	</p>', 1437806743, 1437806743);
 
 -- --------------------------------------------------------
 
@@ -406,6 +383,31 @@ INSERT INTO `rememberTokens` (`id`, `usersId`, `token`, `userAgent`, `createdAt`
 (4, 1, 'b501da7408befba88d12911586e7081a', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:39.0) Gecko/20100101 Firefox/39.0', 1438511745),
 (5, 3, '376959a80b22a340f7cf64c725d61110', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:39.0) Gecko/20100101 Firefox/39.0', 1438511864),
 (6, 1, '8df47c2c39e5da06abef09e839a27d2c', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:39.0) Gecko/20100101 Firefox/39.0', 1438512127);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `settings`
+--
+
+CREATE TABLE IF NOT EXISTS `settings` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `value` varchar(1000) NOT NULL,
+  `note` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `settings`
+--
+
+INSERT INTO `settings` (`id`, `name`, `value`, `note`) VALUES
+(1, 'googleAnalyticAccessToken', '{"access_token":"ya29.FQKKnvAkiWAw4V2eOz2ObjbacSArkED6J7AIvdpDSVLy2p3rW5uRs2RQP5hyfw-494rkwA","token_type":"Bearer","expires_in":3600,"refresh_token":"1\\/9GIaQln-tIrVg08hrC72znC-LREX5P_Oon_yW1TBIn5IgOrJDtdun6zK6XiATCKT","created":1445574098}', ''),
+(3, 'googleAnalyticRefreshToken', '1/9GIaQln-tIrVg08hrC72znC-LREX5P_Oon_yW1TBIn5IgOrJDtdun6zK6XiATCKT', ''),
+(4, 'googleAnalyticProfileId', '104463261', ''),
+(5, 'googleAnalyticAccountId', '47328645', ''),
+(6, 'googleAnalyticTopActivities', '[{"code":"pageviews","name":"Total Page Views","default":1},{"code":"visits","name":"Total Visits","default":1},{"code":"timeOnPage","name":"Total Time On Page","default":1},{"code":"bounceRate","name":"Bounce Rate","default":1}]', ''),
+(7, 'googleAnalyticTrackingId', 'UA-47328645-4', '');
 
 -- --------------------------------------------------------
 
@@ -661,6 +663,18 @@ ALTER TABLE `activityNotifications`
   ADD KEY `usersId` (`usersId`,`wasRead`);
 
 --
+-- Indexes for table `audit`
+--
+ALTER TABLE `audit`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `auditDetail`
+--
+ALTER TABLE `auditDetail`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `categories`
 --
 ALTER TABLE `categories`
@@ -673,13 +687,6 @@ ALTER TABLE `categories`
 ALTER TABLE `comment`
   ADD PRIMARY KEY (`id`),
   ADD KEY `idUser` (`userId`);
-
---
--- Indexes for table `configuration`
---
-ALTER TABLE `configuration`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `idOrganization` (`idOrganization`,`key`);
 
 --
 -- Indexes for table `notifications`
@@ -696,12 +703,6 @@ ALTER TABLE `notifications`
 ALTER TABLE `notificationsBounces`
   ADD PRIMARY KEY (`id`),
   ADD KEY `email` (`email`,`reported`);
-
---
--- Indexes for table `pages`
---
-ALTER TABLE `pages`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `posts`
@@ -778,6 +779,12 @@ ALTER TABLE `postsViews`
 -- Indexes for table `rememberTokens`
 --
 ALTER TABLE `rememberTokens`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `settings`
+--
+ALTER TABLE `settings`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -868,11 +875,6 @@ ALTER TABLE `categories`
 ALTER TABLE `comment`
   MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `configuration`
---
-ALTER TABLE `configuration`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
---
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
@@ -882,11 +884,6 @@ ALTER TABLE `notifications`
 --
 ALTER TABLE `notificationsBounces`
   MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `pages`
---
-ALTER TABLE `pages`
-  MODIFY `id` int(12) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `posts`
 --
@@ -938,6 +935,11 @@ ALTER TABLE `postsViews`
 ALTER TABLE `rememberTokens`
   MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 --
+-- AUTO_INCREMENT for table `settings`
+--
+ALTER TABLE `settings`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
+--
 -- AUTO_INCREMENT for table `shortUrls`
 --
 ALTER TABLE `shortUrls`
@@ -980,3 +982,4 @@ ALTER TABLE `vote`
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+ALTER TABLE `posts` ADD `excerpt` TEXT NULL AFTER `content`;

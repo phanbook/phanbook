@@ -1,5 +1,5 @@
 {% extends 'layouts/layout.volt' %}
-{% block title %}{% endblock %}
+{% block title %}{{ post is defined ? post.getTitle() : 'Phanbook'}}{% endblock %}
 {% block content %}
     <div class="container">
         <div id="content">

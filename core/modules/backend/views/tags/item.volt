@@ -1,5 +1,5 @@
 {% extends 'layouts/layout.volt' %}
-{% block title %}List template{% endblock %}
+{% block title %}Item{% endblock %}
 {% block content %}
 <section class="panel panel-default">
     <header class="panel-heading font-bold">
@@ -10,7 +10,7 @@
         {% endif %}
     </header>
     <div class="panel-body">
-        {{ form('admin/tags/save', 'class' : 'form-horizontal') }}
+        {{ form(this.view.getControllerName() | lower ~ '/save', 'class' : 'form-horizontal') }}
         {% if object is defined %}
             {{ form.render('id') }}
         {% endif %}

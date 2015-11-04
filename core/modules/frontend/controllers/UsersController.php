@@ -15,6 +15,7 @@ namespace Phanbook\Frontend\Controllers;
 
 use Phanbook\Models\Users;
 use Phanbook\Models\Posts;
+use Phanbook\Models\ModelBase;
 use Phanbook\Models\PostsReply;
 use Phanbook\Frontend\Forms\UserForm;
 use Phanbook\Frontend\Forms\ChangePasswordForm;
@@ -44,11 +45,11 @@ class UsersController extends ControllerBase
 
             ];
             list($itemBuilder, $totalBuilder) =
-                $this->prepareQueries($join, false, self::POSTS_IN_PAGE);
-            $itemBuilder->groupBy(array('p.id'));
+                ModelBase::prepareQueriesPosts($join, false, self::POSTS_IN_PAGE);
+                $itemBuilder->groupBy(array('p.id'));
         } else {
             list($itemBuilder, $totalBuilder) =
-                $this->prepareQueries('', false, self::POSTS_IN_PAGE);
+                ModelBase::prepareQueriesPosts('', false, self::POSTS_IN_PAGE);
         }
         $params =[];
         switch ($tab) {

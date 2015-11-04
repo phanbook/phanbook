@@ -35,10 +35,7 @@ use Phalcon\Paginator\Adapter\NativeArray  as PaginatorNativeArray;
  */
 class ControllerBase extends Controller
 {
-    /**
-     * Display item in a page
-     */
-    const ITEM_IN_PAGE = 30;
+
     /**
      * @var array
      */
@@ -63,6 +60,11 @@ class ControllerBase extends Controller
      * @var int
      */
     public $numberPage = 1;
+
+    /**
+     * @var int
+     */
+    public $perPage = 30;
 
     /**
      * Check if we need to throw a json respone. For ajax calls.
@@ -122,6 +124,9 @@ class ControllerBase extends Controller
     public function initialize()
     {
         $this->view->tab = $this->currentOrder;
+        if (isset($this->config->perPage)) {
+            $this->perPage = $this->config->perPage;
+        }
     }
 
 
@@ -402,57 +407,6 @@ class ControllerBase extends Controller
 
         return in_array($extension, $allowedTypes);
     }
-
-
-    /**
-     * This method prepares the queries to be executed in each list of posts
-     * The returned builders are used as base in the search, tagged list and index lists.
-     *
-     * @param array  $join  The Model need to join {code} $join = [ 'type'  => 'join', 'model' => 'Phanbook\\Models\\PostsReply', 'on'    => 'r.postsId = p.id', 'alias' => 'r' ]; {/code} {code} $join = [ 'type'  => 'join', 'model' => 'Phanbook\\Models\\PostsReply', 'on'    => 'r.postsId = p.id', 'alias' => 'r' ]; {/code}
-     * {code}
-     * $join = [
-     *   'type'  => 'join',
-     *   'model' => 'Phanbook\\Models\\PostsReply',
-     *   'on'    => 'r.postsId = p.id',
-     *   'alias' => 'r'
-     * ];
-     * {/code}
-     * @param string $where The condition you want to get.
-     * @param int    $limit The option limit post in a page.
-     *
-     * @return array It return two object
-     */
-    protected function prepareQueries($join, $where, $limit = 15)
-    {
-        /**
-         *
-         * @var \Phalcon\Mvc\Model\Query\BuilderInterface $itemBuilder
-         */
-        $itemBuilder = $this
-            ->modelsManager
-            ->createBuilder()
-            ->from(['p' => 'Phanbook\Models\Posts'])
-            ->orderBy('p.sticked DESC, p.createdAt DESC');
-
-        if (isset($join) && is_array($join)) {
-            $itemBuilder->$join['type']($join['model'], $join['on'], $join['alias']);
-        }
-        if (isset($where)) {
-            $itemBuilder->where($where);
-        }
-
-        $totalBuilder = clone $itemBuilder;
-
-        $itemBuilder
-            ->columns(array('p.*'))
-            ->limit($limit);
-
-        $totalBuilder
-            ->columns('COUNT(*) AS count');
-
-        return array($itemBuilder, $totalBuilder);
-    }
-
     /**
      * Create a paginator default use adapter PaginatorQueryBuilder,
      * show 30 rows by page starting from $page
@@ -469,7 +423,7 @@ class ControllerBase extends Controller
             $paginator  = new PaginatorQueryBuilder(
                 [
                     'builder'  => $builder,
-                    'limit'     => self::ITEM_IN_PAGE,
+                    'limit'     => $this->perPage,
                     'page'      => $page
                 ]
             );
@@ -477,7 +431,7 @@ class ControllerBase extends Controller
             $paginator = new PaginatorNativeArray(
                 [
                     'data'  => $builder->getQuery()->execute()->toArray(),
-                    'limit' => self::ITEM_IN_PAGE,
+                    'limit' => $this->perPage,
                     'page'  => $numberPage
                 ]
             );
@@ -633,5 +587,16 @@ class ControllerBase extends Controller
         }
 
         return $this->indexRedirect();
+    }
+    /**
+     * Transfer values from the controller to views
+     *
+     * @param array $parmas
+     */
+    public function setViewVariable($parmas)
+    {
+        foreach ($parmas as $key => $value) {
+            $this->view->setVar($key, $value);
+        }
     }
 }

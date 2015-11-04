@@ -11,9 +11,10 @@
     <meta name="author" content="Phanbook Team">
 
     <link rel="shortcut icon" href="{{ getImageSrc('favicon.png') }}">
-    <title>{{  get_title(false) }} - {{ name }}</title>
+    <title>{% block title %}{% endblock %}</title>
 
     {{ this.assets.outputCss() }}
+
     <script type="text/javascript">
         var baseUri     = '/backend/';
         var controller  = '{{ controller }}';
