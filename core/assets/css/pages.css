@@ -1,0 +1,353 @@
+/*User*/
+.users .container-jumbotron {
+    background:url("https://webmaker.org/img/home/teach-referral-bg-white-small.png") repeat scroll 0 0 #efefef;
+    margin-bottom: 40px;
+    color: #fff;
+    overflow: hidden;
+}
+.profile #notifications{
+    height: 30px;
+}
+.container-jumbotron > .jumbotron {
+    padding-bottom: 75px;
+    padding-top: 75px;
+}
+.index .container-jumbotron > .jumbotron {
+    padding-top: 1.5em;
+    padding-bottom: 67px;
+}
+.jumbotron {
+	position: relative;
+	max-width: 960px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+.container{
+	padding: 0 !important;
+}
+.users .jumbotron .jumbotron-heading {
+    color: #3875d7;
+}
+.jumbotron-heading {
+    font-weight: 700;
+    margin: 0px;
+    line-height: 1.2em;
+    padding-right: 220px;
+    color: #F9604C;
+    letter-spacing: -1px;
+    font-size: 1.9em;
+}
+.users .jumbotron .jumbotron-sub-heading {
+    color: #4e4e4e;
+    font-size: 18px;
+    margin-top: 0px;
+}
+.users .jumbotron .btn-primary:hover {
+    background: #4f8ef7 none repeat scroll 0% 0%;
+    color: #FFF;
+}
+.users .jumbotron .btn-primary {
+    background: none repeat scroll 0 0 #3875d7;
+    position: absolute;
+    right: 15px;
+    top: 42%;
+    font-weight: 700;
+    padding: 10px 17px;
+    line-height: 1em;
+    border: medium none;
+    color: #fff;
+    border-radius: 4px;
+}
+.btn-primary:active, .btn-primary:focus, .btn-primary:hover{
+    background-color: #F84A33;
+    border-color: #D81F07;
+}
+.users .jumbotron .btn-primary span.icon-profile {
+    background: url("../images/sprites.svg");
+    height: 16px;
+    margin: 0 auto;
+    background-position: -52px -58px;
+    width: 20px;
+    float: left;
+}
+.vertical-list{
+    margin: auto;
+}
+.vertical-list .info {
+    width: 40%;
+}
+.vertical-list .list-element {
+    margin-bottom: 30px;
+}
+.list-element:first-child {
+    margin-top: 0;
+}
+.list-element {
+    font-size: 22px;
+    letter-spacing: 0.01rem;
+    overflow: hidden;
+}
+.user-avatar{
+	float: left;
+    position: relative;
+    margin-right: 15px;
+}
+.user-avatar img {
+    border-radius: 50%;
+    width: 60px;
+}
+.list-element .info {
+    float: left;
+    margin-right: 2em;
+}
+.info h2 {
+    font-size: 0.9em !important;
+    line-height: 1em;
+    margin: 2px 0 3px 0;
+    text-shadow: 0 0.1px 0.1px #a7b3c2;
+    color: #a7b3c2;
+    font-weight: normal !important;
+}
+.info h2 a {
+    color: inherit;
+}
+.info h2 a:hover {
+    color: inherit;
+    text-decoration: underline;
+}
+.info p{
+	color: #999;
+    font-family: sans-serif;
+    font-size: 13px;
+    line-height: 1.3;
+}
+.list-element .pull-right {
+    color: #a7b3c2;
+    display: block;
+    font-size: 0.7em;
+    margin-top: 2px;
+}
+.pull-right span{
+	margin: 0 !important;
+}
+.pull-right .reputation-score {
+    color: #4b4b4b;
+    display: block;
+    font-size: 1.44em;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: -1px;
+    text-align: center;
+}
+.users .pager{
+	/*width: 70% !important;*/
+	margin: -25px auto 0;
+	padding-left: 5px;
+}
+
+/*Trang chi tiet user*/
+.index .user-avatar img{
+    margin-right: 10px;
+    margin-top: 20px;
+    width: 120px;
+}
+.index .info h2{
+    margin-top: 45px;
+    text-shadow: none !important;
+    margin-bottom: 10px;
+}
+.index .info h2 a{
+
+    font-size: 2.3em !important;
+    font-weight: 700;
+}
+.index .info p{
+    color: #333;
+    font-size: 1.2em;
+}
+.index .reputation {
+    font-size: 2.5em;
+    margin-top: -78px;
+}
+
+.index .reputation .experience-heading {
+    color: #333;
+    display: block;
+    font-size: 0.6em;
+    font-weight: 700;
+}
+.series-meta {
+    overflow: hidden;
+    color: #FFF;
+    background: #25262B none repeat scroll 0% 0%;
+    border-top: 1px solid #37373F;
+    border-bottom: 1px solid #37373F;
+    margin: -41px 0 70px 0;
+    font-size: 1.1em;
+}
+.series-meta ul {
+    display: inline;
+    list-style: outside none none;
+    margin-bottom: 0px;
+    padding: 0px;
+}
+.pull-left {
+    float: left !important;
+}
+.col-md-5 {
+    width: 41.6667%;
+}
+.series-meta ul.pull-left li:first-child {
+    padding-left: 0px;
+}
+.series-meta ul li {
+    display: inline-block;
+    border-right: 1px solid #37373F;
+    padding: 15px 15px;
+}
+.series-meta ul li a{
+    color: #aaa;
+}
+.series-meta ul li i {
+    padding-right: 7px;
+    position: relative;
+    top: 2px;
+}
+.users .index i{
+    background: url("../images/sprites.svg");
+    padding: 7px 0px 2px 12px;
+}
+.banner-profile-twitter i {
+    background-position: -54px -121px;
+}
+.banner-profile-github i {
+    background-position: -74px -121px;
+}
+.banner-profile-hire i{
+    background-position: -95px -361px;
+}
+.banner-profile-learning-since{
+    margin: 0 -10px;
+}
+.banner-profile-learning-since i{
+    background-position: -54px -144px;
+}
+li i.heart-1{
+    background-position: -76px -145px;
+}
+li i.film-strip{
+    background-position: -101px -146px;
+}
+/**/
+.index .filter-bar ul.filters {
+    float: none;
+    text-align: center;
+    border-bottom: 1px solid #e8e8e8;
+    margin: 0 0 30px 0;
+}
+.index .filter-bar ul.filters li {
+    border-bottom: medium none #91c7e1;
+    display: inline-block;
+    float: none;
+}
+.index .filter-bar ul.filters li.active {
+    border-bottom: 1px solid #2481b7;
+}
+.index .filter-bar ul.filters li.active a {
+    color: #2481b7;
+}
+.index .filter-bar ul.filters li a {
+    font-weight: 400;
+    color: #555;
+    display: block;
+    font-size: 15px;
+    margin: 0 15px;
+    padding: 0 10px 27px 10px;
+    text-align: center;
+}
+.index .filter-bar ul.filters li a:hover {
+    color: #2481b7;
+}
+.filter-bar ul li a {
+
+}
+#top-posts .answer-hyperlink a {
+    color: #333333 !important;
+    font-size: 15px;
+    font-weight: 500;
+}
+.index .vertical-list .list-element{
+    border-bottom: 1px solid #e8e8e8 !important;
+    padding-bottom: 25px;
+}
+.users .unanswered span, .users .answered-accepted span, .users .answered span{
+    background: url("../images/sprites.svg");
+    float: left;
+    padding: 10px 12px 12px;
+}
+span.posts-hackernews{
+    background-position: -46px 0;
+}
+span.posts-tips{
+    background-position: -71px -28px;
+}
+span.posts-questions{
+    background-position: -46px 0px;
+}
+span.posts-answers{
+    background-position: -46px -28px;
+}
+.index #top-posts .list-element .post-date{
+    width: auto;
+}
+.index .view-more{
+    float: right;
+    margin-bottom:10px;
+    width: 43%;
+    font-size: 15px;
+    background: #fff;
+}
+.index .view-more a:hover{
+    color: #3875d7;
+    text-decoration: underline;
+}
+/*Help*/
+.single-content h1{
+    font-size: xx-large;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.single-content .info {
+    text-align: center;
+    font-size: larger;
+    padding-top: 10px;
+}
+ul{
+    list-style: none;
+}
+.single-content li.first-rule {
+    border-top: 1px solid #ddd;
+    padding-top: 18px;
+}
+.single-content li {
+    border-bottom: 1px solid #ddd;
+    margin: 10px;
+    padding: 10px;
+}
+.single-content .expander {
+    color: gray;
+    cursor: help;
+    padding: 10px;
+}
+.single-content li.bad-example {
+    background: #F5A9A9 none repeat scroll 0% 0%;
+}
+.single-content li.good-example {
+    background: #BCF5A9 none repeat scroll 0% 0%;
+}
+.footer p {
+    font-size: 12px;
+}
+
+

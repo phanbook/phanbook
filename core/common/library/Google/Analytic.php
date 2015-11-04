@@ -120,7 +120,7 @@ class Analytic extends Injectable
     public function checkAccessToken()
     {
         if (Settings::getAccessToken()) {
-            try {
+            try{
                 if ($this->refreshToken()) {
                     return true;
                 }
