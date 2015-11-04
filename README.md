@@ -18,6 +18,7 @@
 - **Beautiful and responsive.** This is forum software for humans. Phanbook is carefully designed to be consistent and intuitive across platforms, out-of-the-box.
 - **Powerful and extensible.** Customize, extend, and integrate Phanbook to suit your community. Phanbook's architecture is amazingly flexible, prioritizing comprehensive APIs and great documentation.
 - **Easily deploy** With Docker and Vagrant you can easy deploy to production with Docker and setup environment develop with Vagrant.
+- **Blogging** Create a beautiful, independent online publication
 - **Free and open.** Phanbook is released under the [GNU General license](https://github.com/phanbook/phanbook/blob/master/LICENSE.txt).
 
 ## Features
@@ -35,6 +36,7 @@ We want Phanbook to be the most powerful forum software out there, and we have a
 - Rewards, badges, and gamification
 - Q&A format and voting
 - Simple CMS
+- The modular structure with a convenient hierarchy that is based on namespaces
 
 ## Installation
 
