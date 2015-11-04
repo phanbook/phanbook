@@ -120,8 +120,12 @@ class Analytic extends Injectable
     public function checkAccessToken()
     {
         if (Settings::getAccessToken()) {
-            if ($this->refreshToken()) {
-                return true;
+            try {
+                if ($this->refreshToken()) {
+                    return true;
+                }
+            } catch (\Google_Auth_Exception $e) {
+                return false;
             }
         }
         return false;
