@@ -39,8 +39,8 @@
                         <h5>Publish</h5>
                         <div class="ibox-tools pull-right">
                             <a class="btn btn-icon icon-muted btn-inactive" data-toggle="class:hide" href="#post-save">
-                            <i class="i i-circleup text"></i>
-                            <i class="i i-circledown text-active"></i>
+                            <i class="fa fa-chevron-circle-up text"></i>
+                            <i class="fa fa-chevron-circle-down text-active"></i>
                             </a>
                         </div>
                     </div>
@@ -59,8 +59,8 @@
                         <h5>Tags</h5>
                         <div class="panel-tools pull-right">
                         <a class="btn btn-icon icon-muted btn-inactive" data-toggle="class:hide" href="#post-tag">
-                            <i class="i i-circleup text"></i>
-                            <i class="i i-circledown text-active"></i>
+                            <i class="fa fa-chevron-circle-up text"></i>
+                            <i class="fa fa-chevron-circle-down text-active"></i>
                         </a>
                         </div>
                     </div>
@@ -77,8 +77,8 @@
                         <h5>Set thumnail</h5>
                         <div class="ibox-tools pull-right">
                             <a class="btn btn-icon icon-muted btn-inactive" data-toggle="class:hide" href="#post-thumbnail">
-                                <i class="i i-circleup text"></i>
-                                <i class="i i-circledown text-active"></i>
+                                <i class="fa fa-chevron-circle-up text"></i>
+                                <i class="fa fa-chevron-circle-down text-active"></i>
                             </a>
                         </div>
                     </div>

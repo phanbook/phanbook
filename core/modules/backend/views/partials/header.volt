@@ -14,7 +14,7 @@
     <ul class="nav navbar-nav hidden-xs">
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <i class="i i-grid"></i>
+                <i class="fa fa-th"></i>
             </a>
             <section class="dropdown-menu aside-lg bg-white on animated fadeInLeft">
                 <div class="row m-l-none m-r-none m-t m-b text-center">

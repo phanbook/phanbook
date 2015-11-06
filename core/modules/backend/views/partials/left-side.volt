@@ -51,32 +51,17 @@
                     </ul>
 
                     <div class="line dk hidden-nav-xs"></div>
-                    <div class="text-muted text-xs hidden-nav-xs padder m-t-sm m-b-sm">Lables</div>
-                    <ul class="nav">
-                        <li>
-                            <a href="/">
-                                <i class="fa fa-circle-o"></i>
-                                <span>Work space</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-circle-o"></i>
-                                <span>Connection</span>
-                            </a>
-                        </li>
-                    </ul>
                     <div class="text-muted text-xs hidden-nav-xs padder m-t-sm m-b-sm">Circles</div>
                     <ul class="nav">
                         <li>
                             <a href="http://chat.phalcontip.com">
-                                <i class="i i-circle-sm-o text-success-lt"></i>
+                                <i class="fa fa-slack text-success"></i>
                                 <span>Chats</span>
                             </a>
                         </li>
                         <li>
                             <a href="/help">
-                                <i class="i i-circle-sm-o text-warning"></i>
+                                <i class="fa fa-life-ring text-warning"></i>
                                 <span>Help</span>
                             </a>
                         </li>
@@ -87,11 +72,12 @@
         </section>
 
         <footer class="footer hidden-xs no-padder text-center-nav-xs">
-            {{ link_to('/auth/logout', '<i class="i i-logout"></i>', 'class' : 'btn btn-icon icon-muted btn-inactive pull-right m-l-xs m-r-xs hidden-nav-xs') }}
-
+            <a href="/oauth/logout" class="btn btn-icon btn-inactive pull-right m-l-xs m-r-xs hidden-nav-xs">
+                <i class="fa fa-sign-out"></i>
+            </a>
             <a href="#nav" data-toggle="class:nav-xs" class="btn btn-icon icon-muted btn-inactive m-l-xs m-r-xs">
-                <i class="i i-circleleft text"></i>
-                <i class="i i-circleright text-active"></i>
+                <i class="fa fa-chevron-circle-left text"></i>
+                <i class="fa fa-chevron-circle-right text-active"></i>
             </a>
         </footer>
     </section>

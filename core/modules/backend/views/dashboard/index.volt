@@ -10,9 +10,9 @@
             <div class="hpanel">
                 <div class="panel-heading">
                     <div class="panel-tools pull-right">
-                        <a class="btn btn-icon icon-muted btn-inactive m-l-xs m-r-xs" data-toggle="class:analytic-hide" href="#analytic">
-                            <i class="i i-circleup text"></i>
-                            <i class="i i-circledown text-active"></i>
+                        <a class="btn btn-icon icon-muted btn-inactive m-l-xs m-r-xs" data-toggle="class:hide" href="#analytic">
+                            <i class="fa fa-chevron-circle-up text"></i>
+                            <i class="fa fa-chevron-circle-down text-active"></i>
                         </a>
                     </div>
                     Information and statistics
@@ -91,11 +91,9 @@
                 <div class="ibox-title">
                     <h5>Replies</h5>
                     <div class="ibox-tools pull-right">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                        <a class="close-link">
-                            <i class="fa fa-times"></i>
+                        <a class="btn btn-icon icon-muted btn-inactive m-l-xs m-r-xs" data-toggle="class:hide" href="#replies-dashboard">
+                            <i class="fa fa-chevron-circle-up text"></i>
+                            <i class="fa fa-chevron-circle-down text-active"></i>
                         </a>
                     </div>
                 </div>
@@ -103,7 +101,7 @@
                     <h3><i class="fa fa-envelope-o"></i> New Replies</h3>
                     <small><i class="fa fa-tim"></i> You have 22 new messages and 16 waiting in draft folder.</small>
                 </div>
-                <div class="ibox-content">
+                <div id="replies-dashboard" class="ibox-content">
                     <div class="feed-activity-list">
 
                         <div class="feed-element">
@@ -177,19 +175,17 @@
                 <div class="ibox-title">
                     <h5>Comments</h5>
                     <div class="ibox-tools pull-right">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                        <a class="close-link">
-                            <i class="fa fa-times"></i>
+                        <a class="btn btn-icon icon-muted btn-inactive m-l-xs m-r-xs" data-toggle="class:hide" href="#comment-dashboard">
+                            <i class="fa fa-chevron-circle-up text"></i>
+                            <i class="fa fa-chevron-circle-down text-active"></i>
                         </a>
                     </div>
                 </div>
                 <div class="ibox-content ibox-heading">
-                    <h3><i class="fa fa-envelope-o"></i> New Comments</h3>
+                    <h3><i class="fa fa-commenting"></i> New Comments</h3>
                     <small><i class="fa fa-tim"></i> You have 22 new messages and 16 waiting in draft folder.</small>
                 </div>
-                <div class="ibox-content">
+                <div id="comment-dashboard" class="ibox-content">
                     <div class="feed-activity-list">
 
                         <div class="feed-element">
