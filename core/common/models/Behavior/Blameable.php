@@ -94,10 +94,12 @@ class Blameable extends Behavior implements BehaviorInterface
         if (is_object($audit)) {
             $metaData = $model->getModelsMetaData();
             $fields   = $metaData->getAttributes($model);
-            $details  = array();
+            $details  = [];
+            $random = new Random();
 
             foreach ($fields as $field) {
                 $auditDetail = new AuditDetail();
+                $auditDetail->setId($random->uuid());
                 $auditDetail->setFieldName($field);
                 $auditDetail->setOldValue(null);
                 $auditDetail->setNewValue($model->readAttribute($field));
