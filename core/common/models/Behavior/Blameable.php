@@ -96,19 +96,21 @@ class Blameable extends Behavior implements BehaviorInterface
             $fields   = $metaData->getAttributes($model);
             $details  = [];
             $random = new Random();
+            //Ignore audit log posts when it create
+            if ($model->getSource() != 'posts') {
+                foreach ($fields as $field) {
+                    $auditDetail = new AuditDetail();
+                    $auditDetail->setId($random->uuid());
+                    $auditDetail->setFieldName($field);
+                    $auditDetail->setOldValue(null);
+                    $auditDetail->setNewValue($model->readAttribute($field));
 
-            foreach ($fields as $field) {
-                $auditDetail = new AuditDetail();
-                $auditDetail->setId($random->uuid());
-                $auditDetail->setFieldName($field);
-                $auditDetail->setOldValue(null);
-                $auditDetail->setNewValue($model->readAttribute($field));
-
-                $details[] = $auditDetail;
-            }
-            $audit->details = $details;
-            if (!$audit->save()) {
-                $this->saveLoger($audit->getMessages());
+                    $details[] = $auditDetail;
+                }
+                $audit->details = $details;
+                if (!$audit->save()) {
+                    $this->saveLoger($audit->getMessages());
+                }
             }
         }
     }
