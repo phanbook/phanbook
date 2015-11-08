@@ -130,8 +130,7 @@ class PostsController extends ControllerBase
     {
         $this->view->form = new PostsForm;
         $this->tag->setTitle('Adding post');
-        $this->assets->addCss('assets/css/editor.css');
-        $this->assets->addJs('assets/js/editor.js');
+        $this->markdownEditor();
         $this->view->pick($this->router->getControllerName() . '/item');
     }
     public function editAction($id)
@@ -144,9 +143,7 @@ class PostsController extends ControllerBase
         $this->tag->setTitle(t('Edit posts'));
         $this->view->form   = new PostsForm($object);
         $this->view->object = $object;
-        $this->assets
-            ->addCss('assets/css/editor.css');
-        $this->assets->addJs('assets/js/editor.js');
+        $this->markdownEditor();
 
         return $this->view->pick($this->router->getControllerName() . '/item');
     }
@@ -231,5 +228,20 @@ class PostsController extends ControllerBase
                 return $this->currentRedirect();
             }
         }
+    }
+    /**
+     * Get lib js and css editor
+     *
+     * @return mixed
+     */
+    public function markdownEditor()
+    {
+        $this->assets
+            ->addCss('assets/css/editor.css');
+        $this->assets
+            ->addJs('assets/js/editor/markdown.js')
+            ->addJs('assets/js/editor/md-converts.js')
+            ->addJs('assets/js/editor/editor.js')
+        ;
     }
 }
