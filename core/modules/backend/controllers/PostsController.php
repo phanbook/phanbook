@@ -197,15 +197,18 @@ class PostsController extends ControllerBase
         }
 
         $id = $this->request->getPost('id');
+        $auth = $this->auth->getAuth();
+        $type = $this->request->getPost('type') ? $this->request->getPost('type') : Posts::POST_BLOG;
         if (!empty($id)) {
             $object = Posts::findFirstById($id);
-            $object->setSlug(Slug::generate($this->request->getPost('title')));
 
         } else {
             $object = new Posts();
             //@todo
         }
-
+        $object->setSlug(Slug::generate($this->request->getPost('title')));
+        $object->setUsersId($auth['id']);
+        $object->setType($type);
         $form = new PostsForm($object);
         $form->bind($_POST, $object);
 
