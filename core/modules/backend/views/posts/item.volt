@@ -23,6 +23,24 @@
                     {{ form.render('content',['class':'form-control input-sm']) }}
                 </div>
                 <div class="form-group">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>Google SEO</h5>
+                                <div class="ibox-tools pull-right">
+                                    <a class="btn btn-icon icon-muted btn-inactive" data-toggle="class:hide" href="#post-type">
+                                        <i class="fa fa-chevron-circle-up text"></i>
+                                        <i class="fa fa-chevron-circle-down text-active"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div  id="post-type" class="ibox-content">
+                                <div class="form-group">
+                                    <p>Coming soon</p>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                <div class="form-group">
                         <div class="col-sm-10" id="locked">
                             <div class="radio">
                                 <label for="locked">{{ form.render('locked') }}<i></i>{{ t('Locked') }}</label>
@@ -102,7 +120,7 @@
             <div class="col-lg-3">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>Set thumnail</h5>
+                        <h5>Thumbnail Image</h5>
                         <div class="ibox-tools pull-right">
                             <a class="btn btn-icon icon-muted btn-inactive" data-toggle="class:hide" href="#post-thumbnail">
                                 <i class="fa fa-chevron-circle-up text"></i>
@@ -113,6 +131,24 @@
                     <div  id="post-thumbnail" class="ibox-content">
                         <div class="form-group">
                             <a href="#">Set feature images</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>Type of Publication</h5>
+                        <div class="ibox-tools pull-right">
+                            <a class="btn btn-icon icon-muted btn-inactive" data-toggle="class:hide" href="#post-type">
+                                <i class="fa fa-chevron-circle-up text"></i>
+                                <i class="fa fa-chevron-circle-down text-active"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div  id="post-type" class="ibox-content">
+                        <div class="form-group">
+                            <p>Coming soon</p>
                         </div>
                     </div>
                 </div>
