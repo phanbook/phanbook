@@ -49,7 +49,20 @@
                             {{ form.render('saveDraft') }}
                             {{ form.render('save') }}
                         </div>
-
+                        <ul class="list-group clear-list">
+                            <li>
+                                <i class="fa fa-archive"></i>Visibility: Public
+                                <a href="#">Edit</a>
+                            </li>
+                            <li>
+                                <i class="fa fa-calendar"></i> Publish immediately
+                                <a href="#">Edit</a>
+                            </li>
+                            <li>
+                                <i class="fa fa-floppy-o"></i>Status: Draft
+                                <a href="#">Edit</a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -66,14 +79,29 @@
                     </div>
                     <div id="post-tag" class="ibox-content">
                         <div class="form-group">
-                            {{form.render('tags')}}
+                            {% set value = null %}
+                            {% if object.tag is defined %}
+                                <!-- set value tag to tag-input when to edit post -->
+                                {% for key, tag in object.tag %}
+                                    {% set value = tag.getSlug() ~ "," ~ value %}
+                                {% endfor %}
+                            {% endif %}
+                            <!-- Start change tag display way -->
+                            <div class="tag-editor" >
+                                <input type="text" id="tag-input" value="" class="form-control"name="tag-input">
+                                {#<input class="button tagadd" type="button" value="Add">#}
+                            </div>
+                            {{form.render('tags', ['value' : value])}}
+                            <p>Separate tags with commas</p>
                         </div>
+                        <!-- Display sugesstion tags for users -->
+                        <div class="tag-suggestion-wrapper tag-suggestions"></div>
                     </div>
                 </div>
             </div>
             <div class="col-lg-3">
                 <div class="ibox float-e-margins">
-                    <div class="box-title">
+                    <div class="ibox-title">
                         <h5>Set thumnail</h5>
                         <div class="ibox-tools pull-right">
                             <a class="btn btn-icon icon-muted btn-inactive" data-toggle="class:hide" href="#post-thumbnail">
@@ -84,7 +112,7 @@
                     </div>
                     <div  id="post-thumbnail" class="ibox-content">
                         <div class="form-group">
-                            <a href="">Set feature images</a>
+                            <a href="#">Set feature images</a>
                         </div>
                     </div>
                 </div>

@@ -198,6 +198,7 @@ class PostsController extends ControllerBase
 
         $id = $this->request->getPost('id');
         $auth = $this->auth->getAuth();
+        $tags = $this->request->getPost('tags', 'string', null);
         $type = $this->request->getPost('type') ? $this->request->getPost('type') : Posts::POST_BLOG;
         if (!empty($id)) {
             $object = Posts::findFirstById($id);
@@ -226,6 +227,7 @@ class PostsController extends ControllerBase
                     ['controller' => $this->getPathController(), 'action' => 'new']
                 );
             } else {
+                $this->phanbook->saveTagsInPosts($tags, $object);
                 $this->flashSession->success(t('Data was successfully saved'));
 
                 return $this->currentRedirect();
@@ -242,6 +244,7 @@ class PostsController extends ControllerBase
         $this->assets
             ->addCss('assets/css/editor.css');
         $this->assets
+            ->addJs('assets/js/tags-suggestion.js')
             ->addJs('assets/js/editor/markdown.js')
             ->addJs('assets/js/editor/md-converts.js')
             ->addJs('assets/js/editor/editor.js')

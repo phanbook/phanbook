@@ -81,12 +81,11 @@ class PostsForm extends Form
             )
         );
         $this->add($content);
-        $tags = new Text(
+        $tags = new Hidden(
             'tags',
             [
                 'placeholder' => t('Tags'),
                 'class'       => 'form-control',
-                'required'    => true
             ]
         );
         $this->add($tags);

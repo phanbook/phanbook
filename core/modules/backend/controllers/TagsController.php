@@ -159,4 +159,27 @@ class TagsController extends ControllerBase
         $this->flashSession->success(t('Data was successfully deleted'));
         return $this->currentRedirect();
     }
+    public function tagSuggestAction()
+    {
+        $this->view->disable();
+        $this->setJsonResponse();
+        $q = $this->request->getQuery('q', 'string');
+        if ($q) {
+            $tags = Tags::query()
+                ->Where('name LIKE "%' . $q . '%"')
+                ->execute();
+            $params = ['tags' => $tags->toArray()];
+            if ($this->request->isAjax()) {
+                echo $this->view->getRender(
+                    'tags',
+                    'suggestions',
+                    $params,
+                    function ($view) {
+                        $view->setRenderLevel(View::LEVEL_ACTION_VIEW);
+                    }
+                );
+                return 1;
+            }
+        }
+    }
 }
