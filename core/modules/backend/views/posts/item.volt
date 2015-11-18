@@ -23,6 +23,22 @@
                     {{ form.render('content',['class':'form-control input-sm']) }}
                 </div>
                 <div class="form-group">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Excertp post</h5>
+                            <div class="ibox-tools pull-right">
+                                <a class="btn btn-icon icon-muted btn-inactive" data-toggle="class:hide" href="#excerpt-js">
+                                    <i class="fa fa-chevron-circle-up text"></i>
+                                    <i class="fa fa-chevron-circle-down text-active"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div  id="excerpt-js" class="ibox-content">
+                            {{ form.render('excerpt', ['class':'form-control input-sm'])}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
                         <div class="ibox float-e-margins">
                             <div class="ibox-title">
                                 <h5>Google SEO</h5>

@@ -81,6 +81,13 @@ class PostsForm extends Form
             )
         );
         $this->add($content);
+        $excerpt = new Textarea('excerpt',
+            [
+                'rows'  =>4
+            ]
+        );
+
+        $this->add($excerpt);
         $tags = new Hidden(
             'tags',
             [
