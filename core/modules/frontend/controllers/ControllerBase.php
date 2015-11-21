@@ -22,7 +22,7 @@ use Phanbook\Models\Karma;
 use Phanbook\Models\Posts;
 use Phanbook\Models\Comment;
 use Phanbook\Models\PostsReply;
-use Phanbook\Forms\CommentForm;
+use Phanbook\Frontend\Forms\CommentForm;
 use Phanbook\Models\ModelBase;
 use Phanbook\Models\ActivityNotifications;
 use Phalcon\Paginator\Adapter\QueryBuilder as PaginatorQueryBuilder;
