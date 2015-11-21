@@ -18,6 +18,7 @@ use Phanbook\Models\Posts;
 use Phanbook\Models\ModelBase;
 use Phanbook\Models\PostsReply;
 use Phanbook\Frontend\Forms\UserForm;
+use Phanbook\Frontend\Forms\UserSettingForm;
 use Phanbook\Frontend\Forms\ChangePasswordForm;
 
 /**
@@ -25,12 +26,15 @@ use Phanbook\Frontend\Forms\ChangePasswordForm;
  */
 class UsersController extends ControllerBase
 {
-    const POSTS_IN_PAGE = 10;
 
-
-    public function indexAction($user)
+    public function initialize()
     {
-        d($user);
+        parent::initialize();
+        $this->view->pick('user');
+    }
+
+    public function detailAction($user)
+    {
         if (!$user = Users::findFirstByUsername($user)) {
             $this->flashSession->error(t('The User dosen\'t exits'));
             return $this->indexRedirect();
@@ -145,15 +149,23 @@ class UsersController extends ControllerBase
         echo json_encode(['946721039'=>'2', '946706853'=>'3', '946706853'=> '1111']);
     }
 
-    public function listUsersAction()
+    public function indexAction()
     {
-        $model = [
-            'name'      => 'Phanbook\Models\Users',
-            'orderBy'   => 'username',
-            'currentOrder' => 'users'
+
+        $page  = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $sql = [
+            'model' => 'Phanbook\Models\Users',
+            'joins' => []
+
         ];
-        $page       = isset($_GET['page'])?(int)$_GET['page']:1;
-        $this->paginatorQueryBuilder($model, $page);
+        //Create a Model paginator
+        $data = $this->paginator($sql, $page);
+        $this->view->setVars(
+            [
+                'paginator' => $data->getPaginate(),
+                'tab'  => 'users',
+            ]
+        );
         $this->tag->setTitle(t('List all users'));
     }
     public function profileAction()
@@ -239,5 +251,33 @@ class UsersController extends ControllerBase
     }
     public function settingsAction()
     {
+        $object = Users::findFirstById($this->auth->getAuth()['id']);
+        if (!$object) {
+            $this->flashSession->error(t('Hack attempt!!!'));
+            return $this->response->redirect();
+        }
+        $form = new UserSettingForm($object);
+        $form->bind($_POST, $object);
+        if ($this->request->isPost()) {
+            if (!$form->isValid()) {
+                foreach ($form->getMessages() as $message) {
+                    $this->flashSession->error($message->getMessage());
+                }
+            } else {
+                $object->setDigest($this->request->getPost('digest'));
+                if (!$object->save()) {
+                    foreach ($object->getMessages() as $message) {
+                        $this->flashSession->error($message->getMessage());
+                    }
+                } else {
+                    $this->flashSession->success(t('Data was successfully saved'));
+                    $this->refreshAuthSession($object->toArray());
+                    return $this->response->redirect($this->router->getControllerName() . '/settings');
+                }
+            }
+        }
+        $this->tag->setTitle(t('Edit profile'));
+        $this->view->form   = $form;
+        $this->view->object = $object;
     }
 }

@@ -148,6 +148,9 @@ $router->add('/{router}', [
     if ($uri == '/tags') {
         return false;
     }
+    if ($uri == '/users') {
+        return false;
+    }
     return true;
 });
 

@@ -3267,7 +3267,7 @@ form .save-post{
     width: 25px;
     display: inline-block;
 }
-.settings, .navbar-nav{
+.nav-users .settings, .navbar-nav{
     display: block;
     background: #FFF none repeat scroll 0% 0%;
     border: 1px solid rgba(0, 0, 0, 0.2);

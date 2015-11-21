@@ -424,7 +424,7 @@ class ControllerBase extends Controller
                 [
                     'builder'  => $builder,
                     'limit'     => $this->perPage,
-                    'page'      => $page
+                    'page'      => $numberPage
                 ]
             );
         } else {

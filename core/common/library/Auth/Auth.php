@@ -271,6 +271,14 @@ class Auth extends Component
         }
         return false;
     }
+    public function isModerator()
+    {
+        $identity = $this->session->get('auth');
+        if ($identity['moderator'] == 'Y') {
+            return true;
+        }
+        return false;
+    }
      /**
      * Checking user is have permission admin
      *

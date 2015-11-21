@@ -1,3 +1,6 @@
+{% if paginator is defined %}
+    {% set totalPages = paginator.total_pages, currentPage = paginator.current %}
+{% endif %}
 {% if totalPages > 1 %}
     {% set startIndex = 1, paginatorUri = this.router.getRewriteUri() == '/' ? 'posts' : this.router.getRewriteUri() %} <!-- start index 1..5 -->
     {% if totalPages > 5 %}

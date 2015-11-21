@@ -15,6 +15,7 @@ namespace Phanbook\Utils;
 use Phanbook\Models\Tags;
 use Phanbook\Models\PostsTags;
 use Phanbook\Models\Posts;
+use Phanbook\Models\Users;
 use Phanbook\Tools\ZFunction;
 use Phalcon\Config\Adapter\Php as AdapterPhp;
 
@@ -177,5 +178,9 @@ class Phanbook
             }
             return true;
         }
+    }
+    public function getUserById($id)
+    {
+        return Users::findFirstById($id);
     }
 }

@@ -51,6 +51,7 @@
     <div class="nav-users">
         <ul class="settings">
             <li><span class="img-setting"></span>{{ link_to('users/profile' ,t('Profile'))}}</li>
+            <li><span class="img-setting"></span>{{ link_to('users/settings' ,t('Settings'))}}</li>
             <li><span class="img-changpass"></span>{{ link_to('users/changepassword', t('Change Password'))}}</li>
             <li><span class="img-link"></span>{{ link_to('//en.gravatar.com' ,t('Change your avatar at Gravatar') ,false)}}</li>
             <li><span class="img-bookmark"></span>{{ link_to('bookmark' ,t('Bookmarks'))}}</li>
