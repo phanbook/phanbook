@@ -103,7 +103,8 @@ class Blameable extends Behavior implements BehaviorInterface
                     $auditDetail->setId($random->uuid());
                     $auditDetail->setFieldName($field);
                     $auditDetail->setOldValue(null);
-                    $auditDetail->setNewValue($model->readAttribute($field));
+                    $newValue = $model->readAttribute($field) ? : 'empty';
+                    $auditDetail->setNewValue($newValue);
 
                     $details[] = $auditDetail;
                 }
@@ -141,7 +142,8 @@ class Blameable extends Behavior implements BehaviorInterface
                 $auditDetail->setId($random->uuid());
                 $auditDetail->setFieldName($field);
                 $auditDetail->setOldValue($originalData[$field]);
-                $auditDetail->setNewValue($model->readAttribute($field));
+                $newValue = $model->readAttribute($field) ? : 'empty';
+                $auditDetail->setNewValue($newValue);
 
                 $details[] = $auditDetail;
             }
