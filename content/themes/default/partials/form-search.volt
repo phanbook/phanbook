@@ -21,17 +21,18 @@
     <a class="icon-search icon" href="#">
         <span class="hidden-text dno">Search</span>
     </a>
-    {% set tabs = ['hot', 'week', 'month', 'unanswered', 'featured', 'interesting', 'hackernew/submit']%}
+    {% set tabs = ['hot', 'week', 'month', 'unanswered', 'featured', 'interesting']%}
     <div class="sorter">show
         <form method="get" action="/" id="tab-selector">
             <select class="submit-on-change" name="tab">
                 {% for value in tabs %}
                     {% if value == currentOrder %}
-                        <option selected="" value="{{value}}">{{value}}</option>
+                        <option selected="" value="posts?tab={{value}}">{{value}}</option>
                     {% else %}
-                        <option value="{{value}}">{{value}}</option>
+                        <option value="posts?tab={{value}}">{{value}}</option>
                     {% endif %}
                 {% endfor %}
+                <option value="posts/new">Ask questions</option>
             </select>
         </form>
     </div>

@@ -40,6 +40,7 @@ class UsersController extends ControllerBase
             return $this->indexRedirect();
         }
         $tab = $this->request->getQuery('tab', 'string');
+        $where  = '';
         if ($tab == "answers") {
             $join = [
                 'type'  => 'join',
@@ -49,27 +50,17 @@ class UsersController extends ControllerBase
 
             ];
             list($itemBuilder, $totalBuilder) =
-                ModelBase::prepareQueriesPosts($join, false, self::POSTS_IN_PAGE);
+                ModelBase::prepareQueriesPosts($join, $where, $this->perPage);
                 $itemBuilder->groupBy(array('p.id'));
         } else {
             list($itemBuilder, $totalBuilder) =
-                ModelBase::prepareQueriesPosts('', false, self::POSTS_IN_PAGE);
+                ModelBase::prepareQueriesPosts('', $where, $this->perPage);
         }
         $params =[];
         switch ($tab) {
             case 'questions':
                 $this->tag->setTitle('Questions');
                 $questionConditions = 'p.type = "questions"';
-                $itemBuilder->where($questionConditions);
-                break;
-            case 'tips':
-                $this->tag->setTitle('Tips');
-                $questionConditions = 'p.type = "tips"';
-                $itemBuilder->where($questionConditions);
-                break;
-            case 'hackernews':
-                $this->tag->setTitle('Hackernews');
-                $questionConditions = 'p.type = "hackernews"';
                 $itemBuilder->where($questionConditions);
                 break;
             case 'answers':
@@ -79,7 +70,7 @@ class UsersController extends ControllerBase
                 //$totalBuilder->where($answersConditions);
                 break;
             default:
-                $this->tag->setTitle('All Questions and Tips');
+                $this->tag->setTitle('All Questions');
                 break;
         }
         $conditions = 'p.deleted = 0 and p.usersId = ?0';
@@ -95,28 +86,19 @@ class UsersController extends ControllerBase
             'usersId = ?0',
             'bind' => [$user->getId()],
         ];
-        $paramTips = [
-            'usersId = ?0 and type = "tips" and deleted = 0',
-            'bind' => [$user->getId()]
-        ];
+
         $paramQuestions = [
             'usersId = ?0 and type = "questions" and deleted = 0',
             'bind' => [$user->getId()]
         ];
-        $paramHackernews = [
-            'usersId = ?0 and type = "hackernews" and deleted = 0',
-            'bind' => [$user->getId()]
-        ];
+
         $this->view->setVars(
             [
                 'user'              => $user,
                 'posts'             => $itemBuilder->getQuery()->execute($params),
-                'totalTips'         => Posts::count($paramTips),
                 'totalQuestions'    => Posts::count($paramQuestions),
-                'totalHackernews'   => Posts::count($paramHackernews),
                 'totalReply'        => PostsReply::find($parametersNumberReply)->count(),
-                'currentOrder'      => $tab
-
+                'tab'               => $tab
             ]
         );
     }

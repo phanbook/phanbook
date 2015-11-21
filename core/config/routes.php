@@ -151,6 +151,9 @@ $router->add('/{router}', [
     if ($uri == '/users') {
         return false;
     }
+    if ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
+        return false;
+    }
     return true;
 });
 
@@ -158,4 +161,11 @@ $router->add('/tags/{id:[0-9]+}/{slug}', [
     'controller' => 'tags',
     'action' => 'postByTag'
 ]);
+$router->add(
+    '/@{username:[a-zA-Z0-9]+}',
+    [
+        'controller' => 'users',
+        'action'     => 'detail'
+    ]
+);
 return $router;

@@ -1,4 +1,4 @@
-{%- if posts|length -%}
+{% if posts|length %}
 <div id="main-content">
     <div id="questions">
         {%- for post in posts -%}
@@ -65,8 +65,8 @@
     </div>
     {{ partial('partials/pagination')}}
 </div>
-{%- else -%}
+{% else %}
 <div class="container">
     <div class="alert alert-info">There are no posts here</div>
 </div>
-{%- endif -%}
+{% endif %}

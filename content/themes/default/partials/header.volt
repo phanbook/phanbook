@@ -24,23 +24,28 @@
 <div>
 <div id="menus" class="nav">
     <ul>
-        {% set menus = [
-            'Questions'     : 'questions',
-            'Ask Question'  : 'questions/new',
-            'Articles'      : 'blog',
-            'Hot'           : 'questions?tab=hot',
-            'Unanswered'    : 'questions?tab=unanswered',
-            'Badges'        : 'badges',
-            'Users'         : 'users',
-            'Tags'          : 'tags'
-        ] %}
-        {% for value, key in menus %}
+        {% set menu1 = ['Questions' : 'questions', 'Hot' : 'hot',
+            'Unanswered' : 'unanswered',
+            'My questions': 'my', 'My answers': 'answers'
+        ]%}
+        {% set menu2 = ['Users' : 'users', 'Tags' : 'tags', 'Badges' : 'badges'] %}
+        {% for value, key in menu1 %}
+            {% if (key == 'my' or key == 'answers') and !this.auth.getAuth() %}
+                {% continue %}
+            {% endif %}
             {% if key == tab %}
                 <li class="current">
-            {% set tabselected = tab %}
             {% else %}
                 <li>
-            {% set tabselected = '' %}
+          {% endif %}
+          {{ link_to('questions?tab=' ~ key, t(value) ,'title' : value) }}</li>
+        {% endfor %}
+        {##}
+        {% for value, key in menu2 %}
+            {% if key == tab %}
+                <li class="current">
+            {% else %}
+                <li>
           {% endif %}
           {{ link_to(key, t(value) ,'title' : value) }}</li>
         {% endfor %}

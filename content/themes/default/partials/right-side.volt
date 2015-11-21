@@ -9,7 +9,7 @@
     <div class="spacer">
         <div class="sidebox submit submit-link">
             <div class="morelink" data-descr="Please remember to read the rules. Thank you!">
-                <a target="_top" class="login-required" href="/hackernew/submit">{{t('Submit a new link')}}</a>
+                <a target="_top" class="login-required" href="/posts/new">{{t('Submit a question')}}</a>
             </div>
         </div>
     </div>
