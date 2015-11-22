@@ -48,7 +48,7 @@
         {% block content %}{% endblock %}
     </section>
     {{partial('partials/footer')}}
-    {{ javascript_include('//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js', false)}}
+    {{ javascript_include('core/assets/js/jquery.js')}}
     {{ javascript_include('core/assets/js/wysiwyg/converter.js')}}
     {{ javascript_include('core/assets/js/wysiwyg/sanitizer.js')}}
     {{ javascript_include('core/assets/js/wysiwyg/editor.js')}}

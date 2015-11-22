@@ -1,7 +1,7 @@
 {% if posts|length %}
 <div id="main-content">
     <div id="questions">
-        {%- for post in posts -%}
+        {% for post in posts %}
             {% set vote = post.getVotes(post.getId(), 'posts'), score = vote['positive'] - vote['negative'] %}
             <div id="question-summary-{{post.getId()}}" class="question-summary narrow">
                 {# Dispaly mobile#}
@@ -27,7 +27,7 @@
                     {{ link_to(postLink, 'class' : 'question-hyperlink', post.getTitle())}}
                     <div class="tags">
                         {% for tag in post.tag %}
-                            {{link_to('tags/' ~ tag.getId() ~ '/' ~ tag.getSlug(),'class':'post-tag', tag.getSlug())}}
+                            {{link_to('tags/' ~ tag.getId() ~ '/' ~ tag.getSlug(),'class':'post-tag', tag.getName())}}
                             &nbsp;
                         {% endfor %}
                     </div>
@@ -53,20 +53,19 @@
                         {%- endif -%}
                         <a class="author" href="/@{{post.user.getUsername()}}">
                             {{ post.user.getInforUser() }}
-                            <span title="reputation" class="reputation-score">{{ post.user.getHumanKarma() }}</span>
+                            <span title="reputation" class="reputation-score">
+                                {{ post.user.getHumanKarma() }}
+                            </span>
                         </a>
-                        {% if post.getType() == 'questions'%}
-                            <a href="">[question]</a>
-                        {% endif %}
                     </div>
                 </div>
             </div>
-        {%- endfor -%}
+        {% endfor %}
     </div>
     {{ partial('partials/pagination')}}
 </div>
 {% else %}
 <div class="container">
-    <div class="alert alert-info">There are no posts here</div>
+    <p class="alert alert-info">There are no posts here</p>
 </div>
 {% endif %}
