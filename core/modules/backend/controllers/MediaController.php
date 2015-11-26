@@ -13,14 +13,21 @@
  */
 namespace Phanbook\Backend\Controllers;
 
+use Phanbook\Backend\Forms\MediaForm;
+
 /**
- * Class SettingsController
+ * Class MediaController
  * @package Phanbook\Backend\Controller
  */
 class MediaController extends ControllerBase
 {
     public function indexAction()
     {
-        $this->tag->setTitle(t('Media Library'));
+        $this->view->title = $this->constants->MEDIA_TITLE();
+        $this->view->form = new MediaForm();
+    }
+    public function settingAction()
+    {
+
     }
 }

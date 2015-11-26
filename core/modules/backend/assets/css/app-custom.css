@@ -151,5 +151,13 @@ input[type="search"]:focus{
     text-indent: 0;
     width: 20px;
 }
-
+.media-tools{
+    padding: 0 0 8px 15px;
+}
+.media-tool{
+    cursor: pointer;
+}
+.btn-mini {
+    height: 30px;
+}
 
