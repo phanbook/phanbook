@@ -19,7 +19,8 @@
         "league/oauth2-client": "0.10.*@dev",
         "league/fractal": "0.7.*",
         "elasticsearch/elasticsearch": "~1.0",
-        "google/apiclient": "1.0.*@beta"
+        "google/apiclient": "1.0.*@beta",
+        "league/flysystem": "^1.1@dev"
 
     }
 }

@@ -80,6 +80,19 @@ return new \Phalcon\Config(
                 ]
             ],
             [
+                'code' => 'media',
+                'name' => 'Media',
+                'icon'  =>  'fa fa-indent',
+                'sub'  => [
+                    [
+                        'code' => 'upload',
+                        'name' => 'Upload',
+                        'icon'  =>  'fa fa-upload',
+                        'sub' => []
+                    ]
+                ]
+            ],
+            [
                 'code' => 'themes',
                 'name' => 'Appearance',
                 'icon'  =>  'fa fa-edit',
