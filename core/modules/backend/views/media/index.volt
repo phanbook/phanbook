@@ -1,5 +1,5 @@
 {% extends 'layouts/layout.volt' %}
-{% block title %}{{title}}{% endblock %}
+{% block title %}{{this.constants.mediaTitle()}}{% endblock %}
 {% block content %}
     <section class="panel panel-default">
         <div class="row">
@@ -18,7 +18,7 @@
                                     {{form.render("mediaType")}}
                                 </div>
                                 <div class="form-group pull-right">
-                                    {{ link_to( '', '<i class="fa fa-upload" style="font-size:12px;"></i> ' ~ this.constants.mediaUpload(), 'class' : 'btn btn-sm btn-primary ') }}
+                                    {{ link_to( 'media/upload', '<i class="fa fa-upload" style="font-size:12px;"></i> ' ~ this.constants.mediaUpload(), 'class' : 'btn btn-sm btn-primary ') }}
                                 </div>
                                 <div class="form-group pull-right" style="margin-right: 10px;">
                                     {{form.render("search")}}

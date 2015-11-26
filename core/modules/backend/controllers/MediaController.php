@@ -23,11 +23,16 @@ class MediaController extends ControllerBase
 {
     public function indexAction()
     {
-        $this->view->title = $this->constants->mediaTitle();
         $this->view->form = new MediaForm();
     }
     public function settingAction()
     {
+
+    }
+    public function uploadAction()
+    {
+        $this->assets->addCss('assets/css/dropzone.css');
+        $this->assets->addJs('assets/js/dropzone.js');
 
     }
 }
