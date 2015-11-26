@@ -12,20 +12,33 @@
  */
 namespace Phanbook\Utils;
 
-class Constants {
+class Constants
+{
     /**
      * For global
      */
-    public  function SEARCH_PLACEHOLDER(){ return t("Search something"); }
+    public function searchPlaceHolder()
+    {
+        return t("Search something");
+    }
 
     /**
      * For global error
      */
-    public  function CSRF_ERROR(){ return t("Media Library"); }
+    public function csrfError()
+    {
+        return t("CSRF validation failed");
+    }
 
     /**
      *  For media feature
      */
-    public  function MEDIA_TITLE(){ return t("Media Library"); }
-    public  function MEDIA_UPLOAD(){ return t("Upload"); }
+    public function mediaTitle()
+    {
+        return t("Media Library");
+    }
+    public function mediaUpload()
+    {
+        return t("Upload");
+    }
 }

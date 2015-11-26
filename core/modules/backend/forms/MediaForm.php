@@ -34,7 +34,7 @@ class MediaForm extends Form
             new Identical(
                 [
                     'value'  => $this->security->getSessionToken(),
-                    'message'=> $this->constants->CSRF_ERROR()
+                    'message'=> $this->constants->csrfError()
                 ]
             )
         );
@@ -42,7 +42,7 @@ class MediaForm extends Form
         $totalMedia = MediaType::sum(["column" => "amount"]);
         $mediaType = new Select(
             "mediaType",
-            MediaType::find( [ 'columns'=> array('id', " CONCAT(name, ' (', amount, ')') as type_amount") ]),
+            MediaType::find([ 'columns'=> array('id', " CONCAT(name, ' (', amount, ')') as type_amount") ]),
             [
                 'using' => [
                         'id',
@@ -61,7 +61,7 @@ class MediaForm extends Form
         $search = new Text(
             'search',
             [
-                'placeholder' => $this->constants->SEARCH_PLACEHOLDER(),
+                'placeholder' => $this->constants->searchPlaceHolder(),
                 'class'       => 'form-control btn-mini',
                 'required'    => false
             ]

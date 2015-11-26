@@ -18,7 +18,7 @@
                                     {{form.render("mediaType")}}
                                 </div>
                                 <div class="form-group pull-right">
-                                    {{ link_to( '', '<i class="fa fa-upload" style="font-size:12px;"></i> ' ~ this.constants.MEDIA_UPLOAD(), 'class' : 'btn btn-sm btn-primary ') }}
+                                    {{ link_to( '', '<i class="fa fa-upload" style="font-size:12px;"></i> ' ~ this.constants.mediaUpload(), 'class' : 'btn btn-sm btn-primary ') }}
                                 </div>
                                 <div class="form-group pull-right" style="margin-right: 10px;">
                                     {{form.render("search")}}

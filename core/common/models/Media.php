@@ -208,5 +208,4 @@ class Media extends ModelBase
             'filename' => 'filename'
         );
     }
-
 }

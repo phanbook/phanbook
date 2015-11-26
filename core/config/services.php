@@ -143,7 +143,8 @@ $di->setShared(
 );
 
 $di->setShared(
-    'constants', new Constants()
+    'constants',
+    new Constants()
 );
 
 // Set the views cache service

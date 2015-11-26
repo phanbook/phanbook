@@ -23,7 +23,7 @@ class MediaController extends ControllerBase
 {
     public function indexAction()
     {
-        $this->view->title = $this->constants->MEDIA_TITLE();
+        $this->view->title = $this->constants->mediaTitle();
         $this->view->form = new MediaForm();
     }
     public function settingAction()
