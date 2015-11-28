@@ -140,7 +140,7 @@ class UsersController extends ControllerBase
 
         ];
         //Create a Model paginator
-        $data = $this->paginator($sql, $page);
+        $data = $this->paginator($sql);
         $this->view->setVars(
             [
                 'paginator' => $data->getPaginate(),
