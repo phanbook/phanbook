@@ -134,7 +134,6 @@ class UsersController extends ControllerBase
     public function indexAction()
     {
 
-        $page  = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $sql = [
             'model' => 'Phanbook\Models\Users',
             'joins' => []

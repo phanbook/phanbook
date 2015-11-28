@@ -50,7 +50,10 @@ class PostsController extends ControllerBase
     {
         /* @var \Phalcon\Mvc\Model\Query\BuilderInterface $itemBuilder */
         /* @var \Phalcon\Mvc\Model\Query\BuilderInterface $totalBuilder */
-        $tab = $this->request->getQuery('tab');
+        $tab     = $this->request->getQuery('tab');
+        $page    = isset($_GET['page']) ? (int)$_GET['page'] : $this->numberPage;
+        $perPage = isset($_GET['perPage']) ? (int)$_GET['perPage'] : $this->perPage;
+
         if ($tab == "answers") {
             $join = [
                 'type'  => 'join',
@@ -60,11 +63,11 @@ class PostsController extends ControllerBase
 
             ];
             list($itemBuilder, $totalBuilder) =
-                ModelBase::prepareQueriesPosts($join, false, $this->perPage);
+                ModelBase::prepareQueriesPosts($join, false, $perPage);
             $itemBuilder->groupBy(array('p.id'));
         } else {
             list($itemBuilder, $totalBuilder) =
-                ModelBase::prepareQueriesPosts('', false, $this->perPage);
+                ModelBase::prepareQueriesPosts('', false, $perPage);
         }
         $userId = $this->auth->getAuth();
 
@@ -131,10 +134,9 @@ class PostsController extends ControllerBase
         if (!$tab) {
             $tab = 'hot';
         }
-        $page       = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $totalPosts = $totalBuilder->getQuery()->setUniqueRow(true)->execute($params);
-        $totalPages = ceil($totalPosts->count / $this->perPage);
-        $offset     = ($page - 1) * $this->perPage + 1;
+        $totalPages = ceil($totalPosts->count / $perPage);
+        $offset     = ($page - 1) * $perPage + 1;
         if ($page > 1) {
             $itemBuilder->offset($offset);
         }

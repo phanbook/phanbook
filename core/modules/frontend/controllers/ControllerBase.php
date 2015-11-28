@@ -411,28 +411,28 @@ class ControllerBase extends Controller
      * Create a paginator default use adapter PaginatorQueryBuilder,
      * show 30 rows by page starting from $page
      *
-     * @param  int   $page  Current page to show
      * @return array the conatainer object...
      */
-    public function paginator($query, $page, $adapter = null)
+    public function paginator($query, $adapter = null)
     {
-        $builder        = ModelBase::modelQuery($query);
-        $numberPage     = isset($page) ? $page : $this->numberPage;
+        $page  = isset($_GET['page']) ? (int)$_GET['page'] : $this->numberPage;
+        $perPage  = isset($_GET['perPage']) ? (int)$_GET['perPage'] : $this->perPage;
+        $builder  = ModelBase::modelQuery($query);
 
         if (is_null($adapter)) {
             $paginator  = new PaginatorQueryBuilder(
                 [
                     'builder'  => $builder,
-                    'limit'     => $this->perPage,
-                    'page'      => $numberPage
+                    'limit'     => $perPage,
+                    'page'      => $page
                 ]
             );
         } else {
             $paginator = new PaginatorNativeArray(
                 [
                     'data'  => $builder->getQuery()->execute()->toArray(),
-                    'limit' => $this->perPage,
-                    'page'  => $numberPage
+                    'limit' => $perPage,
+                    'page'  => $page
                 ]
             );
         }
