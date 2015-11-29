@@ -134,14 +134,13 @@ class UsersController extends ControllerBase
     public function indexAction()
     {
 
-        $page  = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $sql = [
             'model' => 'Phanbook\Models\Users',
             'joins' => []
 
         ];
         //Create a Model paginator
-        $data = $this->paginator($sql, $page);
+        $data = $this->paginator($sql);
         $this->view->setVars(
             [
                 'paginator' => $data->getPaginate(),
