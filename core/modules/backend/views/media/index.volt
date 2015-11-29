@@ -4,7 +4,7 @@
     <section class="panel panel-default">
         <div class="row">
             <div class="col-lg-12 animated fadeInDown">
-                <div class="hpanel">
+                <div class="hpanel upload-tools-border">
                     <div class="panel-heading">
                         <div class="media-tools">
                             {{ form('media/setting', 'method': 'post', 'class':'form-inline') }}
@@ -29,6 +29,13 @@
                 </div>
             </div>
         </div>
+        <div id="media-body" class="panel-body">
         {{ partial('media/grid') }}
+        {% if files|length < 1 %}
+            <div class="form-group text-center media-message">
+                {{this.constants.mediaNotFound()}}
+            </div>
+        {% endif %}
+        </div>
     </section>
     {% endblock %}

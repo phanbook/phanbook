@@ -12,6 +12,9 @@
  */
 namespace Phanbook\Models;
 
+use Phanbook\Media\MediaFiles;
+use Phanbook\Utils\Constants;
+
 class Media extends ModelBase
 {
 
@@ -46,11 +49,34 @@ class Media extends ModelBase
     protected $filename;
 
     /**
+     * store error
+     * @var list
+     */
+    protected $error;
+
+    /**
+     * [Object of flysystem, manager files]
+     * @var [flysystem]
+     */
+    protected $fileSystem;
+
+    /**
+     * Constructer
+     */
+    protected $constants;
+    public function initialize() {
+        $this->error = [];
+        $this->fileSystem = new MediaFiles();
+        $this->constants = new Constants();
+    }
+
+    /**
      * Method to set the value of field id
      *
      * @param integer $id
      * @return $this
      */
+
     public function setId($id)
     {
         $this->id = $id;
@@ -207,5 +233,35 @@ class Media extends ModelBase
             'createdAt' => 'createdAt',
             'filename' => 'filename'
         );
+    }
+
+    public function getError() {
+        return $this->error;
+    }
+
+    /**
+     * Input file for media
+     * @param File Object $fileObj File upload by user
+     * @return boolean           true if all ok. Otherwise, false
+     */
+    public function initFile($fileObj)
+    {
+        $fileExt = $fileObj->getExtension();
+        $filesAccept =  $this->constants->mediaAcceptFilesExt();
+        if (! in_array($fileExt, $filesAccept)) {
+            $this->error[] = $this->constants->mediaFileNotAccept();
+            return false;
+        }
+        $userName = $this->auth->getUsername();
+        $year = date("Y");
+        $month = date("M");
+        $fileName = $fileObj->getName();
+        $serverPath = $userName. "/". $year. "/". $month. "/". $fileName;
+        $localPath = "/tmp/". $fileObj->getTempName();
+        if ($this->fileSystem->uploadFile($localPath, $serverPath)) {
+            return true;
+        }
+        $this->error[] = $this->constants->mediaUploadError();
+        return false;
     }
 }

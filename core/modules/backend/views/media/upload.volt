@@ -10,5 +10,6 @@
 {% block scripts %}
     <script type="text/javascript">
         Dropzone.options.addRemoveLinks = true;
+        Dropzone.options.acceptedFiles = "{{acceptExt}}";
     </script>
 {% endblock %}

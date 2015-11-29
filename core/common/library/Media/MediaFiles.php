@@ -18,11 +18,24 @@ use League\Flysystem\Adapter\Local as Adapter;
 /**
 *
 */
-class Media
+class MediaFiles
 {
     private $fileSystem;
+
     function __construct()
     {
         $this->fileSystem = new Filesystem(new Adapter(ROOT_DIR. 'content/uploads/'));
+    }
+
+    /**
+     * Upload file to content/uploads
+     * @param  string $localPath  upload path (/tmp/xxx)
+     * @param  string $serverPath path to upload
+     * @return boolean
+     */
+    function uploadFile($localPath, $serverPath) {
+        $status = $this->fileSystem->copy($localPath, $serverPath);
+        $this->fileSystem->delete($localPath);
+        return $status;
     }
 }

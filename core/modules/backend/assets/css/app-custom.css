@@ -163,10 +163,22 @@ input[type="search"]:focus{
 #form-upload{
     border: 4px dashed #b4b9be;
     min-height: 200px;
-    font-size: 15pt;
+    font-size: 14pt;
 }
 .btn-right {
     right: 0;
     left: auto !important;
     top: 0;
 }
+.upload-tools-border {
+    border-bottom: 1px solid rgb(224, 228, 231);
+}
+#media-body {
+    min-height: 200px;
+}
+.media-message {
+    vertical-align: middle;
+    margin-top:50px;
+    font-size: 14pt;
+}
+
