@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 28, 2015 at 10:21 AM
+-- Generation Time: Nov 30, 2015 at 08:23 AM
 -- Server version: 5.5.44-MariaDB
 -- PHP Version: 5.6.14
 
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `auditDetail` (
   `auditId` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `fieldName` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `oldValue` text CHARACTER SET utf8 COLLATE utf8_unicode_ci,
-  `newValue` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
+  `newValue` text CHARACTER SET utf8 COLLATE utf8_unicode_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -146,6 +146,43 @@ INSERT INTO `failedLogins` (`id`, `usersId`, `ipAddress`, `attempted`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `media`
+--
+
+CREATE TABLE IF NOT EXISTS `media` (
+  `id` int(11) NOT NULL,
+  `username` varchar(72) NOT NULL,
+  `type` int(11) NOT NULL,
+  `createdAt` int(15) NOT NULL,
+  `filename` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `mediaType`
+--
+
+CREATE TABLE IF NOT EXISTS `mediaType` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `amount` int(11) NOT NULL,
+  `note` varchar(100) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `mediaType`
+--
+
+INSERT INTO `mediaType` (`id`, `name`, `amount`, `note`) VALUES
+(1, 'Images', 0, ''),
+(2, 'Videos', 0, ''),
+(3, 'Audios', 0, ''),
+(4, 'PDFs', 0, '');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `notifications`
 --
 
@@ -197,6 +234,7 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `link` varchar(250) DEFAULT NULL COMMENT 'Add url website hackernew',
   `slug` varchar(64) NOT NULL,
   `content` text,
+  `excerpt` text,
   `numberViews` int(5) unsigned NOT NULL,
   `numberReply` int(3) unsigned NOT NULL,
   `sticked` char(1) DEFAULT 'N',
@@ -213,8 +251,8 @@ CREATE TABLE IF NOT EXISTS `posts` (
 -- Dumping data for table `posts`
 --
 
-INSERT INTO `posts` (`id`, `usersId`, `type`, `title`, `link`, `slug`, `content`, `numberViews`, `numberReply`, `sticked`, `createdAt`, `modifiedAt`, `editedAt`, `status`, `locked`, `deleted`, `acceptedAnswer`) VALUES
-(1, 1, 'tips', 'Welcome to Phanbook', NULL, 'welcome-to-phanbook', 'Hi, welcome to the Phanbook official . We plan to help  answers your questions,  share articles, tutorials and tips from the community and the anybody developers. All this interesting content will be available soon. We think you’re going to love it. Also we have features implemented:\r\n\r\n##Weekly Digest\r\n\r\nA weekly digest is now sent to all users registered in the forum. This email summarizes the most important posts in the last week. A great resource if you want to learn more about the framework. If you don''t want to receive this weekly e-mail you can update your e-mail preferences.\r\n\r\n##Badges\r\n\r\nBadges are awards that reward users for their contributions, collaboration and participation in the forum. Badges enable the community to collectively identify the best contributors. Check the available badges here.\r\n\r\n##Notifications\r\n\r\nAll activity that occurs in the posts where you have been participated is now centralized in the notifications. You can see them anytime here. Improved search system\r\n\r\n##Subscription to Posts\r\n\r\nNow you can subscribe to a post, by doing this you''ll receive e-mail notifications on topics you''re waiting answers without having to participate/comment.\r\n\r\n##Light Theme\r\n\r\nNow you can change the standard Dark theme used for code highlighting to a Lighter theme similar to the one used by Github here.\r\n\r\nWe hope you enjoy all these new features. If you want to implement new features or improve something, remember that the forum source code is published on Github.\r\n\r\nThanks!', 0, 0, 'Y', 1438511582, 1438511582, NULL, 'A', 'N', 0, 'N');
+INSERT INTO `posts` (`id`, `usersId`, `type`, `title`, `link`, `slug`, `content`, `excerpt`, `numberViews`, `numberReply`, `sticked`, `createdAt`, `modifiedAt`, `editedAt`, `status`, `locked`, `deleted`, `acceptedAnswer`) VALUES
+(1, 1, 'blog', 'Welcome to Phanbook', NULL, 'welcome-to-phanbook', 'Hi, welcome to the Phanbook official . We plan to help  answers your questions,  share articles, tutorials and tips from the community and the anybody developers. All this interesting content will be available soon. We think you’re going to love it. Also we have features implemented:\r\n\r\n##Weekly Digest\r\n\r\nA weekly digest is now sent to all users registered in the forum. This email summarizes the most important posts in the last week. A great resource if you want to learn more about the framework. If you don''t want to receive this weekly e-mail you can update your e-mail preferences.\r\n\r\n##Badges\r\n\r\nBadges are awards that reward users for their contributions, collaboration and participation in the forum. Badges enable the community to collectively identify the best contributors. Check the available badges here.\r\n\r\n##Notifications\r\n\r\nAll activity that occurs in the posts where you have been participated is now centralized in the notifications. You can see them anytime here. Improved search system\r\n\r\n##Subscription to Posts\r\n\r\nNow you can subscribe to a post, by doing this you''ll receive e-mail notifications on topics you''re waiting answers without having to participate/comment.\r\n\r\n##Light Theme\r\n\r\nNow you can change the standard Dark theme used for code highlighting to a Lighter theme similar to the one used by Github here.\r\n\r\nWe hope you enjoy all these new features. If you want to implement new features or improve something, remember that the forum source code is published on Github.\r\n\r\nThanks!', NULL, 0, 0, 'Y', 1438511582, 1438511582, NULL, 'A', 'N', 0, 'N');
 
 -- --------------------------------------------------------
 
@@ -689,6 +727,18 @@ ALTER TABLE `comment`
   ADD KEY `idUser` (`userId`);
 
 --
+-- Indexes for table `media`
+--
+ALTER TABLE `media`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `mediaType`
+--
+ALTER TABLE `mediaType`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `notifications`
 --
 ALTER TABLE `notifications`
@@ -875,6 +925,16 @@ ALTER TABLE `categories`
 ALTER TABLE `comment`
   MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT;
 --
+-- AUTO_INCREMENT for table `media`
+--
+ALTER TABLE `media`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `mediaType`
+--
+ALTER TABLE `mediaType`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+--
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
@@ -982,4 +1042,3 @@ ALTER TABLE `vote`
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-ALTER TABLE `posts` ADD `excerpt` TEXT NULL AFTER `content`;
