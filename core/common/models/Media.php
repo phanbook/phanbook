@@ -64,7 +64,8 @@ class Media extends ModelBase
      * Constructer
      */
     protected $constants;
-    public function initialize() {
+    public function initialize()
+    {
         $this->error = [];
         $this->fileSystem = new MediaFiles();
         $this->constants = new Constants();
@@ -235,7 +236,8 @@ class Media extends ModelBase
         );
     }
 
-    public function getError() {
+    public function getError()
+    {
         return $this->error;
     }
 

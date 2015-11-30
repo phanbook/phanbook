@@ -22,7 +22,7 @@ class MediaFiles
 {
     private $fileSystem;
 
-    function __construct()
+    public function __construct()
     {
         $this->fileSystem = new Filesystem(new Adapter(ROOT_DIR. 'content/uploads/'));
     }
@@ -33,7 +33,8 @@ class MediaFiles
      * @param  string $serverPath path to upload
      * @return boolean
      */
-    function uploadFile($localPath, $serverPath) {
+    public function uploadFile($localPath, $serverPath)
+    {
         $status = $this->fileSystem->copy($localPath, $serverPath);
         $this->fileSystem->delete($localPath);
         return $status;

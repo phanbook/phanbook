@@ -56,7 +56,7 @@ class MediaController extends ControllerBase
         } else {
             $this->assets->addCss('/core/assets/css/dropzone.css', false);
             $this->assets->addJs('/core/assets/js/dropzone.js', false);
-            $this->view->acceptExt = implode(",",$this->constants->mediaAcceptFilesExt());
+            $this->view->acceptExt = implode(",", $this->constants->mediaAcceptFilesExt());
         }
     }
 }
