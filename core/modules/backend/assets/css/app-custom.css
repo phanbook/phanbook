@@ -151,5 +151,34 @@ input[type="search"]:focus{
     text-indent: 0;
     width: 20px;
 }
-
+.media-tools{
+    padding: 0 0 8px 15px;
+}
+.media-tool{
+    cursor: pointer;
+}
+.btn-mini {
+    height: 30px;
+}
+#form-upload{
+    border: 4px dashed #b4b9be;
+    min-height: 200px;
+    font-size: 14pt;
+}
+.btn-right {
+    right: 0;
+    left: auto !important;
+    top: 0;
+}
+.upload-tools-border {
+    border-bottom: 1px solid rgb(224, 228, 231);
+}
+#media-body {
+    min-height: 200px;
+}
+.media-message {
+    vertical-align: middle;
+    margin-top:50px;
+    font-size: 14pt;
+}
 

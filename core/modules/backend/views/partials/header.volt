@@ -7,7 +7,7 @@
             <img src="{{getImageSrc('logo_backend.png')}}" class="m-r-sm" alt="scale">
         </a>
         {{link_to()}}
-        <a class="btn btn-link visible-xs" data-toggle="dropdown" data-target=".user">
+        <a class="btn btn-link visible-xs btn-right" data-toggle="dropdown" data-target=".user">
             <i class="fa fa-cog"></i>
         </a>
     </div>

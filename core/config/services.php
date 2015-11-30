@@ -34,6 +34,7 @@ use Phalcon\Mvc\View\Engine\Volt;
 use Phalcon\Queue\Beanstalk;
 use Phalcon\Config\Adapter\Php        as AdapterPhp;
 
+use Phanbook\Utils\Constants;
 use Phanbook\Mail\Mail;
 use Phanbook\Auth\Auth;
 use Phanbook\Utils\Phanbook;
@@ -139,6 +140,11 @@ $di->setShared(
 
         return $modelsManager;
     }
+);
+
+$di->setShared(
+    'constants',
+    new Constants()
 );
 
 // Set the views cache service
