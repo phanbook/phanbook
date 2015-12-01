@@ -4,7 +4,7 @@ web:
     - "80:80"
   volumes:
     - ./:/var/www/html
-    - ./opsfiles/docker/templates/nginx/phanbook.conf:/etc/nginx/sites-enabled/default
+    - ./opsfiles/docker/templates/phanbook.conf:/etc/nginx/sites-enabled/default
   links:
     - php
 php:
