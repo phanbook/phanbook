@@ -39,7 +39,7 @@ return new \Phalcon\Config(
                     'limit'             => 10,
                 ],
             ],
-            'templates'           => 'core/data/templates/',
+            'templatesDir'        => ROOT_DIR . 'content/templates/',
             'repo'                => 'https://github.com/phanbook',
             'timezone'            => 'UTC',
             /**

@@ -1,1 +1,0 @@
-schema/phanbook_prd.sql
