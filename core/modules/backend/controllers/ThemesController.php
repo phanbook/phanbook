@@ -41,16 +41,16 @@ class ThemesController extends ControllerBase
         $themePath = ROOT_DIR . 'content/themes/' . $this->config->theme;
         $tab = $this->request->getQuery('tab');
         switch ($tab) {
-        case 'assets':
-            $this->view->assetsCss  = new \RecursiveDirectoryIterator($themePath . '/assets/css');
-            $this->view->assetsJs   = new \RecursiveDirectoryIterator($themePath . '/assets/js');
+            case 'assets':
+                $this->view->assetsCss  = new \RecursiveDirectoryIterator($themePath . '/assets/css');
+                $this->view->assetsJs   = new \RecursiveDirectoryIterator($themePath . '/assets/js');
 
-            break;
-        case 'partials':
-            $this->view->partialsDir = new \RecursiveDirectoryIterator($themePath . '/partials');
-            break;
-        default:
-            $this->view->directory = new \RecursiveDirectoryIterator($themePath);
+                break;
+            case 'partials':
+                $this->view->partialsDir = new \RecursiveDirectoryIterator($themePath . '/partials');
+                break;
+            default:
+                $this->view->directory = new \RecursiveDirectoryIterator($themePath);
         }
         $this->assets->addJs('/core/assets/js/jquery.redirect.js', false);
     }
@@ -99,7 +99,7 @@ class ThemesController extends ControllerBase
      * @param  string $content this is the code you change
      * @return bool|string
      */
-    public function manageFile($file,$content)
+    public function manageFile($file, $content)
     {
 
         if (!is_writeable($file)) {
