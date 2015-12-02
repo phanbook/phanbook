@@ -6,7 +6,8 @@
                 <img id="site-logo" class="logo-big" src="{{getImageSrc('logo.png')}}" alt="Phanbook Meta">
             </a>
         </div>
-        {% if this.auth.getAuth() %}
+        {% set auth = this.auth.getAuth() %}
+        {% if auth %}
         <div class="icon-right">
             <a class="topbar-icon icon-inbox js-inbox-button" href="#">
                 {% if this.notifications.has()%}
@@ -30,7 +31,7 @@
         ]%}
         {% set menu2 = ['Users' : 'users', 'Tags' : 'tags', 'Badges' : 'badges'] %}
         {% for value, key in menu1 %}
-            {% if (key == 'my' or key == 'answers') and !this.auth.getAuth() %}
+            {% if (key == 'my' or key == 'answers') and !auth %}
                 {% continue %}
             {% endif %}
             {% if key == tab %}
@@ -70,7 +71,7 @@
     <div class="gb-v"></div>
     <div class="notification-real">
         <ul class="navbar-nav">
-            {% for activity in this.notifications.getNotifications(this.auth.getAuth()['id']) %}
+            {% for activity in this.notifications.getNotifications(auth['id']) %}
                 {% set link = 'posts/' ~ activity.post.getId() ~ '/' ~ activity.post.getSlug() %}
                 <li class="{% if activity.getWasRead() == 'N' %}unread{% endif %}">
                     <span>
