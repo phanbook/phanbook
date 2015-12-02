@@ -24,6 +24,11 @@ use Phalcon\Http\Response;
 class MediaController extends ControllerBase
 {
     private $mediaModel;
+    public function onConstruct()
+    {
+        $this->mediaModel = new Media();
+    }
+
     public function indexAction()
     {
         $this->view->form = new MediaForm();
@@ -35,7 +40,7 @@ class MediaController extends ControllerBase
     }
     public function uploadAction()
     {
-        $this->mediaModel = new Media();
+
         if ($this->request->hasFiles() == true) {
             $uploads = $this->request->getUploadedFiles();
             $this->view->disable();
@@ -50,7 +55,7 @@ class MediaController extends ControllerBase
                 $error = implode("\n", $this->mediaModel->getError());
                 $response->setStatusCode(406, $error);
             } else {
-                $response->setStatusCode(200, "Success");
+                $response->setStatusCode(200, $this->constants->successMessage());
             }
             return $response;
         } else {

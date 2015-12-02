@@ -147,6 +147,11 @@ $di->setShared(
     new Constants()
 );
 
+$di->setShared(
+    'auth',
+    new Auth()
+);
+
 // Set the views cache service
 $di->set(
     'viewCache',
@@ -330,12 +335,6 @@ $di->set(
         $dispatcher->setEventsManager($eventsManager);
 
         return $dispatcher;
-    }
-);
-$di->set(
-    'auth',
-    function () {
-        return new Auth();
     }
 );
 //Real-Time notifications checker

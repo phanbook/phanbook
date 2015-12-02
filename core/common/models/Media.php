@@ -64,7 +64,7 @@ class Media extends ModelBase
      * Constructer
      */
     protected $constants;
-    public function initialize()
+    public function onConstruct()
     {
         $this->error = [];
         $this->fileSystem = new MediaFiles();
@@ -248,22 +248,30 @@ class Media extends ModelBase
      */
     public function initFile($fileObj)
     {
-        $fileExt = $fileObj->getExtension();
+        // getExtension() just return name of extension. Not include dot character
+        $fileExt = ".".$fileObj->getExtension();
         $filesAccept =  $this->constants->mediaAcceptFilesExt();
+
+        // Check if file extension's allowed
         if (! in_array($fileExt, $filesAccept)) {
-            $this->error[] = $this->constants->mediaFileNotAccept();
+            $this->error[] = $this->constants->mediaFileNotAccept(). ": ". $fileExt;
             return false;
         }
-        $userName = $this->auth->getUsername();
+
+        // determine directory for this file. <username>/<year>/<month>/<filename>
+        $userName = $this->getDI()->getAuth()->getUsername();
         $year = date("Y");
         $month = date("M");
         $fileName = $fileObj->getName();
         $serverPath = $userName. "/". $year. "/". $month. "/". $fileName;
-        $localPath = "/tmp/". $fileObj->getTempName();
-        if ($this->fileSystem->uploadFile($localPath, $serverPath)) {
+        $localPath = $fileObj->getTempName();
+        if (!file_exists($localPath)) {
+            $this->error[] = $this->constants->mediaTempFileNotFound();
+        } else if ($this->fileSystem->uploadFile($localPath, $serverPath)) {
             return true;
+        } else {
+            $this->error[] = $this->constants->mediaUploadError();
         }
-        $this->error[] = $this->constants->mediaUploadError();
         return false;
     }
 }

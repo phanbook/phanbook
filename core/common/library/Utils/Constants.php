@@ -23,7 +23,16 @@ class Constants
     }
 
     /**
-     * For global error
+     * For global success message
+     * @return String message
+     */
+    public function successMessage()
+    {
+        return t("Success");
+    }
+
+    /**
+     * For global error message
      */
     public function csrfError()
     {
@@ -55,6 +64,10 @@ class Constants
     public function mediaFileNotAccept()
     {
         return t("Can't upload because file type's not allowed");
+    }
+    public function mediaTempFileNotFound()
+    {
+        return t("Can't find temp file for upload");
     }
     public function mediaUploadError()
     {

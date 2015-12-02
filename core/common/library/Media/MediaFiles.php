@@ -12,8 +12,8 @@
  */
 namespace Phanbook\Media;
 
-use League\Flysystem\Filesystem;
-use League\Flysystem\Adapter\Local as Adapter;
+use \League\Flysystem\Filesystem;
+use \League\Flysystem\Adapter\Local as Adapter;
 
 /**
 *
@@ -22,9 +22,9 @@ class MediaFiles
 {
     private $fileSystem;
 
-    public function __construct()
+    public function onConstruct()
     {
-        $this->fileSystem = new Filesystem(new Adapter(ROOT_DIR. 'content/uploads/'));
+
     }
 
     /**
@@ -35,8 +35,10 @@ class MediaFiles
      */
     public function uploadFile($localPath, $serverPath)
     {
-        $status = $this->fileSystem->copy($localPath, $serverPath);
-        $this->fileSystem->delete($localPath);
+        $this->fileSystem = new Filesystem(new Adapter(ROOT_DIR. 'content/uploads/'));
+        $stream = fopen($localPath, 'r+');
+        $status = $this->fileSystem->writeStream($serverPath, $stream);
+        unlink($localPath);
         return $status;
     }
 }
