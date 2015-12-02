@@ -85,6 +85,7 @@ class PagesController extends ControllerBase
 
     /**
      * Create a new post
+     *
      * @todo
      *
      * @return [type] [description]

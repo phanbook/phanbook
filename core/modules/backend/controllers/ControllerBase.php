@@ -41,7 +41,8 @@ class ControllerBase extends Controller
         ['controller' => 'dashboard'],
         ['controller' => 'update'],
         ['controller' => 'tests'],
-        ['controller' => 'media']
+        ['controller' => 'media'],
+        ['controller' => 'themes']
 
     ];
     /**

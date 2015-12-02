@@ -247,7 +247,6 @@ class PostsController extends ControllerBase
             ->addJs('assets/js/tags-suggestion.js')
             ->addJs('assets/js/editor/markdown.js')
             ->addJs('assets/js/editor/md-converts.js')
-            ->addJs('assets/js/editor/editor.js')
-        ;
+            ->addJs('assets/js/editor/editor.js');
     }
 }

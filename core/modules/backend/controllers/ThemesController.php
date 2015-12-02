@@ -31,4 +31,91 @@ class ThemesController extends ControllerBase
 
         return '';
     }
+    /**
+     * List all files of themes
+     *
+     * @return mixed
+     */
+    public function customAction()
+    {
+        $themePath = ROOT_DIR . 'content/themes/' . $this->config->theme;
+        $tab = $this->request->getQuery('tab');
+        switch ($tab) {
+        case 'assets':
+            $this->view->assetsCss  = new \RecursiveDirectoryIterator($themePath . '/assets/css');
+            $this->view->assetsJs   = new \RecursiveDirectoryIterator($themePath . '/assets/js');
+
+            break;
+        case 'partials':
+            $this->view->partialsDir = new \RecursiveDirectoryIterator($themePath . '/partials');
+            break;
+        default:
+            $this->view->directory = new \RecursiveDirectoryIterator($themePath);
+        }
+        $this->assets->addJs('/core/assets/js/jquery.redirect.js', false);
+    }
+    /**
+     * Edit items of themes
+     *
+     * @return mixed
+     */
+    public function editAction()
+    {
+        $filepath = $this->request->getPost('filepath');
+        $filename = $this->request->getPost('filename');
+        $content = file_get_contents($filepath);
+
+        $this->view->setVars(
+            [
+            'content'   => $content,
+            'filename'  => $filename,
+            'filepath'  => $filepath
+            ]
+        );
+        $this->view->pick('themes/item');
+    }
+    /**
+     *
+     *
+     * @return mixed
+     */
+    public function saveAction()
+    {
+        if (!$this->request->isPost()) {
+            $this->flash->error(t('Hack temp!'));
+            $this->indexRedirect();
+        }
+        $content    =  $this->request->getPost('content');
+        $filepath   =  $this->request->getPost('filepath');
+        if (!$this->manageFile($filepath, $content)) {
+            $this->dispatcher->forward($this->router->getControllerName() . '/edit');
+        }
+        $this->flashSession->success(t('Data was successfully saved'));
+        return $this->response->redirect($this->router->getControllerName() . '/custom');
+    }
+    /**
+     *
+     * @param  string $file    the full path file name of themes
+     * @param  string $content this is the code you change
+     * @return bool|string
+     */
+    public function manageFile($file,$content)
+    {
+
+        if (!is_writeable($file)) {
+            $message = new Message(t('Files for saving template is not writable.'));
+            $this->appendMessage($message);
+
+            return false;
+        }
+
+        if (file_put_contents($file, $content)) {
+            return true;
+        }
+
+        $message = new Message(t('File template could not be changed.'));
+        $this->appendMessage($message);
+
+        return false;
+    }
 }
