@@ -38,6 +38,7 @@ class SettingsController extends ControllerBase
     }
     /**
      * Replacing logo frontend page default
+     *
      * @link admin/settings/logo-frontend
      *
      * @return mixed
@@ -251,9 +252,7 @@ class SettingsController extends ControllerBase
         }
     }
     /**
-     *
      * Clean current connected google account
-     *
      */
     public function cleanAuthAction()
     {
@@ -265,9 +264,7 @@ class SettingsController extends ControllerBase
         return $this->currentRedirect();
     }
     /**
-     *
      * Save changes analytic setting
-     *
      */
     public function analyticSettingAction()
     {
@@ -299,9 +296,7 @@ class SettingsController extends ControllerBase
         return $this->currentRedirect();
     }
     /**
-     *
      * Save changes about what analytic module will display on dashboard
-     *
      */
     public function moduleDisplayAction()
     {

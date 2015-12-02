@@ -104,7 +104,7 @@ return new \Phalcon\Config(
                         'sub' => []
                     ],
                     [
-                        'code' => 'index',
+                        'code' => 'custom',
                         'name' => 'Customize',
                         'icon'  =>  'fa fa-bars',
                         'sub' => []

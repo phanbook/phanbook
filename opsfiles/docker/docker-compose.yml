@@ -4,13 +4,13 @@ web:
     - "80:80"
   volumes:
     - ./:/var/www/html
-    - ./opsfiles/docker/images/nginx/phanbook.conf:/etc/nginx/sites-enabled/default
+    - ./opsfiles/docker/templates/phanbook.conf:/etc/nginx/sites-enabled/default
   links:
     - php
 php:
   image: phanbook/php
   volumes:
-    - ./opsfiles/docker/images/php/php-fpm.conf:/etc/php5/fpm/php-fpm.conf
+    - ./opsfiles/docker/templates/php-fpm.conf:/etc/php5/fpm/php-fpm.conf
     - ./:/var/www/html
   links:
     - db
