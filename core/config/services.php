@@ -32,7 +32,9 @@ use Phalcon\Events\Manager             as EventsManager;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\View\Engine\Volt;
 use Phalcon\Queue\Beanstalk;
-use Phalcon\Config\Adapter\Php        as AdapterPhp;
+use Phalcon\Config\Adapter\Php         as AdapterPhp;
+use Phalcon\Logger\Adapter\File        as FileLogger;
+
 
 use Phanbook\Utils\Constants;
 use Phanbook\Mail\Mail;
@@ -234,18 +236,41 @@ $di->set(
 $di->set(
     'db',
     function () use ($di) {
-        return new Mysql(
+        $config = $di->get('config');
+        $connection = new Mysql(
             [
-                'host'     => $di->get('config')->database->mysql->host,
-                'username' => $di->get('config')->database->mysql->username,
-                'password' => $di->get('config')->database->mysql->password,
-                'dbname'   => $di->get('config')->database->mysql->dbname,
-                //'schema'   => $di->get('config')->database->mysql->schema,
+                'host'     => $config->database->mysql->host,
+                'username' => $config->database->mysql->username,
+                'password' => $config->database->mysql->password,
+                'dbname'   => $config->database->mysql->dbname,
                 'options'  => [
-                    \PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES ' . $di->get('config')->database->mysql->charset
+                    \PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES ' . $config->database->mysql->charset
                 ]
             ]
         );
+        if ($config->application->debug) {
+            $eventsManager = new EventsManager();
+            $logger = new FileLogger(ROOT_DIR. 'content/logs/db.log');
+            //Listen all the database events
+            $eventsManager->attach(
+                'db',
+                function ($event, $connection) use ($logger) {
+                    /** @var Phalcon\Events\Event $event */
+                    if ($event->getType() == 'beforeQuery') {
+                        /** @var DatabaseConnection $connection */
+                        $variables = $connection->getSQLVariables();
+                        if ($variables) {
+                            $logger->log($connection->getSQLStatement() . ' [' . join(',', $variables) . ']', \Phalcon\Logger::INFO);
+                        } else {
+                            $logger->log($connection->getSQLStatement(), \Phalcon\Logger::INFO);
+                        }
+                    }
+                }
+            );
+            //Assign the eventsManager to the db adapter instance
+            $connection->setEventsManager($eventsManager);
+        }
+        return $connection;
     },
     true // shared
 );
