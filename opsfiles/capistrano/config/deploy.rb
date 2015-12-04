@@ -79,6 +79,6 @@ namespace :deploy do
   #     end
   #   end
   # end
-  before :deploy, "deploy:setup_config"
-  	#after 'deploy', 'slack:finished'
+  #before :deploy, "deploy:setup_config"
+  #after  :deploy, 'deploy:install_composer'
 end
