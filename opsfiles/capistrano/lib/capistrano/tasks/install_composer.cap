@@ -1,0 +1,9 @@
+#Task 'composer install'
+set :composer_command, 'php composer.phar'
+namespace :deploy do
+  task :install_composer do
+    on roles(:web) do
+        execute "cd '#{release_path}'; #{fetch(:composer_command)} install --no-dev --optimize-autoloader"
+    end
+  end
+end

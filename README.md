@@ -1,6 +1,6 @@
 # Phanbook
 
-[Phanbook](http://phanbook.com) is the next-generation Q&A and forum software that makes online discussion, question and answer site for professional and enthusiast people. Also the name Phanbook is mean - Phan(Phalcon PHP)book(the your note book)
+[Phanbook](http://phanbook.com) is the next-generation Q&A and Forum software that makes online discussion, question and answer site for professional and enthusiast people. Also the name Phanbook is mean - Phan(Phalcon PHP)book(the your note book)
 
 [Live Demo](http://phanbook.com) -
 [Development Forum](http://meta.phanbook.com) -
@@ -15,7 +15,7 @@
 ## Goals
 
 - **Fast and simple.** No clutter, no bloat, no complex dependencies. Phanbook is built with Phalcon PHP so it's quick and easy to deploy. 
-- **Beautiful and responsive.** This is forum software for humans. Phanbook is carefully designed to be consistent and intuitive across platforms, out-of-the-box.
+- **Beautiful and responsive.** This is Q&A software for humans. Phanbook is carefully designed to be consistent and intuitive across platforms, out-of-the-box.
 - **Powerful and extensible.** Customize, extend, and integrate Phanbook to suit your community. Phanbook's architecture is amazingly flexible, prioritizing comprehensive APIs and great documentation.
 - **Easily deploy** With Docker and Vagrant you can easy deploy to production with Docker and setup environment develop with Vagrant.
 - **Blogging** Create a beautiful, independent online publication
@@ -23,7 +23,7 @@
 
 ## Features
 
-We want Phanbook to be the most powerful forum software out there, and we have a huge list of ideas that we want to implement. It will take time, but Phanbook’s flexible plugin system will mean we can release early and often. Here’s a snapshot of what we’ll be working on first:
+We want Phanbook to be the most powerful Q&A software out there, and we have a huge list of ideas that we want to implement. It will take time, but Phanbook’s flexible plugin system will mean we can release early and often. Here’s a snapshot of what we’ll be working on first:
 
 - Multiple Themes
 - Spam Blocking
