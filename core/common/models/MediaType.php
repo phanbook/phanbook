@@ -11,6 +11,7 @@
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
 namespace Phanbook\Models;
+
 use Phalcon\Config\Adapter\Php         as AdapterPhp;
 use Phanbook\Tools\ZFunction;
 

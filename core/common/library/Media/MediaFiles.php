@@ -56,7 +56,7 @@ class MediaFiles
         }
         return [];
     }
-    public function saveConfigFile($userName,$arrayConfig)
+    public function saveConfigFile($userName, $arrayConfig)
     {
 
         $filename = $userName. "/userConfig.json";

@@ -281,7 +281,7 @@ class Media extends ModelBase
                 } else {
                     $this->error[] = $this->constants->mediaUploadError();
                 }
-            }  else {
+            } else {
                 $this->error[] = $this->constants->mediaTempFileNotFound();
             }
         } else {
@@ -297,7 +297,8 @@ class Media extends ModelBase
      * @param  string $filename
      * @return boolean
      */
-    public  function saveToDB($userName, $type, $createdAt, $filename) {
+    public function saveToDB($userName, $type, $createdAt, $filename)
+    {
         $media = new Media();
         $media->setFilename($filename);
         $media->setType($type);
