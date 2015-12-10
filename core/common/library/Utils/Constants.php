@@ -54,13 +54,6 @@ class Constants
     {
         return t("You don't have any media's files here. Please upload first!");
     }
-    public function mediaAcceptFilesExt()
-    {
-        return [
-            ".jpg", ".png", ".bmp", ".gif", ".sgv",
-            ".rar", ".zip", ".doc", ".txt"
-        ];
-    }
     public function mediaFileNotAccept()
     {
         return t("Can't upload because file type's not allowed");
@@ -71,6 +64,10 @@ class Constants
     }
     public function mediaUploadError()
     {
-        return t("An error(s) occured when upload file(s). Please try again later");
+        return t("An error(s) occured when uploading file(s). Please try again later");
+    }
+    public function mediaAlreadyExists()
+    {
+        return t("An error(s) occured when uploading file(s), Another file have same name with this file. Please change file name before upload");
     }
 }

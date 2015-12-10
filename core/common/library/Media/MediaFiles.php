@@ -21,10 +21,11 @@ use \League\Flysystem\Adapter\Local as Adapter;
 class MediaFiles
 {
     private $fileSystem;
-
-    public function onConstruct()
+    private $adapter;
+    public function __construct()
     {
-
+        $this->adapter = new Adapter(ROOT_DIR. 'content/uploads/');
+        $this->fileSystem = new Filesystem($this->adapter);
     }
 
     /**
@@ -35,10 +36,41 @@ class MediaFiles
      */
     public function uploadFile($localPath, $serverPath)
     {
-        $this->fileSystem = new Filesystem(new Adapter(ROOT_DIR. 'content/uploads/'));
         $stream = fopen($localPath, 'r+');
         $status = $this->fileSystem->writeStream($serverPath, $stream);
         unlink($localPath);
         return $status;
+    }
+
+    public function checkFileExists($serverPath)
+    {
+        return $this->fileSystem->has($serverPath);
+    }
+
+    public function getConfigFile($userName)
+    {
+        $filename = $userName. "/userConfig.json";
+        if ($this->fileSystem->has($filename)) {
+            $contents = $this->fileSystem->read($filename);
+            return json_decode($contents, true);
+        }
+        return [];
+    }
+    public function saveConfigFile($userName,$arrayConfig)
+    {
+
+        $filename = $userName. "/userConfig.json";
+        if (!$this->fileSystem->has($filename)) {
+            $this->fileSystem->write($filename, '[]');
+        }
+        $contents = $this->fileSystem->read($filename);
+        $result = array_merge(json_decode($contents, true), $arrayConfig);
+        $result = json_encode($result);
+
+        if (!$this->fileSystem->update($filename, $result)) {
+            return false;
+        }
+        return true;
+
     }
 }

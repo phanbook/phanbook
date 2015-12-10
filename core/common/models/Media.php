@@ -14,6 +14,7 @@ namespace Phanbook\Models;
 
 use Phanbook\Media\MediaFiles;
 use Phanbook\Utils\Constants;
+use Phanbook\Models\MediaType;
 
 class Media extends ModelBase
 {
@@ -64,8 +65,9 @@ class Media extends ModelBase
      * Constructer
      */
     protected $constants;
-    public function onConstruct()
+    public function initialize()
     {
+        parent::initialize();
         $this->error = [];
         $this->fileSystem = new MediaFiles();
         $this->constants = new Constants();
@@ -235,42 +237,74 @@ class Media extends ModelBase
             'filename' => 'filename'
         );
     }
-
+    /**
+     * Get an error if occured
+     * @return list string List error
+     */
     public function getError()
     {
         return $this->error;
     }
 
     /**
-     * Input file for media
+     * Input file for media, using for upload file
      * @param File Object $fileObj File upload by user
      * @return boolean           true if all ok. Otherwise, false
      */
     public function initFile($fileObj)
     {
-        // getExtension() just return name of extension. Not include dot character
-        $fileExt = ".".$fileObj->getExtension();
-        $filesAccept =  $this->constants->mediaAcceptFilesExt();
-
+        $fileExt = $fileObj->getExtension();
+        $filesAccept =  MediaType::getExtensionAllowed();
         // Check if file extension's allowed
-        if (! in_array($fileExt, $filesAccept)) {
-            $this->error[] = $this->constants->mediaFileNotAccept(). ": ". $fileExt;
-            return false;
-        }
-
-        // determine directory for this file. <username>/<year>/<month>/<filename>
-        $userName = $this->getDI()->getAuth()->getUsername();
-        $year = date("Y");
-        $month = date("M");
-        $fileName = $fileObj->getName();
-        $serverPath = $userName. "/". $year. "/". $month. "/". $fileName;
-        $localPath = $fileObj->getTempName();
-        if (!file_exists($localPath)) {
-            $this->error[] = $this->constants->mediaTempFileNotFound();
-        } else if ($this->fileSystem->uploadFile($localPath, $serverPath)) {
-            return true;
+        if (in_array($fileExt, $filesAccept)) {
+             // determine directory for this file. <username>/<file type>/<year>/<month>/<filename>
+            $userName = $this->getDI()->getAuth()->getUsername();
+            $year = date("Y");
+            $month = date("M");
+            $fileName = $fileObj->getName();
+            $fileType = MediaType::getTypeFromExt($fileExt);
+            $serverPath = $userName. DS. $fileType->getName(). DS. $year. DS. $month. DS. $fileName;
+            $localPath = $fileObj->getTempName();
+            if (file_exists($localPath)) {
+                if ($this->fileSystem->checkFileExists($serverPath)) {
+                    $this->error[] = $this->constants->mediaAlreadyExists();
+                } else if ($this->fileSystem->uploadFile($localPath, $serverPath)) {
+                    if ($this->saveToDB($userName, $fileType->getId(), date("d/M/Y"), $fileName)) {
+                        $config = $this->fileSystem->getConfigFile($userName);
+                        $defaultConfig = MediaType::getConfig();
+                        $config = array_merge($defaultConfig, $config);
+                        $config[$fileType->getName()] ++;
+                        $this->fileSystem->saveConfigFile($userName, $config);
+                        return true;
+                    }
+                    $this->error[] = $this->constants->mediaUploadError();
+                } else {
+                    $this->error[] = $this->constants->mediaUploadError();
+                }
+            }  else {
+                $this->error[] = $this->constants->mediaTempFileNotFound();
+            }
         } else {
-            $this->error[] = $this->constants->mediaUploadError();
+            $this->error[] = $this->constants->mediaFileNotAccept(). ": ". $fileExt;
+        }
+        return false;
+    }
+    /**
+     * Save file info uploaded to database
+     * @param  string $userName
+     * @param  id $type
+     * @param  time $createdAt
+     * @param  string $filename
+     * @return boolean
+     */
+    public  function saveToDB($userName, $type, $createdAt, $filename) {
+        $media = new Media();
+        $media->setFilename($filename);
+        $media->setType($type);
+        $media->setUsername($userName);
+        $media->setCreatedAt($createdAt);
+        if ($media->save()) {
+            return true;
         }
         return false;
     }
