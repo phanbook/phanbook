@@ -19,7 +19,7 @@ class Constants
         /**
          * For global
         */
-        define("SEARCH_PLACE_HOLDER", t("Search something"));
+        define("SEARCH_PLACEHOLDER", t("Search something"));
 
         /**
          * For global success message
