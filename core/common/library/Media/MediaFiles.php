@@ -38,7 +38,6 @@ class MediaFiles
     {
         $stream = fopen($localPath, 'r+');
         $status = $this->fileSystem->writeStream($serverPath, $stream);
-        unlink($localPath);
         return $status;
     }
 

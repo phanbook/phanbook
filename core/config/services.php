@@ -465,3 +465,4 @@ if ($config->application->debug) {
         }
     }
 }
+Constants::declareGlobalVariable();

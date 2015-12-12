@@ -35,7 +35,7 @@ class MediaForm extends Form
             new Identical(
                 [
                     'value'  => $this->security->getSessionToken(),
-                    'message'=> $this->constants->csrfError()
+                    'message'=> CSRF_ERROR
                 ]
             )
         );
@@ -71,7 +71,7 @@ class MediaForm extends Form
         $search = new Text(
             'search',
             [
-                'placeholder' => $this->constants->searchPlaceHolder(),
+                'placeholder' => SEARCH_PLACE_HOLDER,
                 'class'       => 'form-control btn-mini',
                 'required'    => false
             ]

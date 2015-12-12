@@ -57,7 +57,7 @@ class MediaController extends ControllerBase
                 $response->setStatusCode(406, $error);
                 $response->setContent($error);
             } else {
-                $response->setStatusCode(200, $this->constants->successMessage());
+                $response->setStatusCode(200, SUCCESS_MESSAGE);
             }
             return $response;
         } else {

@@ -15,6 +15,7 @@ namespace Phanbook\Models;
 use Phanbook\Media\MediaFiles;
 use Phanbook\Utils\Constants;
 use Phanbook\Models\MediaType;
+use Phalcon\Image\Adapter\GD;
 
 class Media extends ModelBase
 {
@@ -246,6 +247,11 @@ class Media extends ModelBase
         return $this->error;
     }
 
+    private function setError($error)
+    {
+        $this->error[] = $error;
+    }
+
     /**
      * Input file for media, using for upload file
      * @param File Object $fileObj File upload by user
@@ -262,32 +268,89 @@ class Media extends ModelBase
             $year = date("Y");
             $month = date("M");
             $fileName = $fileObj->getName();
+            // Type Object.
             $fileType = MediaType::getTypeFromExt($fileExt);
+            // generate path of file
             $serverPath = $userName. DS. $fileType->getName(). DS. $year. DS. $month. DS. $fileName;
             $localPath = $fileObj->getTempName();
             if (file_exists($localPath)) {
+
                 if ($this->fileSystem->checkFileExists($serverPath)) {
-                    $this->error[] = $this->constants->mediaAlreadyExists();
+                    $this->setError(MEDIA_ALREADY_EXISTS);
                 } else if ($this->fileSystem->uploadFile($localPath, $serverPath)) {
-                    if ($this->saveToDB($userName, $fileType->getId(), date("d/M/Y"), $fileName)) {
+                    $uploadStatus = $this->saveToDB($userName, $fileType->getId(), date("d/M/Y"), $fileName);
+                    if ($uploadStatus) {
+                        // Update anaytic file
                         $config = $this->fileSystem->getConfigFile($userName);
                         $defaultConfig = MediaType::getConfig();
                         $config = array_merge($defaultConfig, $config);
                         $config[$fileType->getName()] ++;
                         $this->fileSystem->saveConfigFile($userName, $config);
+                        if ($fileType->getName() == "Images") {
+                            // generate thumbs if this file is an Image
+                            $this->generateThumb($localPath, $serverPath);
+                        }
                         return true;
                     }
-                    $this->error[] = $this->constants->mediaUploadError();
+                    $this->setError(MEDIA_UPLOAD_ERROR);
                 } else {
-                    $this->error[] = $this->constants->mediaUploadError();
+                    $this->setError(MEDIA_UPLOAD_ERROR);
                 }
             } else {
-                $this->error[] = $this->constants->mediaTempFileNotFound();
+                $this->setError(MEDIA_TEMP_NOT_FOUND);
             }
         } else {
-            $this->error[] = $this->constants->mediaFileNotAccept(). ": ". $fileExt;
+            $this->setError(MEDIA_FILE_NOT_ACCEPT. ": ". $fileExt);
         }
         return false;
+    }
+    /**
+     * Generate thumb file for image.
+     * The thumb file has same type with original file. However it have small resolution and name has thumb_ prefix
+     * @param  string $localPath
+     * @return boolean
+     */
+    public function generateThumb($localPath, $serverPath)
+    {
+        $maxWidth = MAX_WIDTH_THUMB;
+        $maxHeight = MAX_HEIGHT_THUMB;
+        $thumbServerPath = dirname($serverPath) . DS . "thumb_" . DS . basename($serverPath);
+        $thumbLocalPath = $localPath. "_thumb";
+        $resizeStatus = $this->resizeImage($localPath, $thumbLocalPath, $maxWidth, $maxHeight);
+        if ($resizeStatus) {
+            $uploadStatus = $this->fileSystem->uploadFile($thumbLocalPath, $thumbServerPath);
+            if ($uploadStatus) {
+                return true;
+            }
+        }
+        return false;
+    }
+    /**
+     * Resize of image uploaded
+     * @param  string $source
+     * @param  string $dest
+     * @param  integer $new_width
+     * @param  integer $new_height
+     * @return   boolean
+     */
+    private function resizeImage($source, $dest, $new_width, $new_height)
+    {
+        $image = new GD($source);
+        $source_height = $image->getHeight();
+        $source_width = $image->getWidth();
+        $source_aspect_ratio = $source_width / $source_height;
+        $desired_aspect_ratio = $new_width / $new_height;
+        if ($source_aspect_ratio > $desired_aspect_ratio) {
+            $temp_height = $new_height;
+            $temp_width = ( int ) ($new_height * $source_aspect_ratio);
+        } else {
+            $temp_width = $new_width;
+            $temp_height = ( int ) ($new_width / $source_aspect_ratio);
+        }
+        $x0 = ($temp_width - $new_width) / 2;
+        $y0 = ($temp_height - $new_height) / 2;
+        $image->resize($temp_width, $temp_height)->crop($new_width, $new_height, $x0, $y0);
+        return $image->save($dest);
     }
     /**
      * Save file info uploaded to database

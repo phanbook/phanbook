@@ -145,6 +145,7 @@ class ControllerBase extends Controller
         $this->view->currentOrder = $this->currentOrder;
         $this->loadDefaultAssets();
         $this->view->menuStruct = $this->menuStruct;
+        $this->view->constants = (object) get_defined_constants(true)["user"];
     }
     /**
      * loadDefaultAssets function.
