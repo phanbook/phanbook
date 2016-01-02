@@ -10,12 +10,13 @@
  * @since         1.0.0
  * @license       http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
+use Phalcon\Http\Response;
 use Phalcon\Mvc\Application;
 
 error_reporting(E_ALL);
 ini_set('memory_limit', '-1');
 
-//  Global constants 
+//  Global constants
 define('DS', DIRECTORY_SEPARATOR);
 define('ROOT_DIR', dirname(__FILE__) . DS);
 define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'local'));
@@ -50,8 +51,17 @@ try {
     $application->setEventsManager($eventsManager);
 
     echo $application->handle()->getContent();
-} catch (Phalcon\Exception $e) {
+} catch (Exception $e) {
+
     echo $e->getMessage();
-} catch (PDOException $e) {
-    echo $e->getMessage();
+    echo $e->getTraceAsString();
+
+    /**
+     * Show an static error page
+     */
+    if (!$di->get('config')->application->debug) {
+        $response = new Response();
+        $response->redirect('errors/503');
+        $response->send();
+    }
 }

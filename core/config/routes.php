@@ -169,4 +169,12 @@ $router->add(
         'action'     => 'detail'
     ]
 );
+$router->add(
+    '/errors/503',
+    [
+        'module'     => 'backend',
+        'controller' => 'errors',
+        'action'     => 'show503'
+    ]
+);
 return $router;
