@@ -28,5 +28,4 @@ class ErrorsController extends Controller
         $this->response->setStatusCode(503, 'Site is Down for Maintenance');
         $this->view->team = $this->config->application->name;
     }
-
 }
