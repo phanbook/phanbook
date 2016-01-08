@@ -42,6 +42,9 @@
           {{ link_to('questions?tab=' ~ key, t(value) ,'title' : value) }}</li>
         {% endfor %}
         {##}
+        <li {% if tab == 'new' %}class="current"{% endif %}>
+            {{ link_to('posts/new', 'Ask') }}
+        </li>
         {% for value, key in menu2 %}
             {% if key == tab %}
                 <li class="current">
