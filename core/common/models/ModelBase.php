@@ -163,25 +163,25 @@ class ModelBase extends Model
     }
     /**
      * The function sending log for nginx or apache, it will to analytic later
+     *
      * @return mixed
      */
-    public function saveLoger($e)
+    public static function saveLoger($e)
     {
-        //error_log($e);
         $logger = new Logger(ROOT_DIR . 'content/logs/error.log');
         if (is_object($e)) {
-            $logger->error($e->getMessage());
-            $logger->error($e->getTraceAsString());
+            $logger->error($e[0]->getMessages());
+            $logger->error($e[0]->getTraceAsString());
         }
         if (is_array($e)) {
             foreach ($e as $message) {
-                d($e);
+                $logger->error($message->getMessage());
             }
         }
         if (is_string($e)) {
             $logger->error($e);
         }
-        //return $this->indexRedirect();
+        //return false;
     }
     /**
      * Get data via method Query Builder Phalcon
