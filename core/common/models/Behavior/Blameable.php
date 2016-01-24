@@ -155,4 +155,3 @@ class Blameable extends Behavior implements BehaviorInterface
         }
     }
 }
-
