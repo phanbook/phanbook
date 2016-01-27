@@ -19,6 +19,7 @@ use Phalcon\Security\Random;
 use Phalcon\Logger\Adapter\File as Logger;
 
 use Phanbook\Models\Audit;
+use Phanbook\Models\ModelBase;
 use Phanbook\Models\AuditDetail;
 
 /**
@@ -110,7 +111,7 @@ class Blameable extends Behavior implements BehaviorInterface
                 }
                 $audit->details = $details;
                 if (!$audit->save()) {
-                    $this->saveLoger($audit->getMessages());
+                    ModelBase::saveLoger($audit->getMessages());
                 }
             }
         }
@@ -149,30 +150,8 @@ class Blameable extends Behavior implements BehaviorInterface
             }
             $audit->details = $details;
             if (!$audit->save()) {
-                $this->saveLoger($audit->getMessages());
+                ModelBase::saveLoger($audit->getMessages());
             }
         }
-    }
-    /**
-     * Tracking logs to a files
-     *
-     * @return bool
-     */
-    public function saveLoger($e)
-    {
-        $logger = new Logger(ROOT_DIR . 'content/logs/error.log');
-        if (is_object($e)) {
-            $logger->error($e[0]->getMessages());
-            $logger->error($e[0]->getTraceAsString());
-        }
-        if (is_array($e)) {
-            foreach ($e as $message) {
-                $logger->error($message->getMessage());
-            }
-        }
-        if (is_string($e)) {
-            $logger->error($e);
-        }
-        return false;
     }
 }
