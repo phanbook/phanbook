@@ -63,13 +63,16 @@
             <li><span class="img-setting"></span>{{ link_to('users/settings' ,t('Settings'))}}</li>
             <li><span class="img-changpass"></span>{{ link_to('users/changepassword', t('Change Password'))}}</li>
             <li><span class="img-link"></span>{{ link_to('//en.gravatar.com' ,t('Change your avatar at Gravatar') ,false)}}</li>
-            <li><span class="img-bookmark"></span>{{ link_to('bookmark' ,t('Bookmarks'))}}</li>
             <li><span class="sign-out"></span>{{ link_to('oauth/logout' ,t('Logout'))}}</li>
+            {% if auth['admin'] == 'Y' %}
+                <li><span class="img-setting"></span>{{ link_to('backend' ,t('Dashboard'))}}</li>
+                <li><span class="img-bookmark"></span>{{ link_to('backend/themes/custom' ,t('Edit Theme'))}}</li>
+            {% endif %}
         </ul>
     </div>
 </div>
-<!-- todo -->
-{% if 1 == 1 %}
+
+{% if auth %}
 <div class="dropdown-menu" id="notifications-dropdown" style="display: none;">
     <div class="gb-v"></div>
     <div class="notification-real">
