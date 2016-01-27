@@ -12,8 +12,8 @@
  */
 namespace Phanbook\Media;
 
-use \League\Flysystem\Filesystem;
-use \League\Flysystem\Adapter\Local as Adapter;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Adapter\Local as Adapter;
 
 /**
 *
@@ -40,12 +40,20 @@ class MediaFiles
         $status = $this->fileSystem->writeStream($serverPath, $stream);
         return $status;
     }
-
+    /**
+     * Looking given file is already on server or not
+     * @param  String $serverPath
+     * @return boolean
+     */
     public function checkFileExists($serverPath)
     {
         return $this->fileSystem->has($serverPath);
     }
-
+    /**
+     * Get content of analytic file for each user
+     * @param  String $userName
+     * @return array
+     */
     public function getConfigFile($userName)
     {
         $filename = $userName. "/userConfig.json";
@@ -55,6 +63,12 @@ class MediaFiles
         }
         return [];
     }
+    /**
+     * Save after modify content of analytic file
+     * @param  String $userName
+     * @param  array $arrayConfig
+     * @return boolean
+     */
     public function saveConfigFile($userName, $arrayConfig)
     {
 
@@ -70,6 +84,5 @@ class MediaFiles
             return false;
         }
         return true;
-
     }
 }

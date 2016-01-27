@@ -19,7 +19,8 @@ class Constants
         /**
          * For global
         */
-        define("SEARCH_PLACEHOLDER", t("Search something"));
+        define("ALREADY_DEFINED", true);
+        define("SEARCH_PLACE_HOLDER", t("Search something"));
 
         /**
          * For global success message

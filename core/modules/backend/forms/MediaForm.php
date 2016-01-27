@@ -71,7 +71,7 @@ class MediaForm extends Form
         $search = new Text(
             'search',
             [
-                'placeholder' => SEARCH_PLACEHOLDER,
+                'placeholder' => SEARCH_PLACE_HOLDER,
                 'class'       => 'form-control btn-mini',
                 'required'    => false
             ]

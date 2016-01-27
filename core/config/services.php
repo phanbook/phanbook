@@ -465,4 +465,7 @@ if ($config->application->debug) {
         }
     }
 }
-Constants::declareGlobalVariable();
+// For avoid re-define variables
+if (!defined("ALREADY_DEFINED")) {
+    Constants::declareGlobalVariable();
+}
