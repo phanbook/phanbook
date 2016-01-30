@@ -12,20 +12,13 @@
  */
 namespace Phanbook\Blog\Controllers;
 
-use Phanbook\Utils\Slug;
-use Phanbook\Models\Tags;
 use Phanbook\Models\Posts;
 use Phanbook\Models\Vote;
-use Phanbook\Models\Comment;
 use Phanbook\Models\Karma;
 use Phanbook\Models\Users;
-use Phanbook\Models\PostsTags;
 use Phanbook\Models\PostsViews;
-use Phanbook\Models\PostsReply;
-use Phanbook\Models\PostsHistory;
 use Phanbook\Frontend\Forms\ReplyForm;
 use Phanbook\Frontend\Forms\CommentForm;
-use Phanbook\Frontend\Forms\QuestionsForm;
 
 /**
  * Class PostController.

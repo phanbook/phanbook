@@ -12,8 +12,6 @@
  */
 namespace Phanbook\Markdown;
 
-use Phanbook\Markdown\Parsedown;
-
 /**
  * Parsedown http://parsedown.org
  * (c) Emanuil Rusev

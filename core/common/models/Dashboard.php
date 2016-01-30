@@ -13,7 +13,6 @@
 namespace Phanbook\Models;
 
 use Phanbook\Google\Analytic;
-use Phanbook\Models\Settings;
 use Phanbook\Factory\TopDashboardFactory;
 use Phanbook\Factory\TopDashboardSubject;
 

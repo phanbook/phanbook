@@ -14,7 +14,6 @@
 namespace Phanbook\Frontend\Controllers;
 
 use Phanbook\Models\Posts;
-use Phanbook\Models\Users;
 use Phanbook\Models\Subscribe;
 use Phanbook\Models\PostsSubscribers;
 

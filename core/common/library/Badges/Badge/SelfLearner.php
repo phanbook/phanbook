@@ -13,7 +13,6 @@
 namespace Phanbook\Badges\Badge;
 
 use Phanbook\Models\Users;
-use Phanbook\Models\UsersBadges;
 use Phanbook\Models\Categories;
 use Phanbook\Models\PostsVotes;
 use Phanbook\Models\PostsRepliesVotes;

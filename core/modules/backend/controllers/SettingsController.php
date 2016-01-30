@@ -14,7 +14,6 @@
 namespace Phanbook\Backend\Controllers;
 
 use Phanbook\Backend\Forms\LogoForm;
-use Phanbook\Backend\Forms\ThemeForm;
 use Phanbook\Backend\Forms\ConfigurationsForm;
 use Phanbook\Backend\Forms\GoogleAnalyticForm;
 use Phanbook\Models\Settings;

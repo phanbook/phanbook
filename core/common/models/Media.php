@@ -14,7 +14,6 @@ namespace Phanbook\Models;
 
 use Phanbook\Media\MediaFiles;
 use Phanbook\Utils\Constants;
-use Phanbook\Models\MediaType;
 use Phalcon\Image\Adapter\GD;
 
 class Media extends ModelBase

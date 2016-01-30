@@ -14,8 +14,6 @@ namespace Phanbook\Models;
 
 use Phalcon\Mvc\Model\Behavior\Timestampable;
 
-use Phanbook\Models\ActivityNotifications;
-
 class UsersBadges extends ModelBase
 {
     /**

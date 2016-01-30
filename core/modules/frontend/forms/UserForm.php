@@ -14,7 +14,6 @@ namespace Phanbook\Frontend\Forms;
 
 use Phanbook\Models\Users;
 use Phanbook\Validators\BirthDate;
-use Phanbook\Validators\Phone;
 use Phalcon\Forms\Element\File;
 use Phalcon\Forms\Element\Select;
 use Phalcon\Forms\Form;

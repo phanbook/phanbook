@@ -12,8 +12,6 @@
  */
 namespace Phanbook\Models;
 
-use Phanbook\Models\MyTimestampable;
-
 class ActivityNotifications extends ModelBase
 {
     use MyTimestampable;

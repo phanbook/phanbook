@@ -13,7 +13,6 @@
 namespace Phanbook\Badges;
 
 use Phanbook\Models\Users;
-use Phanbook\Models\UsersBadges;
 
 /**
  * Phanbook\Badges\Manager

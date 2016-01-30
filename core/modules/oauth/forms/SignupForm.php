@@ -22,7 +22,6 @@ use Phalcon\Validation\Validator\PresenceOf;
 use Phalcon\Validation\Validator\Email;
 use Phalcon\Validation\Validator\Regex;
 use Phalcon\Validation\Validator\Identical;
-use Phanbook\Validators\Phone;
 use Phanbook\Models\User;
 
 class SignupForm extends Form

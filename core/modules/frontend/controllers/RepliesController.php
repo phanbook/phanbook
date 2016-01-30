@@ -17,7 +17,6 @@ use Phanbook\Models\Users;
 use Phanbook\Models\Karma;
 use Phanbook\Models\PostsReply;
 use Phanbook\Models\PostsBounties;
-use Phanbook\Models\ActivityNotifications;
 use Phanbook\Frontend\Forms\ReplyForm;
 use Phanbook\Models\PostsReplyHistory;
 

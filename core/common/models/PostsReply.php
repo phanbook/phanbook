@@ -16,10 +16,6 @@ use Phalcon\Mvc\Model\Behavior\Timestampable;
 use Phalcon\Mvc\Model\Behavior\SoftDelete;
 
 use Phanbook\Models\User;
-use Phanbook\Models\PostsSubscribers;
-use Phanbook\Models\PostsNotifications;
-use Phanbook\Models\ActivityNotifications;
-use Phanbook\Models\Activities;
 
 /**
  * Class PostsReplies

@@ -14,7 +14,6 @@ namespace Phanbook\Badges\Badge;
 
 use Phanbook\Models\Users;
 use Phanbook\Models\Vote;
-use Phanbook\Models\UsersBadges;
 use Phanbook\Badges\BadgeBase;
 
 /**

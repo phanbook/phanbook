@@ -20,9 +20,6 @@ use Phanbook\Github\Auth as GithubAuth;
 use Phanbook\Google\Auth as GoogleAuth;
 use Phanbook\Twitter\Auth as TwitterAuth;
 use Phanbook\Facebook\Auth as FacebookAuth;
-use Phanbook\Models\Karma;
-use Phanbook\Models\RememberTokens;
-use Phanbook\Models\NotificationsBounces;
 
 /**
  * AuthController class.
