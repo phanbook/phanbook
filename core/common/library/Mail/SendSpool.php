@@ -15,7 +15,6 @@ namespace Phanbook\Mail;
 use Phalcon\Di\Injectable;
 
 use Phanbook\Models\Notifications;
-use Phanbook\Models\Posts;
 
 /**
  * SendSpool

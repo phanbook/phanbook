@@ -12,8 +12,6 @@
  */
 namespace Phanbook\Models;
 
-use Phanbook\Models\MyTimestampable;
-
 /**
  * To use subscribe a post
  *

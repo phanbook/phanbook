@@ -17,7 +17,6 @@ use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Element\Hidden;
 use Phalcon\Forms\Element\Submit;
 use Phalcon\Validation\Validator\Identical;
-use Phanbook\Models\Settings;
 
 class DashboardForm extends Form
 {

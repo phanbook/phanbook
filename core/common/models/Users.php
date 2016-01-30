@@ -14,7 +14,6 @@ namespace Phanbook\Models;
 
 use Phalcon\Mvc\Model\Validator\Email as Email;
 use Phalcon\Mvc\Model\Validator\Uniqueness;
-use Phanbook\Models\Activities;
 
 class Users extends ModelBase
 {

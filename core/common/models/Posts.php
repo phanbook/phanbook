@@ -14,11 +14,6 @@ namespace Phanbook\Models;
 
 use Phalcon\Mvc\Model\Behavior\SoftDelete;
 
-use Phanbook\Models\PostsViews;
-use Phanbook\Models\PostsReply;
-use Phanbook\Models\Notifications;
-use Phanbook\Models\PostsNotifications;
-
 class Posts extends ModelBase
 {
 

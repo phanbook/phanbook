@@ -17,8 +17,6 @@ use Phalcon\Mvc\Model;
 use Phalcon\Logger\Adapter\File as Logger;
 use Phalcon\Mvc\Model\Resultset\Simple as Resultset;
 
-use Phanbook\Models\PostsReply;
-use Phanbook\Models\Vote;
 use Phanbook\Models\Behavior\Blameable as ModelBlameable;
 
 /**

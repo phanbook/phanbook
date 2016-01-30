@@ -12,8 +12,6 @@
  */
 namespace Phanbook\Factory;
 
-use Phanbook\Google\Analytic;
-
 class TopDashboardSubject extends AbstractSubject
 {
     /**

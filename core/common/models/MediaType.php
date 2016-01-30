@@ -13,7 +13,6 @@
 namespace Phanbook\Models;
 
 use Phalcon\Config\Adapter\Php         as AdapterPhp;
-use Phanbook\Tools\ZFunction;
 
 class MediaType extends ModelBase
 {
