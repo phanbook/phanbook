@@ -21,10 +21,11 @@ use League\Flysystem\Adapter\Local as Adapter;
 class MediaFiles
 {
     private $fileSystem;
-
+    private $adapter;
     public function __construct()
     {
-        $this->fileSystem = new Filesystem(new Adapter(ROOT_DIR. 'content/uploads/'));
+        $this->adapter = new Adapter(ROOT_DIR. 'content/uploads/');
+        $this->fileSystem = new Filesystem($this->adapter);
     }
 
     /**
@@ -35,8 +36,53 @@ class MediaFiles
      */
     public function uploadFile($localPath, $serverPath)
     {
-        $status = $this->fileSystem->copy($localPath, $serverPath);
-        $this->fileSystem->delete($localPath);
+        $stream = fopen($localPath, 'r+');
+        $status = $this->fileSystem->writeStream($serverPath, $stream);
         return $status;
+    }
+    /**
+     * Looking given file is already on server or not
+     * @param  String $serverPath
+     * @return boolean
+     */
+    public function checkFileExists($serverPath)
+    {
+        return $this->fileSystem->has($serverPath);
+    }
+    /**
+     * Get content of analytic file for each user
+     * @param  String $userName
+     * @return array
+     */
+    public function getConfigFile($userName)
+    {
+        $filename = $userName. "/userConfig.json";
+        if ($this->fileSystem->has($filename)) {
+            $contents = $this->fileSystem->read($filename);
+            return json_decode($contents, true);
+        }
+        return [];
+    }
+    /**
+     * Save after modify content of analytic file
+     * @param  String $userName
+     * @param  array $arrayConfig
+     * @return boolean
+     */
+    public function saveConfigFile($userName, $arrayConfig)
+    {
+
+        $filename = $userName. "/userConfig.json";
+        if (!$this->fileSystem->has($filename)) {
+            $this->fileSystem->write($filename, '[]');
+        }
+        $contents = $this->fileSystem->read($filename);
+        $result = array_merge(json_decode($contents, true), $arrayConfig);
+        $result = json_encode($result);
+
+        if (!$this->fileSystem->update($filename, $result)) {
+            return false;
+        }
+        return true;
     }
 }

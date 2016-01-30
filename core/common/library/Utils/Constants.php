@@ -14,50 +14,46 @@ namespace Phanbook\Utils;
 
 class Constants
 {
-    /**
-     * For global
-     */
-    public function searchPlaceHolder()
+    public static function declareGlobalVariable()
     {
-        return t("Search something");
-    }
+        /**
+         * For global
+        */
+        define("ALREADY_DEFINED", true);
+        define("SEARCH_PLACE_HOLDER", t("Search something"));
 
-    /**
-     * For global error
-     */
-    public function csrfError()
-    {
-        return t("CSRF validation failed");
-    }
+        /**
+         * For global success message
+         * @return String message
+        */
+        define("SUCCESS_MESSAGE", t("Success"));
 
-    /**
-     *  For media feature
-     */
-    public function mediaTitle()
-    {
-        return t("Media Library");
-    }
-    public function mediaUpload()
-    {
-        return t("Upload");
-    }
-    public function mediaNotFound()
-    {
-        return t("You don't have any media's files here. Please upload first!");
-    }
-    public function mediaAcceptFilesExt()
-    {
-        return [
-            ".jpg", ".png", ".bmp", ".gif", ".sgv",
-            ".rar", ".zip", ".doc", ".txt"
-        ];
-    }
-    public function mediaFileNotAccept()
-    {
-        return t("Can't upload because file type's not allowed");
-    }
-    public function mediaUploadError()
-    {
-        return t("An error(s) occured when upload file(s). Please try again later");
+        /**
+         * For global error message
+        */
+        define("CSRF_ERROR", t("CSRF validation failed"));
+
+        /**
+         *  For media feature
+        */
+        define("MEDIA_TITLE", t("Media Library"));
+
+        define("MEDIA_UPLOAD", t("Upload"));
+
+        define("MEDIA_NOT_FOUND", t("You don't have any media's files here. Please upload first!"));
+
+        define("MEDIA_FILE_NOT_ACCEPT", t("Can't upload because file type's not allowed"));
+
+        define("MEDIA_TEMP_NOT_FOUND", t("Can't find temp file for upload. This maybe caused by server configure"));
+
+        define("MEDIA_UPLOAD_ERROR", t("An error(s) occured when uploading file(s). Please try again later"));
+
+        define("MEDIA_UPLOAD_THUMB_ERROR", t("Can't create thumb file for image upload"));
+
+        define("MEDIA_ALREADY_EXISTS", t("An error(s) occured when uploading file(s), Another file have same name with this file. Please change file name before upload"));
+
+        define("MAX_WIDTH_THUMB", 200);
+
+        define("MAX_HEIGHT_THUMB", 200);
     }
 }

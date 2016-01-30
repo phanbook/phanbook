@@ -160,7 +160,7 @@ input[type="search"]:focus{
 .btn-mini {
     height: 30px;
 }
-#form-upload{
+#myAwesomeDropzone{
     border: 4px dashed #b4b9be;
     min-height: 200px;
     font-size: 14pt;

@@ -20,6 +20,7 @@ use Phalcon\Forms\Element\Select;
 use Phalcon\Forms\Element\Text;
 use Phalcon\Validation\Validator\Identical;
 use Phanbook\Models\MediaType;
+use Phanbook\Media\MediaFiles;
 
 class MediaForm extends Form
 {
@@ -34,15 +35,24 @@ class MediaForm extends Form
             new Identical(
                 [
                     'value'  => $this->security->getSessionToken(),
-                    'message'=> $this->constants->csrfError()
+                    'message'=> CSRF_ERROR
                 ]
             )
         );
+        $userName = $this->getDI()->getAuth()->getUsername();
         // Display for type of media. Such as images, videos, audios, etc
-        $totalMedia = MediaType::sum(["column" => "amount"]);
+        // Get user media config file for total media file
+        $mediaFiles = new MediaFiles();
+        $userConfig = $mediaFiles->getConfigFile($userName);
+        $totalMedia = 0;
+        $displayData = [];
+        foreach ($userConfig as $key => $value) {
+            $totalMedia += $value;
+            $displayData[MediaType::getTypeFromName($key)->getId()] = $key. "($value)";
+        }
         $mediaType = new Select(
             "mediaType",
-            MediaType::find([ 'columns'=> array('id', " CONCAT(name, ' (', amount, ')') as type_amount") ]),
+            $displayData,
             [
                 'using' => [
                         'id',
@@ -61,7 +71,7 @@ class MediaForm extends Form
         $search = new Text(
             'search',
             [
-                'placeholder' => $this->constants->searchPlaceHolder(),
+                'placeholder' => SEARCH_PLACE_HOLDER,
                 'class'       => 'form-control btn-mini',
                 'required'    => false
             ]

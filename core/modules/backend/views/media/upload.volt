@@ -1,7 +1,7 @@
 {% extends 'layouts/layout.volt' %}
-{% block title %}{{this.constants.mediaUpload()}}{% endblock %}
+{% block title %}{{constants.MEDIA_UPLOAD}}{% endblock %}
 {% block content %}
-    {{ form('media/upload', 'class':'form-inline dropzone', 'id':'form-upload') }}
+    {{ form('media/upload', 'class':'form-inline dropzone', 'id':'myAwesomeDropzone') }}
         <div class="dz-message">
             <span>Drop files here or click to upload</span>
         </div>
@@ -9,7 +9,14 @@
 {% endblock %}
 {% block scripts %}
     <script type="text/javascript">
-        Dropzone.options.addRemoveLinks = true;
-        Dropzone.options.acceptedFiles = "{{acceptExt}}";
+        Dropzone.options.myAwesomeDropzone = {
+            maxFilesize: 200, // MB
+            maxThumbnailFilesize: 200,
+            init: function() {
+                // this.on("error", function(file, response) {
+                //     alert("err: " + response);
+                // });
+            }
+        };
     </script>
 {% endblock %}

@@ -149,6 +149,11 @@ $di->setShared(
     new Constants()
 );
 
+$di->setShared(
+    'auth',
+    new Auth()
+);
+
 // Set the views cache service
 $di->set(
     'viewCache',
@@ -357,12 +362,6 @@ $di->set(
         return $dispatcher;
     }
 );
-$di->set(
-    'auth',
-    function () {
-        return new Auth();
-    }
-);
 //Real-Time notifications checker
 $di->set(
     'notifications',
@@ -465,4 +464,8 @@ if ($config->application->debug) {
             $kill && exit(1);
         }
     }
+}
+// For avoid re-define variables
+if (!defined("ALREADY_DEFINED")) {
+    Constants::declareGlobalVariable();
 }

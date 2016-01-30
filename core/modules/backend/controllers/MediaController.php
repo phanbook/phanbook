@@ -16,6 +16,7 @@ namespace Phanbook\Backend\Controllers;
 use Phanbook\Backend\Forms\MediaForm;
 use Phanbook\Models\Media;
 use Phalcon\Http\Response;
+use Phanbook\Models\MediaType;
 
 /**
  * Class MediaController
@@ -24,10 +25,16 @@ use Phalcon\Http\Response;
 class MediaController extends ControllerBase
 {
     private $mediaModel;
+    public function onConstruct()
+    {
+        $this->mediaModel = new Media();
+    }
+
     public function indexAction()
     {
         $this->view->form = new MediaForm();
         $this->view->files = [];
+
     }
     public function settingAction()
     {
@@ -35,7 +42,6 @@ class MediaController extends ControllerBase
     }
     public function uploadAction()
     {
-        $this->mediaModel = new Media();
         if ($this->request->hasFiles() == true) {
             $uploads = $this->request->getUploadedFiles();
             $this->view->disable();
@@ -49,14 +55,15 @@ class MediaController extends ControllerBase
             if (!$uploaded) {
                 $error = implode("\n", $this->mediaModel->getError());
                 $response->setStatusCode(406, $error);
+                $response->setContent($error);
             } else {
-                $response->setStatusCode(200, "Success");
+                $response->setStatusCode(200, SUCCESS_MESSAGE);
             }
             return $response;
         } else {
             $this->assets->addCss('/core/assets/css/dropzone.css', false);
             $this->assets->addJs('/core/assets/js/dropzone.js', false);
-            $this->view->acceptExt = implode(",", $this->constants->mediaAcceptFilesExt());
+            $this->view->acceptExt = implode(",", MediaType::getExtensionAllowed());
         }
     }
 }

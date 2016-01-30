@@ -12,6 +12,9 @@
  */
 namespace Phanbook\Models;
 
+use Phalcon\Config\Adapter\Php         as AdapterPhp;
+use Phanbook\Tools\ZFunction;
+
 class MediaType extends ModelBase
 {
 
@@ -29,9 +32,9 @@ class MediaType extends ModelBase
 
     /**
      *
-     * @var integer
+     * @var mixed
      */
-    protected $amount;
+    protected $code;
 
     /**
      *
@@ -66,17 +69,17 @@ class MediaType extends ModelBase
     }
 
     /**
-     * Method to set the value of field amount
+     * Method to set the value of field code
      *
-     * @param integer $amount
-     * @return $this
+     * @param string $code
      */
-    public function setAmount($amount)
+    public function setCode($code)
     {
-        $this->amount = $amount;
+        $this->code = $code;
 
         return $this;
     }
+
 
     /**
      * Method to set the value of field note
@@ -112,13 +115,13 @@ class MediaType extends ModelBase
     }
 
     /**
-     * Returns the value of field amount
+     * Return the value of field code
      *
-     * @return integer
+     * @return string
      */
-    public function getAmount()
+    public function getCode()
     {
-        return $this->amount;
+        return $this->code;
     }
 
     /**
@@ -182,8 +185,83 @@ class MediaType extends ModelBase
         return array(
             'id' => 'id',
             'name' => 'name',
-            'amount' => 'amount',
+            'code'  =>  'code',
             'note' => 'note'
         );
     }
+    /**
+     * get file extension allowed for upload from db
+     * @return list extension allowed
+     */
+    public static function getExtensionAllowed()
+    {
+        $exts = MediaType::find();
+        $extsAllowed = [];
+        foreach ($exts as $mediaObj) {
+            $tmp = explode(",", $mediaObj->getCode());
+            $extsAllowed = array_merge($extsAllowed, $tmp);
+        }
+        return $extsAllowed;
+    }
+    /**
+     * get Type from extension
+     * @param  string $ext
+     * @return mixed  type
+     */
+    public static function getTypeFromExt($ext)
+    {
+        $type = MediaType::findFirst([
+                "conditions" => "code LIKE ?1",
+                "bind"       => array(1 => "%". $ext. "%")
+            ]);
+        return $type;
+    }
+
+    public static function getTypeFromName($name)
+    {
+        $type = MediaType::findFirst([
+                "conditions" => "name = ?1",
+                "bind"       => array(1 => $name)
+            ]);
+        return $type;
+    }
+    /**
+     * Get default media type
+     * @return mixed
+     */
+    public static function getConfig()
+    {
+        $names = MediaType::find();
+        $config = [];
+        foreach ($names as $key) {
+            $config[$key->getName()] = 0;
+        }
+        return $config;
+    }
+
+    // public static function getConfigFile($userName)
+    // {
+    //     $filename = ROOT_DIR. 'content/uploads/'. $userName. "/userConfig.php";
+    //     if (file_exists($filename))
+    //         return (new AdapterPhp($filename))->toArray();
+    //     return [];
+    // }
+    // public static function saveConfigFile($userName,$arrayConfig)
+    // {
+    //     $filename = ROOT_DIR. 'content/uploads/'. $userName. "/userConfig.php";
+    //     if (!file_exists($filename)) {
+    //         $makeFile = ZFunction::makeFile($filename);
+    //         file_put_contents($filename, "<?php return [];");
+    //     }
+    //     if (file_exists($filename)) {
+    //         $data   = new AdapterPhp($filename);
+    //         $result = array_merge($data->toArray(), $arrayConfig);
+    //         $result ='<?php return ' . var_export($result, true) . ';';
+
+    //         if (!file_put_contents($filename, $result)) {
+    //             return false;
+    //         }
+    //         return true;
+    //     }
+    // }
 }
