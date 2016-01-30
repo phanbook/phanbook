@@ -136,8 +136,9 @@ class Phanbook
             'type = "pages" AND title =?0',
             'bind' =>[$title]
         ];
-        if (Posts::findFirst($param)) {
-            return Posts::findFirst($param);
+        $post = Posts::findFirst($param);
+        if ($post) {
+            return $post;
         }
         return null;
     }
