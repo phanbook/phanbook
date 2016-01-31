@@ -163,22 +163,24 @@ CREATE TABLE IF NOT EXISTS `media` (
 -- Table structure for table `mediaType`
 --
 
+
 CREATE TABLE IF NOT EXISTS `mediaType` (
   `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `amount` int(11) NOT NULL,
+  `code` varchar(255) NOT NULL,
   `note` varchar(100) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `mediaType`
 --
 
-INSERT INTO `mediaType` (`id`, `name`, `amount`, `note`) VALUES
-(1, 'Images', 0, ''),
-(2, 'Videos', 0, ''),
-(3, 'Audios', 0, ''),
-(4, 'PDFs', 0, '');
+INSERT INTO `mediaType` (`id`, `name`, `code`, `note`) VALUES
+(1, 'Images', 'jpg,png,bmp,gif,sgv', ''),
+(2, 'Videos', 'mp4,avi,mkv', ''),
+(3, 'Audios', 'mp3,wav', ''),
+(4, 'Documents', 'pdf,doc,tex', ''),
+(5, 'Archives', 'zip,rar', '');
 
 -- --------------------------------------------------------
 
