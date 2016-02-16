@@ -26,7 +26,7 @@
         <form method="get" action="/" id="tab-selector">
             <select class="submit-on-change" name="tab">
                 {% for value in tabs %}
-                    {% if value == currentOrder %}
+                    {% if value == tab %}
                         <option selected="" value="posts?tab={{value}}">{{value}}</option>
                     {% else %}
                         <option value="posts?tab={{value}}">{{value}}</option>

@@ -149,11 +149,13 @@ class LoginController extends ControllerBase
                 } else {
                     $this->auth->check(
                         [
-                        'email' => $this->request->getPost('email'),
-                        'password' => $this->request->getPost('password'),
-                        'remember' => true
+                            'email' => $this->request->getPost('email'),
+                            'password' => $this->request->getPost('password'),
+                            'remember' => true
                         ]
                     );
+                    $this->flashSession->success(t('Welcome back '. $this->auth->getName()));
+                    return $this->indexRedirect();
                 }
             }
         } catch (\Exception $e) {
