@@ -181,4 +181,6 @@ input[type="search"]:focus{
     margin-top:50px;
     font-size: 14pt;
 }
-
+.tag-close {
+    margin: 1px -6px;
+}

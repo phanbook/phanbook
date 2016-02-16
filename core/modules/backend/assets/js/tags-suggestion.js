@@ -87,4 +87,8 @@ $(document).ready(function() {
             $('.tag-editor').append(val);
         });
     };
+
+    $(document).on('click', '.tag-close', function(){
+        $('.tag-suggestion').remove();
+    });
 });
