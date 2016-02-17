@@ -146,7 +146,10 @@
                     </div>
                     <div  id="post-thumbnail" class="ibox-content">
                         <div class="form-group">
-                            <a href="#">Set feature images</a>
+                            <a href="#">Set images or inserting link img</a>
+                        </div>
+                        <div class="form-group">
+                            {{ form.render('thumbnail')}}
                         </div>
                     </div>
                 </div>

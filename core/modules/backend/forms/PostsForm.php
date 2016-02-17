@@ -104,6 +104,15 @@ class PostsForm extends Form
         $csrf = new Hidden('csrf');
         $this->add($csrf);
 
+        //
+        $thumbnail = new Text(
+            'thumbnail',
+            [
+                'class'       => 'form-control'
+            ]
+        );
+        $this->add($thumbnail);
+
         $this->add(
             new Submit(
                 'save',

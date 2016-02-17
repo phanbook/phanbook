@@ -65,6 +65,12 @@ class Posts extends ModelBase
      * @var string
      */
     protected $excerpt;
+
+    /**
+     *
+     * @var string
+     */
+    protected $thumbnail;
     /**
      *
      * @var integer
@@ -208,6 +214,20 @@ class Posts extends ModelBase
 
         return $this;
     }
+
+    /**
+     * Method to set the value of field thumbnail
+     *
+     * @param  string $thumbnail
+     * @return $this
+     */
+    public function setThumbnail($thumbnail)
+    {
+        $this->thumbnail = $thumbnail;
+
+        return $this;
+    }
+
     /**
      * Method to set the value of field excerpt
      *
@@ -419,6 +439,11 @@ class Posts extends ModelBase
         return $this->excerpt;
     }
 
+    public function getThumbnail()
+    {
+        return $this->thumbnail;
+    }
+
     /**
      * Returns the value of field numberViews
      *
@@ -535,32 +560,6 @@ class Posts extends ModelBase
         return parent::findFirst($parameters);
     }
 
-    /**
-     * Independent Column Mapping.
-     */
-    public function columnMap()
-    {
-        return array(
-            'id' => 'id',
-            'usersId' => 'usersId',
-            'type'  => 'type',
-            'title' => 'title',
-            'link'  => 'link',
-            'slug' => 'slug',
-            'content' => 'content',
-            'excerpt' => 'excerpt',
-            'numberViews' => 'numberViews',
-            'numberReply' => 'numberReply',
-            'sticked' => 'sticked',
-            'createdAt' => 'createdAt',
-            'modifiedAt' => 'modifiedAt',
-            'editedAt' => 'editedAt',
-            'status' => 'status',
-            'locked' => 'locked',
-            'deleted' => 'deleted',
-            'acceptedAnswer' => 'acceptedAnswer'
-        );
-    }
 
     /**
      * Implement hook beforeValidationOnCreate
@@ -867,5 +866,32 @@ class Posts extends ModelBase
             }
         }
         return $users;
+    }
+    /**
+     * Independent Column Mapping.
+     */
+    public function columnMap()
+    {
+        return [
+            'id' => 'id',
+            'usersId' => 'usersId',
+            'type'  => 'type',
+            'title' => 'title',
+            'link'  => 'link',
+            'slug' => 'slug',
+            'content' => 'content',
+            'excerpt' => 'excerpt',
+            'thumbnail' => 'thumbnail',
+            'numberViews' => 'numberViews',
+            'numberReply' => 'numberReply',
+            'sticked' => 'sticked',
+            'createdAt' => 'createdAt',
+            'modifiedAt' => 'modifiedAt',
+            'editedAt' => 'editedAt',
+            'status' => 'status',
+            'locked' => 'locked',
+            'deleted' => 'deleted',
+            'acceptedAnswer' => 'acceptedAnswer'
+        ];
     }
 }
