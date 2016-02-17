@@ -80,7 +80,7 @@
                     </div>
                     <div id="post-save" class="ibox-content">
                         <div class="form-group">
-                            {{ form.render('saveDraft') }}
+                            {{ form.render('saveDraft', ['name' : 'saveDraft']) }}
                             {{ form.render('save') }}
                         </div>
                         <ul class="list-group clear-list">

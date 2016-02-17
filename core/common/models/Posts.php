@@ -22,6 +22,12 @@ class Posts extends ModelBase
     const POST_PAGE      = 'pages';
     const POST_QUESTIONS = 'questions';
     const POST_HACKERNEWS= 'hackernews';
+
+    const NO_LOCKED  = 'N';
+    /**
+     * Use for draft posrt
+     */
+    const YES_LOCKED = 'Y';
     /**
      *
      * @var integer
@@ -46,6 +52,10 @@ class Posts extends ModelBase
      */
     protected $title;
 
+    /**
+     *
+     * @var string
+     */
     protected $link;
 
     /**
@@ -567,14 +577,12 @@ class Posts extends ModelBase
     public function beforeValidationOnCreate()
     {
         $this->sticked     = 'N';
-        $this->locked      = 'N';
+        $this->locked      = self::NO_LOCKED;
         $this->status      = 'A';
         $this->deleted     = 0;
         $this->numberViews = 0;
         $this->numberReply = 0;
         $this->acceptedAnswer = 'N';
-
-
     }
 
     /**

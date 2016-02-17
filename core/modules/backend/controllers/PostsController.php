@@ -45,6 +45,11 @@ class PostsController extends ControllerBase
                     'order'  => true,
                     'filter' => ['type' => 'input', 'sanitize' => 'string', 'style' => ''],
                 ],
+                'locked' => [
+                    'title'  => t('Locked'),
+                    'order'  => true,
+                    'filter' => ['type' => 'input', 'sanitize' => 'string', 'style' => ''],
+                ],
                 'username' => [
                     'title'  => t('Users'),
                     'order'  => true,
@@ -59,6 +64,7 @@ class PostsController extends ControllerBase
                     'a.title',
                     'a.type',
                     'a.sticked',
+                    'a.locked',
                     'u.username',
                 ],
                 'joins' => [
@@ -219,6 +225,10 @@ class PostsController extends ControllerBase
                 $this->getPathController().(!is_null($id) ? '/edit/'.$id : '/new')
             );
         } else {
+            //Save post to draft
+            if ($this->request->getPost('saveDraft')) {
+                $object->setLocked(Posts::YES_LOCKED);
+            }
             if (!$object->save()) {
                 $this->saveLoger($object->getMessages());
                 return $this->dispatcher->forward(

@@ -114,7 +114,8 @@ class PostsForm extends Form
         $this->add($thumbnail);
 
         //Type
-        $type = new Select('type',
+        $type = new Select(
+            'type',
             [
                 Posts::POST_BLOG => 'Blog',
                 Posts::POST_PAGE => 'Page',
