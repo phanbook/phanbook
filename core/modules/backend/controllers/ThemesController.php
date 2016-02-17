@@ -12,7 +12,6 @@
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
 namespace Phanbook\Backend\Controllers;
-use Phalcon\Mvc\Model\Message;
 
 /**
  * Class ThemesController
@@ -89,7 +88,10 @@ class ThemesController extends ControllerBase
         $content    =  $this->request->getPost('content');
         $filepath   =  $this->request->getPost('filepath');
         if (!$this->manageFile($filepath, $content)) {
-            $this->dispatcher->forward($this->router->getControllerName() . '/edit');
+            return $this->dispatcher->forward([
+                'controllers' => $this->router->getControllerName(),
+                'action' => 'edit'
+            ]);
         }
         $this->flashSession->success(t('Data was successfully saved'));
         return $this->response->redirect($this->router->getControllerName() . '/custom');
@@ -104,9 +106,7 @@ class ThemesController extends ControllerBase
     {
 
         if (!is_writeable($file)) {
-            $message = new Message(t('Files for saving template is not writable.'));
-            $this->appendMessage($message);
-
+            $this->flashSession->error(t('Files for saving template is not writable.'));
             return false;
         }
 
@@ -114,9 +114,7 @@ class ThemesController extends ControllerBase
             return true;
         }
 
-        $message = new Message(t('File template could not be changed.'));
-        $this->appendMessage($message);
-
+        $this->flashSession->error(t('File template could not be changed.'));
         return false;
     }
 }
