@@ -21,7 +21,7 @@ use Phalcon\Forms\Element\Select;
 use Phalcon\Forms\Element\Textarea;
 use Phalcon\Validation\Validator\PresenceOf;
 use Phalcon\Validation\Validator\Identical;
-use Phanbook\Models\Province;
+use Phanbook\Models\Posts;
 
 class PostsForm extends Form
 {
@@ -112,6 +112,23 @@ class PostsForm extends Form
             ]
         );
         $this->add($thumbnail);
+
+        //Type
+        $type = new Select('type',
+            [
+                Posts::POST_BLOG => 'Blog',
+                Posts::POST_PAGE => 'Page',
+                Posts::POST_QUESTIONS  => 'Questions',
+                Posts::POST_HACKERNEWS => 'Hackernew'
+            ],
+            [
+                'useEmpty' => true,
+                'emptyText' => 'Please, choose one...',
+                'class' => 'form-control',
+                'required' => true
+            ]
+        );
+        $this->add($type);
 
         $this->add(
             new Submit(

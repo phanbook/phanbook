@@ -199,7 +199,6 @@ class PostsController extends ControllerBase
         $id = $this->request->getPost('id');
         $auth = $this->auth->getAuth();
         $tags = $this->request->getPost('tags', 'string', null);
-        $type = $this->request->getPost('type') ? $this->request->getPost('type') : Posts::POST_BLOG;
         if (!empty($id)) {
             $object = Posts::findFirstById($id);
 
@@ -209,7 +208,6 @@ class PostsController extends ControllerBase
         }
         $object->setSlug(Slug::generate($this->request->getPost('title')));
         $object->setUsersId($auth['id']);
-        $object->setType($type);
         $form = new PostsForm($object);
         $form->bind($_POST, $object);
 
@@ -230,7 +228,7 @@ class PostsController extends ControllerBase
                 $this->phanbook->saveTagsInPosts($tags, $object);
                 $this->flashSession->success(t('Data was successfully saved'));
 
-                return $this->currentRedirect();
+                return $this->indexRedirect();
             }
         }
     }

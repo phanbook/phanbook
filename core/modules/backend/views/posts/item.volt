@@ -167,7 +167,7 @@
                     </div>
                     <div  id="post-type" class="ibox-content">
                         <div class="form-group">
-                            <p>Coming soon</p>
+                            {{ form.render('type') }}
                         </div>
                     </div>
                 </div>
