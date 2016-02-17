@@ -12,6 +12,7 @@
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
 namespace Phanbook\Backend\Controllers;
+use Phalcon\Mvc\Model\Message;
 
 /**
  * Class ThemesController
