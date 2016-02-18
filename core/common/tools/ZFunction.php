@@ -183,6 +183,6 @@ class ZFunction extends Injectable
         $di = new self;
         $theme =  $di->getDI()->getConfig()->theme;
 
-        return 'content/themes/' . $theme . '/assets/' . $path;
+        return '/content/themes/' . $theme . '/assets/' . $path;
     }
 }
