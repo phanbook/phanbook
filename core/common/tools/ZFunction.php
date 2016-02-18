@@ -87,7 +87,8 @@ class ZFunction extends Injectable
      * @return void
      */
     public static function truncate($str, $maxLen = 35, $breakWords = true, $suffix = '...')
-    {   $strLength = self::strlen($str);
+    {
+        $strLength = self::strlen($str);
         if ($strLength <= $maxLen) {
             return $str;
         }
