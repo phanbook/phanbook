@@ -29,7 +29,7 @@
     {%- endif -%}
     {{ stylesheet_link('//fonts.googleapis.com/css?family=Open+Sans', false)}}
     {{ stylesheet_link('core/assets/css/app.css')}}
-    <link rel="stylesheet" type="text/css" href="{{this.phanbook.assetContent('assets/css/app.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{assets('css/app.css')}}" />
 
     <script type="text/javascript">
         var baseUri     = '{{ this.config.application.baseUri }}';
@@ -56,7 +56,7 @@
     {{ javascript_include('core/assets/js/app.function.js')}}
     {{ javascript_include('core/assets/js/app.ajax.js')}}
     {{ javascript_include('core/assets/js/app.js')}}
-    <script type="text/javascript" src="{{this.phanbook.assetContent('assets/js/app.js')}}"></script>
+    <script type="text/javascript" src="{{assets('js/app.js')}}"></script>
     {{ this.assets.outputJs() }}
 </body>
 </html>

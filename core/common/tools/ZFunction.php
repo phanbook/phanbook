@@ -12,10 +12,11 @@
  */
 namespace Phanbook\Tools;
 
+use Phalcon\Di\Injectable;
 /**
  * PHP Functions in Volt
  */
-class ZFunction
+class ZFunction extends Injectable
 {
     /**
      * Get either a Gravatar URL or complete image tag for a specified email address.
@@ -170,5 +171,18 @@ class ZFunction
             $output .= htmlentities(trim($tmp)) . "\n";
         }
         return $output;
+    }
+    /**
+     * Helper - Safely add assets to your theme
+     *
+     * @param  string
+     * @return string
+     */
+    public static function assets($path)
+    {
+        $di = new self;
+        $theme =  $di->getDI()->getConfig()->theme;
+
+        return 'content/themes/' . $theme . '/assets/' . $path;
     }
 }

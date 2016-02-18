@@ -30,31 +30,28 @@ class VoltFunctions
         if (function_exists($name)) {
             return $name . '(' . $arguments . ')';
         }
+        $property = $name;
+        $class = '\Phanbook\Tools\ZFunction';
 
-        switch ($name) {
-            case 'getUrlAvatar':
-                return '\Phanbook\Tools\ZFunction::getUrlAvatar('. $arguments .')';
-                break;
-            case 'getHumanDate':
-                return '\Phanbook\Tools\ZFunction::getHumanDate('. $arguments .')';
-                break;
-            case 'getImageSrc':
-                return '\Phanbook\Tools\ZFunction::getImageSrc('. $arguments .')';
-                break;
-            case 'asset':
-                return '\Phanbook\Tools\ZFunction::asset('. $arguments .')';
-                break;
-            default:
-                // code...
-                break;
+        if (method_exists($class, $property)) {
+            return $class . '::' . $property . '(' . $arguments . ')';
+        }
+        if (!$arguments) {
+            // Get constant if exist
+            if (defined($class . '::' . $property)) {
+                return $class . '::' . $property;
+            }
+
+            // Get static property if exist
+            if (property_exists($class, $property)) {
+                return $class . '::$' . $property;
+            }
         }
     }
 
     /**
      * Compile some filters
      *
-     * @package las
-     * @version 1.0
      *
      * @param string $name      filter name
      * @param mixed  $arguments filter args
