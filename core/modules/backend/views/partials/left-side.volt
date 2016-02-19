@@ -34,7 +34,11 @@
                                     <ul class="nav nav-second-level collapse">
                                     {% for sub in menu['sub']  %}
                                             <li {% if this.view.getActionName() == sub['code'] %}class="active"{% endif %} >
-                                                {{link_to( menu['code'] ~'/' ~ sub['code'] , '<i class="' ~ sub['icon'] ~ '"></i><span>' ~ t(sub['name']) ~ '</span>')}}
+                                                {% if sub['controller'] is defined %}
+                                                    {{link_to(sub['code'] , '<i class="' ~ sub['icon'] ~ '"></i><span>' ~ t(sub['name']) ~ '</span>')}}
+                                                {% else %}
+                                                    {{link_to( menu['code'] ~'/' ~ sub['code'] , '<i class="' ~ sub['icon'] ~ '"></i><span>' ~ t(sub['name']) ~ '</span>')}}
+                                                    {% endif %}
                                             </li>
                                     {% endfor %}
                                     </ul>

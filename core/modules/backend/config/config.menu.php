@@ -37,7 +37,7 @@ return new \Phalcon\Config(
                     [
                         "code"  =>  "new",
                         "name"  =>  "Add new",
-                        'icon'  =>  'fa fa-bars',
+                        'icon'  =>  'fa fa-plus',
                         "sub"   =>  []
                     ]
                 ]
@@ -62,7 +62,7 @@ return new \Phalcon\Config(
                     [
                         "code"  =>  "index",
                         "name"  =>  "Edit posts",
-                        'icon'  =>  'fa fa-bars',
+                        'icon'  =>  'fa fa-edit',
                         "sub"   =>  []
                     ],
                     [
@@ -74,7 +74,7 @@ return new \Phalcon\Config(
                     [
                         "code"  =>  "new",
                         "name"  =>  "Add Post",
-                        'icon'  =>  'fa fa-bars',
+                        'icon'  =>  'fa fa-plus',
                         "sub"   =>  []
                     ]
                 ]
@@ -108,20 +108,34 @@ return new \Phalcon\Config(
                         'name' => 'Customize',
                         'icon'  =>  'fa fa-bars',
                         'sub' => []
-                    ]
+                    ],
+                    [
+                        'code'  =>  'template',
+                        'name'  =>  'Template',
+                        'icon'  =>  'fa fa-file',
+                        'sub'   =>  [],
+                        'controller' => true
+                    ],
                 ]
-            ],
-            [
-                'code'  =>  'template',
-                'name'  =>  'Template',
-                'icon'  =>  'fa fa-file',
-                'sub'   =>  []
             ],
             [
                 'code'  =>  'tags',
                 'name'  =>  'Tags',
                 'icon'  =>  'fa fa-tags',
-                'sub'   =>  []
+                'sub'   =>  [
+                    [
+                        'code' => 'new',
+                        'name' => 'Add tag',
+                        'icon' => 'fa fa-plus',
+                        'sub'  => []
+                    ],
+                    [
+                        'code' => 'index',
+                        'name' => 'All tags',
+                        'icon' => 'fa fa-bars',
+                        'sub'  => []
+                    ]
+                ],
             ],
             [
                 "code"  =>  "settings",
@@ -145,14 +159,15 @@ return new \Phalcon\Config(
                         "name" => "Google analytic",
                         'icon'  =>  'fa fa-area-chart',
                         "sub"  => []
+                    ],
+                    [
+                        'code'  =>  'update',
+                        'name'  =>  'Updates',
+                        'icon'  =>  'fa fa-refresh',
+                        'sub'   =>  [],
+                        'controller' => true
                     ]
                 ]
-            ],
-            [
-                'code'  =>  'update',
-                'name'  =>  'Updates',
-                'icon'  =>  'fa fa-refresh',
-                'sub'   =>  []
             ]
         ]
 
