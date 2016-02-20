@@ -1034,14 +1034,14 @@ class Users extends ModelBase
      *
      * @return string
      */
-    public function getFullName()
+    public function getFullNameUser()
     {
         if ($this->firstname && $this->lastname) {
             return $this->firstname . " " . $this->lastname;
         } elseif ($this->firstname) {
             return $this->firstname;
         }
-        return $this->username;
+        return $this->lastname;
     }
     /**
      * Get information editor user

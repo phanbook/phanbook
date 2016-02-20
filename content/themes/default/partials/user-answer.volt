@@ -14,7 +14,7 @@
             </div></a>
         </div>
         <div class="user-details">
-            {{ link_to('@' ~ answerUsers.getUsername(), answerUsers.getFullname() | capitalize)}}<br>
+            {{ link_to('@' ~ answerUsers.getUsername(), answerUsers.getInforUser() | capitalize)}}<br>
             <span class="reputation-score" title="reputation score ">
                 {{answerUsers.getHumanKarma()}}
             </span>
@@ -48,7 +48,7 @@
                 </div></a>
             </div>
             <div class="user-details">
-            {{ link_to('@' ~ editorUsers.getUsername(), editorUsers.getFullname() | capitalize)}}<br>
+            {{ link_to('@' ~ editorUsers.getUsername(), editorUsers.getInforUser() | capitalize)}}<br>
                 <span title="reputation score" class="reputation-score">
                     {{ editorUsers.getHumanKarma() }}
                 </span>

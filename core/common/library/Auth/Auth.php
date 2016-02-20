@@ -382,7 +382,7 @@ class Auth extends Component
             'moderator' => $object->getModerator(),
             'theme'     => $object->getTheme(),
             'name'      => $object->getInforUser(),
-            'fullname'  => $object->getFullName(),
+            'fullname'  => $object->getFullNameUser(),
             'username'  => $object->getUsername(),
             'email'     => $object->getEmail()
             )
