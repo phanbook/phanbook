@@ -24,7 +24,7 @@
     {%- endif -%}
 
     {%- if userPosts is defined -%}
-        <link rel="author" href="{{publicUrl}}/@{{userPosts.getInforUser()}}">
+        <link rel="author" href="{{publicUrl}}/@{{userPosts.getFullName()}}">
         <link rel="publisher" href="{{ publicUrl }}">
     {%- endif -%}
     {{ stylesheet_link('//fonts.googleapis.com/css?family=Open+Sans', false)}}
