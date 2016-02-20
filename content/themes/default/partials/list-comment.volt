@@ -6,7 +6,7 @@
                 <div class="comment-text">
                     <div class="comment-body">
                         <span class="comment-copy">{{ comment['content'] }}</span>–&nbsp;
-                        {{ link_to('@' ~ userComment.getUsername() , userComment.getInforUser(), 'class':'comment-user owner')}}
+                        {{ link_to('@' ~ userComment.getUsername() , userComment.getFullname(), 'class':'comment-user owner')}}
                         <span class="comment-date">
                             <a class="comment-link" href="">
                                 <span title="" class="relativetime-clean">{{ getHumanDate(comment['createdAt'])}}</span>

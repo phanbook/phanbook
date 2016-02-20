@@ -42,7 +42,7 @@
                                 </span></a>
                         {% endif %}
                         <a class="author" href="/@{{post.user.getUsername()}}">
-                            {{ post.user.getInforUser() }}
+                            {{ post.user.getFullname() }}
                             <span title="reputation" class="reputation-score">
                                 {{ post.user.getHumanKarma() }}
                             </span>

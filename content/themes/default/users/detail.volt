@@ -9,7 +9,7 @@
                 </a>
             </div>
             <div class="info">
-                <h2><a href="/@{{ user.getUsername()}}"> {{ user.getInforUser()}}</a></h2>
+                <h2><a href="/@{{ user.getUsername()}}"> {{ user.getFullname()}}</a></h2>
                 <p>179 Best Reply Awards</p>
             </div>
             <div class="reputation pull-right">

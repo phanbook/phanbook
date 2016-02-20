@@ -81,7 +81,7 @@
                 {% set link = 'posts/' ~ activity.post.getId() ~ '/' ~ activity.post.getSlug() %}
                 <li class="{% if activity.getWasRead() == 'N' %}unread{% endif %}">
                     <span>
-                        {{ link_to('@' ~ activity.userOrigin.getUsername() ~ '', activity.userOrigin.getInforUser()|e) }}
+                        {{ link_to('@' ~ activity.userOrigin.getUsername() ~ '', activity.userOrigin.getFullname()|e) }}
                     </span>
                     {# Display notification#}
                     {% if activity.getType() == 'P' %}
