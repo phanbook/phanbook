@@ -59,3 +59,26 @@
 .new .post-wapper, .hackernew .hackernew-post{
     padding: 10px 15px;
 }
+
+/*List tags @/tags*/
+
+.list-tags {
+    margin: 0 10px;
+    padding-top: 10px;
+}
+.list-tags .info {
+    font-weight: bold;
+}
+.button-gray a {
+    background-color: #3a3d41;
+    border: 1px solid #3a3d41;
+    border-radius: 4px;
+    color: #ffffff;
+    display: inline-block;
+    font-size: 12px;
+    line-height: 1;
+    margin: 0 3px 3px 0;
+    padding: 0.4em 0.8em 0.4em 0.4em;
+    text-decoration: none;
+    white-space: nowrap;
+}
