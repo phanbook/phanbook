@@ -133,22 +133,8 @@ $router->add('/{router}', [
     'module'     => 'frontend',
     'controller' => 'router',
 ])->beforeMatch(function ($uri, $route) {
-    if ($uri == '/questions') {
-        return false;
-    }
-    if ($uri == '/backend') {
-        return false;
-    }
-    if ($uri == '/') {
-        return false;
-    }
-    if ($uri == '/posts') {
-        return false;
-    }
-    if ($uri == '/tags') {
-        return false;
-    }
-    if ($uri == '/users') {
+    $uris = ['posts', 'users', 'tags', 'search' , 'questions', 'backend'];
+    if (in_array(ltrim($uri, '/'), $uris)) {
         return false;
     }
     if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])
