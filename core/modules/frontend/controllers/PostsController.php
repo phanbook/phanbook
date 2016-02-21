@@ -124,8 +124,9 @@ class PostsController extends ControllerBase
             default:
                 $this->tag->setTitle($this->config->application->tagline);
         }
-        $type = Posts::POST_PAGE;
-        $conditions = "p.deleted = 0 AND p.type != '{$type}'";
+        $type   = Posts::POST_PAGE;
+        $locked = Posts::NO_LOCKED;
+        $conditions = "p.deleted = 0 AND p.type != '{$type}' AND p.locked = '{$locked}'";
         $itemBuilder->andWhere($conditions);
         $totalBuilder->andWhere($conditions);
         //order like tabs sort
