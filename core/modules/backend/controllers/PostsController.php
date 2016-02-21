@@ -45,8 +45,8 @@ class PostsController extends ControllerBase
                     'order'  => true,
                     'filter' => ['type' => 'input', 'sanitize' => 'string', 'style' => ''],
                 ],
-                'locked' => [
-                    'title'  => t('Locked'),
+                'status' => [
+                    'title'  => t('Status'),
                     'order'  => true,
                     'filter' => ['type' => 'input', 'sanitize' => 'string', 'style' => ''],
                 ],
@@ -64,7 +64,7 @@ class PostsController extends ControllerBase
                     'a.title',
                     'a.type',
                     'a.sticked',
-                    'a.locked',
+                    'a.status',
                     'u.username',
                 ],
                 'joins' => [
@@ -227,7 +227,7 @@ class PostsController extends ControllerBase
         } else {
             //Save post to draft
             if ($this->request->getPost('saveDraft')) {
-                $object->setLocked(Posts::YES_LOCKED);
+                $object->setStatus(Posts::DRAFT_STATUS);
             }
             if (!$object->save()) {
                 $this->saveLoger($object->getMessages());

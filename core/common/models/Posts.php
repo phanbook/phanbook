@@ -23,11 +23,29 @@ class Posts extends ModelBase
     const POST_QUESTIONS = 'questions';
     const POST_HACKERNEWS= 'hackernews';
 
-    const NO_LOCKED  = 'N';
     /**
-     * Use for draft posrt
+     * Use Locked posts, just reading and can not comment to this post
      */
+    const NO_LOCKED  = 'N';
     const YES_LOCKED = 'Y';
+
+    /**
+     *
+     *'publish' - A published post or page
+     *'pending' - post is pending review
+     *'draft'   - a post in draft status
+     *'future'  - a post to publish in the future
+     *'private' - not visible to users who are not logged in
+     *'trash'   - post is in trash bin.
+     *
+     */
+    const PRIVATE_STATUS = 'private';
+    const PUBLISH_STATUS = 'publish';
+    const PENDING_STATUS = 'pending';
+    const FUTURE_STATUS  = 'future';
+    const TRASH_STATUS   = 'trash';
+    const DRAFT_STATUS   = 'draft';
+
     /**
      *
      * @var integer
@@ -578,7 +596,7 @@ class Posts extends ModelBase
     {
         $this->sticked     = 'N';
         $this->locked      = self::NO_LOCKED;
-        $this->status      = 'A';
+        $this->status      = self::PUBLISH_STATUS;
         $this->deleted     = 0;
         $this->numberViews = 0;
         $this->numberReply = 0;

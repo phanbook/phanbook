@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 30, 2015 at 08:23 AM
+-- Generation Time: Feb 21, 2016 at 05:16 AM
 -- Server version: 5.5.44-MariaDB
 -- PHP Version: 5.6.14
 
@@ -163,13 +163,12 @@ CREATE TABLE IF NOT EXISTS `media` (
 -- Table structure for table `mediaType`
 --
 
-
 CREATE TABLE IF NOT EXISTS `mediaType` (
   `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
   `code` varchar(255) NOT NULL,
   `note` varchar(100) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `mediaType`
@@ -237,13 +236,14 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `slug` varchar(64) NOT NULL,
   `content` text,
   `excerpt` text,
+  `thumbnail` varchar(200) DEFAULT NULL,
   `numberViews` int(5) unsigned NOT NULL,
   `numberReply` int(3) unsigned NOT NULL,
   `sticked` char(1) DEFAULT 'N',
   `createdAt` int(11) unsigned DEFAULT NULL,
   `modifiedAt` int(11) unsigned DEFAULT NULL COMMENT 'This is update time when user owner post',
   `editedAt` int(11) unsigned DEFAULT NULL COMMENT 'This is update time when modarator or admin edit post',
-  `status` char(1) DEFAULT 'A',
+  `status` char(30) DEFAULT NULL,
   `locked` char(1) DEFAULT 'N',
   `deleted` int(3) DEFAULT '0',
   `acceptedAnswer` char(1) DEFAULT 'N'
@@ -253,8 +253,8 @@ CREATE TABLE IF NOT EXISTS `posts` (
 -- Dumping data for table `posts`
 --
 
-INSERT INTO `posts` (`id`, `usersId`, `type`, `title`, `link`, `slug`, `content`, `excerpt`, `numberViews`, `numberReply`, `sticked`, `createdAt`, `modifiedAt`, `editedAt`, `status`, `locked`, `deleted`, `acceptedAnswer`) VALUES
-(1, 1, 'blog', 'Welcome to Phanbook', NULL, 'welcome-to-phanbook', 'Hi, welcome to the Phanbook official . We plan to help  answers your questions,  share articles, tutorials and tips from the community and the anybody developers. All this interesting content will be available soon. We think you’re going to love it. Also we have features implemented:\r\n\r\n##Weekly Digest\r\n\r\nA weekly digest is now sent to all users registered in the forum. This email summarizes the most important posts in the last week. A great resource if you want to learn more about the framework. If you don''t want to receive this weekly e-mail you can update your e-mail preferences.\r\n\r\n##Badges\r\n\r\nBadges are awards that reward users for their contributions, collaboration and participation in the forum. Badges enable the community to collectively identify the best contributors. Check the available badges here.\r\n\r\n##Notifications\r\n\r\nAll activity that occurs in the posts where you have been participated is now centralized in the notifications. You can see them anytime here. Improved search system\r\n\r\n##Subscription to Posts\r\n\r\nNow you can subscribe to a post, by doing this you''ll receive e-mail notifications on topics you''re waiting answers without having to participate/comment.\r\n\r\n##Light Theme\r\n\r\nNow you can change the standard Dark theme used for code highlighting to a Lighter theme similar to the one used by Github here.\r\n\r\nWe hope you enjoy all these new features. If you want to implement new features or improve something, remember that the forum source code is published on Github.\r\n\r\nThanks!', NULL, 0, 0, 'Y', 1438511582, 1438511582, NULL, 'A', 'N', 0, 'N');
+INSERT INTO `posts` (`id`, `usersId`, `type`, `title`, `link`, `slug`, `content`, `excerpt`, `thumbnail`, `numberViews`, `numberReply`, `sticked`, `createdAt`, `modifiedAt`, `editedAt`, `status`, `locked`, `deleted`, `acceptedAnswer`) VALUES
+(1, 1, 'blog', 'Welcome to Phanbook', NULL, 'welcome-to-phanbook', 'Hi, welcome to the Phanbook official . We plan to help  answers your questions,  share articles, tutorials and tips from the community and the anybody developers. All this interesting content will be available soon. We think you’re going to love it. Also we have features implemented:\r\n\r\n##Weekly Digest\r\n\r\nA weekly digest is now sent to all users registered in the forum. This email summarizes the most important posts in the last week. A great resource if you want to learn more about the framework. If you don''t want to receive this weekly e-mail you can update your e-mail preferences.\r\n\r\n##Badges\r\n\r\nBadges are awards that reward users for their contributions, collaboration and participation in the forum. Badges enable the community to collectively identify the best contributors. Check the available badges here.\r\n\r\n##Notifications\r\n\r\nAll activity that occurs in the posts where you have been participated is now centralized in the notifications. You can see them anytime here. Improved search system\r\n\r\n##Subscription to Posts\r\n\r\nNow you can subscribe to a post, by doing this you''ll receive e-mail notifications on topics you''re waiting answers without having to participate/comment.\r\n\r\n##Light Theme\r\n\r\nNow you can change the standard Dark theme used for code highlighting to a Lighter theme similar to the one used by Github here.\r\n\r\nWe hope you enjoy all these new features. If you want to implement new features or improve something, remember that the forum source code is published on Github.\r\n\r\nThanks!', NULL, NULL, 0, 0, 'Y', 1438511582, 1438511582, NULL, 'publish', 'N', 0, 'N');
 
 -- --------------------------------------------------------
 
@@ -935,7 +935,7 @@ ALTER TABLE `media`
 -- AUTO_INCREMENT for table `mediaType`
 --
 ALTER TABLE `mediaType`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `notifications`
 --
@@ -1044,5 +1044,3 @@ ALTER TABLE `vote`
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
-ALTER TABLE `posts` ADD `thumbnail` VARCHAR(200) NULL AFTER `excerpt`;
