@@ -137,6 +137,9 @@ $router->add('/{router}', [
     if (in_array(ltrim($uri, '/'), $uris)) {
         return false;
     }
+    if ('/' == $uri) {
+        return false;
+    }
     if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])
         && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
         return false;
