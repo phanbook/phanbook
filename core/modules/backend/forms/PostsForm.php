@@ -136,7 +136,7 @@ class PostsForm extends Form
                 'save',
                 array(
                 'class' => 'btn btn-sm btn-success pull-right',
-                'value' => t('Submit Post')
+                'value' => t('Publish Post')
                 )
             )
         );

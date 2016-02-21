@@ -225,6 +225,7 @@ class PostsController extends ControllerBase
                 $this->getPathController().(!is_null($id) ? '/edit/'.$id : '/new')
             );
         } else {
+            $object->setStatus(Posts::PUBLISH_STATUS);
             //Save post to draft
             if ($this->request->getPost('saveDraft')) {
                 $object->setStatus(Posts::DRAFT_STATUS);
