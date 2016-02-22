@@ -101,6 +101,7 @@ class UsersController extends ControllerBase
                 'tab'               => $tab
             ]
         );
+        $this->assets->addCss('core/assets/css/user.css');
     }
     /**
      * Not use for now

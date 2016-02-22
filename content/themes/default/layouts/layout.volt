@@ -30,6 +30,7 @@
     {{ stylesheet_link('//fonts.googleapis.com/css?family=Open+Sans', false)}}
     {{ stylesheet_link('core/assets/css/app.css')}}
     <link rel="stylesheet" type="text/css" href="{{assets('css/app.css')}}" />
+    {{ this.assets.outputCss() }}
 
     <script type="text/javascript">
         var baseUri     = '{{ this.config.application.baseUri }}';
