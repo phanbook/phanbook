@@ -1,12 +1,11 @@
-/* Replace this file with actual dump of your database */
 -- phpMyAdmin SQL Dump
 -- version 4.5.0-dev
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Aug 02, 2015 at 10:55 AM
--- Server version: 5.5.41-MariaDB
--- PHP Version: 5.4.16
+-- Generation Time: Feb 21, 2016 at 05:16 AM
+-- Server version: 5.5.44-MariaDB
+-- PHP Version: 5.6.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -66,6 +65,35 @@ CREATE TABLE IF NOT EXISTS `activityNotifications` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `audit`
+--
+
+CREATE TABLE IF NOT EXISTS `audit` (
+  `id` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `userId` mediumint(8) unsigned NOT NULL,
+  `ipaddress` int(10) unsigned NOT NULL,
+  `type` char(1) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `createdAt` datetime NOT NULL,
+  `modelName` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `auditDetail`
+--
+
+CREATE TABLE IF NOT EXISTS `auditDetail` (
+  `id` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `auditId` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `fieldName` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `oldValue` text CHARACTER SET utf8 COLLATE utf8_unicode_ci,
+  `newValue` text CHARACTER SET utf8 COLLATE utf8_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `categories`
 --
 
@@ -98,31 +126,6 @@ CREATE TABLE IF NOT EXISTS `comment` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `configuration`
---
-
-CREATE TABLE IF NOT EXISTS `configuration` (
-  `id` int(11) unsigned NOT NULL,
-  `idOrganization` int(11) unsigned NOT NULL DEFAULT '0',
-  `key` varchar(64) NOT NULL,
-  `type` enum('bool','string','int','array') NOT NULL DEFAULT 'string',
-  `value` text,
-  `caption` text NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `configuration`
---
-
-INSERT INTO `configuration` (`id`, `idOrganization`, `key`, `type`, `value`, `caption`) VALUES
-(1, 0, 'ITEMS_PER_PAGE', 'array', '10;20;50;100;150;200', 'Number of rows displayed on a listing page. ; it''s the separating values'),
-(2, 0, 'PASSWORD_RESET_INTERVAL', 'int', '10', 'Password reset interval '),
-(3, 3, 'TASK', 'string', 'Task', 'Label for "task"'),
-(4, 1, 'TASK', 'string', 'Item', 'Label for "task"');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `failedLogins`
 --
 
@@ -139,6 +142,44 @@ CREATE TABLE IF NOT EXISTS `failedLogins` (
 
 INSERT INTO `failedLogins` (`id`, `usersId`, `ipAddress`, `attempted`) VALUES
 (0, 0, '14.169.15.36', 1438512078);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `media`
+--
+
+CREATE TABLE IF NOT EXISTS `media` (
+  `id` int(11) NOT NULL,
+  `username` varchar(72) NOT NULL,
+  `type` int(11) NOT NULL,
+  `createdAt` int(15) NOT NULL,
+  `filename` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `mediaType`
+--
+
+CREATE TABLE IF NOT EXISTS `mediaType` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `code` varchar(255) NOT NULL,
+  `note` varchar(100) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `mediaType`
+--
+
+INSERT INTO `mediaType` (`id`, `name`, `code`, `note`) VALUES
+(1, 'Images', 'jpg,png,bmp,gif,sgv', ''),
+(2, 'Videos', 'mp4,avi,mkv', ''),
+(3, 'Audios', 'mp3,wav', ''),
+(4, 'Documents', 'pdf,doc,tex', ''),
+(5, 'Archives', 'zip,rar', '');
 
 -- --------------------------------------------------------
 
@@ -183,33 +224,6 @@ CREATE TABLE IF NOT EXISTS `notificationsBounces` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pages`
---
-
-CREATE TABLE IF NOT EXISTS `pages` (
-  `id` int(12) NOT NULL,
-  `key` varchar(64) NOT NULL DEFAULT '',
-  `title` varchar(255) DEFAULT NULL,
-  `content` text,
-  `createdAt` int(11) DEFAULT NULL,
-  `editedAt` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `pages`
---
-
-INSERT INTO `pages` (`id`, `key`, `title`, `content`, `createdAt`, `editedAt`) VALUES
-(1, 'help', 'Helper  of Phanbook', '<div>\r\n        <p class="info">\r\n            Phanbook is a pretty open platform and free speech place, but there are a few rules:\r\n        </p>\r\n            <ol class="rule-list">\r\n                <li class="first-rule" id="spam">\r\n                    <div class="help-category-box help-category-big-box">\r\n                        <h3>Asking</h3>\r\n                        <ul>\r\n                                <li><a href="/help/on-topic">\r\n                                            <span class="help-post-pin"></span>\r\n                                        What topics can I ask about here?\r\n                                    </a></li>\r\n                                <li><a href="/help/dont-ask">\r\n                                            <span class="help-post-pin"></span>\r\n                                        What types of questions should I avoid asking?\r\n                                    </a></li>\r\n                                <li><a href="/help/closed-questions">\r\n                                            <span class="help-post-pin"></span>\r\n                                        What does it mean if a question is "closed" or "on hold"?\r\n                                    </a></li>\r\n                                <li><a href="/help/asking-rate-limited">\r\n                                        Why is the system asking me to wait a day or more before asking another question?\r\n                                    </a></li>\r\n                                <li><a href="/help/how-to-ask">\r\n                                        How do I ask a good question?\r\n                                    </a></li>\r\n                        </ul>\r\n                    </div>\r\n                </li>\r\n                <li>\r\n                    <div class="help-category-box help-category-big-box">\r\n                        <h3>Our model</h3>\r\n                        <ul>\r\n                                <li><a href="/help/be-nice">\r\n                                            <span class="help-post-pin"></span>\r\n                                        Be nice.\r\n                                    </a></li>\r\n                                <li><a href="/help/behavior">\r\n                                            <span class="help-post-pin"></span>\r\n                                        What kind of behavior is expected of users?\r\n                                    </a></li>\r\n                                <li><a href="/help/interesting-topics">\r\n                                            <span class="help-post-pin"></span>\r\n                                        How do I find topics I''m interested in?\r\n                                    </a></li>\r\n                                <li><a href="/help/searching">\r\n                                        How do I search?\r\n                                    </a></li>\r\n                                <li><a href="/help/whats-beta">\r\n                                        What does "beta" mean?\r\n                                    </a></li>\r\n                        </ul>\r\n                    </div>\r\n                </li>\r\n                <li>\r\n                    <div class="help-category-box help-category-big-box">\r\n                        <h3>Reputation & Moderation</h3>\r\n                        <ul>\r\n                                <li><a href="/help/site-moderators">\r\n                                            <span class="help-post-pin"></span>\r\n                                        Who are the site moderators, and what is their role here?\r\n                                    </a></li>\r\n                                <li><a href="/help/why-vote">\r\n                                            <span class="help-post-pin"></span>\r\n                                        Why is voting important?\r\n                                    </a></li>\r\n                                <li><a href="/help/whats-reputation">\r\n                                            <span class="help-post-pin"></span>\r\n                                        What is reputation? How do I earn (and lose) it?\r\n                                    </a></li>\r\n                                <li><a href="/help/serial-voting-reversed">\r\n                                        Why do I have a reputation change on my reputation page that says "voting corrected"?\r\n                                    </a></li>\r\n                                <li><a href="/help/user-was-removed">\r\n                                        Why do I have a reputation change on my reputation page that says ''User was removed''?\r\n                                    </a></li>\r\n                        </ul>\r\n                    </div>\r\n                </li>\r\n                <li>\r\n                    <div class="help-category-box help-category-big-box">\r\n                                <h3>Answering</h3>\r\n                                <ul>\r\n                                        <li><a href="/help/accepted-answer">\r\n                                                    <span class="help-post-pin"></span>\r\n                                                What does it mean when an answer is "accepted"?\r\n                                            </a></li>\r\n                                        <li><a href="/help/deleted-answers">\r\n                                                Why and how are some answers deleted?\r\n                                            </a></li>\r\n                                        <li><a href="/help/how-to-answer">\r\n                                                How do I write a good answer?\r\n                                            </a></li>\r\n                                        <li><a href="/help/self-answer">\r\n                                                Can I answer my own question?\r\n                                            </a></li>\r\n                                        <li><a href="/help/referencing">\r\n                                                How to reference material written by others\r\n                                            </a></li>\r\n                                </ul>\r\n                    </div>\r\n                </li>\r\n                <li>\r\n                    <div class="help-category-box">\r\n                        <h3>Badges && Privileges</h3>\r\n                        <ul>\r\n                            <li><a href="/help/badges">View a full list of badges you can earn</a></li>\r\n\r\n                            <li><a href="/help/privileges">View a full list of privileges you can earn</a></li>\r\n                        </ul>\r\n                    </div>\r\n                </li>\r\n                <li>\r\n                    <div class="help-category-box help-category-big-box">\r\n                        <h3>My Account</h3>\r\n                        <ul>\r\n                                <li><a href="/help/merging-accounts">\r\n                                            <span class="help-post-pin"></span>\r\n                                        I accidentally created two accounts; how do I merge them?\r\n                                    </a></li>\r\n                                <li><a href="/help/edit-credentials">\r\n                                            <span class="help-post-pin"></span>\r\n                                        How do I add or remove login credentials from my account?\r\n                                    </a></li>\r\n                                <li><a href="/help/reset-password">\r\n                                            <span class="help-post-pin"></span>\r\n                                        I lost my password; how do I reset it?\r\n                                    </a></li>\r\n                                <li><a href="/help/deleting-account">\r\n                                            <span class="help-post-pin"></span>\r\n                                        How do I delete my account?\r\n                                    </a></li>\r\n                                <li><a href="/help/question-limited">\r\n                                        Why have I been limited to one question per week?\r\n                                    </a></li>\r\n                        </ul>\r\n                    </div>\r\n                </li>\r\n                </div>\r\n            </ol>\r\n        </div>', 1437716250, 1437717686),
-(2, 'rule', 'Rules of Phanbook', '<div class="sub-title">\r\n                <p class="info">Phanbook  is a pretty open platform and free speech place, but there are a few rules:</p>\r\n                <ol class="rule-list">\r\n                    <li class="first-rule" id="spam">\r\n                        <p>Don''t <a href="http://phanbook.com/wiki/faq#wiki_what_constitutes_spam.3F">spam</a>.</p>\r\n                        <div class="examples">\r\n                            <p class="expander"><em class="toggle">[+]</em> What is spam?</p>\r\n                            <div style="display:none;" class="rule-examples">\r\n                                <ul>\r\n                                    <li class="example bad-example"><em>NOT OK:</em> Submitting only links to your blog or personal website.</li>\r\n                                    <li class="example good-example"><em>OK:</em> Submitting links from a variety of sites and sources.</li>\r\n                                    <li class="example good-example"><em>OK:</em> Submitting links from your own site, talking with redditors in the comments, and also submitting cool stuff from other sites.</li>\r\n                                    <li class="example bad-example"><em>NOT OK:</em> Posting the same comment repeatedly in multiple subreddits.</li>\r\n                                </ul>\r\n                            </div>\r\n                        </div>\r\n                    </li>\r\n                    <li id="votecheating">\r\n                        <p>Don''t ask for votes or engage in <a href="http://phanbook.com/wiki/faq#wiki_what_constitutes_vote_cheating_and_vote_manipulation.3F">vote manipulation</a>.</p>\r\n                        <div class="examples">\r\n                            <p class="expander"><em class="toggle">[+]</em> What does vote manipulation look like?</p>\r\n                            <div style="display:none" class="rule-examples">\r\n                                <ul>\r\n                                    <li class="example bad-example"><em>NOT OK:</em> Buying votes or using services to vote.</li>\r\n                                    <li class="example good-example"><em>OK:</em> Sharing reddit links with your friends.</li>\r\n                                    <li class="example bad-example"><em>NOT OK:</em> Sharing links with your friends or coworkers and asking them to vote.</li>\r\n                                    <li class="example bad-example"><em>NOT OK:</em> Creating submissions such as "For every upvote I will ..." or "... please upvote this!", regardless of the cause.</li>\r\n                                </ul>\r\n                            </div>\r\n                        </div>\r\n                    </li>\r\n                    <li id="personalinfo">\r\n                        <p>Don''t post <a href="">personal information</a>.</p>\r\n                        <div class="examples">\r\n                            <p class="expander"><em class="toggle">[+]</em> What might be personal information?</p>\r\n                            <div style="display:none" class="rule-examples">\r\n                                <ul>\r\n                                    <li class="example bad-example"><em>NOT OK:</em> Posting a link to your friend''s facebook profile.</li>\r\n                                    <li class="example good-example"><em>OK:</em> Posting your senator''s publicly available contact information</li>\r\n                                    <li class="example bad-example"><em>NOT OK:</em> Posting the full name, employer, or other real-life details of another redditor</li>\r\n                                    <li class="example good-example"><em>OK:</em> Posting a link to a public page maintained by a celebrity.</li>\r\n                                </ul>\r\n                            </div>\r\n                        </div>\r\n                    </li>\r\n                    <li id="minors">\r\n                        <p>No <a rel="nofollow" href="http://www.missingkids.com/Exploitation/FAQ">child pornography</a> or <a rel="nofollow" href="http://phanbook.com/r/blog/comments/pmj7f/a_necessary_change_in_policy/">sexually suggestive content featuring minors</a>.</p>\r\n                    </li>\r\n                    <li id="breakthesite">\r\n                        <p>Don''t break the site or do anything that interferes with normal use of the site.</p>\r\n                        <div class="examples">\r\n                            <p class="expander"><em class="toggle">[+]</em> Tell me more.</p>\r\n                            <div style="display:none" class="rule-examples">\r\n                                <ul>\r\n                                    <li class="example bad-example"><em>NOT OK:</em> Creating programs that request information more than once every 2 seconds or violate any of our other<a href="https://github.com/reddit/reddit/wiki/API"> API rules</a>.</li>\r\n                                    <li class="example good-example"><em>AWESOME:</em> Responsibly<a href="/wiki/whitehat"> reporting security </a>issues to us.</li>\r\n                                </ul>\r\n                            </div>\r\n                        </div>\r\n                    </li>\r\n                    <!-- Also, ''reddit'' is STRICTLY lowercase -->\r\n                    <li id="ask">\r\n                        <p>Get answers to practical, detailed questions</p>\r\n                        <div class="examples">\r\n                            <p class="expander"><em class="toggle">[+]</em> What is spam?</p>\r\n                            <div style="display: none;" class="rule-examples">\r\n                                <ul>\r\n                                    <li class="example bad-example"><em>NOT OK:</em> Questions you haven''t tried to find an answer for (show your work!)</li>\r\n                                    <li class="example good-example"><em>OK:</em> Specific programming problems</li>\r\n                                    <li class="example good-example"><em>OK:</em> Software algorithms</li>\r\n                                    <li class="example bad-example"><em>NOT OK:</em> Product or service recommendations or comparisons</li>\r\n                                    <li class="example good-example"><em>NOT OK:</em> Software development tools</li>\r\n                                </ul>\r\n                            </div>\r\n                        </div>\r\n                    </li>\r\n                </ol>\r\n            </div>\r\n            <div class="info" id="followreddiquette">\r\n                <p>You should also be mindful of<a href="/wiki/reddiquette"> reddiquette</a>, an <em>informal</em> expression of {{this.config.application.name}} is community values as written by the community itself. Please abide by it the best you can.</p>\r\n            </div>\r\n            <div class="info">\r\n                <img src="/images/dog.jpg" alt="this dog has no semantic value" title="here at reddit, we inscribe our rules on a dog. screw tablets." class="bottom" id="dog">\r\n            </div>', 1437716733, 1437806769),
-(3, 'about', 'About us', '<p>\r\n                   Phanbook is an open source project and depends on volunteer efforts.\r\n                    If you want to improve this forum please submit a\r\n                   <a href="https://help.github.com/articles/creating-a-pull-request">pull request</a>\r\n                 to its <a href="https://github.com/phanbook/phanbook">repository</a>.\r\n               </p>', 1437719274, 1437719299),
-(4, 'markdown', 'Markdown', '<p>\r\n                    This forum allows you to use Markdown as markup language when creating posts or adding comments. Markdown\r\n                   is also used by Github so it''s probably familiar to you. The following guide explain its basic syntax:\r\n             </p>\r\n\r\n                <p>\r\n                 <h3>Bold and Italics</h3>\r\n               </p>\r\n\r\n            <p>\r\n                 <pre>\r\n            *single asterisks*\r\n\r\n            _single underscores_\r\n\r\n            **double asterisks**\r\n\r\n            __double underscores__\r\n            </pre>\r\n            </p>\r\n\r\n\r\n             <p>\r\n                 <h3>Headings</h3>\r\n                   H1 is underlined using equal signs, and H2 is underlined using dashes.\r\n              </p>\r\n                <p>\r\n                 <pre>\r\n            Header 1\r\n            ========\r\n\r\n            Header 2</pre>\r\n             </p>\r\n\r\n                <p>\r\n                 <h3>Headings</h3>\r\n                   Atx-style headers use 1-6 hash characters at the start of the line.\r\n             </p>\r\n                <p>\r\n                 <pre>\r\n            # Header 1\r\n            ## Header 2\r\n            ### Header 3\r\n            #### Header 4\r\n            ##### Header 5\r\n            ###### Header 6\r\n            </pre>\r\n              </p>\r\n\r\n                <p>\r\n                 <h3>Paragraphs</h3>\r\n                 A paragraph is simply one or more consecutive lines of text, separated by one or more blank lines.\r\n              </p>\r\n\r\n            <p>\r\n            <pre>\r\n            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla neque nisl, fringilla sed blandit non, pretium eu odio.\r\n\r\n            Lorem ipsum dolor sit amet, consectetur adipiscing elit.\r\n            Nulla neque nisl, fringilla sed blandit non, pretium eu odio.\r\n            </pre>\r\n            </p>\r\n\r\n               <p>\r\n                 <h3>Unordered Lists</h3>\r\n                    Start each line with hyphens, asterisks or pluses.\r\n              </p>\r\n\r\n            <p>\r\n            <pre>\r\n            * one\r\n            * two\r\n            * three\r\n            </pre>\r\n            </p>\r\n\r\n             <p>\r\n                 <h3>Ordered Lists Core</h3>\r\n                 Start each line with number and a period.\r\n               </p>\r\n\r\n            <p>\r\n            <pre>\r\n            1. one\r\n            2. two\r\n            3. three\r\n            </pre>\r\n            </p>\r\n\r\n              <p>\r\n                 <h3>Code Blocks</h3>\r\n                </p>\r\n\r\n            **Preferred method**\r\n            <p>\r\n            <pre>\r\n            ```php\r\n            &lt;?php\r\n\r\n            require __DIR__ . ''/vendor/autoload.php'';\r\n            ```\r\n            </pre>\r\n            </p>\r\n\r\n            <p>\r\n            <pre>\r\n            ```\r\n            $ cd cphalcon/build\r\n            $ sudo ./install\r\n            ```\r\n            </pre>\r\n            </p>\r\n\r\n            <p>\r\n            <pre>\r\n            Lorem ipsum dolor sit amet\r\n\r\n                consectetur adipiscing elit.\r\n                Nulla neque nisl, fringilla sed blandit non, pretium eu odio.\r\n            </pre>\r\n            </p>\r\n\r\n\r\n\r\n\r\n            <p>\r\n               <h3>Inline Code</h3>\r\n            </p>\r\n\r\n            <p>\r\n            <pre>\r\n            Don''t forget to add `echo $foo;`.\r\n\r\n            Please replace `&lt;b&gt;` to `&lt;strong&gt;`.\r\n            </pre>\r\n            </p>\r\n\r\n            <p>\r\n              <h3>Horizontal Rules</h3>\r\n            </p>\r\n\r\n            <p>\r\n            <pre>\r\n            * * *\r\n\r\n            *******\r\n\r\n            - - - -\r\n\r\n            --------\r\n            </pre>\r\n            </p>\r\n\r\n            <p>\r\n               <h3>Inline Links</h3>\r\n            </p>\r\n\r\n            <p>\r\n            <pre>\r\n            This is an [inline link](http://example.com).\r\n\r\n            This [link](http://example.com "example website") has title attribute.\r\n            </pre>\r\n            </p>\r\n\r\n            <p>\r\n            <pre>\r\n            This is an [reference style link][id1].\r\n\r\n            This [link][id2] has title attribute.\r\n\r\n            [id1]: http://example.com/\r\n            [id2]: http://example.com/ "example website"\r\n            </pre>\r\n            </p>\r\n\r\n            <p>\r\n               <h3>Inline Images</h3>\r\n            </p>\r\n\r\n            <p>\r\n            <pre>\r\n            ![Alt text](/path/to/image.png)\r\n\r\n            ![Alt text](/path/to/image.png "Title")\r\n            </pre>\r\n            </p>\r\n\r\n            <p>\r\n               <h3>Tables</h3>\r\n            </p>\r\n\r\n            <p>\r\n            <pre>\r\n            | head | head |\r\n            |------|------|\r\n            | body | body |\r\n            </pre>\r\n            </p>\r\n\r\n            </div>', 1437806442, 1437806442),
-(5, 'moderation', 'Moderation', '<p>\r\n                    Moderators have special authority, they are community facilitators, they can edit or delete your posts or comments.\r\n                 In order to maintain our community, moderators reserve the right to remove any content and any user account for any reason at any time.\r\n             </p>\r\n\r\n                <p>\r\n                 Most of the time, moderation will be limited to correcting small details in posts or comments, improve grammar,\r\n                 fix occasional details in the code, fix links, etc.\r\n             </p>\r\n\r\n                <p>\r\n                 A moderator is not required to answer questions or make decisions.\r\n              </p>', 1437806487, 1437806487),
-(6, 'vote', 'Vote', '<p>\r\n                    Posts and comments can be voted up or down. Voting enable the community to\r\n                  collectively identify the best (and worst) contributions. However, votes aren''t unlimited.\r\n                 Every time you win 50 points of karma the forum assing you a vote.\r\n                  You can only vote once every post or comment. You can spend\r\n                 your votes by voting positively or negatively posts and comments in the forum.\r\n              </p>\r\n\r\n                <p>\r\n                 When your posts or comments have been voted your karma is increased or decreased depending on the karma of who you get the vote.\r\n                    When you receive votes from the original poster you get an extra number of points on your karma.\r\n                </p>\r\n\r\n                <p>\r\n                 You can see how many votes you have on your  <a href =''http://phanbook.com''> settings</a> page.\r\n               </p>', 1437806743, 1437806743);
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `posts`
 --
 
@@ -221,13 +235,15 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `link` varchar(250) DEFAULT NULL COMMENT 'Add url website hackernew',
   `slug` varchar(64) NOT NULL,
   `content` text,
+  `excerpt` text,
+  `thumbnail` varchar(200) DEFAULT NULL,
   `numberViews` int(5) unsigned NOT NULL,
   `numberReply` int(3) unsigned NOT NULL,
   `sticked` char(1) DEFAULT 'N',
   `createdAt` int(11) unsigned DEFAULT NULL,
   `modifiedAt` int(11) unsigned DEFAULT NULL COMMENT 'This is update time when user owner post',
   `editedAt` int(11) unsigned DEFAULT NULL COMMENT 'This is update time when modarator or admin edit post',
-  `status` char(1) DEFAULT 'A',
+  `status` char(30) DEFAULT NULL,
   `locked` char(1) DEFAULT 'N',
   `deleted` int(3) DEFAULT '0',
   `acceptedAnswer` char(1) DEFAULT 'N'
@@ -237,8 +253,8 @@ CREATE TABLE IF NOT EXISTS `posts` (
 -- Dumping data for table `posts`
 --
 
-INSERT INTO `posts` (`id`, `usersId`, `type`, `title`, `link`, `slug`, `content`, `numberViews`, `numberReply`, `sticked`, `createdAt`, `modifiedAt`, `editedAt`, `status`, `locked`, `deleted`, `acceptedAnswer`) VALUES
-(1, 1, 'tips', 'Welcome to Phanbook', NULL, 'welcome-to-phanbook', 'Hi, welcome to the Phanbook official . We plan to help  answers your questions,  share articles, tutorials and tips from the community and the anybody developers. All this interesting content will be available soon. We think you’re going to love it. Also we have features implemented:\r\n\r\n##Weekly Digest\r\n\r\nA weekly digest is now sent to all users registered in the forum. This email summarizes the most important posts in the last week. A great resource if you want to learn more about the framework. If you don''t want to receive this weekly e-mail you can update your e-mail preferences.\r\n\r\n##Badges\r\n\r\nBadges are awards that reward users for their contributions, collaboration and participation in the forum. Badges enable the community to collectively identify the best contributors. Check the available badges here.\r\n\r\n##Notifications\r\n\r\nAll activity that occurs in the posts where you have been participated is now centralized in the notifications. You can see them anytime here. Improved search system\r\n\r\n##Subscription to Posts\r\n\r\nNow you can subscribe to a post, by doing this you''ll receive e-mail notifications on topics you''re waiting answers without having to participate/comment.\r\n\r\n##Light Theme\r\n\r\nNow you can change the standard Dark theme used for code highlighting to a Lighter theme similar to the one used by Github here.\r\n\r\nWe hope you enjoy all these new features. If you want to implement new features or improve something, remember that the forum source code is published on Github.\r\n\r\nThanks!', 0, 0, 'Y', 1438511582, 1438511582, NULL, 'A', 'N', 0, 'N');
+INSERT INTO `posts` (`id`, `usersId`, `type`, `title`, `link`, `slug`, `content`, `excerpt`, `thumbnail`, `numberViews`, `numberReply`, `sticked`, `createdAt`, `modifiedAt`, `editedAt`, `status`, `locked`, `deleted`, `acceptedAnswer`) VALUES
+(1, 1, 'blog', 'Welcome to Phanbook', NULL, 'welcome-to-phanbook', 'Hi, welcome to the Phanbook official . We plan to help  answers your questions,  share articles, tutorials and tips from the community and the anybody developers. All this interesting content will be available soon. We think you’re going to love it. Also we have features implemented:\r\n\r\n##Weekly Digest\r\n\r\nA weekly digest is now sent to all users registered in the forum. This email summarizes the most important posts in the last week. A great resource if you want to learn more about the framework. If you don''t want to receive this weekly e-mail you can update your e-mail preferences.\r\n\r\n##Badges\r\n\r\nBadges are awards that reward users for their contributions, collaboration and participation in the forum. Badges enable the community to collectively identify the best contributors. Check the available badges here.\r\n\r\n##Notifications\r\n\r\nAll activity that occurs in the posts where you have been participated is now centralized in the notifications. You can see them anytime here. Improved search system\r\n\r\n##Subscription to Posts\r\n\r\nNow you can subscribe to a post, by doing this you''ll receive e-mail notifications on topics you''re waiting answers without having to participate/comment.\r\n\r\n##Light Theme\r\n\r\nNow you can change the standard Dark theme used for code highlighting to a Lighter theme similar to the one used by Github here.\r\n\r\nWe hope you enjoy all these new features. If you want to implement new features or improve something, remember that the forum source code is published on Github.\r\n\r\nThanks!', NULL, NULL, 0, 0, 'Y', 1438511582, 1438511582, NULL, 'publish', 'N', 0, 'N');
 
 -- --------------------------------------------------------
 
@@ -411,6 +427,31 @@ INSERT INTO `rememberTokens` (`id`, `usersId`, `token`, `userAgent`, `createdAt`
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `settings`
+--
+
+CREATE TABLE IF NOT EXISTS `settings` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `value` varchar(1000) NOT NULL,
+  `note` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `settings`
+--
+
+INSERT INTO `settings` (`id`, `name`, `value`, `note`) VALUES
+(1, 'googleAnalyticAccessToken', '{"access_token":"ya29.FQKKnvAkiWAw4V2eOz2ObjbacSArkED6J7AIvdpDSVLy2p3rW5uRs2RQP5hyfw-494rkwA","token_type":"Bearer","expires_in":3600,"refresh_token":"1\\/9GIaQln-tIrVg08hrC72znC-LREX5P_Oon_yW1TBIn5IgOrJDtdun6zK6XiATCKT","created":1445574098}', ''),
+(3, 'googleAnalyticRefreshToken', '1/9GIaQln-tIrVg08hrC72znC-LREX5P_Oon_yW1TBIn5IgOrJDtdun6zK6XiATCKT', ''),
+(4, 'googleAnalyticProfileId', '104463261', ''),
+(5, 'googleAnalyticAccountId', '47328645', ''),
+(6, 'googleAnalyticTopActivities', '[{"code":"pageviews","name":"Total Page Views","default":1},{"code":"visits","name":"Total Visits","default":1},{"code":"timeOnPage","name":"Total Time On Page","default":1},{"code":"bounceRate","name":"Bounce Rate","default":1}]', ''),
+(7, 'googleAnalyticTrackingId', 'UA-47328645-4', '');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `shortUrls`
 --
 
@@ -445,7 +486,7 @@ CREATE TABLE IF NOT EXISTS `successLogins` (
   `usersId` int(15) NOT NULL,
   `ipAddress` varchar(100) NOT NULL,
   `userAgent` varchar(200) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `successLogins`
@@ -495,7 +536,9 @@ INSERT INTO `successLogins` (`id`, `usersId`, `ipAddress`, `userAgent`) VALUES
 (41, 1, '14.169.15.36', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:39.0) Gecko/20100101 Firefox/39.0'),
 (42, 1, '14.169.15.36', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:39.0) Gecko/20100101 Firefox/39.0'),
 (43, 1, '14.169.15.36', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:39.0) Gecko/20100101 Firefox/39.0'),
-(44, 1, '14.169.15.36', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:39.0) Gecko/20100101 Firefox/39.0');
+(44, 1, '14.169.15.36', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:39.0) Gecko/20100101 Firefox/39.0'),
+(45, 1, '14.169.15.36', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:39.0) Gecko/20100101 Firefox/39.0'),
+(46, 1, '14.169.15.36', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:39.0) Gecko/20100101 Firefox/39.0');
 
 -- --------------------------------------------------------
 
@@ -533,7 +576,7 @@ CREATE TABLE IF NOT EXISTS `template` (
   `key` varchar(64) NOT NULL DEFAULT '',
   `subject` varchar(255) DEFAULT NULL,
   `content` text
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `template`
@@ -544,7 +587,8 @@ INSERT INTO `template` (`id`, `name`, `key`, `subject`, `content`) VALUES
 (2, 'Forgot Password', 'forgotpassword', 'Reset your password', '<h5>Hello {{ firstname }} {{ lastname }},</h5>\r\n<p>Below you will find the link that you have requested to reset your password</p>\r\n<h4><a href="{{ link }}">Change my password</a></h4>'),
 (6, 'Test', 'test', 'Phanbook TEST', 'This is a test email. \r\n\r\n© {{ date(''Y'') }} Phanbook'),
 (7, 'Right side theme default', 'rightside', 'Right sidebar', '<!-- begin right-sidebar -->\r\n<div id="right-sidebar" class="sidebar">\r\n    <div class="spacer">\r\n        <form role="search" id="search-right" action="/search">\r\n            <input type="text" tabindex="20" placeholder="{{t(''search'')}}" name="q">\r\n            <input type="submit" tabindex="22" value="">\r\n        </form>\r\n    </div>\r\n    <div class="spacer">\r\n        <div class="sidebox submit submit-link">\r\n            <div class="morelink" data-descr="Please remember to read the rules. Thank you!">\r\n                <a target="_top" class="login-required" href="/hackernew/submit">{{t(''Submit a new link'')}}</a>\r\n            </div>\r\n        </div>\r\n    </div>\r\n    {% if post is defined and this.view.getActionName() == ''view''%}\r\n        <div class="spacer">\r\n            <div class="linkinfo">\r\n                <div class="date">\r\n                    <span>this post was submitted on</span>\r\n                    <time datetime="{{date(''Y-M-D h:i'', post.getCreatedAt())}}">{{ date(''d M Y'', post.getCreatedAt())}}</time>\r\n                </div>\r\n                <div class="score">\r\n                    <span class="number">{{ post.getBounty()[''value''] ? post.getBounty()[''value''] : 0 }}</span>\r\n                    <span class="word">points</span> (95% upvoted)\r\n                </div>\r\n                <div class="shortlink">shortlink:\r\n                    <input type="text" id="shortlink-text" readonly="readonly" value="http://phanbook.com">\r\n                </div>\r\n            </div>\r\n        </div>\r\n    {% endif %}\r\n    <div class="spacer">\r\n        <div class="titlebox">\r\n            <h1 class="hover redditname">\r\n                <a class="hover" href="p/PHP/">PHP</a>\r\n            </h1>\r\n            <span data-sr_name="PHP" class="fancy-toggle-button subscribe-button toggle">\r\n                {% if 1 == 1 %}\r\n                    <a href="#" class="add" data-descr="Subscribe!">subscribe</a>\r\n                {% else %}\r\n                    <a href="#" class="remove" data-descr="Unsubscribe!">unsubscribe</a>\r\n                {% endif %}\r\n            </span>\r\n            <span class="subscribers"><span class="number">37,215</span> <span class="word">readers</span></span>\r\n            <div class="usertext-body may-blank-within md-container ">\r\n                <div class="md"><p><a href="/p/PHP/wiki/index">Subphannook FAQ</a></p>\r\n\r\n                    <p>{{t(''Releases'')}}: <a href="http://php.net/downloads.php">Current Releases</a>, <a href="http://windows.php.net/download/">Windows Releases</a>, <a href="http://museum.php.net/">Old Releases</a></p>\r\n\r\n                    <p>Sources: <a href="https://svn.php.net/viewvc/">Subversion</a>, <a href="https://git.php.net/">Git</a>, <a href="http://lxr.php.net/">Source Search</a></p>\r\n\r\n                    <p><a href="/">Contribute to the PHP Documentation</a></p>\r\n\r\n                    <p>Related subreddits:\r\n                        <a href="/p/css">CSS</a>, <a href="/p/javascript">JavaScript</a>,\r\n                        <a href="/p/web-design">Web Design</a>, <a href="/p/wordpress">Wordpress</a>, <a href="/p/webdev">WebDev</a>\r\n                    </p>\r\n\r\n                    <p>Join <a href="http://chat.phalcontip.com">#phalcon</a> on Freenode!</p>\r\n\r\n                    <hr>\r\n\r\n                    <p><a href="/p/PHP">/p/PHP</a> is not a support subphanbook. Please visit <a href="/p/phphelp">/p/phphelp</a> for help, or connect to <a href="http://chat.phalcontip.com">##php on Slack chat</a> (<a href="https://slack.com/faq.shtml#thien">you registration required</a>)</p>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <div class="spacer">\r\n        <a href="">\r\n        {{image(''images/sponsor.png'')}}\r\n        </a>\r\n    </div>\r\n    <div id="hot-network-questions" class="spacer">\r\n        <h4>\r\n            {{ link_to(''posts/hot'', t(''Hot Network Community'')) }}\r\n        </h4>\r\n        <ul class="widget">\r\n                {% for hot in hotPosts %}\r\n                    <li>\r\n                        <p>\r\n                            <span class="number"> {{ hot.getNumberReply() }}</span>\r\n                            <span class="text">\r\n                            {{ link_to(hot.getType() ~ ''/'' ~ hot.getId() ~ ''/'' ~ hot.getSlug(), hot.getTitle())}}</span>\r\n                        </p>\r\n                    </li>\r\n                {% endfor %}\r\n        </ul>\r\n    </div><!-- hot-network-questions -->\r\n</div>\r\n'),
-(8, 'SendSpool', 'sendspool', 'Send Spool', '{# The template use for send mail when have a reply or comment on post#}\r\n<h5>Hello {{ name }} </h5>\r\n{{ content }}\r\n<p style="font-size:small;-webkit-text-size-adjust:none;color:#717171;">\r\n&mdash;<br>Reply to this email directly or view the complete thread on\r\n<a href="{{ link }}">{{ this.config.application.name }}</a>\r\nChange your e-mail preferences <a href="{{this.config.application.publicUrl}}/settings">here</a></p>\r\n</p>\r\n');
+(8, 'SendSpool', 'sendspool', 'Send Spool', '{# The template use for send mail when have a reply or comment on post#}\r\n<h5>Hello {{ name }} </h5>\r\n{{ content }}\r\n<p style="font-size:small;-webkit-text-size-adjust:none;color:#717171;">\r\n&mdash;<br>Reply to this email directly or view the complete thread on\r\n<a href="{{ link }}">{{ this.config.application.name }}</a>\r\nChange your e-mail preferences <a href="{{this.config.application.publicUrl}}/settings">here</a></p>\r\n</p>\r\n'),
+(9, 'Send Digest', 'senddigest', 'Top stories', '{# The template use for send digest#}\r\n<html><head></head>\r\n<body>\r\n    <h5>Hello {{ username }} </h5>\r\n    <h3> A brief summary of {{this.config.application.name}} since your last visit on last week </h3>\r\n    {% for post in posts %}\r\n        <p><a class="title" href="{{ post[''link''] }}"> {{ post[''title''] }}</a></p>\r\n\r\n        <p> {{ post[''content'']}} <a class="read-more" href="{{ post[''link''] }}">Read more</a></p>\r\n\r\n        <hr style="border: 1px solid #dadada">\r\n    {% endfor %}\r\n    <p class="footer">\r\n        &mdash;<br>Reply to this email directly or view the complete thread on\r\n        <a href="{{ post[''link''] }}">{{ this.config.application.name }}</a>\r\n        Change your e-mail preferences <a href="{{this.config.application.publicUrl}}/settings">here</a>\r\n    </p>\r\n\r\n</body></html>\r\n<style type="text/css">\r\n    h1 {\r\n        font-size:22px;\r\n        color:#333;letter-spacing:-0.5px;\r\n        line-height:1.25;\r\n        font-weight:normal;\r\n        padding:16px 0;\r\n        border-bottom:1px solid #e2e2e2\r\n    }\r\n    a.title {\r\n        text-decoration:none;\r\n        display:block;font-size:20px;\r\n        color:#333;letter-spacing:-0.5px;\r\n        line-height:1.25;\r\n        font-weight:normal;\r\n        color:#155fad\r\n    }\r\n    p.footer {\r\n        font-size:small;\r\n        -webkit-text-size-adjust:none;\r\n        color:#717171;\r\n    }\r\n    a.read-more{\r\n        color:#155fad;\r\n    }\r\n\r\n</style>\r\n');
 
 -- --------------------------------------------------------
 
@@ -659,6 +703,18 @@ ALTER TABLE `activityNotifications`
   ADD KEY `usersId` (`usersId`,`wasRead`);
 
 --
+-- Indexes for table `audit`
+--
+ALTER TABLE `audit`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `auditDetail`
+--
+ALTER TABLE `auditDetail`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `categories`
 --
 ALTER TABLE `categories`
@@ -673,11 +729,16 @@ ALTER TABLE `comment`
   ADD KEY `idUser` (`userId`);
 
 --
--- Indexes for table `configuration`
+-- Indexes for table `media`
 --
-ALTER TABLE `configuration`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `idOrganization` (`idOrganization`,`key`);
+ALTER TABLE `media`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `mediaType`
+--
+ALTER TABLE `mediaType`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `notifications`
@@ -694,12 +755,6 @@ ALTER TABLE `notifications`
 ALTER TABLE `notificationsBounces`
   ADD PRIMARY KEY (`id`),
   ADD KEY `email` (`email`,`reported`);
-
---
--- Indexes for table `pages`
---
-ALTER TABLE `pages`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `posts`
@@ -776,6 +831,12 @@ ALTER TABLE `postsViews`
 -- Indexes for table `rememberTokens`
 --
 ALTER TABLE `rememberTokens`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `settings`
+--
+ALTER TABLE `settings`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -866,10 +927,15 @@ ALTER TABLE `categories`
 ALTER TABLE `comment`
   MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `configuration`
+-- AUTO_INCREMENT for table `media`
 --
-ALTER TABLE `configuration`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+ALTER TABLE `media`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `mediaType`
+--
+ALTER TABLE `mediaType`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `notifications`
 --
@@ -880,11 +946,6 @@ ALTER TABLE `notifications`
 --
 ALTER TABLE `notificationsBounces`
   MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `pages`
---
-ALTER TABLE `pages`
-  MODIFY `id` int(12) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `posts`
 --
@@ -936,6 +997,11 @@ ALTER TABLE `postsViews`
 ALTER TABLE `rememberTokens`
   MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 --
+-- AUTO_INCREMENT for table `settings`
+--
+ALTER TABLE `settings`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
+--
 -- AUTO_INCREMENT for table `shortUrls`
 --
 ALTER TABLE `shortUrls`
@@ -949,7 +1015,7 @@ ALTER TABLE `subscribe`
 -- AUTO_INCREMENT for table `successLogins`
 --
 ALTER TABLE `successLogins`
-  MODIFY `id` int(15) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=45;
+  MODIFY `id` int(15) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=47;
 --
 -- AUTO_INCREMENT for table `tags`
 --
@@ -959,7 +1025,7 @@ ALTER TABLE `tags`
 -- AUTO_INCREMENT for table `template`
 --
 ALTER TABLE `template`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `users`
 --
