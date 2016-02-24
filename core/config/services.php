@@ -376,10 +376,9 @@ $di->set(
     function () use ($di) {
         $translation = new Gettext(
             [
-            'locale' => $di->get('config')->language,
-            'directory' => ROOT_DIR . '/apps/lang',
-            'defaultDomain'=> 'messages',
-
+                'locale' => $di->get('config')->language,
+                'directory' => ROOT_DIR . 'core/lang',
+                'defaultDomain'=> 'messages',
             ]
         );
         return $translation;
