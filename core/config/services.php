@@ -439,6 +439,17 @@ $di->set(
     },
     true
 );
+/**
+ * The logger component
+ */
+$di->set(
+    'logger',
+    function () use ($di) {
+        $logger = ROOT_DIR. 'content/logs/' . date('Y-m-d') . '.log';
+        return new FileLogger($logger, ['model' => 'a+']);
+    },
+    true
+);
 
 /**
  * Translation function call anywhere

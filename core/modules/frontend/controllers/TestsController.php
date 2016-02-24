@@ -32,4 +32,14 @@ class TestsController extends ControllerBase
         return 'frontend';
 
     }
+    public function testLoggerAction()
+    {
+        $this->view->disable();
+        try {
+            $nonExistingComponent = $this->getDI()->get('nonExistingComponent');
+            $nonExistingComponent->executeNonExistingMethod();
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
+        }
+    }
 }
