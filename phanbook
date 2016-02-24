@@ -10,7 +10,12 @@
 #     ruby=/opt/vagrant/embedded/bin/ruby
 # fi
 
-
+getThemeBlog() {
+    cd content/themes
+    if [ ! -d "blog" ]; then
+        git clone --depth=1 https://github.com/phanbook/blog.git
+    fi
+}
 #Setup some dependency
 #rm -rf opsfiles
 if [ ! -d "opsfiles" ]; then
@@ -37,7 +42,9 @@ fi
 if [ "destroy" == "$1" ]; then
     cd opsfiles && vagrant destroy
 fi
-
+if [ "blog" == "$2" ]; then
+    getThemeBlog
+fi
 
 #Docker setup
 if [ "docker" == "$1" ]; then
@@ -61,5 +68,6 @@ if [ "docker" == "$1" ]; then
     cp opsfiles/docker/docker-compose.yml .
     docker-compose up -d
 fi
+
 
 
