@@ -150,14 +150,20 @@ return new \Phalcon\Config(
                     ],
                     [
                         "code" => "logo",
-                        "name" => "Change Logo",
+                        "name" => "Logo",
                         'icon'  =>  'fa fa-bars',
                         "sub"  => []
                     ],
                     [
                         "code" => "analytic",
-                        "name" => "Google analytic",
+                        "name" => "Google",
                         'icon'  =>  'fa fa-area-chart',
+                        "sub"  => []
+                    ],
+                    [
+                        "code" => "reading",
+                        "name" => "Reading",
+                        'icon'  =>  'fa fa-bars',
                         "sub"  => []
                     ],
                     [

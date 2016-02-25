@@ -18,6 +18,7 @@ use Phanbook\Backend\Forms\ConfigurationsForm;
 use Phanbook\Backend\Forms\GoogleAnalyticForm;
 use Phanbook\Models\Settings;
 use Phanbook\Google\Analytic;
+use Phanbook\Backend\Forms\SettingReadingForm;
 
 /**
  * Class SettingsController
@@ -309,5 +310,24 @@ class SettingsController extends ControllerBase
             }
         }
         return $this->currentRedirect();
+    }
+    /**
+     * To set the max number of posts per page
+     *
+     * @return mixed
+     */
+    public function readingAction()
+    {
+        if ($this->request->isPost()) {
+            $reading = [
+                'perPage' => $this->request->getPost('perPage')
+            ];
+            if ($this->phanbook->saveConfig($reading)) {
+                $this->flashSession->success(t('Data was successfully saved'));
+            } else {
+                $this->flashSession->error(t('Data was not saved'));
+            }
+        }
+        $this->view->form = new SettingReadingForm();
     }
 }
