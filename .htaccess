@@ -8,5 +8,5 @@ DirectoryIndex index.html index.php
     RewriteRule ^index\.php$ - [L]
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule . /index.php [L]
+    RewriteRule ^((?s).*)$ index.php?_url=/$1 [QSA,L]
 </IfModule>
