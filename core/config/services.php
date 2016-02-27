@@ -184,24 +184,7 @@ $di->set(
         $view = new View($config->toArray());
         $view->setViewsDir($config->application->view->viewsDir);
         $view->disableLevel([View::LEVEL_MAIN_LAYOUT => true, View::LEVEL_LAYOUT => true]);
-        $view->registerEngines(
-            [
-                '.volt' => function () use ($view, $config) {
-                        $volt = new Volt($view);
-                        $volt->setOptions(
-                            [
-                                'compiledPath'      => $config->application->view->compiledPath,
-                                'compiledSeparator' => $config->application->view->compiledSeparator,
-                                'compiledExtension' => $config->application->view->compiledExtension,
-                                'compileAlways'     => $config->application->debug,
-                            ]
-                        );
-                        $compiler = $volt->getCompiler();
-                        $compiler->addExtension(new \Phanbook\Tools\VoltFunctions());
-                        return $volt;
-                }
-            ]
-        );
+        $view->registerEngines(['.volt' => 'volt']);
 
         // Attach a listener for type 'view'
         $eventsManager->attach(
