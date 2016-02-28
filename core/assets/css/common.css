@@ -499,11 +499,10 @@ a.badge1-alternate:hover, a.badge2-alternate:hover, a.badge3-alternate:hover {
     float: left;
     list-style: outside none none;
     height: 15px;
-    /*padding: 10px 7px 12px;*/
 }
 .nav a, .nav a:visited {
     color: #a2b5d5;
-    font-size: 11px;
+    font-size: 13px;
     font-weight: normal;
 }
 .nav ul li:first-child {
@@ -1096,7 +1095,7 @@ td.badges .badgecount {
     color: #4a6fb1;
     font-weight: 700;
 }
-/*.pager {
+.pager {
     box-sizing: border-box;
     clear: both;
     float: left;
@@ -1104,7 +1103,7 @@ td.badges .badgecount {
     padding: 7px;
     width: 100%;
     background: #fff;
-}*/
+}
 .pager a:hover span {
     background-color: #4f8ef7;
     border-bottom-color: #4f8ef7;

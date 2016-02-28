@@ -1,0 +1,103 @@
+
+.user-list {
+    width: 80%;
+    margin: 60px auto 0 auto;
+}
+.user-header {
+    width: 220px;
+    margin-left: 2%;
+    display: inline-block;
+    margin-bottom: 30px;
+}
+.user-avatar a img{
+    width: 80%;
+    border-radius: 50px;
+}
+.user-avatar{
+    width: 30%;
+    display: inline-block;
+}
+.user-element{
+    width: 62%;
+    margin-left: 2%;
+    display: inline-block;
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-weight: normal;
+}
+.user-element .info h2{
+    color: #0077CC!important;
+    font-size: 14px;
+    margin-bottom: 0.6em;
+}
+.user-element .info p, .user-element .info h4{
+    color: #52575c;
+    font-size: 12px;
+    font-weight: normal;
+    margin-bottom: 0;
+}
+
+/*detail users*/
+.detail .user-detail {
+    width: 100%;
+    margin: 0 5px;
+}
+.detail .user-header {
+    width: 100%;
+    margin: 20px auto;
+}
+.detail .user-avatar{
+    width: 25%;
+    float: left;
+    margin-right: 3%;
+    text-align: center;
+}
+.detail .user-avatar img {
+    margin-bottom: 12px;
+    border-radius: 50%;
+}
+.detail .user-element {
+    width: 70%;
+}
+.detail .user-element .info h2{
+    color: #0077CC!important;
+    font-size: 14px;
+    margin-bottom: 0;
+}
+.detail .user-element .info p, .detail .user-element .info h4{
+    margin-bottom: 0;
+}
+.detail .info p {
+    font-style: italic;
+    padding: 8px 0 12px;
+}
+.detail .user-element .info h4 {
+    padding-bottom: 12px;
+}
+.answer-hyperlink {
+    line-height: 1.4;
+    padding-bottom: 6px;
+}
+.footer {
+    margin-top: 45px;
+}
+@media only screen and (min-width: 755px) and (max-width: 960px) {
+    .box-content {
+        min-height: 750px;
+    }
+    .user-content {
+        font-size: 18px;
+        margin-left: 5px;
+    }
+    .detail .user-element .info h2{
+        font-size: 20px;
+    }
+    .user-element .info p, .user-element .info h4 {
+        font-size: 18px;
+    }
+    .username, .nav-user {
+        font-size: 18px;
+    }
+
+}
+
+

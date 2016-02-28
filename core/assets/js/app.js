@@ -104,7 +104,7 @@ $(document).ready(function () {
     };
     //@todo Fix menu when is mobile
     if (isMobile.SizeSmall()) {
-        $('#menus li').slice(-3).hide();
+        $('#menus li').slice(-1).hide();
     };
     //Fix right sidebar when you filter post by a tag
     if ($('div').hasClass('post-bytag')) {

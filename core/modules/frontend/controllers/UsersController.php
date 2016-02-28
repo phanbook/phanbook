@@ -30,6 +30,7 @@ class UsersController extends ControllerBase
     public function initialize()
     {
         parent::initialize();
+        $this->assets->addCss('core/assets/css/user.css');
         $this->view->pick('user');
     }
 
@@ -101,7 +102,6 @@ class UsersController extends ControllerBase
                 'tab'               => $tab
             ]
         );
-        $this->assets->addCss('core/assets/css/user.css');
     }
     /**
      * Not use for now

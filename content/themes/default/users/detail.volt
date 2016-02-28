@@ -6,8 +6,9 @@
                     {{ image(getUrlAvatar(user.getEmail(), 130), false)}}
                 </div>
             </a>
-            <a href=""> {{ user.getUsername() }}</a>
+            <a href="" class="username"> {{ user.getUsername() }}</a>
         </div>
+
         <div class="user-element">
             <div class="info">
                 <h2><a href="/@{{ user.getUsername()}}"> {{ user.getFullName()}}</a></h2>
@@ -66,3 +67,4 @@
         </div>
     </div><!--end-main-content -->
 </div>
+<div style="clear: both;"></div>
