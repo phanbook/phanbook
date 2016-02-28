@@ -8,7 +8,6 @@
                         {{ image(getUrlAvatar(user.getEmail(), 130), false)}}
                     </div>
                 </a>
-                <a href=""> {{ user.getUsername() }}</a>
             </div>
             <div class="user-element">
                 <div class="info">
