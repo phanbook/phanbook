@@ -786,24 +786,26 @@ class Posts extends ModelBase
         }
         return false;
     }
-    public static function getHotPosts()
+    public static function getHotPosts($limit = 7)
     {
-        $posts = Posts::query()
-            ->where('deleted = 0')
+        $status = self::PUBLISH_STATUS;
+        $posts  = Posts::query()
+            ->where("deleted = 0 AND status = '{$status}'")
             ->orderBy('numberReply DESC, modifiedAt DESC')
-            ->limit(7)
+            ->limit($limit)
             ->execute();
         if ($posts->valid()) {
             return $posts;
         }
         return false;
     }
-    public static function getHotQuestion()
+    public static function getHotQuestion($limit = 7)
     {
+        $type  = self::POST_QUESTIONS;
         $posts = Posts::query()
-            ->where('deleted = 0 AND type = "questions"')
+            ->where("deleted = 0 AND type = '{$type}'")
             ->orderBy('numberReply DESC, modifiedAt DESC')
-            ->limit(7)
+            ->limit($limit)
             ->execute();
         if ($posts->valid()) {
             return $posts;
