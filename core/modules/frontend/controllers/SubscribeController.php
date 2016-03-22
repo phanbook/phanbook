@@ -72,8 +72,9 @@ class SubscribeController extends ControllerBase
             $subscription->setUsersId($userId);
             if (!$subscription->save()) {
                 foreach ($subscription->getMessages() as $message) {
-                    error_log('Subscribe save false '. $message->getMessage() . __LINE__ .'and'. __CLASS__);
+                    $this->logger->error('Subscribe save false '. $message . __LINE__ .'and'. __CLASS__);
                 }
+                return false;
             }
             $this->jsonMessages['messages'][] = [
                 'type'    => 'info',
@@ -85,8 +86,9 @@ class SubscribeController extends ControllerBase
             //unsubsribe posts
             if (!$subscription->delete()) {
                 foreach ($subscription->getMessages() as $message) {
-                    error_log('Unsubscribe delete false '. $message->getMessage() . __LINE__ .'and'. __CLASS__);
+                    $this->logger->error('Unsubscribe delete false '. $message . __LINE__ .'and'. __CLASS__);
                 }
+                return false;
             }
             $this->jsonMessages['messages'][] = [
                 'type'    => 'info',

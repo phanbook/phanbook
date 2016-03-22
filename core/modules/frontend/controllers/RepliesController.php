@@ -163,8 +163,7 @@ class RepliesController extends ControllerBase
                 $user->increaseKarma(Karma::REPLY_ON_SOMEONE_ELSE_POST);
 
                 if (!$post->save() || !$user->save()) {
-                    error_log('Save fail answerAction. I am on here ' . __LINE__);
-                    return false;
+                    $this->logger->error('Save fail answerAction. I am on here ' . __LINE__);
                 }
             }
             $object = new PostsReply();

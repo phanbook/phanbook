@@ -37,15 +37,13 @@ class SearchController extends ControllerBase
             }
         }
 
-        $this->view->setVars(
-            [
-            'tab'  => null,
+        $this->view->setVars([
+            'tab'           => null,
             'object'        => $posts,
             'canonical'     => '',
             'totalPages'    => 1,
             'currentPage'   => null
-            ]
-        );
+        ]);
         return $this->view->pick('post');
     }
     /**
@@ -55,7 +53,7 @@ class SearchController extends ControllerBase
     {
         $this->view->disable();
         if ($this->request->isAjax()) {
-            #$this->view->setRenderLevel(View::LEVEL_ACTION_VIEW);
+            //$this->view->setRenderLevel(View::LEVEL_ACTION_VIEW);
             $post = Posts::findFirstById($this->request->getPost('id'));
             if ($post) {
                 $indexer = new Indexer();
