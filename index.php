@@ -53,15 +53,11 @@ try {
     echo $application->handle()->getContent();
 } catch (Exception $e) {
 
-    echo $e->getMessage();
-    echo $e->getTraceAsString();
+    $logger = $di->get('logger');
+    $logger->error($e->getMessage());
+    $logger->error($e->getTraceAsString());
 
-    /**
-     * Show an static error page
-     */
-    if (!$di->get('config')->application->debug) {
-        $response = new Response();
-        $response->redirect('errors/503');
-        $response->send();
-    }
+    $response = new Response();
+    $response->redirect('errors/503');
+    $response->send();
 }
