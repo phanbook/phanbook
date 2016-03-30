@@ -208,7 +208,7 @@ class PostsController extends ControllerBase
         //Checking tags
         $tags = $this->request->getPost('tags', 'string', null);
         if (is_string($this->phanbook->isTags($tags))) {
-            $this->flashSession->notice(t($this->isTags($tags)));
+            $this->flashSession->notice(t($this->phanbook->isTags($tags)));
 
             return $this->dispatcher->forward(
                 [
@@ -218,6 +218,7 @@ class PostsController extends ControllerBase
                 ]
             );
         }
+
         if (!empty($id)) {
             $object = Posts::findFirstById($id);
             $object->setSlug(Slug::generate($this->request->getPost('title')));
@@ -257,23 +258,26 @@ class PostsController extends ControllerBase
                 $this->router->getControllerName().(!is_null($id) ? '/edit/'.$id : '/new')
             );
         } else {
+            $this->db->begin();
             if (!$object->save()) {
+                $this->db->rollback();
                 $this->saveLoger($object->getMessages());
                 return $this->dispatcher->forward(
                     ['controller' => $this->router->getControllerName(), 'action' => 'new']
                 );
             } else {
                 if (!$this->phanbook->saveTagsInPosts($tags, $object)) {
+                    $this->db->rollback();
                     return $this->response->redirect(
                         $this->router->getControllerName().(!is_null($id) ? '/edit/'.$id : '/new')
                     );
                 }
                 $this->flashSession->success(t('Data was successfully saved'));
-
+                // Commit the transaction
+                $this->db->commit();
                 return $this->response->redirect($this->router->getControllerName());
             }
         }
-        $this->view->disable();
     }
 
     /**
