@@ -1,23 +1,11 @@
 <?php
-namespace Libray;
 
+require_once 'TestBase.php';
 
-class MailTest extends \Codeception\TestCase\Test
+class MailTest extends TestBase
 {
-    /**
-     * @var \UnitTester
-     */
-    protected $tester;
 
-    protected function _before()
-    {
-        $this->di= $this->getModule('Phalcon2')->di;
 
-    }
-
-    protected function _after()
-    {
-    }
 
     // tests
     public function testMail()

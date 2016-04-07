@@ -18,6 +18,7 @@ use Phanbook\Models\Posts;
 use Phanbook\Models\Users;
 use Phanbook\Tools\ZFunction;
 use Phalcon\Config\Adapter\Php as AdapterPhp;
+use Phanbook\Utils\Slug;
 
 /**
  *
@@ -183,5 +184,9 @@ class Phanbook
     public function getUserById($id)
     {
         return Users::findFirstById($id);
+    }
+    public function slug()
+    {
+        return new Slug();
     }
 }
