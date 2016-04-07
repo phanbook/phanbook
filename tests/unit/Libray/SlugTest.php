@@ -19,10 +19,7 @@ class SlugTest extends TestBase
     {
         $slug = $this->di->get('phanbook')->slug();
 
-        //$string   = 'Giải thiết kế giao diện người dùng cho Phanbook';
-        //$expected = 'giai-thiet-ke-giao-dien-nguoi-dung-cho-phanbook';
         foreach ($this->nonAsciiStringProvider() as $value => $expected) {
-            //d($expected);
             $this->assertEquals($expected, $slug->generate($value));
 
         }
