@@ -12,7 +12,7 @@
                                 <span title="" class="relativetime-clean">{{ getHumanDate(comment['createdAt'])}}</span>
                             </a>
                         </span>&nbsp;
-                        {% if auth['admin'] == 'Y' or auth['moderator'] == 'Y' or auth['id'] == post.getUsersId() %}
+                        {% if isTrustModeration() or auth['id'] == post.getUsersId() %}
                             <a class="comment-edit edit-tag" title="edit this comment" href="#" data-id="{{comment['id']}}"></a>
                             <a class="comment-delete delete-tag" title="delete this comment" href="#" data-id="{{comment['id']}}"></a>
                         {% endif %}

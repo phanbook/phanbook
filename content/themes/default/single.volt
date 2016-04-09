@@ -21,7 +21,7 @@
                 {% set auth = this.auth.getAuth(), user = post.user, comments = post.comment.toArray() %}
                 <div class="util-bar post-menu js-util">
                     {{ link_to('', t('share') ,'class' : 'short-link share-link') }}
-                    {% if auth['admin'] == 'Y' or auth['moderator'] == 'Y' or auth['id'] == post.getUsersId() %}
+                    {% if isTrustModeration() or auth['id'] == post.getUsersId() %}
                         {{ link_to(post.getType() ~ '/delete/' ~ post.getId(), t('deleted'))}}
                         {{ link_to(post.getType() ~ '/edit/' ~ post.getId(), t('edit'))}}
                     {% endif %}
@@ -45,7 +45,7 @@
                                     </div>
                                     <div class="util-bar post-menu js-until">
                                     {{ link_to('', t('share'), 'class' : 'short-link share-link') }}
-                                    {% if this.auth.isTrustModeration() or auth['id'] == answer['usersId'] %}
+                                    {% if isTrustModeration() or auth['id'] == answer['usersId'] %}
                                         {{ link_to('replies/delete/' ~ answer['id'], t('deleted'))}}
                                         {{ link_to('replies/editAnswer/' ~ answer['id'], t('edit'))}}
                                     {% endif %}
