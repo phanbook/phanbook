@@ -13,6 +13,7 @@
 namespace Phanbook\Models;
 
 use Phalcon\Mvc\Model\Behavior\SoftDelete;
+use Phanbook\Tools\ZFunction;
 
 class Posts extends ModelBase
 {
@@ -596,7 +597,6 @@ class Posts extends ModelBase
     {
         $this->sticked     = 'N';
         $this->locked      = self::NO_LOCKED;
-        $this->status      = self::PUBLISH_STATUS;
         $this->deleted     = 0;
         $this->numberViews = 0;
         $this->numberReply = 0;
@@ -726,20 +726,7 @@ class Posts extends ModelBase
      */
     public function getHumanCreatedAt()
     {
-        $diff = time() - $this->createdAt;
-        if ($diff > (86400 * 30)) {
-            return date('M \'y', $this->createdAt);
-        } else {
-            if ($diff > 86400) {
-                return ((int)($diff / 86400)) . 'd ago';
-            } else {
-                if ($diff > 3600) {
-                    return ((int)($diff / 3600)) . 'h ago';
-                } else {
-                    return ((int)($diff / 60)) . 'm ago';
-                }
-            }
-        }
+        return ZFunction::getHumanDate($this->createdAt);
     }
 
     /**
@@ -747,20 +734,7 @@ class Posts extends ModelBase
      */
     public function getHumanEditedAt()
     {
-        $diff = time() - $this->editedAt;
-        if ($diff > (86400 * 30)) {
-            return date('M \'y', $this->editedAt);
-        } else {
-            if ($diff > 86400) {
-                return ((int)($diff / 86400)) . 'd ago';
-            } else {
-                if ($diff > 3600) {
-                    return ((int)($diff / 3600)) . 'h ago';
-                } else {
-                    return ((int)($diff / 60)) . 'm ago';
-                }
-            }
-        }
+        return ZFunction::getHumanDate($this->editedAt);
     }
 
     /**
@@ -769,20 +743,7 @@ class Posts extends ModelBase
     public function getHumanModifiedAt()
     {
         if ($this->modifiedAt != $this->createdAt) {
-            $diff = time() - $this->modifiedAt;
-            if ($diff > (86400 * 30)) {
-                return date('M \'y', $this->modifiedAt);
-            } else {
-                if ($diff > 86400) {
-                    return ((int)($diff / 86400)) . 'd ago';
-                } else {
-                    if ($diff > 3600) {
-                        return ((int)($diff / 3600)) . 'h ago';
-                    } else {
-                        return ((int)($diff / 60)) . 'm ago';
-                    }
-                }
-            }
+            return ZFunction::getHumanDate($this->modifiedAt);
         }
         return false;
     }

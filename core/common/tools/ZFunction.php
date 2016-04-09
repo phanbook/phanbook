@@ -52,7 +52,7 @@ class ZFunction extends Injectable
         return '/core/assets/images/' . $name;
     }
     /**
-     * Display date to hume easy  understand
+     * Display date to human easy  understand
      *
      * @param int $date unixtime
      *
