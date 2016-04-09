@@ -143,6 +143,15 @@ class Phanbook
         }
         return null;
     }
+    public function getPostBySlug($slug)
+    {
+
+        $post = Posts::findFirstBySlug($slug);
+        if ($post) {
+            return $post;
+        }
+        return null;
+    }
     /**
      * Retrieves the directory name of the current theme, without the trailing slash.
      *

@@ -38,7 +38,7 @@ class RouterController extends ControllerBase
         if (empty($router)) {
             $router = 'page';
         }
-        $this->view->page = $this->phanbook->getPageByTitle($router);
+        $this->view->page = $this->phanbook->getPostBySlug($router);
         $this->view->tab = $router;
 
         if (file_exists($this->phanbook->getPageFile($router))) {

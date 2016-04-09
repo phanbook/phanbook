@@ -35,6 +35,11 @@ class PagesController extends ControllerBase
                     'order'  => true,
                     'filter' => ['type' => 'input', 'sanitize' => 'string', 'style' => ''],
                 ],
+                'slug'    => [
+                    'title'  => t('Slug'),
+                    'order'  => true,
+                    'filter' => ['type' => 'input', 'sanitize' => 'string', 'style' => ''],
+                ],
                 'username' => [
                     'title'  => t('Users'),
                     'order'  => true,
@@ -48,6 +53,7 @@ class PagesController extends ControllerBase
                     'a.title',
                     'a.sticked',
                     'u.username',
+                    'a.slug'
                 ],
                 'joins' => [
                     [
