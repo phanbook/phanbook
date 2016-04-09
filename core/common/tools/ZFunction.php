@@ -212,5 +212,4 @@ class ZFunction extends Injectable
     {
         return (new Auth)->isTrustModeration();
     }
-
 }

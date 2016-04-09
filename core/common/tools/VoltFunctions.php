@@ -52,7 +52,6 @@ class VoltFunctions
     /**
      * Compile some filters
      *
-     *
      * @param string $name      filter name
      * @param mixed  $arguments filter args
      *
