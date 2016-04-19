@@ -32,14 +32,12 @@ class Posts extends ModelBase
     const YES_LOCKED = 'Y';
 
     /**
-     *
      *'publish' - A published post or page
      *'pending' - post is pending review
      *'draft'   - a post in draft status
      *'future'  - a post to publish in the future
      *'private' - not visible to users who are not logged in
      *'trash'   - post is in trash bin.
-     *
      */
     const PRIVATE_STATUS = 'private';
     const PUBLISH_STATUS = 'publish';

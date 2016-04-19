@@ -30,7 +30,6 @@ class RouterController extends ControllerBase
     }
     /**
      * indexAction function.
-     *
      */
     public function indexAction()
     {

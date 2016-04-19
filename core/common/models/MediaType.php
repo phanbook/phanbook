@@ -44,7 +44,7 @@ class MediaType extends ModelBase
     /**
      * Method to set the value of field id
      *
-     * @param integer $id
+     * @param  integer $id
      * @return $this
      */
     public function setId($id)
@@ -57,7 +57,7 @@ class MediaType extends ModelBase
     /**
      * Method to set the value of field name
      *
-     * @param string $name
+     * @param  string $name
      * @return $this
      */
     public function setName($name)
@@ -83,7 +83,7 @@ class MediaType extends ModelBase
     /**
      * Method to set the value of field note
      *
-     * @param string $note
+     * @param  string $note
      * @return $this
      */
     public function setNote($note)
@@ -154,7 +154,7 @@ class MediaType extends ModelBase
     /**
      * Allows to query a set of records that match the specified conditions
      *
-     * @param mixed $parameters
+     * @param  mixed $parameters
      * @return Mediatype[]
      */
     public static function find($parameters = null)
@@ -165,7 +165,7 @@ class MediaType extends ModelBase
     /**
      * Allows to query the first record that match the specified conditions
      *
-     * @param mixed $parameters
+     * @param  mixed $parameters
      * @return Mediatype
      */
     public static function findFirst($parameters = null)
@@ -209,19 +209,23 @@ class MediaType extends ModelBase
      */
     public static function getTypeFromExt($ext)
     {
-        $type = MediaType::findFirst([
+        $type = MediaType::findFirst(
+            [
                 "conditions" => "code LIKE ?1",
                 "bind"       => array(1 => "%". $ext. "%")
-            ]);
+            ]
+        );
         return $type;
     }
 
     public static function getTypeFromName($name)
     {
-        $type = MediaType::findFirst([
+        $type = MediaType::findFirst(
+            [
                 "conditions" => "name = ?1",
                 "bind"       => array(1 => $name)
-            ]);
+            ]
+        );
         return $type;
     }
     /**

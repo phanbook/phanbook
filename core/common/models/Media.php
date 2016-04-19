@@ -76,7 +76,7 @@ class Media extends ModelBase
     /**
      * Method to set the value of field id
      *
-     * @param integer $id
+     * @param  integer $id
      * @return $this
      */
 
@@ -90,7 +90,7 @@ class Media extends ModelBase
     /**
      * Method to set the value of field username
      *
-     * @param string $username
+     * @param  string $username
      * @return $this
      */
     public function setUsername($username)
@@ -103,7 +103,7 @@ class Media extends ModelBase
     /**
      * Method to set the value of field type
      *
-     * @param integer $type
+     * @param  integer $type
      * @return $this
      */
     public function setType($type)
@@ -116,7 +116,7 @@ class Media extends ModelBase
     /**
      * Method to set the value of field createdAt
      *
-     * @param integer $createdAt
+     * @param  integer $createdAt
      * @return $this
      */
     public function setCreatedAt($createdAt)
@@ -129,7 +129,7 @@ class Media extends ModelBase
     /**
      * Method to set the value of field filename
      *
-     * @param string $filename
+     * @param  string $filename
      * @return $this
      */
     public function setFilename($filename)
@@ -202,7 +202,7 @@ class Media extends ModelBase
     /**
      * Allows to query a set of records that match the specified conditions
      *
-     * @param mixed $parameters
+     * @param  mixed $parameters
      * @return Media[]
      */
     public static function find($parameters = null)
@@ -213,7 +213,7 @@ class Media extends ModelBase
     /**
      * Allows to query the first record that match the specified conditions
      *
-     * @param mixed $parameters
+     * @param  mixed $parameters
      * @return Media
      */
     public static function findFirst($parameters = null)
@@ -273,10 +273,9 @@ class Media extends ModelBase
             $serverPath = $userName. DS. $fileType->getName(). DS. $year. DS. $month. DS. $fileName;
             $localPath = $fileObj->getTempName();
             if (file_exists($localPath)) {
-
                 if ($this->fileSystem->checkFileExists($serverPath)) {
                     $this->setError(MEDIA_ALREADY_EXISTS);
-                } else if ($this->fileSystem->uploadFile($localPath, $serverPath)) {
+                } elseif ($this->fileSystem->uploadFile($localPath, $serverPath)) {
                     $uploadStatus = $this->saveToDB($userName, $fileType->getId(), date("d/M/Y"), $fileName);
                     if ($uploadStatus) {
                         // Update anaytic file
@@ -326,8 +325,8 @@ class Media extends ModelBase
     }
     /**
      * Resize of image uploaded
-     * @param  string $source
-     * @param  string $dest
+     * @param  string  $source
+     * @param  string  $dest
      * @param  integer $new_width
      * @param  integer $new_height
      * @return   boolean
@@ -354,8 +353,8 @@ class Media extends ModelBase
     /**
      * Save file info uploaded to database
      * @param  string $userName
-     * @param  id $type
-     * @param  time $createdAt
+     * @param  id     $type
+     * @param  time   $createdAt
      * @param  string $filename
      * @return boolean
      */

@@ -48,7 +48,7 @@ class Auditdetail extends ModelBase
     /**
      * Method to set the value of field id
      *
-     * @param string $id
+     * @param  string $id
      * @return $this
      */
     public function setId($id)
@@ -61,7 +61,7 @@ class Auditdetail extends ModelBase
     /**
      * Method to set the value of field auditId
      *
-     * @param string $auditId
+     * @param  string $auditId
      * @return $this
      */
     public function setAuditId($auditId)
@@ -74,7 +74,7 @@ class Auditdetail extends ModelBase
     /**
      * Method to set the value of field fieldName
      *
-     * @param string $fieldName
+     * @param  string $fieldName
      * @return $this
      */
     public function setFieldName($fieldName)
@@ -87,7 +87,7 @@ class Auditdetail extends ModelBase
     /**
      * Method to set the value of field oldValue
      *
-     * @param string $oldValue
+     * @param  string $oldValue
      * @return $this
      */
     public function setOldValue($oldValue)
@@ -100,7 +100,7 @@ class Auditdetail extends ModelBase
     /**
      * Method to set the value of field newValue
      *
-     * @param string $newValue
+     * @param  string $newValue
      * @return $this
      */
     public function setNewValue($newValue)
@@ -173,7 +173,7 @@ class Auditdetail extends ModelBase
     /**
      * Allows to query a set of records that match the specified conditions
      *
-     * @param mixed $parameters
+     * @param  mixed $parameters
      * @return Auditdetail[]
      */
     public static function find($parameters = null)
@@ -184,7 +184,7 @@ class Auditdetail extends ModelBase
     /**
      * Allows to query the first record that match the specified conditions
      *
-     * @param mixed $parameters
+     * @param  mixed $parameters
      * @return Auditdetail
      */
     public static function findFirst($parameters = null)
@@ -192,7 +192,6 @@ class Auditdetail extends ModelBase
         return parent::findFirst($parameters);
     }
     /**
-     *
      * Hook Phalcon
      */
     public function initialize()

@@ -216,6 +216,7 @@ class ModelBase extends Model
      *
      *  ];
      * {/code}
+     *
      * @param  array
      * @return Phalcon\Mvc\Model\Query\BuilderInterface
      */
@@ -292,7 +293,6 @@ class ModelBase extends Model
     }
     /**
      * Hook Phalcon PHP
-     *
      */
     public function initialize()
     {

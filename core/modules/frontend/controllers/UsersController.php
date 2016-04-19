@@ -46,7 +46,8 @@ class UsersController extends ControllerBase
         }
         $tab     = $this->request->getQuery('tab');
         $page    = isset($_GET['page']) ? (int)$_GET['page'] : $this->numberPage;
-        $perPage = isset($_GET['perPage']) ? (int)$_GET['perPage'] : $this->perPage;        $where  = '';
+        $perPage = isset($_GET['perPage']) ? (int)$_GET['perPage'] : $this->perPage;
+        $where  = '';
         if ($tab == "answers") {
             $join = [
                 'type'  => 'join',

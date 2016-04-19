@@ -157,8 +157,8 @@ class RepliesController extends ControllerBase
             $post = Posts::findFirstById($postId);
             $user = Users::findFirstById($auth['id']);
             if (!$post) {
-               $this->flashSession->error(t('Hack attempt!'));
-               return $this->currentRedirect();
+                $this->flashSession->error(t('Hack attempt!'));
+                return $this->currentRedirect();
             }
             //Only update the number of replies if the user that commented isn't the same that posted
             if ($user->getId() != $post->getUsersId()) {

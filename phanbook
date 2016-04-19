@@ -69,5 +69,10 @@ if [ "docker" == "$1" ]; then
     docker-compose up -d
 fi
 
+#Fix PSR2
+if [ 'psr2' == "$1" ]; then
+    php phpcbf.phar --standard=PSR2 $2
+fi
+
 
 

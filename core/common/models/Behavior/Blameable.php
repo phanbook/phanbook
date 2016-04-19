@@ -24,7 +24,6 @@ use Phanbook\Models\AuditDetail;
 
 /**
  * Phanbook\Model\Behavior\Blameable
- *
  */
 class Blameable extends Behavior implements BehaviorInterface
 {

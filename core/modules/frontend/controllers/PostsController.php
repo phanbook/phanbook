@@ -28,7 +28,6 @@ use Phanbook\Frontend\Forms\QuestionsForm;
 
 /**
  * Class QuestionsController.
- *
  */
 class PostsController extends ControllerBase
 {
@@ -43,7 +42,6 @@ class PostsController extends ControllerBase
 
     /**
      * Default it will get all posts
-     *
      */
     public function indexAction()
     {
@@ -121,7 +119,6 @@ class PostsController extends ControllerBase
                 $itemBuilder->where($tipConditions);
                 $totalBuilder->where($tipConditions);
                 break;
-
             default:
                 $this->tag->setTitle($this->config->application->tagline);
         }

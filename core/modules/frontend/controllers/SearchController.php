@@ -37,13 +37,15 @@ class SearchController extends ControllerBase
             }
         }
 
-        $this->view->setVars([
-            'tab'           => null,
-            'posts'         => $posts,
-            'canonical'     => '',
-            'totalPages'    => 1,
-            'currentPage'   => null
-        ]);
+        $this->view->setVars(
+            [
+                'tab'           => null,
+                'posts'         => $posts,
+                'canonical'     => '',
+                'totalPages'    => 1,
+                'currentPage'   => null
+            ]
+        );
         return $this->view->pick('post');
     }
     /**

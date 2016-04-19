@@ -54,7 +54,7 @@ class Audit extends ModelBase
     /**
      * Method to set the value of field id
      *
-     * @param string $id
+     * @param  string $id
      * @return $this
      */
     public function setId($id)
@@ -67,7 +67,7 @@ class Audit extends ModelBase
     /**
      * Method to set the value of field userId
      *
-     * @param integer $userId
+     * @param  integer $userId
      * @return $this
      */
     public function setUserId($userId)
@@ -80,7 +80,7 @@ class Audit extends ModelBase
     /**
      * Method to set the value of field ipaddress
      *
-     * @param integer $ipaddress
+     * @param  integer $ipaddress
      * @return $this
      */
     public function setIpaddress($ipaddress)
@@ -93,7 +93,7 @@ class Audit extends ModelBase
     /**
      * Method to set the value of field type
      *
-     * @param string $type
+     * @param  string $type
      * @return $this
      */
     public function setType($type)
@@ -106,7 +106,7 @@ class Audit extends ModelBase
     /**
      * Method to set the value of field createdAt
      *
-     * @param string $createdAt
+     * @param  string $createdAt
      * @return $this
      */
     public function setCreatedAt($createdAt)
@@ -119,7 +119,7 @@ class Audit extends ModelBase
     /**
      * Method to set the value of field modelName
      *
-     * @param string $modelName
+     * @param  string $modelName
      * @return $this
      */
     public function setModelName($modelName)
@@ -202,7 +202,7 @@ class Audit extends ModelBase
     /**
      * Allows to query a set of records that match the specified conditions
      *
-     * @param mixed $parameters
+     * @param  mixed $parameters
      * @return Audit[]
      */
     public static function find($parameters = null)
@@ -213,7 +213,7 @@ class Audit extends ModelBase
     /**
      * Allows to query the first record that match the specified conditions
      *
-     * @param mixed $parameters
+     * @param  mixed $parameters
      * @return Audit
      */
     public static function findFirst($parameters = null)
@@ -222,7 +222,6 @@ class Audit extends ModelBase
     }
     /**
      * Hook Phalcon
-     *
      */
     public function initialize()
     {

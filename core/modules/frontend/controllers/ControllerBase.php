@@ -124,7 +124,8 @@ class ControllerBase extends Controller
 
     public function initialize()
     {
-        $this->view->setVars([
+        $this->view->setVars(
+            [
             'tab'           => $this->currentOrder,
             'tags'          => Tags::find(),
             'hotPosts'      => Posts::getHotPosts(5),
@@ -132,7 +133,8 @@ class ControllerBase extends Controller
             'highestKarma'  => Users::highestKarma(),
             'totalReply'    => PostsReply::totalReply(),
 
-        ]);
+            ]
+        );
         if (isset($this->config->perPage)) {
             $this->perPage = $this->config->perPage;
         }

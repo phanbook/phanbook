@@ -2,11 +2,11 @@
 
 [Phanbook](http://phanbook.com) is the next-generation Q&A and Forum software that makes online discussion, question and answer site for professional and enthusiast people. Also the name Phanbook is mean - Phan(Phalcon PHP)book(the your note book)
 
-[Live Demo](http://phanbook.com) -
-[Meta Forum](http://dev.phanbook.com) -
+[Home](http://phanbook.com) -
+[Meta Forum](http://meta.phanbook.com) -
 [Development Forum](http://dev.phanbook.com) -
 [Discourse Theme](http://discourse.phanbook.com) -
-[Blog Theme](http://ama.phanbook.com) -
+[Blog Theme](http://blog.saigonphp.com) -
 [Contact](mailto:hello@phanbook.com)
 
 ## Build Status and Join chats us:

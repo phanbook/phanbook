@@ -12,7 +12,7 @@
  */
 namespace Phanbook\Models;
 
-use  Phalcon\Mvc\Model\Exception as ModelException;
+use Phalcon\Mvc\Model\Exception as ModelException;
 
 class Settings extends ModelBase
 {
@@ -43,9 +43,11 @@ class Settings extends ModelBase
 
     public function initialize()
     {
-        \Phalcon\Mvc\Model::setup([
-           'notNullValidations' => false
-        ]);
+        \Phalcon\Mvc\Model::setup(
+            [
+            'notNullValidations' => false
+            ]
+        );
         $this->checkName();
     }
 
