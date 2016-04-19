@@ -144,7 +144,11 @@ class Console extends CLIConsole
      */
     protected function config()
     {
-        $config = include ROOT_DIR.'/core/config/config.php';
+        $config = include ROOT_DIR . '/core/config/config.php';
+        if (file_exists(ROOT_DIR . '/core/config/config.global.php')) {
+            $overrideConfig = include ROOT_DIR . '/core/config/config.global.php';
+            $config->merge($overrideConfig);
+        }
         if (file_exists(ROOT_DIR.'/core/config/config.'.APPLICATION_ENV.'.php')) {
             $overrideConfig = include ROOT_DIR.'/core/config/config.'.APPLICATION_ENV.'.php';
             $config->merge($overrideConfig);
