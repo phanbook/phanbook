@@ -132,7 +132,7 @@ class LoginController extends ControllerBase
      */
     public function indexAction()
     {
-        $this->session->set('urlCurrent', $this->request->getHTTPReferer());
+        $this->cookies->set('urlCurrent', $this->request->getHTTPReferer());
         if ($this->auth->getAuth()) {
             $this->view->disable();
 
@@ -196,5 +196,11 @@ class LoginController extends ControllerBase
             $email = $object->getEmail();
             $this->flashSession->success('Welcome back ' . $object->getInforUser());
         }
+    }
+
+    public function initialize()
+    {
+        $this->cookies->set('urlCurrent', $this->request->getHTTPReferer());
+        parent::initialize();
     }
 }
