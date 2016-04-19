@@ -11,29 +11,34 @@
             {% set startIndex = totalPages - 4 %}
         {% endif %}
     {% endif %}
-    <div class="pager pager-desktop fl">
+    <div class="pagination">
         {% if currentPage > 1 %}
             {% set prev = currentPage - 1 %}
-            <a href="{{ paginatorUri ~ '?page=' ~ prev }}">
-                <span class="page-numbers prev">&#x2190;</span>
+            <a href="{{ paginatorUri ~ '?page=' ~ prev }}" class="prev-button">
+                <i class="icon-angle-left"></i>
             </a>
         {% endif %}
         {% for pageIndex in startIndex..totalPages %}
             {% if pageIndex is startIndex + 5 %}
                 {% break %}
             {% endif %}
-            <a href="{{paginatorUri ~ '?page=' ~ pageIndex }}">
-            <span class="page-numbers {% if pageIndex is currentPage %} current {% endif %} ">{{ pageIndex }}</span>
-            </a>
+            {% if pageIndex is currentPage %}
+                <span class="current"> {{ currentPage }}</span>
+            {% else %}
+                <a href="{{paginatorUri ~ '?page=' ~ pageIndex }}">
+                    {{ pageIndex }}
+                </a>
+            {% endif %}
+
         {% endfor %}
         {% if currentPage < totalPages %}
             {% set next = currentPage + 1 %}
             <span class="page-numbers dots">...</span>
             <a href="{{ paginatorUri ~ '?page=' ~ totalPages }}">
-                <span class="page-numbers">{{ totalPages}}</span>
+                {{ totalPages}}
             </a>
-            <a href="{{ paginatorUri ~ '?page=' ~ next }}">
-                <span class="page-numbers next">&#x2192;</span>
+            <a href="{{ paginatorUri ~ '?page=' ~ next }}"class="next-button">
+                <i class="icon-angle-right"></i>
             </a>
         {% endif %}
     </div>

@@ -69,16 +69,7 @@ class UserSettingForm extends Form
                 'save',
                 [
                 'value' => 'Save',
-                'class' => 'btn btn-sm btn-info'
-                ]
-            )
-        );
-        $this->add(
-            new Submit(
-                'saveAvatar',
-                [
-                'value' => 'Change avatar',
-                'class' => 'btn btn-sm btn-info'
+                'class' => 'button color small login-submit submit'
                 ]
             )
         );

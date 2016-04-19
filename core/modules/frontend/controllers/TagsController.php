@@ -24,6 +24,11 @@ use Phanbook\Models\ModelBase;
  */
 class TagsController extends ControllerBase
 {
+    /**
+     * @var int
+     */
+    public $perPage = 12;
+
     public function indexAction()
     {
         $sql = [
@@ -36,12 +41,12 @@ class TagsController extends ControllerBase
         $this->view->setVars(
             [
                 'paginator' => $data->getPaginate(),
-                'tab'  => 'tags',
-                'tags' => Tags::find()
+                'tab'  => 'tags'
             ]
         );
         $this->tag->setTitle(t('All tags'));
         $this->view->pick('tag');
+        $this->assets->addCss('core/assets/css/user.css');
     }
 
     public function tagSuggestAction()

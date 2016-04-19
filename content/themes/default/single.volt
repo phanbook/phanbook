@@ -2,96 +2,170 @@
 {% block title %}{{ post.getTitle() ? post.getTitle() : 'Phanbook'}}{% endblock %}
 {% block content %}
     {% if post is defined %}
-        {{ partial('partials/right-side', ['post' : post]) }}
-        <div id="main-content">
-            <div id="question" class="question question-summary">
-                {{ partial('partials/vote', ['objectId' : post.getId(), 'object' : 'posts'])}}
-                <div class="question-title">
-                    <h2>{{ link_to('',post.getTitle(), 'class' : 'question-hyperlink') }}</h2>
-                    <div class="tags">
-                        {% for tag in post.tag %}
-                            {{link_to('tags/' ~ tag.getId() ~ '/' ~ tag.getSlug(), 'class':'post-tag', tag.getSlug())}}
-                            &nbsp;
-                        {% endfor %}
+    <div class="row">
+            <div class="col-md-9">
+                {{ partial('partials/question', ['single' : true])}}
+
+                <div class="share-tags page-content">
+                    <div class="question-tags"><i class="icon-tags"></i>
+                    {% for tag in post.tag%}
+                        {{link_to('tags/' ~ tag.id ~ '/' ~ tag.slug, tag.name) }},
+                    {% endfor %}
                     </div>
-                </div>
-                <div class="post-text">
-                    {{ this.markdown.text(post.getContent()) }}
-                </div>
-                {% set auth = this.auth.getAuth(), user = post.user, comments = post.comment.toArray() %}
-                <div class="util-bar post-menu js-util">
-                    {{ link_to('', t('share') ,'class' : 'short-link share-link') }}
-                    {% if isTrustModeration() or auth['id'] == post.getUsersId() %}
-                        {{ link_to(post.getType() ~ '/delete/' ~ post.getId(), t('deleted'))}}
-                        {{ link_to(post.getType() ~ '/edit/' ~ post.getId(), t('edit'))}}
+                    <div class="share-inside-warp">
+                        <ul>
+                            <li>
+                                <a href="#" original-title="Facebook" cl>
+                                    <span class="icon_i">
+                                        <span class="icon_square" icon_size="20" span_bg="#3b5997" span_hover="#666">
+                                            <i i_color="#FFF" class="social_icon-facebook"></i>
+                                        </span>
+                                    </span>
+                                </a>
+                                <a href="#" target="_blank">Facebook</a>
+                            </li>
+                            <li>
+                                <a href="#" target="_blank">
+                                    <span class="icon_i">
+                                        <span class="icon_square" icon_size="20" span_bg="#00baf0" span_hover="#666">
+                                            <i i_color="#FFF" class="social_icon-twitter"></i>
+                                        </span>
+                                    </span>
+                                </a>
+                                <a target="_blank" href="#">Twitter</a>
+                            </li>
+                            <li>
+                                <a href="#" target="_blank">
+                                    <span class="icon_i">
+                                        <span class="icon_square" icon_size="20" span_bg="#ca2c24" span_hover="#666">
+                                            <i i_color="#FFF" class="social_icon-gplus"></i>
+                                        </span>
+                                    </span>
+                                </a>
+                                <a href="#" target="_blank">Google plus</a>
+                            </li>
+                            <li>
+                                <a href="#" target="_blank">
+                                    <span class="icon_i">
+                                        <span class="icon_square" icon_size="20" span_bg="#e64281" span_hover="#666">
+                                            <i i_color="#FFF" class="social_icon-dribbble"></i>
+                                        </span>
+                                    </span>
+                                </a>
+                                <a href="#" target="_blank">Dribbble</a>
+                            </li>
+                            <li>
+                                <a target="_blank" href="#">
+                                    <span class="icon_i">
+                                        <span class="icon_square" icon_size="20" span_bg="#c7151a" span_hover="#666">
+                                            <i i_color="#FFF" class="icon-pinterest"></i>
+                                        </span>
+                                    </span>
+                                </a>
+                                <a href="#" target="_blank">Pinterest</a>
+                            </li>
+                        </ul>
+                        <span class="share-inside-f-arrow"></span>
+                        <span class="share-inside-l-arrow"></span>
+                    </div><!-- End share-inside-warp -->
+                    <div class="share-inside"><i class="icon-share-alt"></i>Share</div>
+                    <div class="clearfix"></div>
+                </div><!-- End share-tags -->
+
+                <div class="about-author clearfix">
+                    <div class="author-image">
+                        <a href="/@{{post.user.username}}" original-title="" class="tooltip-n">
+                        {{ image(getUrlAvatar(post.user.email)  ,false) }}
+                        </a>
+                    </div>
+                    <div class="author-bio">
+                        <h4>About the Author</h4>
+                        {{ post.user.bio }}
+                    </div>
+                </div><!-- End about-author -->
+
+                <div id="related-posts">
+                    <h2>Related questions</h2>
+                    <ul class="related-posts">
+                    {% if postRelated is defined %}
+                        {% for item in postRelated %}
+                        <li class="related-item">
+                            <h3><a href="/posts/{{item.id}}/{{item.slug}}">
+                                <i class="icon-double-angle-right"></i>{{ item.title }}
+                                </a>
+                            </h3>
+                        </li>
+                        {% endfor %}
+                    {% else %}
+                        <li class="related-item">Not yet</li>
                     {% endif %}
-                </div>
-                {{ partial('partials/user-ask', ['object': post, 'auth': auth, 'user': user])}}
-                <!-- begin list comment -->
-                <div class="comments-wrap comments">
-                    {{ partial('partials/list-comment', ['comments': comments, 'auth': auth, 'user': user])}}
-                    {{ partial('partials/comment', ['form' : commentForm, 'object' : 'posts', 'objectId' : post.getId()]) }}
+                    </ul>
+                </div><!-- End related-posts -->
+                {% if postsReply|length > 0 %}
+                <div id="commentlist" class="page-content">
+                    <div class="boxedtitle page-title">
+                        <h2>Answers ( <span class="color">{{postsReply|length}}</span> )</h2>
+                    </div>
+                    <ol class="commentlist clearfix">
+                        {% for answer in postsReply %}
+                        <li class="comment">
+                            <div class="comment-body clearfix">
+                                <div class="avatar">
+                                    {{ image(getUrlAvatar(answer.email), false) }}
+                                </div>
+                                <div class="comment-text">
+                                    <div class="author clearfix">
+                                        <div class="comment-author"><a href="#">{{answer.user.getFullName()}}</a></div>
+
+                                        {{ partial('partials/vote-reply', ['objectId' : answer.id, 'object' : 'postsReply', 'votes' : answer])}}
+                                        <div class="comment-meta">
+                                            <div class="date"><i class="icon-time"></i>
+                                            {{ getHumanDate(answer.createdAt)  }}
+                                            </div>
+                                        </div>
+                                        {#<a class="comment-reply" href="#"><i class="icon-reply"></i>Reply</a>#}
+                                    </div>
+                                    <div class="text"><p>{{ answer.content }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ol><!-- End commentlist -->
+                </div><!-- End page-content -->
+                {% endif %}
+                <div id="respond" class="comment-respond page-content clearfix">
+                    <div class="boxedtitle page-title"><h2>Leave a reply</h2></div>
+                    {{ form( 'replies/answer', 'id' : 'commentform', 'class' : 'comment-form') }}
+                        {% if post is defined %}
+                            {{ hidden_field('id', 'value': post.id) }}
+                        {% endif %}
+                        <div id="respond-textarea">
+                            <p>
+                                <label class="required" for="comment">Your answer<span>*</span></label>
+                                {{ form.render('content')}}
+                            </p>
+                        </div>
+                        <p class="form-submit">
+                            <input name="submit" type="submit" id="submit" value="Post your answer" class="button small color">
+                        </p>
+                         {{ form.render('object', ['value': 'questions']) }}
+                    </form>
                 </div>
 
-                {% if postsReply|length > 0 %}
-                        <div class="count-post sort-wrap">
-                            <div class="subheader">{{ postsReply|length }}|{{t('Answers')}}</div>
-                        </div>
-                        {% for answer in postsReply %}
-                            <div class="answer-summary answer">
-                                {{ partial('partials/vote', ['objectId' : answer['id'], 'object' : 'postsReply', 'votes' : answer, 'post': post.toArray()])}}
-                                    <div class="post-text">
-                                        {{ this.markdown.text(answer['content']) }}
-                                    </div>
-                                    <div class="util-bar post-menu js-until">
-                                    {{ link_to('', t('share'), 'class' : 'short-link share-link') }}
-                                    {% if isTrustModeration() or auth['id'] == answer['usersId'] %}
-                                        {{ link_to('replies/delete/' ~ answer['id'], t('deleted'))}}
-                                        {{ link_to('replies/editAnswer/' ~ answer['id'], t('edit'))}}
-                                    {% endif %}
-                                    </div>
-                                    {{ partial('partials/user-answer', ['answer': answer, 'auth': auth, 'user': user])}}
-                                    <!-- begin list comment answer -->
-                                    <div class="view-comment">
-                                        {{ partial('partials/list-comment',['comments': post.getComments(answer['id'] ,'postsReply'), 'auth': auth, 'user': user])}}
-                                       {{ partial('partials/comment', ['form' : commentForm, 'object' : 'postsReply', 'objectId' : answer['id']]) }}
-                                    </div>
-                            </div>
-                        {% endfor %}
-                {% endif %}
-                <div class="post-answer answer-input-wrap">
-                    {{ form( 'replies/answer', 'role':'form') }}
-                        {% if post is defined %}
-                            {{ hidden_field('id', 'value': post.getId()) }}
-                        {% endif %}
-                        <div id ="post-editor" class="post-editor">
-                            <label> {{t('Your Answers')}}</label>
-                            <div class="wmd-panel form-group">
-                                <div id="wmd-button-bar"></div>
-                                {{ form.render('content')}}
-                            </div>
-                            <div id="wmd-preview" class="wmd-panel wmd-preview"></div>
-                            <br/>
-                        </div>
-                        <div class="save-post">
-                            {{ link_to('questions', t('Back to Questions'), 'class' : 'pull-left') }}
-                            {{form.render('postAnswer', ['class' : 'pull-right'])}}
-                        </div>
-                        {{ form.render('object', ['value': 'questions']) }}
-                        {{ form.render('csrf', ['value': this.security.getToken()]) }}
-                    </form>
-                    <h2 class="bottom-notice">
-                        Not the answer you're looking for? Browse other questions tagged
-                        {% for tag in post.tag %}
-                            {{link_to('tags/' ~ tag.getId() ~ '/' ~ tag.getSlug(), 'class':'post-tag', tag.getSlug())}}&nbsp;
-                        {% endfor %} or <a href="/questions/new">ask your own question</a>.
-                    </h2>
-                </div> <!-- post-answer -->
-            {{ hidden_field('post-id', 'value': post.getId()) }}
-            <div id="suggested-posts" class="question"></div>
-            <div id="sticky-progress" style='display:none'></div>
-            </div><!-- endcontainer -->
-        </div>
+                <div class="post-next-prev clearfix">
+                    <p class="prev-post">
+                        <a href="#"><i class="icon-double-angle-left"></i>&nbsp;Prev question</a>
+                    </p>
+                    <p class="next-post">
+                        <a href="#">Next question&nbsp;<i class="icon-double-angle-right"></i></a>
+                    </p>
+                </div><!-- End post-next-prev -->
+            </div><!-- End main -->
+            <aside class="col-md-3 sidebar">
+            {{ partial('partials/right-side')}}
+            </aside>
+        </div><!-- End row -->
     {% else %}
         <p> Sorry post not exsing</p>
     {% endif %}

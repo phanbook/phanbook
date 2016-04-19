@@ -1072,6 +1072,16 @@ class Users extends ModelBase
             return $this->karma;
         }
     }
+    public static function highestKarma($limit = 4)
+    {
+        $user = Users::query()
+            ->limit($limit)
+            ->order('karma DESC')
+            ->execute();
+        if ($user->valid()) {
+            return $user;
+        }
+    }
     /**
      * Independent Column Mapping.
      */

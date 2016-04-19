@@ -1,70 +1,99 @@
-<div class="user-detail">
-    <div class="user-header">
-        <div class="user-avatar">
-            <a href="/@{{ user.getUsername()}}">
-                <div class="gravatar-wrapper{{ user.getId()}}">
-                    {{ image(getUrlAvatar(user.getEmail(), 130), false)}}
-                </div>
-            </a>
-            <a href="" class="username"> {{ user.getUsername() }}</a>
-        </div>
-
-        <div class="user-element">
-            <div class="info">
-                <h2><a href="/@{{ user.getUsername()}}"> {{ user.getFullName()}}</a></h2>
-                <p>{% if user.moderator === 'Y' %}
-                    Moderator
-                {% elseif user.admin === 'Y' %}
-
-                    Admin
-                {% else %}
-                    Users
-                {% endif %}
-                </p>
-                <h4>Joined on {{ date('M d,Y', user.getCreatedAt())}}</h4>
-            </div>
-            <ul class="nav-user">
-                <li>
-                    {{ link_to('@' ~ user.getUsername() ~ '?tab=questions', t('Qestions') ~ ' ' ~ totalQuestions)}}
-                </li>
-                <li>
-                    {{ link_to('@' ~ user.getUsername() ~ '?tab=answers', t('Replies') ~ ' ' ~ totalReply)}}
-                </li>
-
-                <li>
-                  {{ link_to('#', t('Reputation') ~ ' ' ~ user.getHumanKarma())}}
-                </li>
-            </ul>
+<div class="col-md-9">
+    <div class="row">
+        <div class="user-profile">
+            <div class="col-md-12">
+                <div class="page-content">
+                    <h2>About admin</h2>
+                    <div class="user-profile-img"><img width="60" height="60" src="http://2code.info/demo/html/ask-me/images/demo/admin.jpeg" alt="admin"></div>
+                    <div class="ul_list ul_list-icon-ok about-user">
+                        <ul>
+                            <li><i class="icon-plus"></i>Registerd : <span>{{user.getHumanCreatedAt()}}</span></li>
+                            <li><i class="icon-globe"></i>Website : <a target="_blank" href="#">view</a></li>
+                        </ul>
+                    </div>
+                    <p>{{ this.markdown.text(user.bio) }}</p>
+                    <div class="clearfix"></div>
+                    <span class="user-follow-me">Follow Me</span>
+                    <a href="#" original-title="Facebook" class="tooltip-n">
+                        <span class="icon_i">
+                            <span class="icon_square" icon_size="30" span_bg="#3b5997" span_hover="#2f3239">
+                                <i class="social_icon-facebook"></i>
+                            </span>
+                        </span>
+                    </a>
+                    <a href="#" original-title="Twitter" class="tooltip-n">
+                        <span class="icon_i">
+                            <span class="icon_square" icon_size="30" span_bg="#00baf0" span_hover="#2f3239">
+                                <i class="social_icon-twitter"></i>
+                            </span>
+                        </span>
+                    </a>
+                    <a href="#" original-title="Linkedin" class="tooltip-n">
+                        <span class="icon_i">
+                            <span class="icon_square" icon_size="30" span_bg="#006599" span_hover="#2f3239">
+                                <i class="social_icon-linkedin"></i>
+                            </span>
+                        </span>
+                    </a>
+                    <a href="#" original-title="Google plus" class="tooltip-n">
+                        <span class="icon_i">
+                            <span class="icon_square" icon_size="30" span_bg="#c43c2c" span_hover="#2f3239">
+                                <i class="social_icon-gplus"></i>
+                            </span>
+                        </span>
+                    </a>
+                    <a href="#" original-title="Email" class="tooltip-n">
+                        <span class="icon_i">
+                            <span class="icon_square" icon_size="30" span_bg="#000" span_hover="#2f3239">
+                                <i class="social_icon-email"></i>
+                            </span>
+                        </span>
+                    </a>
+                </div><!-- End page-content -->
+            </div><!-- End col-md-12 -->
+            <div class="col-md-12">
+                <div class="page-content page-content-user-profile">
+                    <div class="user-profile-widget">
+                        <h2>User Stats</h2>
+                        <div class="ul_list ul_list-icon-ok">
+                            <ul>
+                                <li><i class="icon-question-sign"></i>
+                                    <a href="?tab=questions">Questions
+                                        <span> ( <span>{{ totalQuestions}}</span> )
+                                    </span>
+                                </a></li>
+                                <li><i class="icon-comment"></i>
+                                    <a href="?tab=answers">Answers
+                                    <span> ( <span>{{ totalReply }}</span> ) </span>
+                                </a></li>
+                                <li><i class="icon-star"></i>
+                                    <a href="#">Favorite Questions
+                                    <span> ( <span>3</span> ) </span>
+                                </a></li>
+                                <li><i class="icon-heart"></i>
+                                    <a href="">Karma
+                                    <span> ( <span>{{user.getHumanKarma()}}</span> ) </span>
+                                </a></li>
+                            </ul>
+                        </div>
+                    </div><!-- End user-profile-widget -->
+                </div><!-- End page-content -->
+            </div><!-- End col-md-12 -->
+        </div><!-- End user-profile -->
+    </div><!-- End row -->
+    <div class="clearfix"></div>
+    <div class="page-content page-content-user">
+        <div class="user-questions">
+            {{ partial('partials/list-posts')}}
         </div>
     </div>
-    <div class="user-content">
-        <div class="vertical-list">
-            {% if posts is defined %}
-                    {% for post in posts %}
-                        <div class="list-element">
-                            <div class="{% if post.getAcceptedanswer() == "Y"%}answered-accepted{% elseif post.getNumberreply() >1 %}answered {% else %}unanswered{% endif %}">
-                                {% if tab == 'answers'%}
-                                    <span class="posts-answers"></span>
-                                {% else %}
-                                    <span class="posts-{{post.getType()}}"></span>
-                                {% endif %}
-                            </div>
-                            <div class="answer-hyperlink">
-                                {{ link_to(post.getType() ~ '/' ~ post.getId() ~ '/' ~ post.getSlug(), post.getTitle(), 'class' : 'answer-hyperlink ')}}
-                            </div>
-                            <span class="post-date">
-                                <span class="relativetime" title="{{ date("Y-M-D h:i", post.getCreatedAt()) }}">
-                                    {{ date("M j/y \a\t h:i", post.getCreatedAt()) }}
-                                </span>
-                            </span>
-                        </div>
-                    {% endfor %}
-            {% endif %}
-        </div>
-        <div class="view-more">
-             <a href="/@{{user.getUsername()}}?tab=">{{t('View all questions')}}</a>
-            &rarr;
-        </div>
-    </div><!--end-main-content -->
-</div>
-<div style="clear: both;"></div>
+
+    <div class="height_20"></div>
+    {{ partial('partials/pagination')}}
+    <!-- if no questions
+    <p>No questions yet</p>
+    -->
+</div><!-- End main -->
+<aside class="col-md-3 sidebar">
+    {{ partial('partials/right-side')}}
+</aside>

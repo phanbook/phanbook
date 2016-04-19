@@ -27,10 +27,14 @@ use Phanbook\Frontend\Forms\ChangePasswordForm;
 class UsersController extends ControllerBase
 {
 
+    /**
+     * @var int
+     */
+    public $perPage = 12;
+
     public function initialize()
     {
         parent::initialize();
-        $this->assets->addCss('core/assets/css/user.css');
         $this->view->pick('user');
     }
 
@@ -40,8 +44,9 @@ class UsersController extends ControllerBase
             $this->flashSession->error(t('The User dosen\'t exits'));
             return $this->indexRedirect();
         }
-        $tab = $this->request->getQuery('tab', 'string');
-        $where  = '';
+        $tab     = $this->request->getQuery('tab');
+        $page    = isset($_GET['page']) ? (int)$_GET['page'] : $this->numberPage;
+        $perPage = isset($_GET['perPage']) ? (int)$_GET['perPage'] : $this->perPage;        $where  = '';
         if ($tab == "answers") {
             $join = [
                 'type'  => 'join',
@@ -92,14 +97,21 @@ class UsersController extends ControllerBase
             'usersId = ?0 and type = "questions" and deleted = 0',
             'bind' => [$user->getId()]
         ];
-
+        $totalPosts = $totalBuilder->getQuery()->setUniqueRow(true)->execute($params);
+        $totalPages = ceil($totalPosts->count / $perPage);
+        $offset     = ($page - 1) * $perPage + 1;
+        if ($page > 1) {
+            $itemBuilder->offset($offset);
+        }
         $this->view->setVars(
             [
                 'user'              => $user,
                 'posts'             => $itemBuilder->getQuery()->execute($params),
                 'totalQuestions'    => Posts::count($paramQuestions),
                 'totalReply'        => PostsReply::find($parametersNumberReply)->count(),
-                'tab'               => $tab
+                'tab'               => $tab,
+                'totalPages'        => $totalPages,
+                'currentPage'       => $page
             ]
         );
     }
@@ -149,6 +161,7 @@ class UsersController extends ControllerBase
             ]
         );
         $this->tag->setTitle(t('List all users'));
+        $this->assets->addCss('core/assets/css/user.css');
     }
     public function profileAction()
     {
@@ -231,7 +244,7 @@ class UsersController extends ControllerBase
 
         return true;
     }
-    public function settingsAction()
+    public function settingAction()
     {
         $object = Users::findFirstById($this->auth->getAuth()['id']);
         if (!$object) {
@@ -254,7 +267,7 @@ class UsersController extends ControllerBase
                 } else {
                     $this->flashSession->success(t('Data was successfully saved'));
                     $this->refreshAuthSession($object->toArray());
-                    return $this->response->redirect($this->router->getControllerName() . '/settings');
+                    return $this->response->redirect($this->router->getControllerName() . '/setting');
                 }
             }
         }

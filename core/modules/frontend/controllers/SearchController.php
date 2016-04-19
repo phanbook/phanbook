@@ -39,7 +39,7 @@ class SearchController extends ControllerBase
 
         $this->view->setVars([
             'tab'           => null,
-            'object'        => $posts,
+            'posts'         => $posts,
             'canonical'     => '',
             'totalPages'    => 1,
             'currentPage'   => null
@@ -56,24 +56,7 @@ class SearchController extends ControllerBase
             //$this->view->setRenderLevel(View::LEVEL_ACTION_VIEW);
             $post = Posts::findFirstById($this->request->getPost('id'));
             if ($post) {
-                $indexer = new Indexer();
-                $posts = $indexer->search(
-                    [
-                        'title'    => $post->getTitle(),
-                        'content'  => $post->getContent()
-                    ],
-                    5,
-                    true
-                );
-                if (count($posts) == 0) {
-                    $posts = $indexer->search(
-                        [
-                            'title'    => $post->title
-                        ],
-                        5,
-                        true
-                    );
-                }
+                $posts = Posts::postRelated($post);
                 if (count($posts) > 0) {
                     $params = ['posts' => $posts];
                     echo $this->view->getRender(

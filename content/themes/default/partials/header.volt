@@ -1,126 +1,95 @@
-{# Default theme#}
-<div class="topbar">
-    <div class="network-items">
-        <div class="site-name">
-            <a href="/" class="logo-site-name">
-                <img id="site-logo" class="logo-big" src="{{getImageSrc('logo.png')}}" alt="Phanbook Meta">
-            </a>
-        </div>
-        {% set auth = this.auth.getAuth() %}
-        {% if auth %}
-        <div class="icon-right">
-            <a class="topbar-icon icon-inbox js-inbox-button" href="#">
-                {% if this.notifications.has()%}
-                    <span style="" class="unread-count">{{this.notifications.getNumber()}}</span>
-                {% endif %}
-            </a>
-            <a class="topbar-icon icon-setting js-user" href="#"></a>
-        </div>
-        {% else %}
-            <div class="login-links-container">
-                {{ link_to('oauth/login', t('log in'))}}
+<div class="setting-panel">
+        <section class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="page-content">
+                        <h2>Settings</h2>
+                        <div class="form-style form-style-3">
+                            <ul>
+                                <li><a href="/users/setting">Edit Setting</a></li>
+                                <li><a href="">User Questions</a></li>
+                                <li><a href="">User Answers</a></li>
+                                <li><a href="/users/profile">Edit Profile</a></li>
+                            </ul>
+                        </div>
+                    </div><!-- End page-content -->
+                </div><!-- End col-md-6 -->
+                <div class="col-md-6">
+                    <div class="page-content Register">
+                        <h2>Dashboard</h2>
+                        <div class="form-style form-style-3">
+                            <ul>
+                                <li><a href="/backend/dashboard">Dashboard</a></li>
+                                <li><a href="/backend/themes/custom">Edit Theme</a></li>
+                                <li><a href="/users/profile">Edit Profile</a></li>
+                                <li><a href="/oauth/logout">Logout</a></li>
+                            </ul>
+                        </div>
+                    </div><!-- End page-content -->
+                </div><!-- End col-md-6 -->
             </div>
-        {% endif %}
-    </div>
-<div>
-<div id="menus" class="nav">
-    <ul>
-        {% set menu1 = ['Questions' : 'questions', 'Hot' : 'hot',
-            'Unanswered' : 'unanswered',
-            'My questions': 'my', 'My answers': 'answers'
-        ]%}
-        {% set menu2 = ['Users' : 'users', 'Tags' : 'tags', 'Badges' : 'badges'] %}
-        {% for value, key in menu1 %}
-            {% if (key == 'my' or key == 'answers') and !auth %}
-                {% continue %}
-            {% endif %}
-            {% if key == tab %}
-                <li class="current">
-            {% else %}
-                <li>
-          {% endif %}
-          {{ link_to('questions?tab=' ~ key, t(value) ,'title' : value) }}</li>
-        {% endfor %}
-        {##}
-        <li {% if tab == 'new' %}class="current"{% endif %}>
-            {{ link_to('posts/new', 'Ask') }}
-        </li>
-        {% for value, key in menu2 %}
-            {% if key == tab %}
-                <li class="current">
-            {% else %}
-                <li>
-          {% endif %}
-          {{ link_to(key, t(value) ,'title' : value) }}</li>
-        {% endfor %}
-    </ul>
-</div>
-<div id ="menus-settings" class="dropdown-menu" style="display: none;">
-    <div class="gb-v"></div>
-    <div class="nav-users">
-        <ul class="settings">
-            <li><span class="img-setting"></span>{{ link_to('users/profile' ,t('Profile'))}}</li>
-            <li><span class="img-setting"></span>{{ link_to('users/settings' ,t('Settings'))}}</li>
-            <li><span class="img-changpass"></span>{{ link_to('users/changepassword', t('Change Password'))}}</li>
-            <li><span class="img-link"></span>{{ link_to('//en.gravatar.com' ,t('Change your avatar at Gravatar') ,false)}}</li>
-            <li><span class="sign-out"></span>{{ link_to('oauth/logout' ,t('Logout'))}}</li>
-            {% if auth['admin'] == 'Y' %}
-                <li><span class="img-setting"></span>{{ link_to('backend' ,t('Dashboard'))}}</li>
-                <li><span class="img-bookmark"></span>{{ link_to('backend/themes/custom' ,t('Edit Theme'))}}</li>
-            {% endif %}
-        </ul>
-    </div>
-</div>
+        </section>
+</div><!-- End login-panel -->
+<div id="header-top">
+    <section class="container clearfix">
+        <nav class="header-top-nav">
+            <ul>
+                <li><a href="#"><i class="icon-headphones"></i>Support</a></li>
+                {% if isLogin() %}
+                    <li><a href="/oauth/logout" id="setting-panel"><i class="icon-plus"></i>Setting</a></li>
+                    <li><a href="/notifications">
+                        {% if this.notifications.has()%}
+                        <span class="mail-status unread"></span>
+                        {% endif %}<i class="icon-inbox"></i>
+                    </a></li>
+                {% else %}
+                    <li><a href="contact_us.html"><i class="icon-envelope"></i>Contact</a></li>
+                    <li><a href="/oauth/login"><i class="icon-user"></i>Login Area</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+        <div class="header-search">
+            {{ partial('partials/form-search')}}
+        </div>
+    </section><!-- End container -->
+</div><!-- End header-top -->
+<header id="header">
+    <section class="container clearfix">
+        <div class="logo"><a href="/">
+            <img id="site-logo" src="{{getImageSrc('logo.png')}}" alt="Phanbook Meta">
+            </a>
+        </div>
+        <nav class="navigation">
+            <ul>
+            {% set menu1 = ['Questions' : 'questions', 'Hot' : 'hot',
+                'My questions': 'my', 'My answers': 'answers'
+            ]%}
+            {% set menu2 = ['Users' : 'users', 'Tags' : 'tags', 'Badges' : 'badges'] %}
+            {% for value, key in menu1 %}
+                {% if (key == 'my' or key == 'answers') and !isLogin() %}
+                    {% continue %}
+                {% endif %}
+                {% if key == tab %}
+                    <li class="current_page_item">
+                {% else %}
 
-{% if auth %}
-<div class="dropdown-menu" id="notifications-dropdown" style="display: none;">
-    <div class="gb-v"></div>
-    <div class="notification-real">
-        <ul class="navbar-nav">
-            {% for activity in this.notifications.getNotifications(auth['id']) %}
-                {% set link = 'posts/' ~ activity.post.getId() ~ '/' ~ activity.post.getSlug() %}
-                <li class="{% if activity.getWasRead() == 'N' %}unread{% endif %}">
-                    <span>
-                        {{ link_to('@' ~ activity.userOrigin.getUsername() ~ '', activity.userOrigin.getFullName()|e) }}
-                    </span>
-                    {# Display notification#}
-                    {% if activity.getType() == 'P' %}
-                        has upvoted in
-                        {{ link_to( link, activity.post.getTitle()|e, 'data-id':activity.post.getId(), 'data-object':'P') }}
-                    {% endif %}
-
-                    {% if activity.type == 'C' %}
-                        has commented in
-                        {{ link_to( link ~ '#C' ~ activity.getPostsReplyId(), activity.post.getTitle()|e,
-                        'data-id':activity.getPostsReplyId(), 'data-object' : 'C') }}
-                    {% endif %}
-
-                    {% if activity.getType() == 'R' %}
-                        has reply in
-                        {{ link_to( link ~ '#C' ~ activity.getPostsReplyId(), activity.post.getTitle()|e,
-                        'data-id':activity.getPostsReplyId(), 'data-object' : 'R')}}
-                    {% endif %}
-
-                    {% if activity.getType() == 'B' %}
-                        you've earned the "
-                        {{ link_to('help/badges', activity.extra,
-                        'data-id':activity.getPostsReplyId()) }}" badge
-                    {% endif %}
-
-                    {% if activity.getType() == 'O' %}
-                        you've earned the "
-                        {{ link_to(link, activity.getExtra(),
-                        'data-id':activity.getPostsReplyId()) }}" badge
-                    {% endif %}
-
-                    {% if activity.getType() == 'V' %}
-                        you've earned the "
-                        {{ link_to(link, activity.getExtra(),
-                        'data-id':activity.getPostsReplyId()) }}" badge
-                    {% endif %}
-                </li>
+                    <li>
+              {% endif %}
+              {{ link_to('questions?tab=' ~ key, t(value) ,'title' : value) }}</li>
             {% endfor %}
-      </ul>
-    </div>
-</div>
-{% endif %}
+        {##}
+            <li {% if tab == 'new' %}class="current_page_item"{% endif %}>
+                {{ link_to('posts/new', 'Ask Question') }}
+            </li>
+            {% for value, key in menu2 %}
+                {% if key == tab %}
+                    <li class="current_page_item">
+                {% else %}
+                    <li>
+              {% endif %}
+              {{ link_to(key, t(value) ,'title' : value) }}</li>
+            {% endfor %}
+            </ul>
+        </nav>
+    </section><!-- End container -->
+</header><!-- End header -->

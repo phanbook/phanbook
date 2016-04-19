@@ -1,31 +1,41 @@
-<div class="user-list">
-    <div>
-    {% for user in paginator.items %}
-        <div class="user-header">
-            <div class="user-avatar">
-                <a href="/@{{ user.getUsername()}}">
-                    <div class="gravatar-wrapper{{ user.getId()}}">
-                        {{ image(getUrlAvatar(user.getEmail(), 130), false)}}
-                    </div>
-                </a>
+<div class="container">
+    <div class="col-md-12">
+        <div class="carousel slide" id="myCarousel">
+            <div class="carousel-inner">
+                {% for user in paginator.items %}
+                <div class="item active">
+                    <ul class="thumbnails">
+                        <li class="col-sm-3">
+                            <div class="fff">
+                                <div class="thumbnail-user-list">
+                                    <a href="#">
+                                        <img src="{{getUrlAvatar(user.email, 200)}}">
+                                    </a>
+                                </div>
+                                <div class="caption">
+                                    <h4>{{ user.getFullName() | capitalize }}</h4>
+                                    <p>Karma : {{ user.getHumanKarma()}}</p>
+                                    <p>Role:
+                                    {% if user.moderator === 'Y' %}
+                                        Moderator
+                                    {% elseif user.admin === 'Y' %}
+                                        Admin
+                                    {% else %}
+                                        Users
+                                    {% endif %}
+                            </p>
+                            <p>Joined on {{ date('M d,Y', user.getCreatedAt())}}</p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div><!-- /Slide1 -->
+                {% endfor %}
             </div>
-            <div class="user-element">
-                <div class="info">
-                    <h2><a href="/@{{ user.getUsername()}}"> {{ user.getFullName()}}</a></h2>
-                    <p>{% if user.moderator === 'Y' %}
-                        Moderator
-                    {% elseif user.admin === 'Y' %}
-                        Admin
-                    {% else %}
-                        Users
-                    {% endif %}
-                    </p>
-                    <h4>Joined on {{ date('M d,Y', user.getCreatedAt())}}</h4>
-                </div>
-            </div>
-        </div>
-    {% endfor %}
+           <!-- /.control-box -->
+        </div><!-- /#myCarousel -->
+    </div><!-- /.col-xs-12 -->
+    <div class="col-md-12">
+        {{ partial('partials/pagination')}}
     </div>
-    <!-- paginator -->
-    {{ partial('partials/pagination')}}
-</div>
+</div><!-- /.container -->

@@ -224,17 +224,6 @@ class UserForm extends Form
         $this->add($birthDate);
         //$this->add(new File('avatar'));
 
-        // CSRF
-        $csrf = new Hidden('csrf');
-        $csrf->addValidator(
-            new Identical(
-                array(
-                'value'   => $this->security->getSessionToken(),
-                'message' => t('CSRF validation failed')
-                )
-            )
-        );
-        $this->add($csrf);
 
         //Submit
         $this->add(
@@ -251,7 +240,7 @@ class UserForm extends Form
                 'saveAvatar',
                 [
                 'value' => 'Change avatar',
-                'class' => 'btn btn-sm btn-info'
+                'class' => 'button color small login-submit submit'
                 ]
             )
         );

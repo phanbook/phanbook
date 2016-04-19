@@ -16,7 +16,7 @@ use Phalcon\DI\FactoryDefault;
 use Phalcon\Mvc\Model;
 use Phalcon\Logger\Adapter\File as Logger;
 use Phalcon\Mvc\Model\Resultset\Simple as Resultset;
-
+use Phanbook\Tools\ZFunction;
 use Phanbook\Models\Behavior\Blameable as ModelBlameable;
 
 /**
@@ -27,6 +27,12 @@ use Phanbook\Models\Behavior\Blameable as ModelBlameable;
  */
 class ModelBase extends Model
 {
+
+    /**
+     *
+     * @var integer
+     */
+    protected $createdAt;
 
     /**
      * Toggle object status. 0 or 1
@@ -82,11 +88,12 @@ class ModelBase extends Model
 
     public function getPostsWithVotes($postId = false)
     {
-        $sql = 'SELECT p.*, pr.usersId as editorId,
+        $sql = 'SELECT p.*, pr.usersId as editorId, u.email,
             (SELECT SUM(v.positive) FROM  vote v  WHERE p.id = v.objectId AND v.object = ?) AS positive,
             (SELECT SUM(v.negative) FROM  vote v  WHERE p.id = v.objectId AND v.object = ?) AS negative
             FROM postsReply p
             LEFT JOIN postsReplyHistory pr ON p.id = pr.postsReplyId
+            LEFT JOIN users u ON u.id = p.usersId
             WHERE p.postsId= ? AND p.deleted = 0
             GROUP BY p.id
             ORDER BY p.id DESC';
@@ -94,7 +101,7 @@ class ModelBase extends Model
         $postsReply = new PostsReply();
         $params = [Vote::OBJECT_POSTS_REPLY, Vote::OBJECT_POSTS_REPLY, ($postId ? $postId : $this->getId())];
         $pdoResult  = $postsReply->getReadConnection()->query($sql, $params);
-        return (new Resultset(null, $postsReply, $pdoResult))->toArray();
+        return (new Resultset(null, $postsReply, $pdoResult));
     }
     /**
      * @param $obJectid
@@ -291,5 +298,12 @@ class ModelBase extends Model
     {
         $this->addBehavior(new ModelBlameable());
         $this->keepSnapshots(true);
+    }
+    /**
+     * @return bool|string
+     */
+    public function getHumanCreatedAt()
+    {
+        return ZFunction::getHumanDate($this->createdAt);
     }
 }

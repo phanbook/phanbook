@@ -16,7 +16,7 @@ function updateTags(){
     $("#tags").val(window.list_tag.join(","));
     $(".post-tag").remove();
     for(var i = 0;i < window.list_tag.length; i++){
-        $('<span class="post-tag">'+window.list_tag[i]+'<span class="delete-tag" title="remove this tag"></span></span>').insertBefore("#tag-input");
+        $('<span class="post-tag">'+window.list_tag[i]+'<span class="icon-remove delete-tag" title="remove this tag"></span></span>').insertBefore("#tag-input");
     }
     $(".delete-tag").click(function(){
         $(this).parent().remove();
@@ -84,8 +84,8 @@ $(document).ready(function() {
         $('#tags').val(tagValues);
         var tagArray = tagValues.split(','), name = [];
         tagArray.forEach(function (element, index){
-            var val= '<span class="post-tag">' + element + '<span title="remove this tag" class="delete-tag"></span></span>';
-            $('.tag-editor').prepend(val);
+            var val= '<span class="post-tag">' + element + '<span title="remove this tag" class="icon-remove delete-tag"></span></span>';
+            $('.tag-editor').before(val);
         });
     };
 });

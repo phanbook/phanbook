@@ -435,6 +435,11 @@ class PostsReply extends ModelBase
             $this->getDI()->getQueue()->put($toNotify);
         }
     }
+    //@todo add condition
+    public static function totalReply()
+    {
+        return PostsReply::count();
+    }
     /**
      * Independent Column Mapping.
      */

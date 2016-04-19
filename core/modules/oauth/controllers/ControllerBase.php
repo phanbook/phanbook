@@ -93,7 +93,7 @@ class ControllerBase extends Controller
     }
     public function currentRedirect()
     {
-        if ($url = $this->cookies->get('urlCurrent')) {
+        if ($url = $this->cookies->get('urlCurrent')->getValue()) {
             $this->cookies->delete('urlCurrent');
             return $this->response->redirect($url);
         }

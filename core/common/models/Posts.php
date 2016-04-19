@@ -14,6 +14,7 @@ namespace Phanbook\Models;
 
 use Phalcon\Mvc\Model\Behavior\SoftDelete;
 use Phanbook\Tools\ZFunction;
+use Phanbook\Search\Indexer;
 
 class Posts extends ModelBase
 {
@@ -724,14 +725,6 @@ class Posts extends ModelBase
     /**
      * @return bool|string
      */
-    public function getHumanCreatedAt()
-    {
-        return ZFunction::getHumanDate($this->createdAt);
-    }
-
-    /**
-     * @return bool|string
-     */
     public function getHumanEditedAt()
     {
         return ZFunction::getHumanDate($this->editedAt);
@@ -855,6 +848,33 @@ class Posts extends ModelBase
             }
         }
         return $users;
+    }
+    //@todo add condition
+    public static function totalPost()
+    {
+        return Posts::count();
+    }
+    /**
+     * Get post related via elastic
+     *
+     * @param  object $post
+     * @return object
+     */
+    public static function postRelated($post)
+    {
+        $indexer = new Indexer();
+        $posts = $indexer->search(
+            [
+                'title'    => $post->title,
+                'content'  => $post->content
+            ],
+            5,
+            true
+        );
+        if (count($posts) == 0) {
+            $posts = $indexer->search(['title' => $post->title], 5, true);
+        }
+        return $posts;
     }
     /**
      * Independent Column Mapping.

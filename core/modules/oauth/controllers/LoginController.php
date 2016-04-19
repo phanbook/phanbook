@@ -155,7 +155,7 @@ class LoginController extends ControllerBase
                         ]
                     );
                     $this->flashSession->success(t('Welcome back '. $this->auth->getName()));
-                    return $this->indexRedirect();
+                    return $this->currentRedirect();
                 }
             }
         } catch (\Exception $e) {
@@ -196,11 +196,5 @@ class LoginController extends ControllerBase
             $email = $object->getEmail();
             $this->flashSession->success('Welcome back ' . $object->getInforUser());
         }
-    }
-
-    public function initialize()
-    {
-        $this->cookies->set('urlCurrent', $this->request->getHTTPReferer());
-        parent::initialize();
     }
 }

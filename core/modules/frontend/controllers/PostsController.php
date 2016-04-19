@@ -20,6 +20,7 @@ use Phanbook\Models\Users;
 use Phanbook\Models\ModelBase;
 use Phanbook\Models\Tags;
 use Phanbook\Models\PostsViews;
+use Phanbook\Models\PostsReply;
 use Phanbook\Models\PostsHistory;
 use Phanbook\Frontend\Forms\ReplyForm;
 use Phanbook\Frontend\Forms\CommentForm;
@@ -36,7 +37,7 @@ class PostsController extends ControllerBase
      */
     public function initialize()
     {
-        $this->view->hotPosts   = Posts::getHotPosts();
+
         parent::initialize();
     }
 
@@ -145,8 +146,7 @@ class PostsController extends ControllerBase
                 'type'        => Posts::POST_ALL,
                 'posts'       => $itemBuilder->getQuery()->execute($params),
                 'totalPages'  => $totalPages,
-                'currentPage' => $page,
-                'tags'        => Tags::find()
+                'currentPage' => $page
             ]
         );
         return $this->view->pick('post');
@@ -178,7 +178,8 @@ class PostsController extends ControllerBase
                 'post'            => $object,
                 'firstTime'       => false,
                 'tab'             => null,
-                'type'            => Posts::POST_QUESTIONS
+                'type'            => Posts::POST_QUESTIONS,
+                'breadcrumbName'     => 'Ask Questions'
             ]
         );
         $this->tag->setTitle('Edit a questions or tips ');
@@ -322,7 +323,9 @@ class PostsController extends ControllerBase
                 'form'            => new QuestionsForm(),
                 'firstTime'       => $firstTime,
                 'tab'             => 'new',
-                'type'            => Posts::POST_QUESTIONS
+                'type'            => Posts::POST_QUESTIONS,
+                'breadcrumbName'  => 'Ask Questions'
+
             ]
         );
         $this->assets->addJs('core/assets/js/tags-suggest.js');
@@ -389,7 +392,7 @@ class PostsController extends ControllerBase
                 $this->saveLoger($postView->getMessages());
             }
         }
-
+        //d($object->getPostsWithVotes($id));
         $this->view->setVars(
             [
                 'post'          => $object,
@@ -398,7 +401,8 @@ class PostsController extends ControllerBase
                 'postsReply'    => $object->getPostsWithVotes($id),
                 'commentForm'   => new CommentForm(),
                 'userPosts'     => $object->user,
-                'type'          => Posts::POST_QUESTIONS
+                'type'          => Posts::POST_QUESTIONS,
+                'postRelated'   => Posts::postRelated($object)
             ]
         );
         $this->tag->setTitle($this->escaper->escapeHtml($object->getTitle()));

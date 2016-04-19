@@ -1,12 +1,33 @@
-<div class="footer" align="center" class="container-fluid">
-        <div class="footer-links">
-            {{ link_to('about', t('about us'))}}
-            {{ link_to('help',  t('help')) }}
-            {{ link_to('rules' , t('rule')) }}
-            {{ link_to('portal', t('legal')) }}
-            {{ link_to('contact', t('contact us')) }}
-            <a href="http://phanbook.com" target="_blank">portal</a>
-            <a href="https://github.com/phanbook" target="_blank">github</a>
-        </div>
-        <p class="text-footer">site design / logo &copy; 2015 {{name}}, inc; user contributions licensed under <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">cc-wiki</a> with <a rel="license" href="">attribution required</a> and powered by Phanbook</p>
-</div>
+<footer id="footer">
+        <section class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="widget widget_contact">
+                        <h3 class="widget_title">Where We Are ?</h3>
+                        <p>Welcome! We are Phanbook. A non-profit, open source Q&A site, discussion and blogging platform.</p>
+                        <ul>
+                            <li>Support Email Account : hello@phanbook.com</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="widget">
+                        <h3 class="widget_title">Quick Links</h3>
+                        <ul>
+                            <li><a href="/">Home</a></li>
+                            <li><a href="#">About</a></li>
+                            <li>
+                                <a href="https://github.com/phanbook" target="_blank">Github</a>
+                            </li>
+                            <li><a href="#">Contact Us</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div><!-- End row -->
+        </section><!-- End container -->
+    </footer><!-- End footer -->
+    <footer id="footer-bottom">
+        <section class="container">
+            <div class="copyrights f_left">site design / logo &copy;2015 | <a href="#">By Phanbook</a></div>
+        </section><!-- End container -->
+    </footer><!-- End footer-bottom -->

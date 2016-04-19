@@ -279,6 +279,10 @@ class Auth extends Component
         }
         return false;
     }
+    public function isLogin()
+    {
+        return $this->session->get('auth') ? :false;
+    }
      /**
      * Checking user is have permission admin
      *

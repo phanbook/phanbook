@@ -71,9 +71,10 @@ class QuestionsForm extends Form
             array(
             'placeholder' => t('Please be sure to answer the question. Provide details and share your research!'),
             'class'       => 'wmd-input',
-            'id'          => 'wmd-input',
+            'id'          => 'question-details',
             'required'    => true,
-            'rows'  =>10
+            'rows'        => 8,
+            'cols'        => 58
 
             )
         );
@@ -108,8 +109,9 @@ class QuestionsForm extends Form
             new Submit(
                 'save',
                 array(
-                'class' => 'btn btn-sm btn-success',
-                'value' => t('Submit Post')
+                'class' => 'button color small submit',
+                'id'    => 'publish-question',
+                'value' => t('Publish Your Question')
                 )
             )
         );

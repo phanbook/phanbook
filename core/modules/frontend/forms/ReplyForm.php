@@ -36,7 +36,7 @@ class ReplyForm extends Form
             'class'       => 'wmd-input',
             'id'           => 'wmd-input',
             'required'    => true,
-            'rows'  =>10
+            'rows'  =>8
 
             )
         );

@@ -63,7 +63,7 @@ class ZFunction extends Injectable
     {
         $diff = time() - $date;
         if ($diff > (86400 * 30)) {
-            return date('M \'y', $date);
+            return date('M j/y \a\t h:i', $date);
         } else {
             if ($diff > 86400) {
                 return ((int)($diff / 86400)) . 'd ago';
@@ -211,5 +211,9 @@ class ZFunction extends Injectable
     public static function isTrustModeration()
     {
         return (new Auth)->isTrustModeration();
+    }
+    public static function isLogin()
+    {
+        return (new Auth)->isLogin();
     }
 }

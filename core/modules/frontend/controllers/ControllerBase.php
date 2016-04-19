@@ -19,6 +19,7 @@ use Phalcon\Logger\Adapter\File as Logger;
 use Phanbook\Models\Vote;
 use Phanbook\Models\Users;
 use Phanbook\Models\Karma;
+use Phanbook\Models\Tags;
 use Phanbook\Models\Posts;
 use Phanbook\Models\Comment;
 use Phanbook\Models\PostsReply;
@@ -123,7 +124,15 @@ class ControllerBase extends Controller
 
     public function initialize()
     {
-        $this->view->tab = $this->currentOrder;
+        $this->view->setVars([
+            'tab'           => $this->currentOrder,
+            'tags'          => Tags::find(),
+            'hotPosts'      => Posts::getHotPosts(5),
+            'totalPost'     => Posts::totalPost(),
+            'highestKarma'  => Users::highestKarma(),
+            'totalReply'    => PostsReply::totalReply(),
+
+        ]);
         if (isset($this->config->perPage)) {
             $this->perPage = $this->config->perPage;
         }
@@ -280,7 +289,6 @@ class ControllerBase extends Controller
         }
         $objectId = $this->request->getPost('objectId');
         $object   = $this->request->getPost('object');
-        $vote     = Vote::vote($objectId, $object, $way);
         $user     = Users::findFirstById($this->auth->getAuth()['id']);
         $this->setJsonResponse();
 
@@ -319,7 +327,7 @@ class ControllerBase extends Controller
             //Set karam Voting someone else's post (positive or negative) on posts reply
             $this->setPointReply($way, $user, $postReply);
         }
-
+        $vote = Vote::vote($objectId, $object, $way);
         if (!$vote) {
             $this->jsonMessages['messages'][] = [
                 'type'    => 'error',
@@ -444,8 +452,8 @@ class ControllerBase extends Controller
     }
     public function currentRedirect()
     {
-        if ($url = $this->session->get('urlCurrent')) {
-            $this->session->remove('urlCurrent');
+        if ($url = $this->cookies->get('urlCurrent')->getValue()) {
+            $this->cookies->delete('urlCurrent');
             return $this->response->redirect($url);
         }
         return $this->response->redirect($this->request->getHTTPReferer(), true);
