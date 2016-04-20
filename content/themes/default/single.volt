@@ -125,7 +125,7 @@
                                         </div>
                                         {#<a class="comment-reply" href="#"><i class="icon-reply"></i>Reply</a>#}
                                     </div>
-                                    <div class="text"><p>{{ answer.content }}</p>
+                                    <div class="text"><p>{{ this.markdown.text(answer.content) }}</p>
                                     </div>
                                 </div>
                             </div>
