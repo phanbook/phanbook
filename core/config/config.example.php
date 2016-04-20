@@ -71,6 +71,7 @@ return new \Phalcon\Config(
          * @link http://github.com/phanbook/docs/mail.md
          */
         'mail'        => [
+            'templatesDir' => 'mail/',
             'fromName'     => 'Phanbook',
             'fromEmail'    => 'phanbook@no-reply',
             'smtp'         => [

@@ -234,9 +234,14 @@ class Template extends ModelBase
      */
     public function manageFile($delete = false)
     {
+        $config       = $this->getDi()->get('config');
         $templateFile = $this->getKey() . $this->getFirstTemplateEngine();
-        $dir          = $this->getDi()->get('config')->application->templatesDir;
-        //d($dir);
+        $dir = $config->application->dataDir . $config->mail->templatesDir;
+        if (!is_dir($dir)) {
+            $message = new Message(t('Directory not exists'));
+            $this->appendMessage($message);
+            return false;
+        }
         if (!is_writeable($dir)) {
             $message = new Message(t('Directory for saving template is not writable.'));
             $this->appendMessage($message);
@@ -244,7 +249,10 @@ class Template extends ModelBase
             return false;
         }
 
-        if ($delete && unlink($dir . $templateFile)) {
+        if ($delete) {
+            if (file_exists($dir . $templateFile)) {
+                unlink($dir . $templateFile);
+            }
             return true;
         }
 

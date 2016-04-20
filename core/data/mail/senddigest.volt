@@ -1,6 +1,7 @@
 {# The template use for send digest#}
 <html><head></head>
 <body>
+    {% if posts|length > 0%}
     <h5>Hello {{ username }} </h5>
     <h3> A brief summary of {{this.config.application.name}} since your last visit on last week </h3>
     {% for post in posts %}
@@ -15,6 +16,8 @@
         <a href="{{ post['link'] }}">{{ this.config.application.name }}</a>
         Change your e-mail preferences <a href="{{this.config.application.publicUrl}}/settings">here</a>
     </p>
+    {% endif %}
+
 
 </body></html>
 <style type="text/css">

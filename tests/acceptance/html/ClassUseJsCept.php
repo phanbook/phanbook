@@ -4,13 +4,13 @@ $I->wantTo('See all class to use for javascript');
 $I->amOnPage('/questions/1/phanbook');
 
 //$I->see('Sign Up With Google');
-$I->click('.iam-subscribe');
+// $I->click('.iam-subscribe');
 
-$I->click('.voter');
+// $I->click('.voter');
 
-//Acept
-$I->click('.iam-accepting');
-$I->click(['data-object' => 'posts']);
+// //Acept
+// $I->click('.iam-accepting');
+// $I->click(['data-object' => 'posts']);
 // $I->see('Sign Up With Github');
 // $I->click('.gitbub-button');
 // $I->see('Sign Up With Facebook');

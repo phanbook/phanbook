@@ -53,18 +53,6 @@ class TemplateForm extends Form
         $this->add(new TextArea('content', ['rows' => 30, 'cols' => 10, 'placeholder' => 'Content']));
 
         // CSRF
-        $csrf = new Hidden('csrf');
-
-        $csrf->addValidator(
-            new Identical(
-                array(
-                'value'   => $this->security->getSessionToken(),
-                'message' => t('CSRF validation failed')
-                )
-            )
-        );
-
-        $this->add($csrf);
 
         //Submit
         $this->add(

@@ -32,6 +32,7 @@ return new \Phalcon\Config(
             'modelsDir'           => ROOT_DIR . 'core/models/',
             'baseUri'             => '/',
             'view'                      => [
+                'viewsDir'          => ROOT_DIR . '/views/',
                 'compiledPath'      => ROOT_DIR . 'content/cache/volt/',
                 'compiledSeparator' => '_',
                 'compiledExtension' => '.php',
@@ -39,7 +40,7 @@ return new \Phalcon\Config(
                     'limit'             => 10,
                 ],
             ],
-            'templatesDir'        => ROOT_DIR . 'core/data/templates/',
+            'dataDir'             => ROOT_DIR . 'core/data/',
             'repo'                => 'https://github.com/phanbook',
             'timezone'            => 'UTC',
             /**

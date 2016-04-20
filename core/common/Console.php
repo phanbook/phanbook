@@ -21,6 +21,7 @@ use Phalcon\Queue\Beanstalk;
 use Phanbook\Tools\Cli\Output;
 use Phanbook\Markdown\ParsedownExtra;
 use Phanbook\Mail\Mail;
+use Phanbook\Auth\Auth;
 use Phanbook\Queue\DummyServer;
 
 /**
@@ -106,7 +107,7 @@ class Console extends CLIConsole
         $this->_task = $this->_action = null;
         $this->_params = array();
         $this->_taskId = null;
-        $loaders = array('config', 'loader', 'db', 'router', 'markdown', 'mail', 'view', 'queue');
+        $loaders = array('config', 'loader', 'db', 'router', 'markdown', 'mail', 'view', 'queue', 'isCli');
 
         // Register services
         foreach ($loaders as $service) {
@@ -137,6 +138,15 @@ class Console extends CLIConsole
                 'Phanbook\Seeder'       => ROOT_DIR . '/core/modules/seeder/'
             ]
         )->register();
+    }
+    protected function isCli()
+    {
+        $this->_di->set(
+            'isCli',
+            function () {
+                return true;
+            }
+        );
     }
 
     /**
@@ -222,7 +232,7 @@ class Console extends CLIConsole
         $this->_di->set(
             'view',
             function () use ($config) {
-                $view = new View($config->toArray());
+                $view = new View();
                 $view->setViewsDir($config->application->view->viewsDir);
                 $view->disableLevel([View::LEVEL_MAIN_LAYOUT => true, View::LEVEL_LAYOUT => true]);
                 $view->registerEngines(

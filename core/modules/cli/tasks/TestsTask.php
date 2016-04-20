@@ -53,4 +53,8 @@ class TestsTask extends Task
         //new TriggerARuntimeFatal();
         strpos();
     }
+    public function renderAction()
+    {
+        echo $this->mail->renderTest();
+    }
 }

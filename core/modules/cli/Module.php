@@ -36,6 +36,29 @@ class Module implements ModuleDefinitionInterface
      */
     public function registerServices(DiInterface $di)
     {
+        $di->set(
+            'view',
+            function () {
+                $view = new View();
+                $view->setViewsDir(__DIR__ . '/views/');
+                $view->disableLevel([View::LEVEL_MAIN_LAYOUT => true, View::LEVEL_LAYOUT => true]);
+                $view->registerEngines(['.volt' => 'volt']);
 
+                // Create an event manager
+                $eventsManager = new EventsManager();
+                $eventsManager->attach(
+                    'view',
+                    function ($event, $view) {
+                        if ($event->getType() == 'notFoundView') {
+                            throw new \Exception('View not found!!! (' . $view->getActiveRenderPath() . ')');
+                        }
+                    }
+                );
+                // Bind the eventsManager to the view component
+                $view->setEventsManager($eventsManager);
+
+                return $view;
+            }
+        );
     }
 }

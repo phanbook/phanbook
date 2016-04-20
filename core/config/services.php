@@ -34,6 +34,8 @@ use Phalcon\Mvc\View\Engine\Volt;
 use Phalcon\Queue\Beanstalk;
 use Phalcon\Config\Adapter\Php         as AdapterPhp;
 use Phalcon\Logger\Adapter\File        as FileLogger;
+use Phalcon\Mvc\View;
+
 
 
 use Phanbook\Utils\Constants;

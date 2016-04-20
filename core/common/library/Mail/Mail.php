@@ -39,16 +39,19 @@ class Mail extends Component
         }
         //Set views layout
         $this->view->setViewsDir(ROOT_DIR . '/core/data/');
-        $html = $this->view->getRender(
-            'templates',
+        $render = $this->view->getRender(
+            rtrim($this->config->mail->templatesDir, '/'),
             $key,
             $params,
             function ($view) {
                 $view->setRenderLevel(View::LEVEL_LAYOUT);
             }
         );
-        return $html;
-        //return $this->view->getContent();
+        if (!empty($render)) {
+            return $render;
+        }
+        //When use template for cli
+        return $this->view->getContent();
     }
 
     /**
@@ -111,5 +114,10 @@ class Mail extends Component
     public function getToMailTest($to)
     {
         return $to;
+    }
+    public function renderTest()
+    {
+
+        return $this->getTemplate('test', []);
     }
 }
