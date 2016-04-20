@@ -107,7 +107,9 @@ class Console extends CLIConsole
         $this->_task = $this->_action = null;
         $this->_params = array();
         $this->_taskId = null;
-        $loaders = array('config', 'loader', 'db', 'router', 'markdown', 'mail', 'view', 'queue', 'isCli');
+        $loaders = [
+            'config', 'loader', 'db', 'router', 'markdown', 'mail', 'view', 'queue', 'auth', 'session'
+        ];
 
         // Register services
         foreach ($loaders as $service) {
@@ -139,13 +141,28 @@ class Console extends CLIConsole
             ]
         )->register();
     }
-    protected function isCli()
+    protected function auth()
     {
         $this->_di->set(
-            'isCli',
+            'auth',
             function () {
-                return true;
+                return new Auth;
             }
+        );
+    }
+    protected function session()
+    {
+        $config = $this->_config;
+        $this->_di->set(
+            'session',
+            function () use ($config) {
+                $sessionAdapter = $config->application->session->adapter;
+                $session        = new $sessionAdapter($config->application->session->options->toArray());
+                $session->start();
+
+                return $session;
+            },
+            true
         );
     }
 
