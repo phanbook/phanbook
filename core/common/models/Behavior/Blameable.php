@@ -56,7 +56,9 @@ class Blameable extends Behavior implements BehaviorInterface
     public function createAudit($type, ModelInterface $model)
     {
         //Skip if it is cli
-
+        if ($model->getDI()->has('isCli')) {
+            return;
+        }
         //Get the session service
         $auth    = $model->getDI()->getAuth();
         if (!empty($auth->getUserId())) {

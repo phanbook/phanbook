@@ -108,7 +108,8 @@ class Console extends CLIConsole
         $this->_params = array();
         $this->_taskId = null;
         $loaders = [
-            'config', 'loader', 'db', 'router', 'markdown', 'mail', 'view', 'queue', 'auth', 'session'
+            'config', 'loader', 'db', 'router', 'markdown', 'mail',
+            'view', 'queue', 'auth', 'session', 'isCli'
         ];
 
         // Register services
@@ -140,6 +141,15 @@ class Console extends CLIConsole
                 'Phanbook\Seeder'       => ROOT_DIR . '/core/modules/seeder/'
             ]
         )->register();
+    }
+    protected function isCli()
+    {
+        $this->_di->set(
+            'isCli',
+            function () {
+                return true;
+            }
+        );
     }
     protected function auth()
     {
