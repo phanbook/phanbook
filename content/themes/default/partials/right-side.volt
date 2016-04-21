@@ -61,7 +61,7 @@
                 <img width="60" height="60" src="{{getUrlAvatar(userHighest.email)}}" alt="">
                 </a>
             </div>
-            <h6><a href="#">{{userHighest.getFullName()}}</a></h6>
+            <h6><a href="/@{{userHighest.username}}">{{userHighest.getFullName() | capitalize }}</a></h6>
             <span class="comment">{{userHighest.getHumanKarma()}} Points</span>
         </li>
     {% endfor %}
@@ -85,7 +85,7 @@
     {% for hot in hotPosts %}
         <li class="related-item">
             <h3>
-             {{ link_to(hot.getType() ~ '/' ~ hot.getId() ~ '/' ~ hot.getSlug(), hot.getTitle())}}
+             {{ link_to(hot.type ~ '/' ~ hot.id ~ '/' ~ hot.slug, hot.title) }}
             </h3>
             <div class="clear"></div><span> {{ hot.getHumanCreatedAt()}}</span>
         </li>

@@ -3,8 +3,10 @@
         <div class="user-profile">
             <div class="col-md-12">
                 <div class="page-content">
-                    <h2>About admin</h2>
-                    <div class="user-profile-img"><img width="60" height="60" src="http://2code.info/demo/html/ask-me/images/demo/admin.jpeg" alt="admin"></div>
+                    <h2>About {{ user.getFullname()}}</h2>
+                    <div class="user-profile-img">
+                    <img width="60" height="60" src="{{getUrlAvatar(user.email)}}" alt="admin">
+                    </div>
                     <div class="ul_list ul_list-icon-ok about-user">
                         <ul>
                             <li><i class="icon-plus"></i>Registerd : <span>{{user.getHumanCreatedAt()}}</span></li>

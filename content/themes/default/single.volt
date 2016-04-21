@@ -18,7 +18,7 @@
                                 <a href="#" original-title="Facebook" cl>
                                     <span class="icon_i">
                                         <span class="icon_square" icon_size="20" span_bg="#3b5997" span_hover="#666">
-                                            <i i_color="#FFF" class="social_icon-facebook"></i>
+                                            <i i_color="#FFF" class="social_icon-facebook icon-facebook"></i>
                                         </span>
                                     </span>
                                 </a>
@@ -28,7 +28,7 @@
                                 <a href="#" target="_blank">
                                     <span class="icon_i">
                                         <span class="icon_square" icon_size="20" span_bg="#00baf0" span_hover="#666">
-                                            <i i_color="#FFF" class="social_icon-twitter"></i>
+                                            <i i_color="#FFF" class="icon-twitter social_icon-twitter"></i>
                                         </span>
                                     </span>
                                 </a>
@@ -38,27 +38,17 @@
                                 <a href="#" target="_blank">
                                     <span class="icon_i">
                                         <span class="icon_square" icon_size="20" span_bg="#ca2c24" span_hover="#666">
-                                            <i i_color="#FFF" class="social_icon-gplus"></i>
+                                            <i i_color="#FFF" class="icon-google-plus social_icon-gplus"></i>
                                         </span>
                                     </span>
                                 </a>
                                 <a href="#" target="_blank">Google plus</a>
                             </li>
                             <li>
-                                <a href="#" target="_blank">
-                                    <span class="icon_i">
-                                        <span class="icon_square" icon_size="20" span_bg="#e64281" span_hover="#666">
-                                            <i i_color="#FFF" class="social_icon-dribbble"></i>
-                                        </span>
-                                    </span>
-                                </a>
-                                <a href="#" target="_blank">Dribbble</a>
-                            </li>
-                            <li>
                                 <a target="_blank" href="#">
                                     <span class="icon_i">
                                         <span class="icon_square" icon_size="20" span_bg="#c7151a" span_hover="#666">
-                                            <i i_color="#FFF" class="icon-pinterest"></i>
+                                            <i i_color="#FFF" class="icon pinterest icon-pinterest"></i>
                                         </span>
                                     </span>
                                 </a>
@@ -115,7 +105,9 @@
                                 </div>
                                 <div class="comment-text">
                                     <div class="author clearfix">
-                                        <div class="comment-author"><a href="#">{{answer.user.getFullName()}}</a></div>
+                                        <div class="comment-author">
+                                            <a href="/@{{answer.user.username}}">{{answer.user.getFullName()}}</a>
+                                        </div>
 
                                         {{ partial('partials/vote-reply', ['objectId' : answer.id, 'object' : 'postsReply', 'votes' : answer])}}
                                         <div class="comment-meta">
