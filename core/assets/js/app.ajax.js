@@ -92,12 +92,14 @@ $('body').on('click', '.iam-subscribe', function (event){
             'objectId': $(this).data('objectId'),
         },
         success: function (data) {
-            var v = $('.iam-subscribe').text().trim();
+            var v = currentElement.text().trim();
             v = parseInt(v);
             if (data.messages[0].flag == 1) {
-                $('.iam-subscribe').text(v + 1);
+                v = v + 1;
+                currentElement.html('<i class="icon-star"></i>' + v);
             } else{
-                $('.iam-subscribe').text(v - 1);
+                v = v - 1;
+                currentElement.html('<i class="icon-star"></i>' + v );
             };
         },
         error: function( xhr, status ) {
