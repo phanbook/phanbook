@@ -875,6 +875,15 @@ class Posts extends ModelBase
         return $posts;
     }
     /**
+     * Get value favorite this post
+     *
+     * @return number
+     */
+    public function postFavorite()
+    {
+        return $this->postSubscriber->count();
+    }
+    /**
      * Independent Column Mapping.
      */
     public function columnMap()

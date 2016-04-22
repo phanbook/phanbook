@@ -115,9 +115,19 @@
                                             {{ getHumanDate(answer.createdAt)  }}
                                             </div>
                                         </div>
-                                        {#<a class="comment-reply" href="#"><i class="icon-reply"></i>Reply</a>#}
                                     </div>
                                     <div class="text"><p>{{ this.markdown.text(answer.content) }}</p>
+                                    </div>
+                                    {# Add class js for ajax#}
+                                    <div>
+                                    {% if post.usersId == this.session.auth['id'] %}
+                                        {% if answer.accepted == "Y"%}
+                                            <a  href="#" class="question-answered question-answered-done"> <i class="icon-ok"></i>Best Answer</a>
+                                        {% else %}
+                                            <a href="#" class="iam-accepting" data-object-id="{{ answer.id }}" title="Click to accept this answer because it solved your problem or was the most helpful in finding your solution">
+                                            <i class="icon-ok"></i></a>
+                                        {% endif %}
+                                    {% endif %}
                                     </div>
                                 </div>
                             </div>

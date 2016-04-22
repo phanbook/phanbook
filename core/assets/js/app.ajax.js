@@ -92,10 +92,12 @@ $('body').on('click', '.iam-subscribe', function (event){
             'objectId': $(this).data('objectId'),
         },
         success: function (data) {
+            var v = $('.iam-subscribe').text().trim();
+            v = parseInt(v);
             if (data.messages[0].flag == 1) {
-                $('.iam-subscribe').addClass('star-on');
+                $('.iam-subscribe').text(v + 1);
             } else{
-                $('.iam-subscribe').removeClass('star-on');
+                $('.iam-subscribe').text(v - 1);
             };
         },
         error: function( xhr, status ) {

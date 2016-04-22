@@ -148,7 +148,7 @@ class PostsSubscribers extends ModelBase
     /**
     * Create a posts-views logging the ipaddress where the post was created
     */
-    public function befor()
+    public function before()
     {
         $this->createdAt    = time();
     }

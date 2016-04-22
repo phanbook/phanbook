@@ -23,12 +23,14 @@
             {% endif %}
         </p>
         <div class="question-details">
-                {% if post.acceptedAnswer == "Y"%}
-                    <span class="question-answered question-answered-done"> <i class="icon-ok"></i>solved</span>
-                {% else %}
-                    <span class="question-answered"><i class="icon-ok"></i>in progress</span>
-                {% endif %}
-            <span class="question-favorite"><i class="icon-star"></i>{{ score }}</span>
+            {% if post.acceptedAnswer == "Y"%}
+                <span class="question-answered question-answered-done"> <i class="icon-ok"></i>solved</span>
+            {% else %}
+                <span class="question-answered"><i class="icon-ok"></i>in progress</span>
+            {% endif %}
+            <span class="question-favorite iam-subscribe" data-object-id="{{ post.id }}">
+                <i class="icon-star"></i>{{ post.postFavorite() }}
+            </span>
         </div>
         {#<span class="question-category"><a href="#"><i class="icon-folder-close"></i>Phanbook</a></span>#}
         <span class="question-date">
