@@ -19,35 +19,35 @@
                     <a href="#" original-title="Facebook" class="tooltip-n">
                         <span class="icon_i">
                             <span class="icon_square" icon_size="30" span_bg="#3b5997" span_hover="#2f3239">
-                                <i class="social_icon-facebook"></i>
+                                <i class="social_icon-facebook icon-facebook"></i>
                             </span>
                         </span>
                     </a>
                     <a href="#" original-title="Twitter" class="tooltip-n">
                         <span class="icon_i">
                             <span class="icon_square" icon_size="30" span_bg="#00baf0" span_hover="#2f3239">
-                                <i class="social_icon-twitter"></i>
+                                <i class="social_icon-twitter icon-twitter"></i>
                             </span>
                         </span>
                     </a>
                     <a href="#" original-title="Linkedin" class="tooltip-n">
                         <span class="icon_i">
                             <span class="icon_square" icon_size="30" span_bg="#006599" span_hover="#2f3239">
-                                <i class="social_icon-linkedin"></i>
+                                <i class="social_icon-linkedin icon-linkedin"></i>
                             </span>
                         </span>
                     </a>
                     <a href="#" original-title="Google plus" class="tooltip-n">
                         <span class="icon_i">
                             <span class="icon_square" icon_size="30" span_bg="#c43c2c" span_hover="#2f3239">
-                                <i class="social_icon-gplus"></i>
+                                <i class="social_icon-gplus icon-google-plus"></i>
                             </span>
                         </span>
                     </a>
                     <a href="#" original-title="Email" class="tooltip-n">
                         <span class="icon_i">
                             <span class="icon_square" icon_size="30" span_bg="#000" span_hover="#2f3239">
-                                <i class="social_icon-email"></i>
+                                <i class="social_icon-email icon-envelope"></i>
                             </span>
                         </span>
                     </a>

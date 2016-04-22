@@ -23,7 +23,7 @@
         <li class="facebook-fans">
             <a href="#" target="_blank">
             <strong>
-                <i class="social_icon-facebook"></i>
+                <i class="social_icon-facebook icon-facebook"></i>
                 <span>5,000</span><br>
                 <small>People like it</small>
             </strong>
@@ -32,7 +32,7 @@
         <li class="twitter-followers">
             <a href="#" target="_blank">
             <strong>
-                <i class="social_icon-twitter"></i>
+                <i class="social_icon-twitter icon-twitter"></i>
                 <span>3,000</span><br>
                 <small>Followers</small>
             </strong>
