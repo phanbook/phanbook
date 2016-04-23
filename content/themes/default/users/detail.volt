@@ -81,6 +81,25 @@
                     </div><!-- End user-profile-widget -->
                 </div><!-- End page-content -->
             </div><!-- End col-md-12 -->
+            {% if user.badges is defined %}
+            <div class="col-md-12">
+                <div class="page-content page-content-user-profile">
+                    <div class="user-profile-widget">
+                        <h2>User Badges</h2>
+                        <div class="ul_list ul_list-icon-ok">
+                            <ul>
+                                {% for badge in user.badges %}
+                                <li><i class="icon-trophy"></i>
+                                    <a href="">{{ badge.badge }}
+                                    </a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div><!-- End user-profile-widget -->
+                </div><!-- End page-content -->
+            </div><!-- End col-md-12 -->
+            {% endif %}
         </div><!-- End user-profile -->
     </div><!-- End row -->
     <div class="clearfix"></div>
