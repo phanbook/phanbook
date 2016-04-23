@@ -5228,3 +5228,6 @@ p a,li a, a:hover,.button.normal:hover,span.color,#footer a:hover,.widget a:hove
     background-color: #73C78D;
 }
 
+.comment-vote .vote-result{
+    margin-top: 6px;
+}

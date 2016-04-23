@@ -6,6 +6,6 @@
         <li><a href="#" class="voter question-vote-down" title="Dislike" data-way="negative" data-object-id="{{ objectId }}" data-object="{{ object }}"></a>
         </li>
     </ul>
+    <span class="question-vote-result vote-result">{{ votes.positive - votes.negative }}</span>
 </div>
-<span class="question-vote-result">{{ votes.positive - votes.negative }}</span>
 {% endif %}

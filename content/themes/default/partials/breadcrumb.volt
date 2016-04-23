@@ -31,7 +31,7 @@
                     <p>You're probably heard of StackOverflow before, the biggest Question and Answer website. It’s one of the most popular website among developers. With the Phanbook you can building easy it!
                     </p>
                     <div class="clearfix"></div>
-                    <a class="color button dark_button medium" href="#">About Us</a>
+                    <a class="color button dark_button medium" href="/about">About Us</a>
                     <a class="color button dark_button medium" href="/oauth/login">Join Now</a>
                 </div>
                 <div class="col-md-9">
@@ -39,7 +39,7 @@
                         <p>
                             <textarea rows="4" id="question_title" onfocus="if(this.value=='Ask any question and you be sure find your answer ?')this.value='';" onblur="if(this.value=='')this.value='Ask any question and you be sure find your answer ?';">Ask any question and you be sure find your answer ?</textarea>
                             <i class="icon-pencil"></i>
-                            <span class="color button small publish-question">Ask Now</span>
+                            <a href="/posts/new" class="color button small publish-question">Ask Now</a>
                         </p>
                     </form>
                 </div>

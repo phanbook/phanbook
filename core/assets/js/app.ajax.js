@@ -43,7 +43,8 @@ $('body').on('click', '.voter', function (event) {
         },
         success: function (data) {
             if (data != 0) {
-                currentElement.parent().children("span.vote-count").html(data.data);
+                //currentElement.parent().children("span.vote-count").html(data.data);
+                currentElement.parent().parent().parent().children("span.vote-result").html(data.data);
             }
         },
         error: function( xhr, status ) {
