@@ -53,22 +53,16 @@ class Module implements ModuleDefinitionInterface
             $eventsManager = new EventsManager();
             $eventsManager->attach("dispatch", function ($event, $dispatcher, $exception) {
                 //controller or action doesn't exist
-                $object = $event->getData();
                 if ($event->getType() == 'beforeException') {
                     switch ($exception->getCode()) {
                         case Dispatcher::EXCEPTION_HANDLER_NOT_FOUND:
                         case Dispatcher::EXCEPTION_ACTION_NOT_FOUND:
-                            $dispatcher->forward([
-                                'controller' => 'errors',
-                                'action'     => 'index'
-                            ]);
-                            return false;
+                            header('Location: /action-not-found');
+                            exit();
+
                         case Dispatcher::EXCEPTION_CYCLIC_ROUTING:
-                            $dispatcher->forward([
-                                'controller' => 'errors',
-                                'action'     => 'show404'
-                            ]);
-                            return false;
+                            header('Location: /cyclic-routing');
+                            exit();
                     }
                 }
             });

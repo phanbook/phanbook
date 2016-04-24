@@ -51,12 +51,12 @@ class Module implements ModuleDefinitionInterface
                     switch ($exception->getCode()) {
                         case Dispatcher::EXCEPTION_HANDLER_NOT_FOUND:
                         case Dispatcher::EXCEPTION_ACTION_NOT_FOUND:
-                            $dispatcher->forward([
-                                'module'     => 'backend',
-                                'controller' => 'errors',
-                                'action'     => 'notFound'
-                            ]);
-                            return false;
+                            header('Location: /action-not-found');
+                            exit();
+
+                        case Dispatcher::EXCEPTION_CYCLIC_ROUTING:
+                            header('Location: /cyclic-routing');
+                            exit();
                     }
                 }
             });

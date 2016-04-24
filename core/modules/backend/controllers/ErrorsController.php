@@ -15,11 +15,23 @@ namespace Phanbook\Backend\Controllers;
 use Phalcon\Mvc\Controller;
 
 /**
- * Frontend Error Controller
+ * Backend Error Controller
  */
 class ErrorsController extends Controller
 {
-
+    public function indexAction()
+    {
+        $this->view->message = t('The router not found');
+    }
+    /**
+     * 404 paga
+     */
+    public function show404Action()
+    {
+        // Send a HTTP 404 response header
+        $this->response->setStatusCode(404, 'Page Not Found');
+        $this->view->message = t('The action not found');
+    }
     /**
      * 503 page
      */
@@ -27,5 +39,9 @@ class ErrorsController extends Controller
     {
         $this->response->setStatusCode(503, 'Site is Down for Maintenance');
         $this->view->team = $this->config->application->name;
+    }
+    public function reportsAction()
+    {
+        $this->tag->setTitle(t('Reports error'));
     }
 }

@@ -12,6 +12,7 @@
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
 namespace Phanbook\Frontend\Controllers;
+use Phanbook\Models\Users;
 
 /**
  * Class TestsController
@@ -30,7 +31,8 @@ class TestsController extends ControllerBase
     {
         d($this->router);
         return 'frontend';
-
+        
+        Users::
     }
     public function testLoggerAction()
     {

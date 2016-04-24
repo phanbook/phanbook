@@ -159,11 +159,27 @@ $router->add(
     ]
 );
 $router->add(
-    '/errors/503',
+    '/maintenance',
     [
         'module'     => 'backend',
         'controller' => 'errors',
         'action'     => 'show503'
+    ]
+);
+$router->add(
+    '/action-not-found',
+    [
+        'module'     => 'backend',
+        'controller' => 'errors',
+        'action'     => 'show404'
+    ]
+);
+$router->add(
+    '/cyclic-routing',
+    [
+        'module'     => 'backend',
+        'controller' => 'errors',
+        'action'     => 'show404'
     ]
 );
 return $router;
