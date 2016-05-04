@@ -14,7 +14,6 @@ namespace Phanbook\Models;
 
 use Phalcon\DI\FactoryDefault;
 use Phalcon\Mvc\Model;
-use Phalcon\Logger\Adapter\File as Logger;
 use Phalcon\Mvc\Model\Resultset\Simple as Resultset;
 use Phanbook\Tools\ZFunction;
 use Phanbook\Models\Behavior\Blameable as ModelBlameable;
@@ -169,14 +168,14 @@ class ModelBase extends Model
     /**
      * The function sending log for nginx or apache, it will to analytic later
      *
-     * @return mixed
+     * @param $e
      */
-    public static function saveLoger($e)
+    public function saveLoger($e)
     {
-        $logger = new Logger(ROOT_DIR . 'content/logs/error.log');
+
+        $logger = $this->getDI()->getLogger();
         if (is_object($e)) {
-            $logger->error($e[0]->getMessages());
-            $logger->error($e[0]->getTraceAsString());
+            $logger->error($e[0]->getMessage());
         }
         if (is_array($e)) {
             foreach ($e as $message) {
@@ -186,7 +185,6 @@ class ModelBase extends Model
         if (is_string($e)) {
             $logger->error($e);
         }
-        //return false;
     }
     /**
      * Get data via method Query Builder Phalcon

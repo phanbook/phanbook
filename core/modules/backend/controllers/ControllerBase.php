@@ -16,7 +16,6 @@ namespace Phanbook\Backend\Controllers;
 use Phalcon\Mvc\Controller;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Db\Adapter\Pdo;
-use Phalcon\Logger\Adapter\File as Logger;
 use Phalcon\Paginator\Adapter\NativeArray as Paginator;
 use Phalcon\Paginator\Adapter\QueryBuilder as PaginatorQueryBuilder;
 
@@ -650,25 +649,23 @@ class ControllerBase extends Controller
     }
     /**
      * The function sending log for nginx or apache, it will to analytic later
-     * @return mixed
+     *
+     * @param $e
      */
     public function saveLoger($e)
     {
-        //error_log($e);
-        $logger = new Logger(ROOT_DIR . 'content/logs/error.log');
+
+        $logger = $this->logger;
         if (is_object($e)) {
-            //d($e);
             $logger->error($e[0]->getMessage());
         }
         if (is_array($e)) {
             foreach ($e as $message) {
-                d($e);
+                $logger->error($message->getMessage());
             }
         }
         if (is_string($e)) {
             $logger->error($e);
         }
-
-        return $this->indexRedirect();
     }
 }

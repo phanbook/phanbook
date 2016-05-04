@@ -15,7 +15,6 @@ namespace Phanbook\Frontend\Controllers;
 use Phalcon\Mvc\Controller;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Db\Adapter\Pdo;
-use Phalcon\Logger\Adapter\File as Logger;
 use Phanbook\Models\Vote;
 use Phanbook\Models\Users;
 use Phanbook\Models\Karma;
@@ -536,7 +535,7 @@ class ControllerBase extends Controller
                 }
             }
         } else {
-            error_log('todo setPointReply');
+            $this->saveLoger('todo setPointReply');
         }
     }
     /**
@@ -572,31 +571,29 @@ class ControllerBase extends Controller
         }
 
         if (!$activity->save()) {
-            error_log('Save fail, I am on here' . __LINE__);
+            $this->saveLoger('Save fail, I am on here' . __LINE__);
         }
     }
     /**
      * The function sending log for nginx or apache, it will to analytic later
-     * @return mixed
+     *
+     * @param $e
      */
     public function saveLoger($e)
     {
-        //error_log($e);
-        $logger = new Logger(ROOT_DIR . 'content/logs/error.log');
+
+        $logger = $this->logger;
         if (is_object($e)) {
-            //d($e);
             $logger->error($e[0]->getMessage());
         }
         if (is_array($e)) {
             foreach ($e as $message) {
-                d($e);
+                $logger->error($message->getMessage());
             }
         }
         if (is_string($e)) {
             $logger->error($e);
         }
-
-        return $this->indexRedirect();
     }
     /**
      * Transfer values from the controller to views
