@@ -249,6 +249,7 @@ class Media extends ModelBase
     private function setError($error)
     {
         $this->error[] = $error;
+        return false;
     }
 
     /**
@@ -258,49 +259,54 @@ class Media extends ModelBase
      */
     public function initFile($fileObj)
     {
-        $fileExt = $fileObj->getExtension();
+        $fileExt     = $fileObj->getExtension();
         $filesAccept =  MediaType::getExtensionAllowed();
+
         // Check if file extension's allowed
-        if (in_array($fileExt, $filesAccept)) {
-             // determine directory for this file. <username>/<file type>/<year>/<month>/<filename>
-            $userName = $this->getDI()->getAuth()->getUsername();
-            $year = date("Y");
-            $month = date("M");
-            $fileName = $fileObj->getName();
-            // Type Object.
-            $fileType = MediaType::getTypeFromExt($fileExt);
-            // generate path of file
-            $serverPath = $userName. DS. $fileType->getName(). DS. $year. DS. $month. DS. $fileName;
-            $localPath = $fileObj->getTempName();
-            if (file_exists($localPath)) {
-                if ($this->fileSystem->checkFileExists($serverPath)) {
-                    $this->setError(MEDIA_ALREADY_EXISTS);
-                } elseif ($this->fileSystem->uploadFile($localPath, $serverPath)) {
-                    $uploadStatus = $this->saveToDB($userName, $fileType->getId(), date("d/M/Y"), $fileName);
-                    if ($uploadStatus) {
-                        // Update anaytic file
-                        $config = $this->fileSystem->getConfigFile($userName);
-                        $defaultConfig = MediaType::getConfig();
-                        $config = array_merge($defaultConfig, $config);
-                        $config[$fileType->getName()] ++;
-                        $this->fileSystem->saveConfigFile($userName, $config);
-                        if ($fileType->getName() == "Images") {
-                            // generate thumbs if this file is an Image
-                            $this->generateThumb($localPath, $serverPath);
-                        }
-                        return true;
-                    }
-                    $this->setError(MEDIA_UPLOAD_ERROR);
-                } else {
-                    $this->setError(MEDIA_UPLOAD_ERROR);
-                }
-            } else {
-                $this->setError(MEDIA_TEMP_NOT_FOUND);
-            }
-        } else {
-            $this->setError(MEDIA_FILE_NOT_ACCEPT. ": ". $fileExt);
+        if (!in_array($fileExt, $filesAccept)) {
+            return $this->setError(MEDIA_FILE_NOT_ACCEPT. ": ". $fileExt);
         }
-        return false;
+         // determine directory for this file. <username>/<file type>/<year>/<month>/<filename>
+        $userName = $this->getDI()->getAuth()->getUsername();
+        $year     = date("Y");
+        $month    = date("M");
+        $fileName = $fileObj->getName();
+        $fileType = MediaType::getTypeFromExt($fileExt);
+
+        // generate path of file
+        $serverPath = $userName. DS. $fileType->getName(). DS. $year. DS. $month. DS. $fileName;
+        $localPath = $fileObj->getTempName();
+
+        if (!file_exists($localPath)) {
+            return $this->setError(MEDIA_TEMP_NOT_FOUND);
+        }
+        if ($this->fileSystem->checkFileExists($serverPath)) {
+            return $this->setError(MEDIA_ALREADY_EXISTS);
+        }
+        if (!$this->fileSystem->uploadFile($localPath, $serverPath)) {
+            return $this->setError(MEDIA_TEMP_NOT_FOUND);
+
+        }
+        $uploadStatus = $this->saveToDB(
+            $userName,
+            $fileType->getId(),
+            time(),
+            $fileName
+        );
+        if (!$uploadStatus) {
+            return $this->setError(MEDIA_UPLOAD_ERROR);
+        }
+        // Update analytic file
+        $config        = $this->fileSystem->getConfigFile($userName);
+        $defaultConfig = MediaType::getConfig();
+        $config        = array_merge($defaultConfig, $config);
+        $config[$fileType->getName()] ++;
+
+        $this->fileSystem->saveConfigFile($userName, $config);
+        if ($fileType->getName() == "Images") {
+            $this->generateThumb($localPath, $serverPath);
+        }
+        return true;
     }
     /**
      * Generate thumb file for image.

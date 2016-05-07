@@ -42,7 +42,7 @@ class MediaController extends ControllerBase
     }
     public function uploadAction()
     {
-        if ($this->request->hasFiles() == true) {
+        if ($this->request->hasFiles()) {
             $uploads = $this->request->getUploadedFiles();
             $this->view->disable();
             $uploaded = true;
@@ -51,19 +51,17 @@ class MediaController extends ControllerBase
                     $uploaded = false;
                 }
             }
-            $response = new Response();
             if (!$uploaded) {
                 $error = implode("\n", $this->mediaModel->getError());
-                $response->setStatusCode(406, $error);
-                $response->setContent($error);
+                $this->response->setStatusCode(406, $error);
+                $this->response->setContent($error);
             } else {
-                $response->setStatusCode(200, SUCCESS_MESSAGE);
+                $this->response->setStatusCode(200, SUCCESS_MESSAGE);
             }
-            return $response;
-        } else {
-            $this->assets->addCss('/core/assets/css/dropzone.css', false);
-            $this->assets->addJs('/core/assets/js/dropzone.js', false);
-            $this->view->acceptExt = implode(",", MediaType::getExtensionAllowed());
+            return $this->response->send();
         }
+        $this->assets->addCss('/core/assets/css/dropzone.css', false);
+        $this->assets->addJs('/core/assets/js/dropzone.js', false);
+        $this->view->acceptExt = implode(",", MediaType::getExtensionAllowed());
     }
 }
