@@ -17,10 +17,8 @@ use Phalcon\Loader;
 use Phalcon\DiInterface;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\View;
-use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
 use Phalcon\Mvc\ModuleDefinitionInterface;
 use Phalcon\Mvc\View\Engine\Volt;
-use Phalcon\Config\Adapter\Php  as AdapterPhp;
 use Phalcon\Events\Manager as EventsManager;
 
 class Module implements ModuleDefinitionInterface

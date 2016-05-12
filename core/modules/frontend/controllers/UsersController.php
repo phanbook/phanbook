@@ -164,6 +164,10 @@ class UsersController extends ControllerBase
         $this->tag->setTitle(t('List all users'));
         $this->assets->addCss('core/assets/css/user.css');
     }
+
+    /**
+     * @return \Phalcon\Http\Response|\Phalcon\Http\ResponseInterface
+     */
     public function profileAction()
     {
         $object = Users::findFirstById($this->auth->getAuth()['id']);
@@ -209,6 +213,10 @@ class UsersController extends ControllerBase
 
         return $this->session->set('auth', $auth);
     }
+
+    /**
+     * @return bool
+     */
     public function changepasswordAction()
     {
         $form = new ChangePasswordForm();
@@ -245,6 +253,10 @@ class UsersController extends ControllerBase
 
         return true;
     }
+
+    /**
+     * @return \Phalcon\Http\Response|\Phalcon\Http\ResponseInterface
+     */
     public function settingAction()
     {
         $object = Users::findFirstById($this->auth->getAuth()['id']);

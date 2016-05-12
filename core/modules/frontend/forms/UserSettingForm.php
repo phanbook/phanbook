@@ -13,18 +13,12 @@
 namespace Phanbook\Frontend\Forms;
 
 use Phanbook\Models\Users;
-use Phalcon\Forms\Element\File;
 use Phalcon\Forms\Element\Select;
 use Phalcon\Forms\Form;
-use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Element\Hidden;
 use Phalcon\Forms\Element\Submit;
 use Phalcon\Forms\Element\Radio;
-use Phalcon\Validation\Validator\PresenceOf;
-use Phalcon\Validation\Validator\Email;
-use Phalcon\Validation\Validator\Regex;
-use Phalcon\Validation\Validator\Identical;
-use Phalcon\Forms\Element\TextArea;
+
 
 class UserSettingForm extends Form
 {

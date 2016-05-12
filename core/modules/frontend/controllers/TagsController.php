@@ -49,6 +49,9 @@ class TagsController extends ControllerBase
         $this->assets->addCss('core/assets/css/user.css');
     }
 
+    /**
+     * @return int
+     */
     public function tagSuggestAction()
     {
         $this->view->disable();

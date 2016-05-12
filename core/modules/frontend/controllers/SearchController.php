@@ -21,6 +21,9 @@ use Phalcon\Mvc\View;
  */
 class SearchController extends ControllerBase
 {
+    /**
+     * @return \Phalcon\Http\Response|\Phalcon\Http\ResponseInterface|View
+     */
     public function indexAction()
     {
         $this->tag->setTitle('Search Results');

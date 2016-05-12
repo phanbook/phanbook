@@ -14,7 +14,6 @@ namespace Phanbook\Frontend\Forms;
 
 use Phalcon\Forms\Element\TextArea;
 use Phalcon\Forms\Form;
-use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Element\Hidden;
 use Phalcon\Forms\Element\Submit;
 use Phalcon\Validation\Validator\Identical;
