@@ -452,13 +452,7 @@ if (!function_exists('t')) {
 //Phalcon Debugger
 if ($config->application->debug) {
     (new \Phalcon\Debug)->listen();
-    if (!function_exists('d')) {
-        function d($object, $kill = true)
-        {
-            echo '<pre style="text-aling:left">', print_r($object, true), '</pre>';
-            $kill && exit(1);
-        }
-    }
+    include ROOT_DIR . 'core/common/tools/Debug.php';
 }
 // For avoid re-define variables
 if (!defined("ALREADY_DEFINED")) {
