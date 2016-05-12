@@ -51,7 +51,7 @@ class UsersController extends ControllerBase
         if ($tab == "answers") {
             $join = [
                 'type'  => 'join',
-                'model' => 'Phanbook\\Models\\PostsReply',
+                'model' => 'PostsReply',
                 'on'    => 'r.postsId = p.id',
                 'alias' => 'r'
 
@@ -149,7 +149,7 @@ class UsersController extends ControllerBase
     {
 
         $sql = [
-            'model' => 'Phanbook\Models\Users',
+            'model' => 'Users',
             'joins' => []
 
         ];

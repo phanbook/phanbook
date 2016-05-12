@@ -32,7 +32,7 @@ class TagsController extends ControllerBase
     public function indexAction()
     {
         $sql = [
-            'model' => 'Phanbook\Models\Tags',
+            'model' => 'Tags',
             'joins' => []
 
         ];
@@ -91,7 +91,7 @@ class TagsController extends ControllerBase
     {
         $join = [
             'type'  => 'join',
-            'model' => 'Phanbook\\Models\\PostsTags',
+            'model' => 'PostsTags',
             'on'    => 'pt.postsId = p.id',
             'alias' => 'pt'
 

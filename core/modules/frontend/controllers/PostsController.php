@@ -54,7 +54,7 @@ class PostsController extends ControllerBase
         if ($tab == "answers") {
             $join = [
                 'type'  => 'join',
-                'model' => 'Phanbook\\Models\\PostsReply',
+                'model' => 'PostsReply',
                 'on'    => 'r.postsId = p.id',
                 'alias' => 'r'
 

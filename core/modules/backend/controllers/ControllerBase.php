@@ -327,56 +327,12 @@ class ControllerBase extends Controller
 
 
     /**
-     * This method prepares the queries to be executed in each list of posts
-     * The returned builders are used as base in the search, tagged list and index lists.
-     *
-     * @param array  $join  The Model need to join {code} $join = [ 'type'  => 'join', 'model' => 'Phanbook\\Models\\PostsReply', 'on'    => 'r.postsId = p.id', 'alias' => 'r' ]; {/code} {code} $join = [ 'type'  => 'join', 'model' => 'Phanbook\\Models\\PostsReply', 'on'    => 'r.postsId = p.id', 'alias' => 'r' ]; {/code}
-     * {code}
-     * $join = [
-     *   'type'  => 'join',
-     *   'model' => 'Phanbook\\Models\\PostsReply',
-     *   'on'    => 'r.postsId = p.id',
-     *   'alias' => 'r'
-     * ];
-     * {/code}
-     * @param string $where The condition you want to get.
-     * @param int    $limit The option limit post in a page.
-     *
-     * @return array It return two object
-     */
-    protected function prepareQueries($join, $where, $limit = 15)
-    {
-        $itemBuilder = $this
-            ->modelsManager
-            ->createBuilder()
-            ->from(['p' => 'Phanbook\Models\Posts'])
-            ->orderBy('p.sticked DESC, p.createdAt DESC');
-
-        if (isset($join) && is_array($join)) {
-            $itemBuilder->$join['type']($join['model'], $join['on'], $join['alias']);
-        }
-        if (isset($where)) {
-            $itemBuilder->where($where);
-        }
-
-        $totalBuilder = clone $itemBuilder;
-
-        $itemBuilder
-            ->columns(array('p.*'))
-            ->limit($limit);
-
-        $totalBuilder
-            ->columns('COUNT(*) AS count');
-
-        return array($itemBuilder, $totalBuilder);
-    }
-    /**
      * Create a QueryBuilder paginator, show 15 rows by page starting from $page
      *
      * @param array $model The model need to retrieve and someoption {code} $mode = [ 'name'      => 'Phanbook\Models\Users' 'orderBy'   => 'username' 'currentOrder'=> 'users'// mean adding class for menu ] {/code}
      * {code}
      *      $mode = [
-     *          'name'      => 'Phanbook\Models\Users'
+     *          'name'      => 'Users'
      *          'orderBy'   => 'username'
      *          'currentOrder'=> 'users'// mean adding class for menu
      *      ]
@@ -388,7 +344,7 @@ class ControllerBase extends Controller
     public function paginatorQueryBuilder($model, $page)
     {
         $builder = $this->modelsManager->createBuilder()
-            ->from($model['name'])
+            ->from('Phanbook\\Models\\' . $model['name'])
             ->orderBy($model['orderBy']);
         //Create a Model paginator, show 15 rows by page starting from $page
         $paginator   = (new PaginatorQueryBuilder(
@@ -557,7 +513,7 @@ class ControllerBase extends Controller
             }
             foreach (self::$grid['query']['joins'] as $join) {
                 if (in_array($join['type'], ['innerJoin', 'leftJoin', 'rightJoin', 'join'])) {
-                    $builder->$join['type']($join['model'], $join['on'], $join['alias']);
+                    $builder->$join['type']('Phanbook\\Models\\' . $join['model'], $join['on'], $join['alias']);
                 }
             }
             if (!empty(self::$grid['query']['groupBy'])) {

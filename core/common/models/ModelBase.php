@@ -55,7 +55,7 @@ class ModelBase extends Model
     {
         $di = FactoryDefault::getDefault();
 
-        return $di->get('mysql');
+        return $di->get('db');
     }
 
     /**
@@ -221,8 +221,9 @@ class ModelBase extends Model
     public static function modelQuery($query)
     {
         $builder = self::getBuilder();
+        $modelNamespace = __NAMESPACE__ . '\\' ;
         if (!empty($query['model'])) {
-            $builder->from(['a' => $query['model']]);
+            $builder->from(['a' => $modelNamespace . $query['model']]);
         }
 
         if (!empty($query['columns'])) {
@@ -230,7 +231,7 @@ class ModelBase extends Model
         }
         foreach ($query['joins'] as $join) {
             if (in_array($join['type'], ['innerJoin', 'leftJoin', 'rightJoin', 'join'])) {
-                $builder->$join['type']($join['model'], $join['on'], $join['alias']);
+                $builder->$join['type']($modelNamespace . $join['model'], $join['on'], $join['alias']);
             }
         }
         if (!empty($query['groupBy'])) {
@@ -264,6 +265,8 @@ class ModelBase extends Model
      */
     public static function prepareQueriesPosts($join, $where, $limit = 15)
     {
+        $modelNamespace = __NAMESPACE__ . '\\' ;
+
         /**
          *
          * @var \Phalcon\Mvc\Model\Query\BuilderInterface $itemBuilder
@@ -272,7 +275,7 @@ class ModelBase extends Model
             ->from(['p' => 'Phanbook\Models\Posts'])
             ->orderBy('p.sticked DESC, p.createdAt DESC');
         if (isset($join) && is_array($join)) {
-            $itemBuilder->$join['type']($join['model'], $join['on'], $join['alias']);
+            $itemBuilder->$join['type']($modelNamespace . $join['model'], $join['on'], $join['alias']);
         }
         if (isset($where)) {
             $itemBuilder->where($where);

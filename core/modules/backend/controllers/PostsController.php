@@ -70,7 +70,7 @@ class PostsController extends ControllerBase
                 'joins' => [
                     [
                         'type' => 'join',
-                        'model' => 'Phanbook\Models\Users',
+                        'model' => 'Users',
                         'on' => 'a.usersId = u.id',
                         'alias' => 'u'
                     ]
