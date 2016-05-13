@@ -28,9 +28,10 @@ class ErrorsController extends Controller
      */
     public function show404Action()
     {
+        $message = $this->request->getQuery('msg') ? : 'The action not found';
         // Send a HTTP 404 response header
         $this->response->setStatusCode(404, 'Page Not Found');
-        $this->view->message = t('The action not found');
+        $this->view->message = t($message);
     }
     /**
      * 503 page

@@ -41,22 +41,26 @@ class Module implements ModuleDefinitionInterface
             return $url;
         });
         //Registering a dispatcher
-        $di->set('dispatcher', function () {
+        $di->set('dispatcher', function () use ($di) {
             //Create/Get an EventManager
             $eventsManager = new EventsManager();
             //Attach a listener
-            $eventsManager->attach('dispatch', function ($event, $dispatcher, $exception) {
+            $eventsManager->attach('dispatch', function ($event, $dispatcher, $exception) use($di) {
                 //controller or action doesn't exist
                 if ($event->getType() == 'beforeException') {
+                    $message  = $exception->getMessage();
+                    $response = $di->getResponse();
                     switch ($exception->getCode()) {
                         case Dispatcher::EXCEPTION_HANDLER_NOT_FOUND:
+                            $response->redirect();
+                            return false;
                         case Dispatcher::EXCEPTION_ACTION_NOT_FOUND:
-                            header('Location: /action-not-found');
-                            exit();
+                            $response->redirect('action-not-found?msg=' . $message);
+                            return false;
 
                         case Dispatcher::EXCEPTION_CYCLIC_ROUTING:
-                            header('Location: /cyclic-routing');
-                            exit();
+                            $response->redirect('cyclic-routing?msg=' . $message);
+                            return false;
                     }
                 }
             });
