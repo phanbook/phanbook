@@ -45,7 +45,7 @@ class Module implements ModuleDefinitionInterface
             //Create/Get an EventManager
             $eventsManager = new EventsManager();
             //Attach a listener
-            $eventsManager->attach('dispatch', function ($event, $dispatcher, $exception) use($di) {
+            $eventsManager->attach('dispatch', function ($event, $dispatcher, $exception) use ($di) {
                 //controller or action doesn't exist
                 if ($event->getType() == 'beforeException') {
                     $message  = $exception->getMessage();
