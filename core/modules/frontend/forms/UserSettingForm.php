@@ -19,7 +19,6 @@ use Phalcon\Forms\Element\Hidden;
 use Phalcon\Forms\Element\Submit;
 use Phalcon\Forms\Element\Radio;
 
-
 class UserSettingForm extends Form
 {
     public function initialize($entity = null)
