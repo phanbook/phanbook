@@ -231,6 +231,7 @@ class UsersController extends ControllerBase
                 }
             } else {
                 if ($object && $object->getStatus() == $object::STATUS_ACTIVE) {
+
                     if (!$this->security->checkHash($this->request->getPost('passwd'), $object->getPasswd())) {
                         $this->flashSession->error(t('Oops! Wrong password.'));
                     } else {

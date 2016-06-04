@@ -100,27 +100,12 @@ class ChangePasswordForm extends Form
 
         $this->add($passwdNewConfirm);
 
-
-        // CSRF
-        $csrf = new Hidden('csrf');
-
-        $csrf->addValidator(
-            new Identical(
-                array(
-                'value'   => $this->security->getSessionToken(),
-                'message' => t('CSRF validation failed')
-                )
-            )
-        );
-
-        $this->add($csrf);
-
         //Submit
         $this->add(
             new Submit(
                 'save',
                 [
-                'class' => 'btn btn-info btm-sm',
+                'class' => 'button color small submit',
                 'value' => t('Save')
                 ]
             )

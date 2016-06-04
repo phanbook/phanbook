@@ -6,19 +6,19 @@
     <div class="form-group">
         <label class="col-sm-2 control-label" for="input-id-1">{{ t('Current password') }}:</label>
         <div class="col-sm-10">
-            {{ form.render('passwd', ['class':'form-control input-sm']) }}
+            {{ form.render('passwd') }}
         </div>
     </div>
     <div class="form-group">
         <label class="col-sm-2 control-label" for="input-id-1">{{ t('New password') }}:</label>
         <div class="col-sm-10">
-            {{ form.render('passwd_new', ['class':'form-control input-sm']) }}
+            {{ form.render('passwd_new') }}
         </div>
     </div>
     <div class="form-group">
         <label class="col-sm-2 control-label" for="input-id-1">{{ t('Confirm new password') }}:</label>
         <div class="col-sm-10">
-            {{ form.render('passwd_new_confirm', ['class':'form-control input-sm']) }}
+            {{ form.render('passwd_new_confirm') }}
         </div>
     </div>
 

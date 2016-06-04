@@ -10,6 +10,8 @@
                                 <li><a href="">User Questions</a></li>
                                 <li><a href="">User Answers</a></li>
                                 <li><a href="/users/profile">Edit Profile</a></li>
+                                <li><a href="/users/changepassword">Change Password</a></li>
+
                             </ul>
                         </div>
                     </div><!-- End page-content -->
