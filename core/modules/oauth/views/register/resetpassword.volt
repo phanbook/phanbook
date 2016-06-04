@@ -6,6 +6,7 @@
         <div id="single-content">
             <div class="main-title">
                 <h1>{{ t('Created your password')}} </h1>
+                {{ this.flashSession.output() }}
             </div>
             <form action="" class="user-form" autoescape="off" method="post">
               <div class="list-group">
@@ -18,7 +19,6 @@
 
               </div>
                 {{ form.render('change', ['class' : 'btn btn-lg btn-primary btn-block']) }}
-                {{ form.render('csrf', ['value': this.security.getToken()]) }}
             </form>
         </div>
     </div>

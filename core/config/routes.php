@@ -121,6 +121,11 @@ $router->add('/oauth/facebook/access_token', [
     'controller' => 'login',
     'action'     => 'tokenFacebook'
 ]);
+$router->add('/oauth/resetpassword', [
+    'module'     => 'oauth',
+    'controller' => 'register',
+    'action'     => 'resetpassword'
+]);
 
 $router->add('/questions', [
     'module'     => 'frontend',

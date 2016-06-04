@@ -80,7 +80,7 @@ class RegisterController extends ControllerBase
     public function indexAction()
     {
         $registerHash = $this->request->getQuery('registerhash');
-        ;
+
 
         if (empty($registerHash)) {
             $this->flashSession->error('Hack attempt!!!');
