@@ -20,13 +20,7 @@ env:
   global:
     - APPLICATION_ENV="travis"
   matrix:
-    - PHALCON_VERSION="2.0.11"
-    - PHALCON_VERSION="2.0.10"
-    - PHALCON_VERSION="2.0.9"
-    - PHALCON_VERSION="2.0.8"
-    - PHALCON_VERSION="2.0.7"
-    - PHALCON_VERSION="2.0.6"
-    - PHALCON_VERSION="2.0.5"
+    - PHALCON_VERSION="2.1.0"
 
 install:
   - composer self-update
