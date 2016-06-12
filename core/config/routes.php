@@ -187,4 +187,13 @@ $router->add(
         'action'     => 'show404'
     ]
 );
+$router->add(
+    '/error-reporting',
+    [
+        'module'     => 'backend',
+        'controller' => 'errors',
+        'action'     => 'show505'
+    ]
+);
+
 return $router;

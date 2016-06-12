@@ -10,7 +10,6 @@
  * @since         1.0.0
  * @license       http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
-use Phalcon\Http\Response;
 use Phalcon\Mvc\Application;
 
 error_reporting(E_ALL);
@@ -57,7 +56,7 @@ try {
     $logger->error($e->getMessage());
     $logger->error($e->getTraceAsString());
 
-    $response = new Response();
-    $response->redirect('errors/503');
+    $response = $di->get('response');
+    $response->redirect('error-reporting');
     $response->send();
 }

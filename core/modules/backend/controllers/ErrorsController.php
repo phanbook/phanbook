@@ -41,6 +41,14 @@ class ErrorsController extends Controller
         $this->response->setStatusCode(503, 'Site is Down for Maintenance');
         $this->view->team = $this->config->application->name;
     }
+    /**
+     * 505 page
+     */
+    public function show505Action()
+    {
+        $this->response->setStatusCode(505, 'Site in formations');
+        $this->view->team = $this->config->application->name;
+    }
     public function reportsAction()
     {
         $this->tag->setTitle(t('Reports error'));
