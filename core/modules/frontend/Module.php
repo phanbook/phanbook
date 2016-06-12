@@ -43,32 +43,35 @@ class Module implements ModuleDefinitionInterface
     {
 
         //Registering a dispatcher
-        $di->set('dispatcher', function ()  {
-            $eventsManager = new EventsManager();
-            $eventsManager->attach("dispatch", function ($event, $dispatcher, $exception)  {
-                //controller or action doesn't exist
-                if ($event->getType() == 'beforeException') {
-                    $message  = $exception->getMessage();
-                    $response = $this->getResponse();
-                    switch ($exception->getCode()) {
-                        case Dispatcher::EXCEPTION_HANDLER_NOT_FOUND:
-                            $response->redirect();
-                            return false;
-                        case Dispatcher::EXCEPTION_ACTION_NOT_FOUND:
-                            $response->redirect('action-not-found?msg=' . $message);
-                            return false;
+        $di->set(
+            'dispatcher',
+            function () {
+                $eventsManager = $this->getEventsManager();
+                $eventsManager->attach("dispatch", function ($event, $dispatcher, $exception) {
+                    //controller or action doesn't exist
+                    if ($event->getType() == 'beforeException') {
+                        $message  = $exception->getMessage();
+                        $response = $this->getResponse();
+                        switch ($exception->getCode()) {
+                            case Dispatcher::EXCEPTION_HANDLER_NOT_FOUND:
+                                $response->redirect();
+                                return false;
+                            case Dispatcher::EXCEPTION_ACTION_NOT_FOUND:
+                                $response->redirect('action-not-found?msg=' . $message);
+                                return false;
 
-                        case Dispatcher::EXCEPTION_CYCLIC_ROUTING:
-                            $response->redirect('cyclic-routing?msg=' . $message);
-                            return false;
+                            case Dispatcher::EXCEPTION_CYCLIC_ROUTING:
+                                $response->redirect('cyclic-routing?msg=' . $message);
+                                return false;
+                        }
                     }
-                }
-            });
-            $dispatcher = new Dispatcher();
-            $dispatcher->setDefaultNamespace("Phanbook\Frontend\Controllers");
-            $dispatcher->setEventsManager($eventsManager);
-            return $dispatcher;
-        });
+                });
+                $dispatcher = new Dispatcher();
+                $dispatcher->setDefaultNamespace("Phanbook\Frontend\Controllers");
+                $dispatcher->setEventsManager($eventsManager);
+                return $dispatcher;
+            }
+        );
         /**
          * Setting up the view component
          */
@@ -78,12 +81,11 @@ class Module implements ModuleDefinitionInterface
                 $config = $di->get('config');
                 $view = new View();
                 $view->setViewsDir(ROOT_DIR . 'content/themes/' . $config->theme);
-
                 $view->disableLevel([View::LEVEL_MAIN_LAYOUT => true, View::LEVEL_LAYOUT => true]);
                 $view->registerEngines(['.volt' => 'volt']);
 
                 // Create an event manager
-                $eventsManager = new EventsManager();
+                $eventsManager = $this->getEventsManager();
                 $eventsManager->attach(
                     'view',
                     function ($event, $view) {
