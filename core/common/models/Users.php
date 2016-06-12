@@ -12,8 +12,9 @@
  */
 namespace Phanbook\Models;
 
-use Phalcon\Mvc\Model\Validator\Email as Email;
-use Phalcon\Mvc\Model\Validator\Uniqueness;
+use Phalcon\Validation;
+use Phalcon\Validation\Validator\Email as EmailValidator;
+use Phalcon\Validation\Validator\Uniqueness as UniquenessValidator;
 
 class Users extends ModelBase
 {
@@ -842,34 +843,36 @@ class Users extends ModelBase
     public function validation()
     {
 
-        // $this->validate(
-        //     new Email(
-        //         array(
-        //             'field'    => 'email',
-        //             'required' => true,
-        //         )
-        //     )
-        // );
-        $this->validate(
-            new Uniqueness(
-                [
-                    "field"   => array('email'),
-                    "message" => "Another user with same email already exists."
-                ]
-            )
+        $validator = new Validation();
+        $validator->add(
+            'email',
+            new EmailValidator([
+                'model' => $this,
+                'message' => 'Please enter a correct email address'
+            ])
         );
-        $this->validate(
-            new Uniqueness(
-                [
-                    "field"   => array('username'),
-                    "message" => "Another user with same username already exists."
-                ]
-            )
+        $validator->add(
+            'email',
+            new UniquenessValidator([
+                'model' => $this,
+                'message' => 'Another user with same email already exists'
+            ])
         );
-        if ($this->validationHasFailed() == true) {
-            return false;
-        }
+
+        $validator->add(
+            'username',
+            new UniquenessValidator([
+                'model' => $this,
+                'message' => 'Another user with same username already exists'
+            ])
+        );
+
+        return $this->validate($validator);
     }
+
+    /**
+     * @return array
+     */
     public static function getStatusesWithLabels()
     {
         return [
@@ -880,6 +883,9 @@ class Users extends ModelBase
         ];
     }
 
+    /**
+     * @return array
+     */
     public static function getGendersWithLabels()
     {
         return [
@@ -888,6 +894,11 @@ class Users extends ModelBase
             self::GENDER_FEMALE  => t('Female')
         ];
     }
+
+    /**
+     * @param $string
+     * @return bool|\Phalcon\Mvc\ModelInterface
+     */
     public static function findByEmailOrUsername($string)
     {
         $user = Users::query()

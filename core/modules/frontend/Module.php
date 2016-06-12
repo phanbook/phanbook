@@ -43,13 +43,13 @@ class Module implements ModuleDefinitionInterface
     {
 
         //Registering a dispatcher
-        $di->set('dispatcher', function () use ($di) {
+        $di->set('dispatcher', function ()  {
             $eventsManager = new EventsManager();
-            $eventsManager->attach("dispatch", function ($event, $dispatcher, $exception) use ($di) {
+            $eventsManager->attach("dispatch", function ($event, $dispatcher, $exception)  {
                 //controller or action doesn't exist
                 if ($event->getType() == 'beforeException') {
                     $message  = $exception->getMessage();
-                    $response = $di->getResponse();
+                    $response = $this->getResponse();
                     switch ($exception->getCode()) {
                         case Dispatcher::EXCEPTION_HANDLER_NOT_FOUND:
                             $response->redirect();
@@ -78,6 +78,7 @@ class Module implements ModuleDefinitionInterface
                 $config = $di->get('config');
                 $view = new View();
                 $view->setViewsDir(ROOT_DIR . 'content/themes/' . $config->theme);
+
                 $view->disableLevel([View::LEVEL_MAIN_LAYOUT => true, View::LEVEL_LAYOUT => true]);
                 $view->registerEngines(['.volt' => 'volt']);
 
