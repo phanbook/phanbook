@@ -29,6 +29,10 @@ try {
      */
     require ROOT_DIR . 'core/config/services.php';
 
+    $modules = require ROOT_DIR . 'core/config/modules.php';
+
+    require_once ROOT_DIR . 'core/config/routing.php';
+
     /**
      * Handle the request
      */
@@ -42,7 +46,8 @@ try {
     /**
      * Include modules
      */
-    $application->registerModules(require ROOT_DIR . 'core/config/modules.php');
+
+    $application->registerModules($modules);
 
     /**
      * Sets the event manager
@@ -51,7 +56,6 @@ try {
 
     echo $application->handle()->getContent();
 } catch (Exception $e) {
-
     $logger = $di->get('logger');
     $logger->error($e->getMessage());
     $logger->error($e->getTraceAsString());
