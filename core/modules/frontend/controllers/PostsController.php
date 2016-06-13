@@ -64,7 +64,6 @@ class PostsController extends ControllerBase
             list($itemBuilder, $totalBuilder) =
                 ModelBase::prepareQueriesPosts('', false, $perPage);
         }
-        $userId = $this->auth->getAuth();
 
         /*
          * Create the conditions according to the parameter order

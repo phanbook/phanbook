@@ -36,16 +36,12 @@ use Phalcon\Config\Adapter\Php         as AdapterPhp;
 use Phalcon\Logger\Adapter\File        as FileLogger;
 use Phalcon\Mvc\View;
 
-
-
 use Phanbook\Utils\Constants;
 use Phanbook\Mail\Mail;
 use Phanbook\Auth\Auth;
 use Phanbook\Utils\Phanbook;
 use Phanbook\Queue\DummyServer;
 use Phanbook\Markdown\ParsedownExtra;
-use Phanbook\Plugins\Security          as SecurityPlugin;
-use Phanbook\Plugins\NotFound          as NotFoundPlugin;
 use Phanbook\Notifications\Checker     as NotificationsChecker;
 
 /**
