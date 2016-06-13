@@ -79,16 +79,6 @@ $di->set('config', $config, true);
 // setup timezone
 date_default_timezone_set($di->get('config')->application->timezone ?: 'UTC');
 
-/**
- * Router
- */
-$di->set(
-    'router',
-    function () {
-        return include ROOT_DIR . "core/config/routes.php";
-    },
-    true
-);
 
 /**
  * The URL component is used to generate all kind of urls in the application
