@@ -11,17 +11,22 @@
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
 
-$router->add('#^/oauth/([a-zA-Z0-9\_]+)[/]{0,1}$#', [
+$router->add('/oauth/:controller', [
     'module' => 'oauth',
     'controller' => 1,
 ]);
-
-$router->add('#^/oauth[/]{0,1}([a-zA-Z0-9\_]+)/([a-zA-Z0-9\_]+)(/.*)*$#', [
+$router->add('/oauth/:controller/:int', [
+    'module' => 'oauth',
+    'controller' => 1,
+    'id' => 2,
+]);
+$router->add('/oauth/:controller/:action/:params', [
     'module' => 'oauth',
     'controller' => 1,
     'action' => 2,
     'params' => 3,
 ]);
+
 
 
 $router->add('/oauth/github/access_token', [

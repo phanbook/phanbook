@@ -10,48 +10,46 @@
  * @since   1.0.0
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
-$router->add('#^/backend/([a-zA-Z0-9\_]+)[/]{0,1}$#', [
+$router->add('/backend/:controller', [
     'module' => 'backend',
     'controller' => 1,
 ]);
-
-$router->add('#^/backend[/]{0,1}([a-zA-Z0-9\_]+)/([a-zA-Z0-9\_]+)(/.*)*$#', [
+$router->add('/backend/:controller/:int', [
+    'module' => 'backend',
+    'controller' => 1,
+    'id' => 2,
+]);
+$router->add('/backend/:controller/:action/:params', [
     'module' => 'backend',
     'controller' => 1,
     'action' => 2,
     'params' => 3,
 ]);
 
+$router->add('/backend', [
+    'module'     => 'backend',
+    'controller' => 'dashboard',
+    'action'     => 'index'
+]);
 
-$router->add(
-    '/maintenance',
-    [
-        'module'     => 'backend',
-        'controller' => 'errors',
-        'action'     => 'show503'
-    ]
-);
-$router->add(
-    '/action-not-found',
-    [
-        'module'     => 'backend',
-        'controller' => 'errors',
-        'action'     => 'show404'
-    ]
-);
-$router->add(
-    '/cyclic-routing',
-    [
-        'module'     => 'backend',
-        'controller' => 'errors',
-        'action'     => 'show404'
-    ]
-);
-$router->add(
-    '/error-reporting',
-    [
-        'module'     => 'backend',
-        'controller' => 'errors',
-        'action'     => 'show505'
-    ]
-);
+$router->add('/maintenance', [
+    'module'     => 'backend',
+    'controller' => 'errors',
+    'action'     => 'show503'
+]);
+$router->add('/action-not-found', [
+    'module'     => 'backend',
+    'controller' => 'errors',
+    'action'     => 'show404'
+]);
+$router->add('/cyclic-routing', [
+    'module'     => 'backend',
+    'controller' => 'errors',
+    'action'     => 'show404'
+]);
+
+$router->add('/error-reporting', [
+    'module'     => 'backend',
+    'controller' => 'errors',
+    'action'     => 'show505'
+]);
