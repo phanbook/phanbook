@@ -11,9 +11,5 @@ return [
     'backend' => array(
         'className' => 'Phanbook\Backend\Module',
         'path' => ROOT_DIR . 'core/modules/backend/Module.php'
-    ),
-    'blog' => array(
-        'className' => 'Phanbook\Blog\Module',
-        'path' => ROOT_DIR . 'core/modules/blog/Module.php'
     )
 ];

@@ -4,8 +4,6 @@
 
 [Home](http://phanbook.com) -
 [Meta Forum](http://meta.phanbook.com) -
-[Development Forum](http://dev.phanbook.com) -
-[Discourse Theme](http://discourse.phanbook.com) -
 [Blog Theme](http://blog.saigonphp.com) -
 [Contact](mailto:hello@phanbook.com)
 

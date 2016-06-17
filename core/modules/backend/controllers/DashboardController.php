@@ -25,9 +25,15 @@ use Phanbook\Backend\Forms\DashboardForm;
  */
 class DashboardController extends ControllerBase
 {
-
+    /**
+     * @var object
+     */
     private $analytic;
+    /**
+     * @var object
+     */
     private $model;
+
     public function initialize()
     {
         parent::initialize();
@@ -42,14 +48,15 @@ class DashboardController extends ControllerBase
      */
     public function indexAction()
     {
-        $this->view->isLogged = false;
+        $isLogged = false;
         // We check if user authorization
         if ($this->analytic->checkAccessToken()) {
-            $this->view->isLogged = true;
+            $isLogged = true;
             $this->view->analyticTopActivity = $this->model->getAnalyticData();
             $this->view->analyticData = true;
         }
         $this->tag->setTitle(t('Dashboard'));
         $this->view->form = new DashboardForm();
+        $this->view->isLogged = $isLogged;
     }
 }

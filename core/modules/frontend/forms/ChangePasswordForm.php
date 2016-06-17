@@ -14,10 +14,8 @@ namespace Phanbook\Frontend\Forms;
 
 use Phalcon\Forms\Form;
 use Phalcon\Forms\Element\Password;
-use Phalcon\Forms\Element\Hidden;
 use Phalcon\Forms\Element\Submit;
 use Phalcon\Validation\Validator\PresenceOf;
-use Phalcon\Validation\Validator\Identical;
 use Phalcon\Validation\Validator\Confirmation;
 use Phalcon\Validation\Validator\StringLength;
 
