@@ -3,24 +3,20 @@ $I = new AcceptanceTester($scenario);
 $I->wantTo('add a new user and see it in database');
 $I->amOnPage('/oauth/login');
 
-$I->see(' Sign in using Google+');
-$I->click('.google-button');
-$I->see('Sign Up With Github');
-$I->click('.gitbub-button');
-$I->see('Sign in using Facebook');
-$I->see('Login');
+$I->see('Sign In');
 $I->submitForm(
     '#login-form',
     [
-        'email' => 'Davert',
+        'email' => 'Davert@gmail.com',
         'password' => '123456',
         'remember' => true
     ],
-    'Login'
+    'Sign In'
 );
 
 
-$I->click('Sign Up With Email');
+$I->amOnPage('/oauth/register/signup');
+
 $I->fillField('firstname', 'Phanbook');
 $I->fillField('email', 'hello@phanbook.com');
 $I->fillField('username', 'admin');

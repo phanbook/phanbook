@@ -42,7 +42,7 @@
                             <input type="file" class="file">
                             <div class="fakefile">
                                 <button type="button" class="button small margin_0">Select file</button>
-                                <span><i class="icon-arrow-up"></i>Browse</span>
+                                <span><i class="fa fa-arrow-up"></i>Browse</span>
                             </div>
                         </div>
                     <p></p>
