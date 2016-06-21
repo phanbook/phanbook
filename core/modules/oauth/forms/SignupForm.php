@@ -163,7 +163,8 @@ class SignupForm extends Form
 
         //Submit
         $this->add(
-            new Submit('submit',
+            new Submit(
+                'submit',
                 [
                     'value' => 'Register'
                 ]

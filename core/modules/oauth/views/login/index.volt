@@ -34,14 +34,14 @@
 
         <div class="social-auth-links text-center">
             <p>- OR -</p>
-            <a href="/oauth/login/github" class="btn btn-block btn-social btn-flat"><i class="fa fa-github"></i> Sign in using
+            <a href="/oauth/login/github" class="github-button btn btn-block btn-social btn-flat"><i class="fa fa-github"></i> Sign in using
             Github</a>
 
             <a href="/oauth/login/facebook" class="btn btn-block btn-social btn-facebook btn-flat">
             <i class="fa fa-facebook"></i> Sign in usingFacebook
             </a>
 
-            <a href="/oauth/login/google" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Sign in using
+            <a href="/oauth/login/google" class="google-button btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Sign in using
             Google+</a>
         </div>
         <a href="#">I forgot my password</a><br>

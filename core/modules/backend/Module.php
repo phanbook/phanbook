@@ -34,10 +34,16 @@ class Module implements ModuleDefinitionInterface
         //Read configuration
         $config = include __DIR__ . "/config/config.php";
 
+        $configGlobal = $di->getConfig();
+
         // The URL component is used to generate all kind of urls in the application
-        $di->set('url', function () use ($config) {
+        $di->set('url', function () use ($config, $configGlobal) {
             $url = new Url();
-            $url->setBaseUri($config->application->baseUri);
+            if ($configGlobal->environment == 'production') {
+                $url->setStaticBaseUri($configGlobal->application->production->staticBaseUri);
+            } else {
+                $url->setBaseUri($config->application->baseUri);
+            }
             return $url;
         });
         //Registering a dispatcher

@@ -34,6 +34,11 @@ return new \Phalcon\Config(
             ]
         ],
         /**
+         * - Production is default
+         * - Development just replace production to development
+         */
+        'environment' => 'production',
+        /**
          * Application settings
          */
         'application' => [

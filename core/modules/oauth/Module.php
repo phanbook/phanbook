@@ -17,6 +17,7 @@ use Phalcon\Loader;
 use Phalcon\DiInterface;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\View;
+use Phalcon\Mvc\Url;
 use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
 use Phalcon\Mvc\ModuleDefinitionInterface;
 use Phalcon\Mvc\View\Engine\Volt;
@@ -43,6 +44,21 @@ class Module implements ModuleDefinitionInterface
      */
     public function registerServices(DiInterface $di)
     {
+        //Read configuration
+        $config = include __DIR__ . "/config/config.php";
+
+        $configGlobal = $di->getConfig();
+
+        // The URL component is used to generate all kind of urls in the application
+        $di->set('url', function () use ($config, $configGlobal) {
+            $url = new Url();
+            if ($configGlobal->environment == 'production') {
+                $url->setStaticBaseUri($configGlobal->application->production->staticBaseUri);
+            } else {
+                $url->setBaseUri($config->application->baseUri);
+            }
+            return $url;
+        });
 
         //Registering a dispatcher
         $di->set('dispatcher', function () use ($di) {
