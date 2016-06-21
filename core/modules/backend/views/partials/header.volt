@@ -1,6 +1,6 @@
 <header class="bg-white header header-md navbar navbar-fixed-top-xs box-shadow">
     <div class="navbar-header aside dk">
-        <a href="/backend" class="navbar-brand">
+        <a href="/backend" class="navbar-brand logo-backend">
             <img src="{{getImageSrc('logo_backend.png')}}" class="m-r-sm" alt="scale">
         </a>
     </div>

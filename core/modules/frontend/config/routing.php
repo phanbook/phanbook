@@ -58,6 +58,10 @@ $router->add('/questions/edit/{id:[0-9]+}', [
     'controller' => 'posts',
     'action' => 'edit'
 ]);
+$router->add('/questions', [
+    'controller' => 'posts',
+    'action' => 'index'
+]);
 
 /**
  * @link https://docs.phalconphp.com/en/latest/reference/routing.html#match-callbacks

@@ -3,11 +3,11 @@ $I = new AcceptanceTester($scenario);
 $I->wantTo('add a new user and see it in database');
 $I->amOnPage('/oauth/login');
 
-$I->see('Sign Up With Google');
+$I->see(' Sign in using Google+');
 $I->click('.google-button');
 $I->see('Sign Up With Github');
 $I->click('.gitbub-button');
-$I->see('Sign Up With Facebook');
+$I->see('Sign in using Facebook');
 $I->see('Login');
 $I->submitForm(
     '#login-form',

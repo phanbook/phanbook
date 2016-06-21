@@ -4,7 +4,7 @@
     <div class="login-box-body">
         <p class="login-box-msg">Sign in to start your session</p>
 
-        {{form('oauth/login')}}
+        {{form('oauth/login', 'id' : 'login-form')}}
 
             <div class="form-group has-feedback">
                 {{ form.render('email', ['class' : 'form-control'])}}
