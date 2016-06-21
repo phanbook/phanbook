@@ -1,26 +1,23 @@
 {% extends 'layouts/layout.volt' %}
-{% block title %}Forgot my password{% endblock %}
+{% block title %}Reset password{% endblock %}
 {% block content %}
-<div class="signup-login">
-    <div class="container">
-        <div id="single-content">
-            <div class="main-title">
-                <h1>{{ t('Created your password')}} </h1>
-                {{ this.flashSession.output() }}
-            </div>
-            <form action="" class="user-form" autoescape="off" method="post">
-              <div class="list-group">
-                <div class="list-group-item">
-                    {{ form.render('password_new', ['class' : 'form-control no-border'] ) }}
-                </div>
-                <div class="list-group-item">
-                    {{ form.render('password_new_confirm', ['class' : 'form-control no-border'] ) }}
-                </div>
+    <div class="login-box-body">
+        <p class="login-box-msg">Created your password</p>
 
-              </div>
-                {{ form.render('change', ['class' : 'btn btn-lg btn-primary btn-block']) }}
-            </form>
-        </div>
+        <form action="" class="user-form" autoescape="off" method="post">
+            <div class="form-group has-feedback">
+                {{ form.render('password_new', ['class' : 'form-control'])}}
+                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+            </div>
+
+            <div class="form-group has-feedback">
+                {{ form.render('password_new_confirm', ['class' : 'form-control'])}}
+                <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
+            </div>
+
+            <div class="form-group has-feedback">
+                {{ form.render('change', ['class' : 'btn btn-primary btn-block btn-flat'])}}
+            </div>
+        </form>
     </div>
-</div>
 {% endblock %}

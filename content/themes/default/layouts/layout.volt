@@ -51,7 +51,7 @@
     {{ partial('partials/footer')}}
 </div><!-- End wrap -->
 
-<div class="go-up"><i class="icon-chevron-up"></i></div>
+<div class="go-up"><i class="fa fa-chevron-up"></i></div>
 
 <!-- js -->
 {{ javascript_include('core/assets/js/jquery.js')}}

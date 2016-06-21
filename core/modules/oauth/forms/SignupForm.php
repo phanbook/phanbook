@@ -18,6 +18,7 @@ use Phalcon\Forms\Element\Hidden;
 use Phalcon\Forms\Element\Submit;
 use Phalcon\Forms\Element\Radio;
 use Phalcon\Forms\Element\Password;
+use Phalcon\Forms\Element\Check;
 use Phalcon\Validation\Validator\PresenceOf;
 use Phalcon\Validation\Validator\Email;
 use Phalcon\Validation\Validator\Regex;
@@ -110,6 +111,16 @@ class SignupForm extends Form
         );
         $this->add($email);
 
+        //Remember me
+        $terms = new Check(
+            'terms',
+            [
+                'value'     => 'yes',
+                'checked'   => 'checked'
+            ]
+        );
+        $this->add($terms);
+
         //Phone
         // $phone = new Text('phone', [
         //     'placeholder' => 'Phone',
@@ -152,11 +163,9 @@ class SignupForm extends Form
 
         //Submit
         $this->add(
-            new Submit(
-                'signup',
+            new Submit('submit',
                 [
-                'value' => 'Sign in',
-                'class' => 'submit-button-signup'
+                    'value' => 'Register'
                 ]
             )
         );

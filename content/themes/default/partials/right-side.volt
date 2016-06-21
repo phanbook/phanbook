@@ -2,8 +2,8 @@
     <h3 class="widget_title">Stats</h3>
     <div class="ul_list ul_list-icon-ok">
         <ul>
-            <li><i class="icon-question-sign"></i>Questions ( <span>{{totalPost}}</span> )</li>
-            <li><i class="icon-comment"></i>Answers ( <span>{{totalReply}}</span> )</li>
+            <li><i class="fa fa-question"></i>Questions ( <span>{{totalPost}}</span> )</li>
+            <li><i class="fa fa-comment"></i>Answers ( <span>{{totalReply}}</span> )</li>
         </ul>
     </div>
 </div>
@@ -14,7 +14,7 @@
         <li class="rss-subscribers">
             <a href="#" target="_blank">
             <strong>
-                <i class="icon-rss"></i>
+                <i class="fa fa-rss"></i>
                 <span>Subscribe</span><br>
                 <small>To RSS Feed</small>
             </strong>
@@ -23,7 +23,7 @@
         <li class="facebook-fans">
             <a href="#" target="_blank">
             <strong>
-                <i class="social_icon-facebook icon-facebook"></i>
+                <i class="social_icon-facebook fa fa-facebook"></i>
                 <span>5,000</span><br>
                 <small>People like it</small>
             </strong>
@@ -32,7 +32,7 @@
         <li class="twitter-followers">
             <a href="#" target="_blank">
             <strong>
-                <i class="social_icon-twitter icon-twitter"></i>
+                <i class="social_icon-twitter fa fa-twitter"></i>
                 <span>3,000</span><br>
                 <small>Followers</small>
             </strong>

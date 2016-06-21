@@ -36,17 +36,17 @@
     <section class="container clearfix">
         <nav class="header-top-nav">
             <ul>
-                <li><a href="#"><i class="icon-headphones"></i>Support</a></li>
+                <li><a href="#"><i class="fa fa-headphones"></i>Support</a></li>
                 {% if isLogin() %}
-                    <li><a href="/oauth/logout" id="setting-panel"><i class="icon-plus"></i>Setting</a></li>
+                    <li><a href="/oauth/logout" id="setting-panel"><i class="fa fa-plus"></i>Setting</a></li>
                     <li><a href="/notifications">
                         {% if this.notifications.has()%}
                         <span class="mail-status unread"></span>
-                        {% endif %}<i class="icon-inbox"></i>
+                        {% endif %}<i class="fa fa-inbox"></i>
                     </a></li>
                 {% else %}
-                    <li><a href="contact_us.html"><i class="icon-envelope"></i>Contact</a></li>
-                    <li><a href="/oauth/login"><i class="icon-user"></i>Login Area</a></li>
+                    <li><a href="contact_us.html"><i class="fa fa-envelope"></i>Contact</a></li>
+                    <li><a href="/oauth/login"><i class="fa fa-user"></i>Login Area</a></li>
                 {% endif %}
             </ul>
         </nav>

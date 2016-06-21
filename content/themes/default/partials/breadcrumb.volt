@@ -38,7 +38,7 @@
                     <form class="form-style form-style-2">
                         <p>
                             <textarea rows="4" id="question_title" onfocus="if(this.value=='Ask any question and you be sure find your answer ?')this.value='';" onblur="if(this.value=='')this.value='Ask any question and you be sure find your answer ?';">Ask any question and you be sure find your answer ?</textarea>
-                            <i class="icon-pencil"></i>
+                            <i class="fa fa-pencil"></i>
                             <a href="/posts/new" class="color button small publish-question">Ask Now</a>
                         </p>
                     </form>

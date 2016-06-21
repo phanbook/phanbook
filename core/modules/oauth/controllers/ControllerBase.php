@@ -24,9 +24,11 @@ use Phanbook\Models\Karma;
  */
 class ControllerBase extends Controller
 {
+
     public function initialize()
     {
-        $this->assets->addCss('oauth/assets/css/login.css');
+        $this->loadDefaultAssets();
+
     }
     /**
      * Set a flash message with messages from objects
@@ -102,5 +104,25 @@ class ControllerBase extends Controller
     public function indexRedirect()
     {
         return $this->response->redirect('oauth/login');
+    }
+    /**
+     * loadDefaultAssets function.
+     *
+     * @access private
+     * @return void
+     */
+    private function loadDefaultAssets()
+    {
+        $this->assets
+            ->addCss('core/assets/css/bootstrap.min.css')
+            ->addCss('core/assets/css/font-awesome.min.css')
+            ->addCss('oauth/assets/css/app.css')
+            ->addCss('core/assets/css/icheck/blue.css')
+        ;
+        $this->assets
+            ->addJs('core/assets/js/jquery.js')
+            ->addJs('core/assets/js/icheck/icheck.min.js')
+            ->addJs('oauth/assets/js/app.js')
+        ;
     }
 }

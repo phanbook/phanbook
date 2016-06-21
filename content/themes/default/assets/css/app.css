@@ -1,10 +1,9 @@
 
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,300,600,700);
-@import url("/core/assets/css/base.css");
-@import url("/core/assets/css/lists.css");
 @import url("/core/assets/css/bootstrap.min.css");
+@import url("/core/assets/css/base.css");
 @import url("/core/assets/css/prettyPhoto.css");
-@import url("/core/assets/fonts/font-awesome.min.css");
+@import url("/core/assets/css/font-awesome.min.css");
 body {
     background-color: #f3f3f3;
     color: #2f3239;
@@ -812,7 +811,22 @@ div[class*="slider_shadow"]:before, div[class^="header_shadow"] {
     position: absolute;
     top: 20px;
     right: 86px;
+    line-height: 15px;
+    height: 25px;
+
 }
+.question-report {
+    float: right;
+    font-size: 12px;
+    background-color: #2f3239;
+    padding: 4px 10px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    height: 23px;
+    line-height: 15px;
+}
+
 .question-type-main i {
     margin-right: 5px;
 }
@@ -1050,17 +1064,7 @@ div[class*="slider_shadow"]:before, div[class^="header_shadow"] {
     color: #2f3239;
     font-size: 12px;
 }
-.question-report {
-    float: right;
-    font-size: 12px;
-    background-color: #2f3239;
-    padding: 4px 10px;
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    height: 23px;
-    line-height: 15px;
-}
+
 .question-answered {
     float: left;
     font-size: 14px;

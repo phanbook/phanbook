@@ -7,7 +7,7 @@
                 {{ partial('partials/question', ['single' : true])}}
 
                 <div class="share-tags page-content">
-                    <div class="question-tags"><i class="icon-tags"></i>
+                    <div class="question-tags"><i class="fa fa-tags"></i>
                     {% for tag in post.tag%}
                         {{link_to('tags/' ~ tag.id ~ '/' ~ tag.slug, tag.name) }},
                     {% endfor %}
@@ -18,7 +18,8 @@
                                 <a href="#" original-title="Facebook" cl>
                                     <span class="icon_i">
                                         <span class="icon_square" icon_size="20" span_bg="#3b5997" span_hover="#666">
-                                            <i i_color="#FFF" class="social_icon-facebook icon-facebook"></i>
+                                            <i i_color="#FFF" class="social_icon-facebook
+                                            fa fa-facebook"></i>
                                         </span>
                                     </span>
                                 </a>
@@ -28,7 +29,7 @@
                                 <a href="#" target="_blank">
                                     <span class="icon_i">
                                         <span class="icon_square" icon_size="20" span_bg="#00baf0" span_hover="#666">
-                                            <i i_color="#FFF" class="icon-twitter social_icon-twitter"></i>
+                                            <i i_color="#FFF" class="fa fa-twitter social_icon-twitter"></i>
                                         </span>
                                     </span>
                                 </a>
@@ -38,7 +39,7 @@
                                 <a href="#" target="_blank">
                                     <span class="icon_i">
                                         <span class="icon_square" icon_size="20" span_bg="#ca2c24" span_hover="#666">
-                                            <i i_color="#FFF" class="icon-google-plus social_icon-gplus"></i>
+                                            <i i_color="#FFF" class="fa fa-google-plus social_icon-gplus"></i>
                                         </span>
                                     </span>
                                 </a>
@@ -48,7 +49,7 @@
                                 <a target="_blank" href="#">
                                     <span class="icon_i">
                                         <span class="icon_square" icon_size="20" span_bg="#c7151a" span_hover="#666">
-                                            <i i_color="#FFF" class="icon pinterest icon-pinterest"></i>
+                                            <i i_color="#FFF" class="icon pinterest fa fa-pinterest"></i>
                                         </span>
                                     </span>
                                 </a>
@@ -58,7 +59,7 @@
                         <span class="share-inside-f-arrow"></span>
                         <span class="share-inside-l-arrow"></span>
                     </div><!-- End share-inside-warp -->
-                    <div class="share-inside"><i class="icon-share-alt"></i>Share</div>
+                    <div class="share-inside"><i class="fa fa-share-alt"></i>Share</div>
                     <div class="clearfix"></div>
                 </div><!-- End share-tags -->
 
@@ -111,7 +112,7 @@
 
                                         {{ partial('partials/vote-reply', ['objectId' : answer.id, 'object' : 'postsReply', 'votes' : answer])}}
                                         <div class="comment-meta">
-                                            <div class="date"><i class="icon-time"></i>
+                                            <div class="date"><i class="fa fa-time"></i>
                                             {{ getHumanDate(answer.createdAt)  }}
                                             </div>
                                         </div>
@@ -122,10 +123,10 @@
                                     <div>
                                     {% if post.usersId == this.session.auth['id'] %}
                                         {% if answer.accepted == "Y"%}
-                                            <a  href="#" class="question-answered question-answered-done"> <i class="icon-ok"></i>Best Answer</a>
+                                            <a  href="#" class="question-answered question-answered-done"> <i class="fa fa-check"></i>Best Answer</a>
                                         {% else %}
                                             <a href="#" class="iam-accepting" data-object-id="{{ answer.id }}" title="Click to accept this answer because it solved your problem or was the most helpful in finding your solution">
-                                            <i class="icon-ok"></i></a>
+                                            <i class="fa fa-check"></i></a>
                                         {% endif %}
                                     {% endif %}
                                     </div>
@@ -157,10 +158,10 @@
 
                 <div class="post-next-prev clearfix">
                     <p class="prev-post">
-                        <a href="#"><i class="icon-double-angle-left"></i>&nbsp;Prev question</a>
+                        <a href="#"><i class="fa fa-angle-double-left"></i>&nbsp;Prev question</a>
                     </p>
                     <p class="next-post">
-                        <a href="#">Next question&nbsp;<i class="icon-double-angle-right"></i></a>
+                        <a href="#">Next question&nbsp;<i class="fa fa-angle-double-right"></i></a>
                     </p>
                 </div><!-- End post-next-prev -->
             </div><!-- End main -->

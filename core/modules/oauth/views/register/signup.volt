@@ -1,10 +1,20 @@
 {% extends 'layouts/layout.volt' %}
-{% block title %} {{ this.config.application.name ~ t('Login')}}{% endblock %}
+{% block title %} Sign Up{% endblock %}
 {% block content %}
     <div class="login-box-body">
         <p class="login-box-msg">Sign in to start your session</p>
 
-        {{form('oauth/login')}}
+        {{form('oauth/register/signup')}}
+
+            <div class="form-group has-feedback">
+                {{ form.render('firstname', ['class' : 'form-control'])}}
+                <span class=" fa fa-universal-access form-control-feedback"></span>
+            </div>
+
+            <div class="form-group has-feedback">
+                {{ form.render('lastname', ['class' : 'form-control'])}}
+                <span class=" fa fa-universal-access form-control-feedback"></span>
+            </div>
 
             <div class="form-group has-feedback">
                 {{ form.render('email', ['class' : 'form-control'])}}
@@ -12,15 +22,15 @@
             </div>
 
             <div class="form-group has-feedback">
-                {{ form.render('password', ['class' : 'form-control'])}}
-                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                {{ form.render('username', ['class' : 'form-control'])}}
+                <span class="glyphicon glyphicon-user form-control-feedback"></span>
             </div>
 
             <div class="row">
                 <div class="col-xs-8">
                   <div class="checkbox icheck">
                     <label>
-                      {{ form.render('remember')}} Remember Me
+                      {{ form.render('terms')}} I agree to the <a href="#">terms</a>
                     </label>
                   </div>
                 </div>
@@ -30,6 +40,7 @@
                 </div>
                 <!-- /.col -->
             </div>
+
         </form>
 
         <div class="social-auth-links text-center">
@@ -44,7 +55,6 @@
             <a href="/oauth/login/google" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Sign in using
             Google+</a>
         </div>
-        <a href="#">I forgot my password</a><br>
-        <a href="/oauth/register/signup" class="text-center">Register a new membership</a>
+        <a href="/oauth/login" class="text-center">I already have a membership</a>
     </div>
 {% endblock %}

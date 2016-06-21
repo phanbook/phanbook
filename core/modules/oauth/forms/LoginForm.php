@@ -69,33 +69,21 @@ class LoginForm extends Form
         $remember = new Check(
             'remember',
             [
-            'value'     => 'yes',
-            'checked'   => 'checked'
+                'value'     => 'yes',
+                'checked'   => 'checked'
             ]
         );
         $this->add($remember);
 
-        // CSRF
-        $csrf = new Hidden('csrf');
 
-        $csrf->addValidator(
-            new Identical(
-                array(
-                'value'   => $this->security->getSessionToken(),
-                'message' => t('CSRF validation failed')
-                )
-            )
-        );
-
-        $this->add($csrf);
 
         //Submit
         $this->add(
             new Submit(
-                'login',
+                'submit',
                 [
-                'class' => 'submit-button-login',
-                'value' => t('Login')
+                    'class' => 'submit-button-login',
+                    'value' => t('Sign In')
                 ]
             )
         );

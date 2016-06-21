@@ -131,7 +131,6 @@ class RegisterController extends ControllerBase
      */
     public function signupAction()
     {
-        $this->view->disable();
         if ($this->auth->getAuth()) {
             return $this->response->redirect();
         }
@@ -181,6 +180,7 @@ class RegisterController extends ControllerBase
                 }
             }
         }
+        $this->view->form = $form;
     }
 
         /**

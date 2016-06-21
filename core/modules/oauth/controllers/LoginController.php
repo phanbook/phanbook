@@ -161,8 +161,7 @@ class LoginController extends ControllerBase
         } catch (\Exception $e) {
             $this->flashSession->error($e->getMessage());
         }
-        $this->view->loginForm  = $form;
-        $this->view->signupForm = new SignupForm;
+        $this->view->form  = $form;
     }
 
     /**
