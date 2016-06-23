@@ -193,25 +193,14 @@ class PostsController extends ControllerBase
             return $this->response->redirect($this->router->getControllerName());
         }
 
-        $id = $this->request->getPost('id');
+        $id   = $this->request->getPost('id');
         $auth = $this->auth->getAuth();
+        $tags = $this->request->getPost('tags', 'string', null);
+
         if (!$auth) {
             $this->flashSession->error('You must be logged first');
 
             return $this->currentRedirect();
-        }
-        //Checking tags
-        $tags = $this->request->getPost('tags', 'string', null);
-        if (is_string($this->phanbook->isTags($tags))) {
-            $this->flashSession->notice(t($this->phanbook->isTags($tags)));
-
-            return $this->dispatcher->forward(
-                [
-                'controller' => $this->router->getControllerName(),
-                'action' => (!is_null($id)) ? 'edit' : 'new',
-                'params' => (!is_null($id)) ? array($id) : array(),
-                ]
-            );
         }
 
         if (!empty($id)) {
@@ -261,7 +250,7 @@ class PostsController extends ControllerBase
                     ['controller' => $this->router->getControllerName(), 'action' => 'new']
                 );
             } else {
-                if (!$this->phanbook->saveTagsInPosts($tags, $object)) {
+                if (!$this->phanbook->tag()->saveTagsInPosts($tags, $object)) {
                     $this->db->rollback();
                     return $this->response->redirect(
                         $this->router->getControllerName().(!is_null($id) ? '/edit/'.$id : '/new')

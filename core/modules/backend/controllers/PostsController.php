@@ -236,7 +236,7 @@ class PostsController extends ControllerBase
                     ['controller' => $this->getPathController(), 'action' => 'new']
                 );
             } else {
-                $this->phanbook->saveTagsInPosts($tags, $object);
+                $this->phanbook->tag()->saveTagsInPosts($tags, $object);
                 $this->flashSession->success(t('Data was successfully saved'));
 
                 return $this->indexRedirect();

@@ -12,8 +12,6 @@
  */
 namespace Phanbook\Utils;
 
-use Phanbook\Models\Tags;
-use Phanbook\Models\PostsTags;
 use Phanbook\Models\Posts;
 use Phanbook\Models\Users;
 use Phanbook\Tools\ZFunction;
@@ -54,76 +52,7 @@ class Phanbook
     {
         return '/content/themes/'. $this->theme .'/' . $item;
     }
-    /**
-     * It will return string when error to occur and to array to success
-     *
-     * @param  $tag is string it should slug
-     * @return string|array
-     */
-    public function isTags($tag)
-    {
-        if (!is_string($tag) || empty($tag)) {
-            return 'You need to add tags for your posts';
-        }
-        $tags = explode(',', $tag);
-        if (count($tags) == 0) {
-            return 'This tag does not exist';
-        }
-        if (count($tags) >= 5) {
-            return 'The tags maximum allow is 5';
-        }
-        $results = [];
-        foreach ($tags as $tag) {
-            $object= Tags::findFirstBySlug(trim($tag));
-            if (!is_object($object)) {
-                return 'This tag does not exist';
-            }
-            $results[] = $object->getId();
-        }
 
-        return $results;
-    }
-    /**
-     * @todo Update the total of posts related to a tags
-     *
-     * @return bool
-     */
-    public function saveTagsInPosts($_tag, $object)
-    {
-        $tags = $this->isTags($_tag);
-        if (is_array($tags)) {
-            //
-            $postsTags = PostsTags::find(
-                [
-                    'postsId = ?0',
-                    'bind' => [$object->getId()]
-                ]
-            );
-            if (isset($postsTags)) {
-                $postsTags->delete();
-            }
-            foreach ($tags as $tagsId) {
-                $postsTags = new PostsTags();
-                $postsTags->setTagsId($tagsId);
-                $postsTags->setPostsId($object->getId());
-
-                if (!$postsTags->save()) {
-                    return false;
-                }
-                //Update the total of posts related to a tags
-                if ($object->getOperationMade() == \Phalcon\Mvc\Model::OP_CREATE) {
-                    $tag = Tags::findFirstById($tagsId);
-                    $number = $tag->getNumberposts();
-                    $tag->setNumberPosts($number + 1);
-                    if (!$tag->save()) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-        return false;
-    }
     /**
      * Retrieve a page give its title
      *
@@ -190,12 +119,29 @@ class Phanbook
             return true;
         }
     }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function getUserById($id)
     {
         return Users::findFirstById($id);
     }
+
+    /**
+     * @return \Phanbook\Utils\Slug
+     */
     public function slug()
     {
         return new Slug();
+    }
+
+    /**
+     * @return Tag
+     */
+    public function tag()
+    {
+        return new Tag();
     }
 }
