@@ -255,7 +255,7 @@ $di->set(
     'cookies',
     function () {
         $cookies = new Cookies();
-        $cookies->useEncryption(false);
+        $cookies->useEncryption(true);
         return $cookies;
     },
     true

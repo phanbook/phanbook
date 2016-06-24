@@ -56,6 +56,7 @@ class ControllerBase extends Controller
      */
     public function commonOauthSave($uid, $user, $token, $object, $nameOauth)
     {
+
         if (!$object) {
             $object = new Users();
             //setTokenGithub or setTokenGoogle
@@ -73,14 +74,15 @@ class ControllerBase extends Controller
             }
             $object->setStatus(Users::STATUS_ACTIVE);
             $object->increaseKarma(Karma::LOGIN);
+            if (!$object->save()) {
+                $this->displayModelErrors($object);
+                return $this->indexRedirect();
+            }
         }
         //Update session id
         session_regenerate_id(true);
 
-        if (!$object->save()) {
-            $this->displayModelErrors($object);
-            return $this->indexRedirect();
-        }
+
 
         //Store the user data in session
         $this->auth->setSession($object);
@@ -95,9 +97,12 @@ class ControllerBase extends Controller
     }
     public function currentRedirect()
     {
-        if ($url = $this->cookies->get('urlCurrent')->getValue()) {
-            $this->cookies->delete('urlCurrent');
-            return $this->response->redirect($url);
+        if ($this->cookies->has('HTTPBACK')) {
+            $url   = $this->cookies->get('HTTPBACK');
+            $clone = clone $url;
+            $url->delete();
+
+            return $this->response->redirect(unserialize($clone->getValue()));
         }
         return $this->response->redirect($this->request->getHTTPReferer(), true);
     }
