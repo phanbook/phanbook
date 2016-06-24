@@ -79,12 +79,35 @@ class Users extends ModelBase
      */
     protected $tokenGithub;
 
+    /**
+     * @var string
+     */
     protected $tokenGoogle;
 
+    /**
+     * @var string
+     */
     protected $tokenFacebook;
 
+    /**
+     * @var string
+     */
     protected $uid;
 
+    /**
+     * @var string
+     */
+    protected $uuidGithub;
+
+    /**
+     * @var string
+     */
+    protected $uuidGoogle;
+
+    /**
+     * @var string
+     */
+    protected $uuidFacebook;
     /**
      *
      * @var integer
@@ -290,6 +313,36 @@ class Users extends ModelBase
     public function setUid($uid)
     {
         $this->uid = $uid;
+
+        return $this;
+    }
+
+    /**
+     * @param string $uuidFacebook
+     */
+    public function setUuidFacebook($uuidFacebook)
+    {
+        $this->uuidFacebook = $uuidFacebook;
+
+        return $this;
+    }
+
+    /**
+     * @param string $uuidGithub
+     */
+    public function setUuidGithub($uuidGithub)
+    {
+        $this->uuidGithub = $uuidGithub;
+
+        return $this;
+    }
+
+    /**
+     * @param string $uuidGoogle
+     */
+    public function setUuidGoogle($uuidGoogle)
+    {
+        $this->uuidGoogle = $uuidGoogle;
 
         return $this;
     }
@@ -631,19 +684,54 @@ class Users extends ModelBase
     {
         return $this->tokenGithub;
     }
+
+    /**
+     * @return string
+     */
     public function getTokenGoogle()
     {
         return $this->tokenGoogle;
     }
+
+    /**
+     * @return string
+     */
     public function getTokenFacebook()
     {
         return $this->tokenFacebook;
     }
+
+    /**
+     * @return string
+     */
     public function getUId()
     {
         return $this->uid;
     }
 
+    /**
+     * @return string
+     */
+    public function getUuidFacebook()
+    {
+        return $this->uuidFacebook;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUuidGithub()
+    {
+        return $this->uuidGithub;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUuidGoogle()
+    {
+        return $this->uuidGoogle;
+    }
     /**
      * Returns the value of field createdAt
      *
@@ -1098,6 +1186,9 @@ class Users extends ModelBase
             'tokenGoogle'       => 'tokenGoogle',
             'tokenFacebook'     => 'tokenFacebook',
             'uid'               => 'uid',
+            'uuidGithub'        => 'uuidGithub',
+            'uuidGoogle'        => 'uuidGoogle',
+            'uuidFacebook'      => 'uuidFacebook',
             'createdAt'         => 'createdAt',
             'modifiedAt'        => 'modifiedAt',
             'notifications'     => 'notifications',

@@ -196,6 +196,7 @@ class PostsController extends ControllerBase
         $id   = $this->request->getPost('id');
         $auth = $this->auth->getAuth();
         $tags = $this->request->getPost('tags', 'string', null);
+
         if (!$auth) {
             $this->flashSession->error('You must be logged first');
 

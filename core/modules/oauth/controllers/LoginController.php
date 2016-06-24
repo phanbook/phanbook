@@ -28,20 +28,24 @@ use Phanbook\Facebook\Auth as FacebookAuth;
  */
 class LoginController extends ControllerBase
 {
+    /**
+     * @return array|\Phalcon\Http\Response|\Phalcon\Http\ResponseInterface
+     */
     public function githubAction()
     {
         $this->view->disable();
         if (!$this->auth->getAuth()) {
             $config= $this->config->github;
-            // if (!isset($config)) {
-            //     $this->flashSession->error(t('You need add config github token'));
-            // }
             $auth = new GithubAuth($config);
             return $auth->authorize();
         }
         $this->flashSession->success(t('Welcome back '. $this->auth->getName()));
         return $this->currentRedirect();
     }
+
+    /**
+     * @return array|\Phalcon\Http\Response|\Phalcon\Http\ResponseInterface
+     */
     public function googleAction()
     {
         $this->view->disable();
@@ -52,6 +56,10 @@ class LoginController extends ControllerBase
         $this->flashSession->success(t('Welcome back '. $this->auth->getName()));
         return $this->indexRedirect();
     }
+
+    /**
+     * @return array|\Phalcon\Http\Response|\Phalcon\Http\ResponseInterface
+     */
     public function facebookAction()
     {
         $this->view->disable();
@@ -76,14 +84,22 @@ class LoginController extends ControllerBase
         $auth = new GithubAuth($this->config->github);
         list($uid, $token, $user) = $auth->authorize();
         if (isset($token) && is_object($token) && isset($uid)) {
-            //Edit/Create the user because token github not change everytime
-            $object = Users::findFirstByTokenGithub($token->accessToken);
+            //Edit/Create the user because token github not change every time
+            //$object = Users::findFirstByTokenGithub($token->accessToken);
+
+            //Now it change every time
+            $object = Users::findFirstByUuidGithub($uid);
+
             $this->commonOauthSave($uid, $user, $token, $object, 'Github');
         } else {
             $this->flashSession->error('Invalid Github response. Please try again');
             return $this->response->redirect();
         }
     }
+
+    /**
+     * @return \Phalcon\Http\Response|\Phalcon\Http\ResponseInterface
+     */
     public function tokenGoogleAction()
     {
         $this->view->disable();
@@ -91,13 +107,17 @@ class LoginController extends ControllerBase
         list($uid, $token, $user) = $auth->authorize();
         if (isset($token) && is_object($token) && isset($uid)) {
             //Edit/Create the user
-            $object = Users::findFirstByUid($uid);
+            $object = Users::findFirstByUuidGoogle($uid);
             $this->commonOauthSave($uid, $user, $token, $object, 'Google');
         } else {
             $this->flashSession->error('Invalid Google response. Please try again');
             return $this->response->redirect();
         }
     }
+
+    /**
+     * @return \Phalcon\Http\Response|\Phalcon\Http\ResponseInterface
+     */
     public function tokenFacebookAction()
     {
         $this->view->disable();
@@ -105,21 +125,7 @@ class LoginController extends ControllerBase
         list($uid, $token, $user) = $auth->authorize();
         if (isset($token) && is_object($token)) {
             //Edit/Create the user
-            $object = Users::findFirstByUid($uid);
-            $this->commonOauthSave($uid, $user, $token, $object, 'Facebook');
-        } else {
-            $this->flashSession->error('Invalid Google response. Please try again');
-            return $this->response->redirect();
-        }
-    }
-    public function tokenTwitterkAction()
-    {
-        $this->view->disable();
-        $auth = new TwitterAuth($this->config->twitter);
-        list($uid, $token, $user) = $auth->authorize();
-        if (isset($token) && is_object($token)) {
-            //Edit/Create the user
-            $object = Users::findFirstByUid($uid);
+            $object = Users::findFirstByUuidFacebook($uid);
             $this->commonOauthSave($uid, $user, $token, $object, 'Facebook');
         } else {
             $this->flashSession->error('Invalid Google response. Please try again');
@@ -132,12 +138,18 @@ class LoginController extends ControllerBase
      */
     public function indexAction()
     {
-        $this->cookies->set('urlCurrent', $this->request->getHTTPReferer());
+
+        $url = $this->request->getHTTPReferer();
+        if (!empty($url)) {
+            $this->cookies->set('HTTPBACK', serialize($url));
+        }
+
         if ($this->auth->getAuth()) {
             $this->view->disable();
 
             return $this->response->redirect();
         }
+
 
         $form = new LoginForm;
         try {
@@ -146,17 +158,20 @@ class LoginController extends ControllerBase
                     foreach ($form->getMessages() as $message) {
                         $this->flashSession->error($message->getMessage());
                     }
-                } else {
-                    $this->auth->check(
-                        [
-                            'email' => $this->request->getPost('email'),
-                            'password' => $this->request->getPost('password'),
-                            'remember' => true
-                        ]
-                    );
-                    $this->flashSession->success(t('Welcome back '. $this->auth->getName()));
-                    return $this->currentRedirect();
                 }
+
+                $check =
+                $this->auth->check(
+                    [
+                        'email' => $this->request->getPost('email'),
+                        'password' => $this->request->getPost('password'),
+                        'remember' => true
+                    ]
+                );
+                if ($check) {
+                    $this->flashSession->success(t('Welcome back '. $this->auth->getName()));
+                }
+                return $this->currentRedirect();
             }
         } catch (\Exception $e) {
             $this->flashSession->error($e->getMessage());
@@ -192,7 +207,6 @@ class LoginController extends ControllerBase
         if ($object->getOperationMade() == Model::OP_CREATE) {
             $this->flashSession->success('Welcome ' . $object->getInforUser());
         } else {
-            $email = $object->getEmail();
             $this->flashSession->success('Welcome back ' . $object->getInforUser());
         }
     }

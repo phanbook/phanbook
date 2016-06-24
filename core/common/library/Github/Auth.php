@@ -69,12 +69,9 @@ class Auth extends Injectable
             exit('Invalid state');
         } else {
             // Try to get an access token (using the authorization code grant)
-            $token = $provider->getAccessToken(
-                'authorization_code',
-                [
+            $token = $provider->getAccessToken('authorization_code', [
                 'code' => $code
-                ]
-            );
+            ]);
             $uid = $provider->getUserUid($token);
             $userDetails = $provider->getUserDetails($token);
             return array($uid, $token, $userDetails);

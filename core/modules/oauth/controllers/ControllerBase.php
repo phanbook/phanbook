@@ -60,10 +60,12 @@ class ControllerBase extends Controller
         if (!$object) {
             $object = new Users();
             //setTokenGithub or setTokenGoogle
+            $uuidName  = 'setUuid' . $nameOauth;
             $tokenName = 'setToken'. $nameOauth;
             $object->$tokenName($token->accessToken);
             $object->setTokenType(Users::TOKEN_TYPE);
-            $object->setUid($uid);
+            //$object->setUid($uid);
+            $object->$uuidName($uid);
             $object->setEmail($user->email);
             $object->setFirstname($user->firstName);
             //@ Todo later, it perfect if we do haven't delete in database
