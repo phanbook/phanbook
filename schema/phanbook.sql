@@ -6637,5 +6637,5 @@ ALTER TABLE `vote`
 
 
 ALTER TABLE `users` ADD `uuidGithub` VARCHAR(100) NULL AFTER `uid`;
-ALTER TABLE `users` ADD `uuidGoole` VARCHAR(100) NULL AFTER `uid`;
+ALTER TABLE `users` ADD `uuidGoogle` VARCHAR(100) NULL AFTER `uid`;
 ALTER TABLE `users` ADD `uuidFacebook` VARCHAR(100) NULL AFTER `uid`;
