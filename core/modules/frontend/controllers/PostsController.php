@@ -331,11 +331,14 @@ class PostsController extends ControllerBase
 
         if (!$object = Posts::findFirstById($id)) {
             $this->flashSession->error(t('Posts doesn\'t exist.'));
-
             return $this->indexRedirect();
         }
         if ($object->getDeleted()) {
             $this->flashSession->error('The Post is deleted');
+            return $this->indexRedirect();
+        }
+        if (!$object->isPublish()) {
+            $this->flashSession->error('The Post have not publish');
             return $this->indexRedirect();
         }
         $ipAddress = $this->request->getClientAddress();

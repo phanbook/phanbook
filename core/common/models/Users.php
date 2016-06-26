@@ -1160,6 +1160,11 @@ class Users extends ModelBase
             return $this->karma;
         }
     }
+
+    /**
+     * @param int $limit
+     * @return \Phalcon\Mvc\Model\ResultsetInterface
+     */
     public static function highestKarma($limit = 4)
     {
         $user = Users::query()
@@ -1170,6 +1175,7 @@ class Users extends ModelBase
             return $user;
         }
     }
+    
     /**
      * Independent Column Mapping.
      */

@@ -764,6 +764,10 @@ class Posts extends ModelBase
         }
         return false;
     }
+
+    /**
+     * @return bool|\Phalcon\Mvc\Model\ResultsetInterface
+     */
     public static function getHotArticle()
     {
         $posts = Posts::query()
@@ -882,6 +886,17 @@ class Posts extends ModelBase
     public function postFavorite()
     {
         return $this->postSubscriber->count();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPublish()
+    {
+        if ($this->status == self::PUBLISH_STATUS) {
+            return true;
+        }
+        return false;
     }
     /**
      * Independent Column Mapping.
