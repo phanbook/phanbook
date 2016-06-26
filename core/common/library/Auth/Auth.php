@@ -38,15 +38,14 @@ class Auth extends Component
         if (!$user) {
             $this->registerUserThrottling(0);
             $this->flashSession->error(t('Wrong email/password combination!'));
-            return $this->response->redirect($this->request->getHTTPReferer(), true);
+            return false;
         }
 
         // Check the password
         if (!$this->security->checkHash($credentials['password'], $user->getPasswd())) {
             //$this->registerUserThrottling($user->id);
             $this->flashSession->error(t('Wrong email/password combination!'));
-            return $this->response->redirect($this->request->getHTTPReferer(), true);
-
+            return false;
         }
 
         // Check if the user was flagged
