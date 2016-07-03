@@ -48,7 +48,10 @@ class PostsController extends ControllerBase
                 'status' => [
                     'title'  => t('Status'),
                     'order'  => true,
+                    'orderKey'  => 'a.status',
                     'filter' => ['type' => 'input', 'sanitize' => 'string', 'style' => ''],
+                    'filterKey'  => 'a.status',
+
                 ],
                 'username' => [
                     'title'  => t('Users'),
