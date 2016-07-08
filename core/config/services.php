@@ -84,12 +84,13 @@ $di->set(
     function () use ($di) {
         $url = new UrlResolver();
         $config = $di->get('config');
-        $url->setBaseUri($config->application->baseUri);
-        if (!$config->application->debug) {
+
+        if (APPLICATION_ENV == 'production') {
             $url->setStaticBaseUri($config->application->production->staticBaseUri);
         } else {
             $url->setStaticBaseUri($config->application->development->staticBaseUri);
         }
+        $url->setBaseUri($config->application->baseUri);
         return $url;
     }
 );

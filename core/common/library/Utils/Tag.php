@@ -57,7 +57,6 @@ class Tag
         $tagsId    = [];
         $postId    = $object->getId();
         $getTagsId = $this->getTagsId($tag);
-
         if (is_array($getTagsId)) {
             $postsTags = PostsTags::find(
                 [
@@ -85,12 +84,14 @@ class Tag
                 }
                 //Update the total of posts related to a tags
                 if ($object->getOperationMade() == \Phalcon\Mvc\Model::OP_CREATE) {
-                    $tags    = Tags::findFirstById($tagsId);
+
+                    $tags    = Tags::findFirstById($tagId);
                     $number  = $tags->getNumberposts();
                     $tags->setNumberPosts($number + 1);
                     $tags->save();
                 }
             }
+
             return true;
         }
         return false;
