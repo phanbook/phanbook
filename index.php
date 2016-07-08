@@ -18,7 +18,6 @@ ini_set('memory_limit', '-1');
 //  Global constants
 define('DS', DIRECTORY_SEPARATOR);
 define('ROOT_DIR', dirname(__FILE__) . DS);
-define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'local'));
 
 require ROOT_DIR . 'core/config/loader.php';
 require ROOT_DIR . 'vendor/autoload.php';

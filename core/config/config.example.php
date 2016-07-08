@@ -19,6 +19,11 @@
  *
  * @package Phanbook
  */
+/**
+ * - Production is default
+ * - Development just replace production to development
+ */
+define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production';
 return new \Phalcon\Config(
     [
         /**
@@ -33,11 +38,8 @@ return new \Phalcon\Config(
                 'charset'  => 'utf8',
             ]
         ],
-        /**
-         * - Production is default
-         * - Development just replace production to development
-         */
-        'environment' => 'production',
+
+
         /**
          * Application settings
          */

@@ -17,6 +17,7 @@ use Phalcon\Loader;
 use Phalcon\DiInterface;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\View;
+use Phalcon\Mvc\Url;
 use Phalcon\Mvc\ModuleDefinitionInterface;
 use Phalcon\Mvc\View\Engine\Volt;
 use Phalcon\Events\Manager as EventsManager;
@@ -41,6 +42,23 @@ class Module implements ModuleDefinitionInterface
      */
     public function registerServices(DiInterface $di)
     {
+
+        //Read configuration
+        $config = include __DIR__ . "/config/config.php";
+
+        $configGlobal = $di->getConfig();
+
+        $di->set('url', function () use ($config, $configGlobal) {
+            $url = new Url();
+            if (APPLICATION_ENV == 'production') {
+                $url->setStaticBaseUri($configGlobal->application->production->staticBaseUri);
+            } else {
+                $url->setStaticBaseUri($configGlobal->application->development->staticBaseUri);
+            }
+            $url->setBaseUri($config->application->baseUri);
+
+            return $url;
+        });
 
         //Registering a dispatcher
         $di->set('dispatcher', function () use ($di) {

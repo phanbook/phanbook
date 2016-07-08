@@ -156,20 +156,20 @@ class ControllerBase extends Controller
     {
         $this->assets
             ->addCss('//fonts.googleapis.com/css?family=Open+Sans', false)
-            ->addCss('assets/css/bootstrap.min.css')
-            ->addCss('assets/css/animate.css')
-            ->addCss('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css', false)
-            ->addCss('assets/css/app.v1.css')
-            ->addCss('assets/css/app-custom.css');
+            ->addCss('core/assets/css/bootstrap.min.css')
+            ->addCss('core/assets/css/font-awesome.min.css')
+            ->addCss('core/assets/css/animate.css')
+            ->addCss('backend/assets/css/app.v1.css')
+            ->addCss('backend/assets/css/app-custom.css');
         $this->assets
-            ->addJs('//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js', false)
-            ->addJs('//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js', false)
-            ->addJs('//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js', false)
-            ->addJs('assets/js/growl/jquery.growl.js')
-            ->addJs('assets/js/jquery.taginput.src.js')
-            ->addJs('assets/js/chosen/chosen.jquery.min.js')
-            ->addJs('assets/js/app.js')
-            ->addJs('assets/js/app.plugin-custom.js');
+            ->addJs('core/assets/js/jquery.js')
+            ->addJs('core/assets/js/jquery-ui.js')
+            ->addJs('core/assets/js/bootstrap.js')
+            ->addJs('core/assets/js/growl/jquery.growl.js')
+            ->addJs('core/assets/js/chosen/chosen.jquery.min.js')
+            ->addJs('backend/assets/js/jquery.taginput.src.js')
+            ->addJs('backend/assets/js/app.js')
+            ->addJs('backend/assets/js/app.plugin-custom.js');
     }
 
     /**
@@ -544,8 +544,8 @@ class ControllerBase extends Controller
             }
         }
 
-        $this->assets->addCss('assets/js/chosen/chosen.css');
-        $this->assets->addJs('assets/js/datatables/jquery.dataTables.min.js');
+        $this->assets->addCss('core/assets/js/chosen/chosen.css');
+        $this->assets->addJs('core/assets/js/datatables/jquery.dataTables.min.js');
 
         $paginator = new Paginator(
             [

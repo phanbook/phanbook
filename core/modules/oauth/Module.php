@@ -52,11 +52,13 @@ class Module implements ModuleDefinitionInterface
         // The URL component is used to generate all kind of urls in the application
         $di->set('url', function () use ($config, $configGlobal) {
             $url = new Url();
-            if ($configGlobal->environment == 'production') {
+            if (APPLICATION_ENV == 'production') {
                 $url->setStaticBaseUri($configGlobal->application->production->staticBaseUri);
             } else {
-                $url->setBaseUri($config->application->baseUri);
+                $url->setStaticBaseUri($configGlobal->application->development->staticBaseUri);
             }
+            $url->setBaseUri($config->application->baseUri);
+
             return $url;
         });
 

@@ -254,11 +254,11 @@ class PostsController extends ControllerBase
     public function markdownEditor()
     {
         $this->assets
-            ->addCss('assets/css/editor.css');
+            ->addCss('backend/assets/css/editor.css');
         $this->assets
-            ->addJs('assets/js/tags-suggestion.js')
-            ->addJs('assets/js/editor/markdown.js')
-            ->addJs('assets/js/editor/md-converts.js')
-            ->addJs('assets/js/editor/editor.js');
+            ->addJs('backend/assets/js/tags-suggestion.js')
+            ->addJs('backend/assets/js/editor/markdown.js')
+            ->addJs('backend/assets/js/editor/md-converts.js')
+            ->addJs('backend/assets/js/editor/editor.js');
     }
 }
