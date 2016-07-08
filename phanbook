@@ -50,7 +50,7 @@ fi
 if [ "docker" == "$1" ]; then
     if ! which docker > /dev/null; then
         echo "Docker doesn't seem to be installed. Please download and install it"
-        echo "from http://www.docker.io/downloads.html and re-run phanbook."
+        echo "from https://docs.docker.com/engine/installation/ and re-run phanbook."
         exit 3
     fi
     if [[ "destroy" == "$2" ]]; then
