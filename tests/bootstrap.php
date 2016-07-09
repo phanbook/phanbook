@@ -22,9 +22,7 @@ ini_set('memory_limit', '-1');
 if (!defined('ROOT_DIR')) {
     define('ROOT_DIR', dirname(__DIR__) .'/');
 }
-if (!defined('APPLICATION_ENV')) {
-    define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'local'));
-}
+
 
 require ROOT_DIR . 'vendor/autoload.php';
 require ROOT_DIR . 'core/config/loader.php';

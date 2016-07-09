@@ -23,7 +23,9 @@
  * - Production is default
  * - Development just replace production to development
  */
-define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
+if (!defined('APPLICATION_ENV')) {
+    define('APPLICATION_ENV', getenv('APPLICATION_ENV') ? : 'production');
+}
 
 return new \Phalcon\Config(
     [
