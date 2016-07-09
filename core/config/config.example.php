@@ -129,8 +129,10 @@ return new \Phalcon\Config(
          *
          * @link http://github.com/phanbook/docs/lanuage.md
          */
-        'language' => 'en_EN',
-        /**
+        'language' => [
+            'code' => 'en',
+            'gettext' => false
+        ],        /**
          * Set theme you want to use, for example 'discourse'
          *
          * @link http://github.com/phanbook/docs/theme.md

@@ -35,7 +35,7 @@ use Phalcon\Queue\Beanstalk;
 use Phalcon\Config\Adapter\Php         as AdapterPhp;
 use Phalcon\Logger\Adapter\File        as FileLogger;
 use Phalcon\Mvc\View;
-
+use Phalcon\Translate\Adapter\NativeArray;
 use Phanbook\Utils\Constants;
 use Phanbook\Mail\Mail;
 use Phanbook\Auth\Auth;
@@ -342,17 +342,27 @@ $di->set(
     },
     true
 );
-//Translation application use gettext
+//Translation application use Gettext or Native Array
 $di->set(
     'translation',
     function () use ($di) {
-        $translation = new Gettext(
-            [
-                'locale' => $di->get('config')->language,
+        $language = $di->get('config')->language;
+        if ($language->gettext) {
+            $translation = new Gettext([
+                'locale' => $language->code,
                 'directory' => ROOT_DIR . 'core/lang',
                 'defaultDomain'=> 'messages',
-            ]
-        );
+            ]);
+        } else {
+            $path = ROOT_DIR . 'core/lang/messages/' . $language->code . '.php';
+            if (!file_exists($path)) {
+                throw new \Exception("You must specify a language file for language '$language->code'");
+            }
+            $translation = new NativeArray([
+               'content' => require_once $path
+            ]);
+        }
+
         return $translation;
     },
     true
