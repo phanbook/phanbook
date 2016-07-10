@@ -259,7 +259,13 @@ class ControllerBase extends Controller
         $this->view->disable();
 
         if (empty($model)) {
-            $class = 'Phanbook\Models\\' . ucfirst($this->router->getControllerName());
+            $model = $this->router->getControllerName();
+            //Becuase controller pages use model posts render data
+            if ($model == 'pages') {
+                $model = 'posts';
+            }
+
+            $class = 'Phanbook\Models\\' . ucfirst($model);
         }
 
         if (!class_exists($class)) {

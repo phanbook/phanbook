@@ -69,6 +69,7 @@ class PostsController extends ControllerBase
                     'a.sticked',
                     'a.status',
                     'u.username',
+                    'a.deleted'
                 ],
                 'joins' => [
                     [
@@ -77,7 +78,8 @@ class PostsController extends ControllerBase
                         'on' => 'a.usersId = u.id',
                         'alias' => 'u'
                     ]
-                ]
+                ],
+                'where' => 'a.type != "pages" AND a.deleted = 0'
             ]
         ];
     }

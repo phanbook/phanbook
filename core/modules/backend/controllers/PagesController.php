@@ -63,7 +63,7 @@ class PagesController extends ControllerBase
                         'alias' => 'u'
                     ]
                 ],
-                'where' => 'a.type = "pages"'
+                'where' => 'a.type = "pages" AND a.deleted = 0'
             ]
         ];
     }
