@@ -40,13 +40,13 @@
                                     <span class="form-description">Please choose  suitable Keywords Ex : <span class="color">question , poll</span> .</span>
                                 </p>
                                 <div class="tag-suggestion-wrapper tag-suggestions"></div>
-                            </div>
-                            <div id="form-textarea">
-                                <p>
+                                <div id="form-textarea">
                                     <label class="required">Details<span>*</span></label>
-                                     {{ form.render('content')}}
+                                    <div class="input-context">
+                                        {{ form.render('content')}}
+                                     </div>
                                     <span class="form-description">Type the description thoroughly and in detail .</span>
-                                </p>
+                                </div>
                             </div>
                             <p class="form-submit">
                                  {{form.render('save')}}

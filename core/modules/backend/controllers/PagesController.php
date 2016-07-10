@@ -16,6 +16,7 @@ use Phalcon\Mvc\View;
 use Phanbook\Backend\Forms\PostsForm;
 use Phanbook\Models\Posts;
 use Phanbook\Utils\Slug;
+use Phanbook\Utils\Editor;
 
 /**
  * Class IndexController
@@ -98,6 +99,8 @@ class PagesController extends ControllerBase
      */
     public function newAction()
     {
+        $editor = new Editor();
+        $editor->init();
         $this->view->form = new PostsForm;
         $this->tag->setTitle('Adding post');
         $this->view->pick($this->router->getControllerName() . '/item');

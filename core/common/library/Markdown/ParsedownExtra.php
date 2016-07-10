@@ -44,11 +44,15 @@ class ParsedownExtra extends Parsedown
         array_unshift($this->InlineTypes['['], 'FootnoteMarker');
     }
 
-    // 
+    //
     // ~
 
     function text($text)
     {
+        if ($this->isHTML($text)) {
+            return $text;
+        }
+
         $markup = parent::text($text);
 
         // merge consecutive dl elements
@@ -66,11 +70,20 @@ class ParsedownExtra extends Parsedown
         return $markup;
     }
 
-    // 
-    // Blocks
-    // 
+    /**
+     * @param $str
+     * @return bool
+     */
+    protected function isHTML($str)
+    {
+        return preg_match( "/\/[a-z]*>/i", $str ) != 0;
+    }
 
-    // 
+    //
+    // Blocks
+    //
+
+    //
     // Abbreviation
 
     protected function blockAbbreviation($Line)
@@ -86,7 +99,7 @@ class ParsedownExtra extends Parsedown
         }
     }
 
-    // 
+    //
     // Footnote
 
     protected function blockFootnote($Line)
@@ -134,7 +147,7 @@ class ParsedownExtra extends Parsedown
         return $Block;
     }
 
-    // 
+    //
     // Definition List
 
     protected function blockDefinitionList($Line, $Block)
@@ -195,7 +208,7 @@ class ParsedownExtra extends Parsedown
         }
     }
 
-    // 
+    //
     // Header
 
     protected function blockHeader($Line)
@@ -213,7 +226,7 @@ class ParsedownExtra extends Parsedown
         return $Block;
     }
 
-    // 
+    //
     // Markup
 
     protected function blockMarkupComplete($Block)
@@ -225,7 +238,7 @@ class ParsedownExtra extends Parsedown
         return $Block;
     }
 
-    // 
+    //
     // Setext
 
     protected function blockSetextHeader($Line, array $Block = null)
@@ -243,11 +256,11 @@ class ParsedownExtra extends Parsedown
         return $Block;
     }
 
-    // 
+    //
     // Inline Elements
-    // 
+    //
 
-    // 
+    //
     // Footnote Marker
 
     protected function inlineFootnoteMarker($Excerpt)
@@ -285,7 +298,7 @@ class ParsedownExtra extends Parsedown
 
     private $footnoteCount = 0;
 
-    // 
+    //
     // Link
 
     protected function inlineLink($Excerpt)
@@ -303,9 +316,9 @@ class ParsedownExtra extends Parsedown
         return $Link;
     }
 
-    // 
+    //
     // ~
-    // 
+    //
 
     protected function unmarkedText($text)
     {
@@ -323,9 +336,9 @@ class ParsedownExtra extends Parsedown
         return $text;
     }
 
-    // 
+    //
     // Util Methods
-    // 
+    //
 
     protected function addDdElement(array $Line, array $Block)
     {
@@ -445,7 +458,7 @@ class ParsedownExtra extends Parsedown
         // http://stackoverflow.com/q/1148928/200145
         libxml_use_internal_errors(true);
 
-        $DOMDocument = new DOMDocument;
+        $DOMDocument = new \DOMDocument;
 
         // http://stackoverflow.com/q/11309194/200145
         $elementMarkup = mb_convert_encoding($elementMarkup, 'HTML-ENTITIES', 'UTF-8');
@@ -499,9 +512,9 @@ class ParsedownExtra extends Parsedown
         return $A['number'] - $B['number'];
     }
 
-    // 
+    //
     // Fields
-    // 
+    //
 
     protected $regexAttribute = '(?:[#.][-\w]+[ ]*)';
 }

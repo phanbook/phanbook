@@ -132,12 +132,19 @@ return new \Phalcon\Config(
         'language' => [
             'code' => 'en',
             'gettext' => false
-        ],        /**
+        ],
+        /**
          * Set theme you want to use, for example 'discourse'
          *
          * @link http://github.com/phanbook/docs/theme.md
          */
         'theme'    => 'default',
+        /**
+         * Set editor you want to use, for example 'markdown' default is ckeditor
+         *
+         */
+        'editor' => 'ckeditor',
+
         /**
          * The parameter you get form
          *

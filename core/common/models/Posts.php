@@ -595,6 +595,7 @@ class Posts extends ModelBase
     public function beforeValidationOnCreate()
     {
         $this->sticked     = 'N';
+        $this->status      = self::PUBLISH_STATUS;
         $this->locked      = self::NO_LOCKED;
         $this->deleted     = 0;
         $this->numberViews = 0;

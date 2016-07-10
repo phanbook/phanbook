@@ -68,12 +68,13 @@ class QuestionsForm extends Form
             'content',
             array(
             'placeholder' => t('Please be sure to answer the question. Provide details and share your research!'),
-            'class'       => 'wmd-input',
             'id'          => 'question-details',
             'required'    => true,
             'rows'        => 8,
-            'cols'        => 58
-
+            'cols'        => 100,
+            'data-provide'=> 'markdown',
+            'data-iconlibrary' => 'fa',
+            'required'    => true,
             )
         );
         $content->addValidator(

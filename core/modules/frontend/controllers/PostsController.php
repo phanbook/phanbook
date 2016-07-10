@@ -13,6 +13,7 @@
 namespace Phanbook\Frontend\Controllers;
 
 use Phanbook\Utils\Slug;
+use Phanbook\Utils\Editor;
 use Phanbook\Models\Posts;
 use Phanbook\Models\Vote;
 use Phanbook\Models\Karma;
@@ -36,6 +37,9 @@ class PostsController extends ControllerBase
     {
 
         parent::initialize();
+
+        $editor = new Editor();
+        $editor->init();
     }
 
     /**
@@ -391,6 +395,7 @@ class PostsController extends ControllerBase
                 'postRelated'   => Posts::postRelated($object)
             ]
         );
+
         $this->tag->setTitle($this->escaper->escapeHtml($object->getTitle()));
         return $this->view->pick('single');
     }

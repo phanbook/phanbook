@@ -15,13 +15,14 @@
     {% endif %}
     <div class="question-inner">
         <div class="clearfix"></div>
-        <p class="question-desc">
+        <div class="question-desc">
             {% if listPost is defined %}
-                {{ truncate(post.content, 300, '...')}}
+                {#{ this.markdown.text(truncate(post.content, 200, '...'))}#}
+                {{truncate(post.content, 200, '...')}}
             {% else %}
                 {{ this.markdown.text(post.content)}}
             {% endif %}
-        </p>
+        </div>
         <div class="question-details">
             {% if post.acceptedAnswer == "Y"%}
                 <span class="question-answered question-answered-done"> <i class="fa fa-check"></i>solved</span>

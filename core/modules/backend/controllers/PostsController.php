@@ -17,6 +17,7 @@ use Phanbook\Backend\Forms\StickyForm;
 use Phanbook\Backend\Forms\PostsForm;
 use Phanbook\Models\Posts;
 use Phanbook\Utils\Slug;
+use Phanbook\Utils\Editor;
 
 /**
  * Class IndexController
@@ -139,9 +140,11 @@ class PostsController extends ControllerBase
      */
     public function newAction()
     {
+        $editor = new Editor();
+        $editor->init();
         $this->view->form = new PostsForm;
         $this->tag->setTitle('Adding post');
-        $this->markdownEditor();
+        $this->loadAssetsTag();
         $this->view->pick($this->router->getControllerName() . '/item');
     }
     public function editAction($id)
@@ -151,10 +154,13 @@ class PostsController extends ControllerBase
 
             return $this->currentRedirect();
         }
+        $editor = new Editor();
+        $editor->init();
+
         $this->tag->setTitle(t('Edit posts'));
         $this->view->form   = new PostsForm($object);
         $this->view->object = $object;
-        $this->markdownEditor();
+        $this->loadAssetsTag();
 
         return $this->view->pick($this->router->getControllerName() . '/item');
     }
@@ -249,18 +255,12 @@ class PostsController extends ControllerBase
         }
     }
     /**
-     * Get lib js and css editor
      *
      * @return mixed
      */
-    public function markdownEditor()
+    public function loadAssetsTag()
     {
-        $this->assets
-            ->addCss('backend/assets/css/editor.css');
-        $this->assets
-            ->addJs('backend/assets/js/tags-suggestion.js')
-            ->addJs('backend/assets/js/editor/markdown.js')
-            ->addJs('backend/assets/js/editor/md-converts.js')
-            ->addJs('backend/assets/js/editor/editor.js');
+
+        $this->assets->addJs('backend/assets/js/tags-suggestion.js');
     }
 }

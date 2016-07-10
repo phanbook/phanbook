@@ -34,7 +34,7 @@
         var googleAnalytic = '{{ this.config.googleAnalytic }}';
     </script>
 </head>
-<body>
+<body class="{{action}} {{controller}}">
 
 <div class="loader"><div class="loader_html"></div></div>
 <div class="m-b-md">
