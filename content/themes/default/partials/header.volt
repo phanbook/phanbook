@@ -1,4 +1,5 @@
-<div class="setting-panel">
+{% if isLogin() %}
+<div class="setting-panel" style="display:none">
         <section class="container">
             <div class="row">
                 <div class="col-md-6">
@@ -32,6 +33,7 @@
             </div>
         </section>
 </div><!-- End login-panel -->
+{% endif %}
 <div id="header-top">
     <section class="container clearfix">
         <nav class="header-top-nav">
