@@ -15,7 +15,6 @@ namespace Phanbook\Forms;
 use Phalcon\Forms\Form;
 use Phanbook\Models\Tags;
 
-
 class FormBase extends Form
 {
 

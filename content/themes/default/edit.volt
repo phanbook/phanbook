@@ -26,17 +26,12 @@
                                      {{ form.render('title', ['id' : 'question-title']) }}
                                     <span class="form-description">Please choose an appropriate title for the question to answer it even easier .</span>
                                 </p>
-                                {% set value = null %}
-                                {% if post.tag is defined %}
-                                    <!-- set value tag to tag-input when to edit post -->
-                                    {% for key, tag in post.tag %}
-                                        {% set value = tag.getSlug() ~ "," ~ value %}
-                                    {% endfor %}
-                                {% endif %}
+
                                 <p>
                                     <label class="required">Tags<span>*</span></label>
-                                    <input type="text" id="tag-input" value="" name="tag-input" class="tag-editor">
-                                    {{ form.render('tags',['value' : value])}}
+                                    <div class="input-context">
+                                        {{ form.renderTags() }}
+                                    </div>
                                     <span class="form-description">Please choose  suitable Keywords Ex : <span class="color">question , poll</span> .</span>
                                 </p>
                                 <div class="tag-suggestion-wrapper tag-suggestions"></div>
@@ -58,4 +53,10 @@
                 </div><!-- End page-content -->
             </div><!-- End main -->
         </div><!-- End row -->
+{% endblock %}
+
+{% block scripts%}
+    <script type="text/javascript">
+        $('select').select2();
+    </script>
 {% endblock %}
