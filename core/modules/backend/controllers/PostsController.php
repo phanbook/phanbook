@@ -144,7 +144,7 @@ class PostsController extends ControllerBase
         $editor->init();
         $this->view->form = new PostsForm;
         $this->tag->setTitle('Adding post');
-        $this->loadAssetsTag();
+        $this->addAssetsSelect();
         $this->view->pick($this->router->getControllerName() . '/item');
     }
     public function editAction($id)
@@ -160,7 +160,7 @@ class PostsController extends ControllerBase
         $this->tag->setTitle(t('Edit posts'));
         $this->view->form   = new PostsForm($object);
         $this->view->object = $object;
-        $this->loadAssetsTag();
+        $this->addAssetsSelect();
 
         return $this->view->pick($this->router->getControllerName() . '/item');
     }
@@ -258,9 +258,9 @@ class PostsController extends ControllerBase
      *
      * @return mixed
      */
-    public function loadAssetsTag()
+    protected function addAssetsSelect()
     {
-
-        $this->assets->addJs('backend/assets/js/tags-suggestion.js');
+        $this->assets->addCss('core/assets/js/select/select2.min.css');
+        $this->assets->addJs('core/assets/js/select/select2.min.js');
     }
 }

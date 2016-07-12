@@ -25,6 +25,9 @@ class Tag
      */
     public function getTagsId($tag)
     {
+        if (is_array($tag)) {
+            return $tag;
+        }
         if (!is_string($tag) || empty($tag)) {
             return 'You need to add tags for your posts';
         }

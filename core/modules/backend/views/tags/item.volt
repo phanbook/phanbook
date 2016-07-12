@@ -37,7 +37,6 @@
                 {{ form.render('save') }}
             </div>
         </div>
-        {{ form.render('csrf', ['value': this.security.getToken()]) }}
         {{ endform() }}
     </div>
 </section>

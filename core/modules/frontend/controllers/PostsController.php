@@ -180,8 +180,8 @@ class PostsController extends ControllerBase
                 'breadcrumbName'     => 'Ask Questions'
             ]
         );
+        $this->addAssetsSelect();
         $this->tag->setTitle('Edit a questions or tips ');
-        $this->assets->addJs('core/assets/js/tags-suggest.js');
         return $this->view->pick('edit');
     }
 
@@ -315,7 +315,7 @@ class PostsController extends ControllerBase
 
             ]
         );
-        $this->assets->addJs('core/assets/js/tags-suggest.js');
+        $this->addAssetsSelect();
         $this->tag->setTitle($this->escaper->escapeHtml(t('Create Questions')));
         return $this->view->pick('edit');
     }
@@ -398,5 +398,10 @@ class PostsController extends ControllerBase
 
         $this->tag->setTitle($this->escaper->escapeHtml($object->getTitle()));
         return $this->view->pick('single');
+    }
+    protected function addAssetsSelect()
+    {
+        $this->assets->addCss('core/assets/js/select/select2.min.css');
+        $this->assets->addJs('core/assets/js/select/select2.min.js');
     }
 }

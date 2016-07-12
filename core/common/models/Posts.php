@@ -899,6 +899,14 @@ class Posts extends ModelBase
         }
         return false;
     }
+    public function getTagsId()
+    {
+        $ids = [];
+        foreach ($this->tag as $key => $item) {
+            $ids[] = $item->id;
+        }
+        return $ids;
+    }
     /**
      * Independent Column Mapping.
      */

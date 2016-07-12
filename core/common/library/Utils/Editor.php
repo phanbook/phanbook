@@ -14,7 +14,6 @@ namespace Phanbook\Utils;
 
 use Phalcon\Mvc\User\Component;
 
-
 class Editor extends Component
 {
 

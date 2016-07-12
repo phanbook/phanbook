@@ -113,19 +113,7 @@
                     </div>
                     <div id="post-tag" class="ibox-content">
                         <div class="form-group">
-                            {% set value = null %}
-                            {% if object.tag is defined %}
-                                <!-- set value tag to tag-input when to edit post -->
-                                {% for key, tag in object.tag %}
-                                    {% set value = tag.getSlug() ~ "," ~ value %}
-                                {% endfor %}
-                            {% endif %}
-                            <!-- Start change tag display way -->
-                            <div class="tag-editor" >
-                                <input type="text" id="tag-input" value="" class="form-control"name="tag-input">
-                                {#<input class="button tagadd" type="button" value="Add">#}
-                            </div>
-                            {{form.render('tags', ['value' : value])}}
+                            {{ form.renderTags()}}
                             <p>Separate tags with commas</p>
                         </div>
                         <!-- Display sugesstion tags for users -->
@@ -177,4 +165,10 @@
         {{ endform() }}
     </div>
 </section>
+{% endblock %}
+
+{% block scripts%}
+    <script type="text/javascript">
+        $('select').select2();
+    </script>
 {% endblock %}

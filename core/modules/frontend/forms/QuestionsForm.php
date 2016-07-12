@@ -12,7 +12,7 @@
  */
 namespace Phanbook\Frontend\Forms;
 
-use Phalcon\Forms\Form;
+use Phanbook\Forms\FormBase;
 use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Element\Submit;
 use Phalcon\Forms\Element\Hidden;
@@ -21,13 +21,14 @@ use Phalcon\Validation\Validator\PresenceOf;
 use Phalcon\Validation\Validator\Identical;
 use Phanbook\Models\Province;
 
-class QuestionsForm extends Form
+class QuestionsForm extends FormBase
 {
     public function initialize($entity = null)
     {
         // In edit page the id is hidden
         if (!is_null($entity)) {
             $this->add(new Hidden('id'));
+            $this->tagsId = $entity->getTagsId();
         }
 
         //title
