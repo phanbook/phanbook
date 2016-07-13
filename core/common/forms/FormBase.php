@@ -27,7 +27,7 @@ class FormBase extends Form
 
         $tags = Tags::find();
         foreach ($tags as $key => $tag) {
-            $selected = 'null';
+            $selected = '';
             if (is_array($this->tagsId)) {
                 if (in_array($tag->id, $this->tagsId)) {
                     $selected = 'selected';
