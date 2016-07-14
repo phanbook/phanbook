@@ -37,11 +37,16 @@ $di['router'] = function () use ($modules, $di) {
             continue;
         }
 
-        $moduleRouting = ROOT_DIR . 'core/modules/'. $moduleName .'/config/routing.php';
-        if (file_exists($moduleRouting) && is_file($moduleRouting)) {
-            include $moduleRouting;
+        if (isset($module['router'])) {
+            $routing = $module['router'];
+
+        } else {
+            $routing = ROOT_DIR . 'core/modules/'. $moduleName .'/config/routing.php';
+        }
+
+        if (file_exists($routing) && is_file($routing)) {
+            include $routing;
         }
     }
-
     return $router;
 };
