@@ -92,13 +92,13 @@ class Phanbook
     }
     /**
      * Retrieves the file name of the current theme with url.
-     * /about it will return such as content/themes/default/page-about.volt
+     * /about it will return such as content/themes/default/pages/about.volt
      *
      * @return string
      */
     public function getPageFile($name)
     {
-        return ROOT_DIR . 'content/themes/' . $this->theme . '/page-'. $name . '.volt';
+        return ROOT_DIR . 'content/themes/' . $this->theme . '/pages/'. $name . '.volt';
     }
 
     public function saveConfig($arrayConfig)
