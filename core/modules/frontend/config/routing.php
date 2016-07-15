@@ -63,6 +63,11 @@ $router->add('/questions', [
     'action' => 'index'
 ]);
 
+$router->add('/posts/{type}', [
+    'controller' => 'posts',
+    'action' => 'index'
+]);
+
 /**
  * @link https://docs.phalconphp.com/en/latest/reference/routing.html#match-callbacks
  */

@@ -53,6 +53,10 @@ class PostsController extends ControllerBase
         $page    = isset($_GET['page']) ? (int)$_GET['page'] : $this->numberPage;
         $perPage = isset($_GET['perPage']) ? (int)$_GET['perPage'] : $this->perPage;
 
+        if (empty($tab)) {
+            $tab = $this->dispatcher->getParam('type');
+        }
+
         if ($tab == "answers") {
             $join = [
                 'type'  => 'join',
