@@ -55,6 +55,12 @@ try {
 
     echo $application->handle()->getContent();
 } catch (Exception $e) {
+
+    if (APPLICATION_ENV == 'development') {
+        d($e->getMessage(), false);
+        d($e->getTraceAsString());
+    }
+
     $logger = $di->get('logger');
     $logger->error($e->getMessage());
     $logger->error($e->getTraceAsString());
