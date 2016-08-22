@@ -140,9 +140,12 @@ class LoginController extends ControllerBase
     {
 
         $url = $this->request->getHTTPReferer();
-        if (!empty($url)) {
-            $this->cookies->set('HTTPBACK', serialize($url));
+        if (empty($url)) {
+            $url = ($this->request->isSecureRequest()
+            ? 'https://' : 'http://') . $this->request->getHttpHost() . '/oauth/login';
         }
+
+        $this->cookies->set('HTTPBACK', serialize($url));
 
         if ($this->auth->getAuth()) {
             $this->view->disable();
@@ -152,29 +155,26 @@ class LoginController extends ControllerBase
 
 
         $form = new LoginForm;
-        try {
-            if ($this->request->isPost()) {
-                if (!$form->isValid($this->request->getPost())) {
-                    foreach ($form->getMessages() as $message) {
-                        $this->flashSession->error($message->getMessage());
-                    }
-                }
 
-                $check =
-                $this->auth->check(
-                    [
-                        'email' => $this->request->getPost('email'),
-                        'password' => $this->request->getPost('password'),
-                        'remember' => true
-                    ]
-                );
-                if ($check) {
-                    $this->flashSession->success(t('Welcome back '. $this->auth->getName()));
+        if ($this->request->isPost()) {
+            if (!$form->isValid($this->request->getPost())) {
+                foreach ($form->getMessages() as $message) {
+                    $this->flashSession->error($message->getMessage());
                 }
-                return $this->currentRedirect();
             }
-        } catch (\Exception $e) {
-            $this->flashSession->error($e->getMessage());
+
+            $check =
+            $this->auth->check(
+                [
+                    'email' => $this->request->getPost('email'),
+                    'password' => $this->request->getPost('password'),
+                    'remember' => true
+                ]
+            );
+            if ($check) {
+                $this->flashSession->success(t('Welcome back '. $this->auth->getName()));
+            }
+            return $this->currentRedirect();
         }
         $this->view->form  = $form;
     }
