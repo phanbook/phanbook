@@ -160,7 +160,7 @@ class RegisterController extends ControllerBase
                     return $this->currentRedirect();
                 } else {
                     $params = [
-                        'link'      => ($this->request->isSecureRequest()
+                        'link'      => ($this->request->isSecure()
                                 ? 'https://' : 'http://') . $this->request->getHttpHost()
                             . '/oauth/register?registerhash=' . $registerHash
                     ];

@@ -141,7 +141,7 @@ class LoginController extends ControllerBase
 
         $url = $this->request->getHTTPReferer();
         if (empty($url)) {
-            $url = ($this->request->isSecureRequest()
+            $url = ($this->request->isSecure()
             ? 'https://' : 'http://') . $this->request->getHttpHost() . '/oauth/login';
         }
 
