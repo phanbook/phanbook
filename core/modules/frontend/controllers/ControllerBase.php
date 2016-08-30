@@ -300,7 +300,7 @@ class ControllerBase extends Controller
             ];
             return $this->jsonMessages;
         }
-
+        $this->db->begin();
         if ($object == Vote::OBJECT_POSTS) {
             if (!$post = Posts::findFirstById($objectId)) {
                 $this->jsonMessages['messages'][] = [
@@ -330,6 +330,7 @@ class ControllerBase extends Controller
         }
         $vote = Vote::vote($objectId, $object, $way);
         if (!$vote) {
+            $this->db->rollback();
             $this->jsonMessages['messages'][] = [
                 'type'    => 'error',
                 'content' =>  'Vote have a problem :)'
@@ -345,16 +346,17 @@ class ControllerBase extends Controller
         }
         //checking the user have already voted this post yet
         if (is_array($vote)) {
+            $this->db->rollback();
             $this->jsonMessages['messages'][] = $vote;
             return $this->jsonMessages;
         }
+        $this->db->commit();
 
         if ($this->request->isAjax()) {
             $vote = (new Vote)->getVotes($objectId, $object);
             return (['data' => $vote['positive'] - $vote['negative']]);
         }
         echo 0;
-
         return 0;
     }
     /**

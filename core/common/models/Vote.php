@@ -12,9 +12,10 @@
  */
 namespace Phanbook\Models;
 
-use Phalcon\Mvc\Model\Validator\Email as Email;
-use Phalcon\Mvc\Model\Validator\Uniqueness;
-use Phalcon\Mvc\Model\Validator\InclusionIn;
+use Phalcon\Validation;
+use Phalcon\Validation\Validator\Email as EmailValidator;
+use Phalcon\Validation\Validator\Uniqueness as UniquenessValidator;
+use Phalcon\Validation\Validator\InclusionIn as InclusionInValidator;
 
 class Vote extends ModelBase
 {
@@ -250,30 +251,27 @@ class Vote extends ModelBase
 
     public function validation()
     {
-        $this->validate(
-            new Uniqueness(
-                [
-                    "field"   => ['usersId', 'objectId', 'object'],
-                    "message" => t("You already voted.")
-                ]
-            )
+
+        $validator = new Validation();
+
+        $validator->add(
+            ['usersId', 'objectId', 'object'],
+            new UniquenessValidator([
+                'model' => $this,
+                'message' => 'You already voted.'
+            ])
         );
 
-        $this->validate(
-            new InclusionIn(
-                [
-                    'field'   => 'object',
-                    'message' => t('Invalid object type.'),
-                    'domain'  => array_flip(self::getObjectsWithLabels())
-                ]
-            )
+        $validator->add(
+            'object',
+            new InclusionInValidator([
+                'model' => $this,
+                'message' => 'Invalid object type.',
+                'domain'  => array_flip(self::getObjectsWithLabels())
+            ])
         );
 
-        if ($this->validationHasFailed() == true) {
-            return false;
-        }
-
-        return true;
+        return $this->validate($validator);
     }
 
     public static function getObjectsWithLabels()

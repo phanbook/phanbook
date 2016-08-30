@@ -68,6 +68,15 @@ $router->add('/posts/{type}', [
     'action' => 'index'
 ]);
 
+$router->add('/posts/new', [
+    'controller' => 'posts',
+    'action' => 'new'
+]);
+$router->add('/posts/vote', [
+    'controller' => 'posts',
+    'action' => 'vote'
+]);
+
 /**
  * @link https://docs.phalconphp.com/en/latest/reference/routing.html#match-callbacks
  */
