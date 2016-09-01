@@ -518,8 +518,9 @@ class ControllerBase extends Controller
                 $builder->columns(self::$grid['query']['columns']);
             }
             foreach (self::$grid['query']['joins'] as $join) {
-                if (in_array($join['type'], ['innerJoin', 'leftJoin', 'rightJoin', 'join'])) {
-                    $builder->$join['type']('Phanbook\\Models\\' . $join['model'], $join['on'], $join['alias']);
+                $type = (string) $join['type'];
+                if (in_array($type, ['innerJoin', 'leftJoin', 'rightJoin', 'join'])) {
+                    $builder->$type('Phanbook\\Models\\' . $join['model'], $join['on'], $join['alias']);
                 }
             }
             if (!empty(self::$grid['query']['groupBy'])) {
