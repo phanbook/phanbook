@@ -235,24 +235,24 @@ class PostsController extends ControllerBase
             return $this->response->redirect(
                 $this->getPathController().(!is_null($id) ? '/edit/'.$id : '/new')
             );
-        } else {
-            $object->setStatus(Posts::PUBLISH_STATUS);
-            //Save post to draft
-            if ($this->request->getPost('saveDraft')) {
-                $object->setStatus(Posts::DRAFT_STATUS);
-            }
-            if (!$object->save()) {
-                $this->saveLoger($object->getMessages());
-                return $this->dispatcher->forward(
-                    ['controller' => $this->getPathController(), 'action' => 'new']
-                );
-            } else {
-                $this->phanbook->tag()->saveTagsInPosts($tags, $object);
-                $this->flashSession->success(t('Data was successfully saved'));
-
-                return $this->indexRedirect();
-            }
         }
+
+        $object->setStatus(Posts::PUBLISH_STATUS);
+        //Save post to draft
+        if ($this->request->getPost('saveDraft')) {
+            $object->setStatus(Posts::DRAFT_STATUS);
+        }
+        if (!$object->save()) {
+            $this->saveLoger($object->getMessages());
+            return $this->dispatcher->forward(
+                ['controller' => $this->getPathController(), 'action' => 'new']
+            );
+        }
+
+        $this->phanbook->tag()->saveTagsInPosts($tags, $object);
+        $this->flashSession->success(t('Data was successfully saved'));
+
+        return $this->indexRedirect();
     }
     /**
      *

@@ -597,18 +597,18 @@ class ControllerBase extends Controller
      */
     private function getGridFilters($key = false)
     {
-        if ($this->cookies->has('gridFilters')) {
-            $cookieValue = unserialize($this->cookies->get('gridFilters')->getValue());
-            if ($key) {
-                if (!empty($cookieValue[$key])) {
-                    return $cookieValue[$key];
-                }
-            } else {
-                return $cookieValue;
-            }
+        if (!$this->cookies->has('gridFilters')) {
+            return false;
         }
 
-        return false;
+        $cookieValue = unserialize($this->cookies->get('gridFilters')->getValue());
+        if ($key) {
+            if (!empty($cookieValue[$key])) {
+                return $cookieValue[$key];
+            }
+        } else {
+            return $cookieValue;
+        }
     }
     /**
      * The function sending log for nginx or apache, it will to analytic later

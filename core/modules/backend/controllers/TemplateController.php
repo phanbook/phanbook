@@ -129,20 +129,20 @@ class TemplateController extends ControllerBase
             return $this->response->redirect(
                 $this->getPathController() . (!is_null($id) ? '/edit/' . $id : '/new')
             );
-        } else {
-            if (!$object->save()) {
-                foreach ($object->getMessages() as $message) {
-                    $this->flashSession->error($message->getMessage());
-                }
-
-                return $this->dispatcher->forward(
-                    ['controller' => $this->getPathController(), 'action' => 'new']
-                );
-            } else {
-                $this->flashSession->success(t('Data was successfully saved'));
-                return $this->indexRedirect();
-            }
         }
+
+        if (!$object->save()) {
+            foreach ($object->getMessages() as $message) {
+                $this->flashSession->error($message->getMessage());
+            }
+
+            return $this->dispatcher->forward(
+                ['controller' => $this->getPathController(), 'action' => 'new']
+            );
+        }
+
+        $this->flashSession->success(t('Data was successfully saved'));
+        return $this->indexRedirect();
     }
 
     /**
