@@ -60,44 +60,45 @@ class Tag
         $tagsId    = [];
         $postId    = $object->getId();
         $getTagsId = $this->getTagsId($tag);
-        if (is_array($getTagsId)) {
-            $postsTags = PostsTags::find(
-                [
-                    'postsId = ?0',
-                    'bind' => [$postId]
-                ]
-            );
-
-            foreach ($postsTags as $value) {
-                $tagsId[] = $value->tagsId;
-            }
-
-            //Deleted tags
-            $rows2 = array_diff($tagsId, $getTagsId);
-            $this->deletedTag($postId, $rows2);
-
-            $rows = array_diff($getTagsId, $tagsId);
-            foreach ($rows as $tagId) {
-                $postsTags = new PostsTags();
-                $postsTags->setTagsId($tagId);
-                $postsTags->setPostsId($postId);
-
-                if (!$postsTags->save()) {
-                    return false;
-                }
-                //Update the total of posts related to a tags
-                if ($object->getOperationMade() == \Phalcon\Mvc\Model::OP_CREATE) {
-
-                    $tags    = Tags::findFirstById($tagId);
-                    $number  = $tags->getNumberposts();
-                    $tags->setNumberPosts($number + 1);
-                    $tags->save();
-                }
-            }
-
-            return true;
+        if (!is_array($getTagsId)) {
+            return false;
         }
-        return false;
+
+        $postsTags = PostsTags::find(
+            [
+                'postsId = ?0',
+                'bind' => [$postId]
+            ]
+        );
+
+        foreach ($postsTags as $value) {
+            $tagsId[] = $value->tagsId;
+        }
+
+        //Deleted tags
+        $rows2 = array_diff($tagsId, $getTagsId);
+        $this->deletedTag($postId, $rows2);
+
+        $rows = array_diff($getTagsId, $tagsId);
+        foreach ($rows as $tagId) {
+            $postsTags = new PostsTags();
+            $postsTags->setTagsId($tagId);
+            $postsTags->setPostsId($postId);
+
+            if (!$postsTags->save()) {
+                return false;
+            }
+            //Update the total of posts related to a tags
+            if ($object->getOperationMade() == \Phalcon\Mvc\Model::OP_CREATE) {
+
+                $tags    = Tags::findFirstById($tagId);
+                $number  = $tags->getNumberposts();
+                $tags->setNumberPosts($number + 1);
+                $tags->save();
+            }
+        }
+
+        return true;
     }
 
     /**

@@ -65,15 +65,20 @@ class Mail extends Component
      */
     public function send($to, $templateKey, $params = [])
     {
-
         $body = $this->getTemplate($templateKey, $params);
         if (!$body) {
             d('You need to create templates email in database');
             return false;
         }
 
-        $subject = (empty($this->template) ? 'Phanbook - TEST' : (empty($params['subject']) ? $this->template->getSubject(
-        ) : $params['subject']));
+        if (empty($this->template)) {
+            $subject = 'Phanbook - TEST';
+        } elseif (empty($params['subject'])) {
+            $subject = $this->template->getSubject();
+        } else {
+            $subject = $params['subject'];
+        }
+
         // Create the message
         $message = Swift_Message::newInstance()
             ->setSubject($subject)
