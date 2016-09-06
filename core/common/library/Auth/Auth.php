@@ -30,7 +30,7 @@ class Auth extends Component
      * @param  array $credentials
      * @return boolan
      */
-    public function check($credentials)
+    public function check(array $credentials)
     {
 
         // Check if the user exist
@@ -68,7 +68,7 @@ class Auth extends Component
      *
      * @param Phanbook\Models\Users $user
      */
-    public function saveSuccessLogin($user)
+    public function saveSuccessLogin(Users $user)
     {
         $successLogin = new SuccessLogins();
         $successLogin->setUsersId($user->getId());
@@ -126,7 +126,7 @@ class Auth extends Component
      *
      * @param Phanbook\Models\Users $user
      */
-    public function setRememberEnviroment($user)
+    public function setRememberEnviroment(Users $user)
     {
         $userAgent = $this->request->getUserAgent();
         $token = md5($user->getEmail() . $user->getPasswd() . $userAgent);

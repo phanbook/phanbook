@@ -19,6 +19,7 @@ use Phanbook\Models\Template;
 
 require_once ROOT_DIR . 'vendor/swiftmailer/swiftmailer/lib/swift_required.php';
 
+use Swift_Mailer;
 use Swift_Message;
 use Swift_SmtpTransport;
 
@@ -94,7 +95,7 @@ class Mail extends Component
                 ->setPassword($this->config->mail->smtp->password);
         }
 
-        $mailer = \Swift_Mailer::newInstance($this->transport);
+        $mailer = Swift_Mailer::newInstance($this->transport);
         return $mailer->send($message);
     }
 
