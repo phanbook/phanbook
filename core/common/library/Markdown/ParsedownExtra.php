@@ -15,7 +15,7 @@
 #
 namespace Phanbook\Markdown;
 
-class ParsedownExtra extends Parsedown
+class ParsedownExtra extends \Parsedown
 {
     # ~
 

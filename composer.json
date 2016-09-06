@@ -20,7 +20,8 @@
         "league/fractal": "0.7.*",
         "elasticsearch/elasticsearch": "~1.0",
         "google/apiclient": "1.0.*@beta",
-        "league/flysystem": "^1.1@dev"
+        "league/flysystem": "^1.1@dev",
+        "erusev/parsedown": "~1.6"
 
     }
 }
