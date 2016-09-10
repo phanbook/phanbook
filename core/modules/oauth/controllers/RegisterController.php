@@ -231,8 +231,8 @@ class RegisterController extends ControllerBase
                         'firstname' => $object->getFirstname(),
                         'lastname'  => $object->getLastname(),
                         'link'      => ($this->request->isSecureRequest()
-                                ? 'https://' : 'http://') . $this->request->getHttpHost()
-                            . '/oauth/resetpassword?forgothash=' . $passwordForgotHash
+                                            ? 'https://' : 'http://') . $this->request->getHttpHost()
+                                        . '/oauth/resetpassword?forgothash=' . $passwordForgotHash
                     ];
                     if (!$this->mail->send($object->getEmail(), 'forgotpassword', $params)) {
                         $this->flashSession->error(t('Error sendig email.'));
