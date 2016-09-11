@@ -12,6 +12,7 @@
  */
 namespace Phanbook\Twitter;
 
+use Phalcon\Config;
 use Phalcon\DI\Injectable;
 use Guzzle\Http\Client as HttpClient;
 use League\OAuth2\Client\Provider\Twitter;
@@ -33,9 +34,9 @@ class Auth extends Injectable
 
 
     /**
-     * @param $config
+     * @param Config $config
      */
-    public function __construct($config)
+    public function __construct(Config $config)
     {
         $this->redirectUriAuthorize = $config->redirectUri;
         $this->clientId             = $config->clientId;

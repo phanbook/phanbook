@@ -30,7 +30,7 @@ class Auth extends Component
      * @param  array $credentials
      * @return boolan
      */
-    public function check($credentials)
+    public function check(array $credentials)
     {
 
         // Check if the user exist
@@ -68,7 +68,7 @@ class Auth extends Component
      *
      * @param Phanbook\Models\Users $user
      */
-    public function saveSuccessLogin($user)
+    public function saveSuccessLogin(Users $user)
     {
         $successLogin = new SuccessLogins();
         $successLogin->setUsersId($user->getId());
@@ -126,7 +126,7 @@ class Auth extends Component
      *
      * @param Phanbook\Models\Users $user
      */
-    public function setRememberEnviroment($user)
+    public function setRememberEnviroment(Users $user)
     {
         $userAgent = $this->request->getUserAgent();
         $token = md5($user->getEmail() . $user->getPasswd() . $userAgent);
@@ -203,10 +203,7 @@ class Auth extends Component
      */
     public function checkUserFlags(Users $user)
     {
-        if ($user->getStatus() != Users::STATUS_ACTIVE) {
-            return false;
-        }
-        return true;
+        return ($user->getStatus() == Users::STATUS_ACTIVE);
     }
 
     /**
@@ -267,18 +264,14 @@ class Auth extends Component
     public function isAdmin()
     {
         $identity = $this->session->get('auth');
-        if ($identity['admin'] == 'Y') {
-            return true;
-        }
-        return false;
+
+        return ($identity['admin'] == 'Y');
     }
     public function isModerator()
     {
         $identity = $this->session->get('auth');
-        if ($identity['moderator'] == 'Y') {
-            return true;
-        }
-        return false;
+
+        return ($identity['moderator'] == 'Y');
     }
     public function isLogin()
     {
@@ -342,16 +335,16 @@ class Auth extends Component
     public function getUser()
     {
         $identity = $this->session->get('auth');
-        if (isset($identity['id'])) {
-            $user = Users::findFirstById($identity['id']);
-            if (!$user) {
-                error_log('The user does not exist' . __CLASS__ . ' and '. __LINE__);
-                return false;
-            }
-            return $user;
+        if (!isset($identity['id'])) {
+            return false;
         }
 
-        return false;
+        $user = Users::findFirstById($identity['id']);
+        if (!$user) {
+            error_log('The user does not exist' . __CLASS__ . ' and '. __LINE__);
+            return false;
+        }
+        return $user;
     }
     /**
      * Check condition to allow comment or vote
@@ -361,17 +354,17 @@ class Auth extends Component
     public function getVote()
     {
         $identity = $this->session->get('auth');
-        if (isset($identity['id'])) {
-            $user = Users::findFirstById($identity['id']);
-            if (!$user) {
-                error_log('The user does not exist' . __CLASS__ . ' and '. __LINE__);
-                return false;
-            }
-
-            return $user->getVote();
+        if (!isset($identity['id'])) {
+            return false;
         }
 
-        return false;
+        $user = Users::findFirstById($identity['id']);
+        if (!$user) {
+            error_log('The user does not exist' . __CLASS__ . ' and '. __LINE__);
+            return false;
+        }
+
+        return $user->getVote();
     }
     /**
      *

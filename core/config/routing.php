@@ -6,8 +6,6 @@ $di['router'] = function () use ($modules, $di) {
 
     $router = new \Phalcon\Mvc\Router(false);
 
-    $router->clear();
-
     $moduleRouting = ROOT_DIR . 'core/modules/'. $defaultModule .'/config/routing.php';
 
     if (file_exists($moduleRouting) && is_file($moduleRouting)) {

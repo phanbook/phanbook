@@ -12,6 +12,8 @@
  */
 namespace Phanbook\Queue;
 
+use Phalcon\Queue\Beanstalkd;
+
 /**
  * Server
  *
@@ -22,9 +24,9 @@ class Server
     /**
      * Server constructor
      *
-     * @param Phalcon\Queue\Beanstalkd $queue
+     * @param Beanstalkd $queue
      */
-    public function __construct($queue)
+    public function __construct(Beanstalkd $queue)
     {
         $this->queue = $queue;
     }

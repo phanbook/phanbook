@@ -57,11 +57,12 @@ class MediaFiles
     public function getConfigFile($userName)
     {
         $filename = $userName. "/userConfig.json";
-        if ($this->fileSystem->has($filename)) {
-            $contents = $this->fileSystem->read($filename);
-            return json_decode($contents, true);
+        if (!$this->fileSystem->has($filename)) {
+            return [];
         }
-        return [];
+
+        $contents = $this->fileSystem->read($filename);
+        return json_decode($contents, true);
     }
     /**
      * Save after modify content of analytic file
@@ -71,7 +72,6 @@ class MediaFiles
      */
     public function saveConfigFile($userName, $arrayConfig)
     {
-
         $filename = $userName. "/userConfig.json";
         if (!$this->fileSystem->has($filename)) {
             $this->fileSystem->write($filename, '[]');

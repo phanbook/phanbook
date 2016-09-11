@@ -146,39 +146,39 @@ class RegisterController extends ControllerBase
                     $this->flashSession->error($message);
                 }
                 return $this->currentRedirect();
-            } else {
-                $registerHash = md5(uniqid(rand(), true));
-                $randomPasswd = substr(md5(microtime()), 0, 7);
-
-                $object->setPasswd($this->security->hash($randomPasswd));
-                $object->setRegisterhash($registerHash);
-                $object->setStatus(Users::STATUS_PENDING);
-                $object->setGender(Users::GENDER_UNKNOWN);
-
-                if (!$object->save()) {
-                    $this->displayModelErrors($object);
-                    return $this->currentRedirect();
-                } else {
-                    $params = [
-                        'link'      => ($this->request->isSecure()
-                                ? 'https://' : 'http://') . $this->request->getHttpHost()
-                            . '/oauth/register?registerhash=' . $registerHash
-                    ];
-                    if (!$this->mail->send($object->getEmail(), 'registration', $params)) {
-                        error_log('Email not sent' . $object->getEmail());
-                        $this->flashSession->error(t('Error sending registration email.'));
-                    } else {
-                        $this->flashSession->success(
-                            t(
-                                'Your account was successfully created.
-                                An email was sent to your address in order to continue the process.'
-                            )
-                        );
-                    }
-
-                    return $this->response->redirect();
-                }
             }
+
+            $registerHash = md5(uniqid(rand(), true));
+            $randomPasswd = substr(md5(microtime()), 0, 7);
+
+            $object->setPasswd($this->security->hash($randomPasswd));
+            $object->setRegisterhash($registerHash);
+            $object->setStatus(Users::STATUS_PENDING);
+            $object->setGender(Users::GENDER_UNKNOWN);
+
+            if (!$object->save()) {
+                $this->displayModelErrors($object);
+                return $this->currentRedirect();
+            }
+
+            $params = [
+                'link'      => ($this->request->isSecure()
+                        ? 'https://' : 'http://') . $this->request->getHttpHost()
+                    . '/oauth/register?registerhash=' . $registerHash
+            ];
+            if (!$this->mail->send($object->getEmail(), 'registration', $params)) {
+                error_log('Email not sent' . $object->getEmail());
+                $this->flashSession->error(t('Error sending registration email.'));
+            } else {
+                $this->flashSession->success(
+                    t(
+                        'Your account was successfully created.
+                        An email was sent to your address in order to continue the process.'
+                    )
+                );
+            }
+
+            return $this->response->redirect();
         }
         $this->view->form = $form;
     }
@@ -231,8 +231,8 @@ class RegisterController extends ControllerBase
                         'firstname' => $object->getFirstname(),
                         'lastname'  => $object->getLastname(),
                         'link'      => ($this->request->isSecureRequest()
-                                ? 'https://' : 'http://') . $this->request->getHttpHost()
-                            . '/oauth/resetpassword?forgothash=' . $passwordForgotHash
+                                            ? 'https://' : 'http://') . $this->request->getHttpHost()
+                                        . '/oauth/resetpassword?forgothash=' . $passwordForgotHash
                     ];
                     if (!$this->mail->send($object->getEmail(), 'forgotpassword', $params)) {
                         $this->flashSession->error(t('Error sendig email.'));

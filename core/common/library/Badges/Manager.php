@@ -29,13 +29,15 @@ class Manager
         $badges = array();
         $directory = new \RecursiveDirectoryIterator(__DIR__ . '/Badge');
         foreach ($directory as $item) {
-            if (!$item->isDir()) {
-                $path = $item->getPathname();
-                $baseClassName = str_replace('.php', '', basename($path));
-                $className = 'Phanbook\Badges\Badge\\' . $baseClassName;
-
-                $badges[] = new $className();
+            if ($item->isDir()) {
+                continue;
             }
+
+            $path = $item->getPathname();
+            $baseClassName = str_replace('.php', '', basename($path));
+            $className = 'Phanbook\Badges\Badge\\' . $baseClassName;
+
+            $badges[] = new $className();
         }
 
         return $badges;

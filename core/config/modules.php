@@ -19,15 +19,15 @@ foreach ($directory as $item) {
 $modulesCore =
 [
     'frontend' => array(
-        'className' => 'Phanbook\Frontend\Module',
+        'className' => \Phanbook\Frontend\Module::class,
         'path' => ROOT_DIR . 'core/modules/frontend/Module.php'
     ),
     'oauth' => array(
-        'className' => 'Phanbook\Oauth\Module',
+        'className' => \Phanbook\Oauth\Module::class,
         'path' => ROOT_DIR . 'core/modules/oauth/Module.php'
     ),
     'backend' => array(
-        'className' => 'Phanbook\Backend\Module',
+        'className' => \Phanbook\Backend\Module::class,
         'path' => ROOT_DIR . 'core/modules/backend/Module.php'
     )
 ];

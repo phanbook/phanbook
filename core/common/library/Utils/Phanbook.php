@@ -67,19 +67,18 @@ class Phanbook
             'bind' =>[$title]
         ];
         $post = Posts::findFirst($param);
-        if ($post) {
-            return $post;
+        if (!$post) {
+            return null;
         }
-        return null;
+        return $post;
     }
     public function getPostBySlug($slug)
     {
-
         $post = Posts::findFirstBySlug($slug);
-        if ($post) {
-            return $post;
+        if (!$post) {
+            return null;
         }
-        return null;
+        return $post;
     }
     /**
      * Retrieves the directory name of the current theme, without the trailing slash.
