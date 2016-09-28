@@ -36,7 +36,6 @@ use Phalcon\Config\Adapter\Php         as AdapterPhp;
 use Phalcon\Logger\Adapter\File        as FileLogger;
 use Phalcon\Mvc\View;
 use Phalcon\Translate\Adapter\NativeArray;
-use Phanbook\Utils\Constants;
 use Phanbook\Mail\Mail;
 use Phanbook\Auth\Auth;
 use Phanbook\Utils\Phanbook;
@@ -133,10 +132,6 @@ $di->setShared(
     }
 );
 
-$di->setShared(
-    'constants',
-    new Constants()
-);
 
 $di->setShared(
     'auth',
@@ -453,5 +448,5 @@ if ($config->application->debug) {
 }
 // For avoid re-define variables
 if (!defined("ALREADY_DEFINED")) {
-    Constants::declareGlobalVariable();
+    include 'constants.php';
 }
