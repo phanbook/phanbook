@@ -32,7 +32,7 @@ class ZFunction extends Injectable
     public static function getUrlAvatar($email, $s = 32, $d = 'identicon', $r = 'pg')
     {
 
-        $url = 'http://www.gravatar.com/avatar/';
+        $url = 'https://www.gravatar.com/avatar/';
         $url .= md5(strtolower(trim($email)));
         $url .= "?s={$s}&d={$d}&r={$r}";
         return $url;
