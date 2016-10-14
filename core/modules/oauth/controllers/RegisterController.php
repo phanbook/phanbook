@@ -111,13 +111,24 @@ class RegisterController extends ControllerBase
                     $this->flashSession->error($message);
                 }
             } else {
-                $object->setPasswd($this->security->hash($this->request->getPost('password_new_confirm')));
+                $password = $this->request->getPost('password_new_confirm');
+
+                $object->setPasswd($this->security->hash($password));
                 $object->setRegisterHash(null);
                 $object->setStatus(Users::STATUS_ACTIVE);
                 if (!$object->save()) {
                     $this->displayModelErrors($object);
                 } else {
                     $this->flashSession->success(t('Your password was changed successfully.'));
+
+                    //Assign to session
+                    $this->auth->check(
+                        [
+                            'email' => $object->getEmail(),
+                            'password' => $password,
+                            'remember' => true
+                        ]
+                    );
 
                     return $this->response->redirect();
                 }
