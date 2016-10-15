@@ -230,8 +230,9 @@ class ModelBase extends Model
             $builder->columns($query['columns']);
         }
         foreach ($query['joins'] as $join) {
-            if (in_array($join['type'], ['innerJoin', 'leftJoin', 'rightJoin', 'join'])) {
-                $builder->$join['type']($modelNamespace . $join['model'], $join['on'], $join['alias']);
+            $type = (string) $join['type'];
+            if (in_array($type, ['innerJoin', 'leftJoin', 'rightJoin', 'join'])) {
+                $builder->$type($modelNamespace . $join['model'], $join['on'], $join['alias']);
             }
         }
         if (!empty($query['groupBy'])) {
@@ -275,7 +276,8 @@ class ModelBase extends Model
             ->from(['p' => 'Phanbook\Models\Posts'])
             ->orderBy('p.sticked DESC, p.createdAt DESC');
         if (isset($join) && is_array($join)) {
-            $itemBuilder->$join['type']($modelNamespace . $join['model'], $join['on'], $join['alias']);
+            $type = (string) $join['type'];
+            $itemBuilder->$type($modelNamespace . $join['model'], $join['on'], $join['alias']);
         }
         if (isset($where)) {
             $itemBuilder->where($where);
