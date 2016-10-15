@@ -1048,3 +1048,4 @@ ALTER TABLE `vote`
 ALTER TABLE `users` ADD `uuidGithub` VARCHAR(100) NULL AFTER `uid`;
 ALTER TABLE `users` ADD `uuidGoogle` VARCHAR(100) NULL AFTER `uid`;
 ALTER TABLE `users` ADD `uuidFacebook` VARCHAR(100) NULL AFTER `uid`;
+ALTER TABLE `rememberTokens` CHANGE `userAgent` `userAgent` VARCHAR(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
