@@ -12,8 +12,8 @@
  */
 namespace Phanbook\Models;
 
-use Phalcon\Mvc\Model\Validator\Uniqueness;
-use Phalcon\Mvc\Model\Validator\InclusionIn;
+use Phalcon\Validation;
+use Phalcon\Validation\Validator\InclusionIn;
 
 class Comment extends ModelBase
 {
@@ -226,21 +226,19 @@ class Comment extends ModelBase
 
     public function validation()
     {
-        $this->validate(
+        $validator = new Validation();
+
+        $validator->add(
+            'object',
             new InclusionIn(
                 [
-                    'field'   => 'object',
                     'message' => t('Invalid object type.'),
                     'domain'  => array_flip(self::getObjectsWithLabels())
                 ]
             )
         );
 
-        if ($this->validationHasFailed() == true) {
-            return false;
-        }
-
-        return true;
+        return $this->validate($validator);
     }
     /**
      * Implement hook Phalcon
@@ -254,7 +252,7 @@ class Comment extends ModelBase
     public static function getObjectsWithLabels()
     {
         return [
-            self::OBJECT_POSTSREPLY => t('PostsReply'),
+            self::OBJECT_POSTSREPLY => t('Posts Reply'),
             self::OBJECT_POSTS      => t('Posts')
 
         ];
