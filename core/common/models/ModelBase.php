@@ -36,8 +36,8 @@ class ModelBase extends Model
     /**
      * Toggle object status. 0 or 1
      *
-     * @param $id     - id of object to toggle
-     * @param string                          $method - column name for toggleing - status by default
+     * @param $id - id of object to toggle
+     * @param string  $method - column name for toggleing - status by default
      */
     public function toggleObject($id, $column = 'status')
     {
@@ -79,7 +79,7 @@ class ModelBase extends Model
     public function getVotes($objectId, $object)
     {
         return $this->getModelsManager()->executeQuery(
-            'SELECT SUM(positive) AS positive, SUM(negative) AS negative FROM ' . __NAMESPACE__ . '\Vote WHERE objectId = :objectId: AND object = :object:',
+            'SELECT COALESCE(SUM(positive),0) AS positive, COALESCE(SUM(negative),0) AS negative FROM ' . __NAMESPACE__ . '\Vote WHERE objectId = :objectId: AND object = :object:',
             ['objectId' => $objectId, 'object' => $object]
         )->getFirst()->toArray();
 
@@ -88,8 +88,8 @@ class ModelBase extends Model
     public function getPostsWithVotes($postId = false)
     {
         $sql = 'SELECT p.*, pr.usersId as editorId, u.email,
-            (SELECT SUM(v.positive) FROM  vote v  WHERE p.id = v.objectId AND v.object = ?) AS positive,
-            (SELECT SUM(v.negative) FROM  vote v  WHERE p.id = v.objectId AND v.object = ?) AS negative
+            (SELECT COALESCE(SUM(v.positive),0) FROM  vote v  WHERE p.id = v.objectId AND v.object = ?) AS positive,
+            (SELECT COALESCE(SUM(v.negative),0) FROM  vote v  WHERE p.id = v.objectId AND v.object = ?) AS negative
             FROM postsReply p
             LEFT JOIN postsReplyHistory pr ON p.id = pr.postsReplyId
             LEFT JOIN users u ON u.id = p.usersId
