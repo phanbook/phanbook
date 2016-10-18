@@ -26,6 +26,9 @@ use Phanbook\Models\Behavior\Blameable as ModelBlameable;
  */
 class ModelBase extends Model
 {
+    const OBJECT_POSTS       = 'posts';
+    const OBJECT_COMMENTS    = 'comments';
+    const OBJECT_POSTS_REPLIES = 'postsReplies';
 
     /**
      *
@@ -36,8 +39,8 @@ class ModelBase extends Model
     /**
      * Toggle object status. 0 or 1
      *
-     * @param $id     - id of object to toggle
-     * @param string                          $method - column name for toggleing - status by default
+     * @param $id - id of object to toggle
+     * @param string  $method - column name for toggleing - status by default
      */
     public function toggleObject($id, $column = 'status')
     {
@@ -79,7 +82,7 @@ class ModelBase extends Model
     public function getVotes($objectId, $object)
     {
         return $this->getModelsManager()->executeQuery(
-            'SELECT SUM(positive) AS positive, SUM(negative) AS negative FROM ' . __NAMESPACE__ . '\Vote WHERE objectId = :objectId: AND object = :object:',
+            'SELECT COALESCE(SUM(positive),0) AS positive, COALESCE(SUM(negative),0) AS negative FROM ' . __NAMESPACE__ . '\Vote WHERE objectId = :objectId: AND object = :object:',
             ['objectId' => $objectId, 'object' => $object]
         )->getFirst()->toArray();
 
@@ -88,8 +91,8 @@ class ModelBase extends Model
     public function getPostsWithVotes($postId = false)
     {
         $sql = 'SELECT p.*, pr.usersId as editorId, u.email,
-            (SELECT SUM(v.positive) FROM  vote v  WHERE p.id = v.objectId AND v.object = ?) AS positive,
-            (SELECT SUM(v.negative) FROM  vote v  WHERE p.id = v.objectId AND v.object = ?) AS negative
+            (SELECT COALESCE(SUM(v.positive),0) FROM  vote v  WHERE p.id = v.objectId AND v.object = ?) AS positive,
+            (SELECT COALESCE(SUM(v.negative),0) FROM  vote v  WHERE p.id = v.objectId AND v.object = ?) AS negative
             FROM postsReply p
             LEFT JOIN postsReplyHistory pr ON p.id = pr.postsReplyId
             LEFT JOIN users u ON u.id = p.usersId
@@ -98,7 +101,7 @@ class ModelBase extends Model
             ORDER BY p.id DESC';
 
         $postsReply = new PostsReply();
-        $params = [Vote::OBJECT_POSTS_REPLY, Vote::OBJECT_POSTS_REPLY, ($postId ? $postId : $this->getId())];
+        $params = [Vote::OBJECT_POSTS_REPLIES, Vote::OBJECT_POSTS_REPLIES, ($postId ? $postId : $this->getId())];
         $pdoResult  = $postsReply->getReadConnection()->query($sql, $params);
         return (new Resultset(null, $postsReply, $pdoResult));
     }
@@ -308,5 +311,17 @@ class ModelBase extends Model
     public function getHumanCreatedAt()
     {
         return ZFunction::getHumanDate($this->createdAt);
+    }
+
+    /**
+     * @return array
+     */
+    public static function getObjectsWithLabels()
+    {
+        return [
+            self::OBJECT_POSTS      => t('Posts'),
+            self::OBJECT_COMMENTS    => t('Comments'),
+            self::OBJECT_POSTS_REPLIES => t('Posts Replies')
+        ];
     }
 }

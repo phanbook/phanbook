@@ -20,10 +20,6 @@ use Phalcon\Validation\Validator\InclusionIn as InclusionInValidator;
 class Vote extends ModelBase
 {
 
-    const OBJECT_POSTS       = 'posts';
-    const OBJECT_COMMENTS    = 'comments';
-    const OBJECT_POSTS_REPLY = 'postsReply';
-
     /**
      *
      * @var integer
@@ -274,23 +270,13 @@ class Vote extends ModelBase
         return $this->validate($validator);
     }
 
-    public static function getObjectsWithLabels()
-    {
-        return [
-            self::OBJECT_POSTS      => t('Posts'),
-            self::OBJECT_COMMENTS    => t('Comments'),
-            self::OBJECT_POSTS_REPLY => t('Posts Reply')
-        ];
-    }
-
     /**
      * hook beforeValidationOnCreate
      */
     public function beforeValidationOnCreate()
     {
-        $auth = \Phalcon\DI::getDefault()->getAuth();
         $this->createdAt = time();
-        $this->usersId = $auth->getAuth()['id'];
+        $this->usersId = $this->getDI()->getAuth()->getUserId();
     }
 
     /**
