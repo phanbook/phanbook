@@ -244,7 +244,7 @@ class Comment extends ModelBase
     {
 
         $this->createdAt  = time();
-        $this->userId     = (int) $this->getDI()->getAuth()->getUserId();
+        $this->userId     = $this->getDI()->getAuth()->getUserId();
     }
     /**
      * To checking isset class, it use in function setActivityNotifications of ContrllerBase

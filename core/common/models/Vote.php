@@ -276,7 +276,7 @@ class Vote extends ModelBase
     public function beforeValidationOnCreate()
     {
         $this->createdAt = time();
-        $this->usersId = (int) $this->getDI()->getAuth()->getUserId();
+        $this->usersId = $this->getDI()->getAuth()->getUserId();
     }
 
     /**
