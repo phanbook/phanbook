@@ -18,9 +18,6 @@ use Phalcon\Validation\Validator\InclusionIn;
 class Comment extends ModelBase
 {
 
-    const OBJECT_POSTSREPLY = 'postsReply';
-    const OBJECT_POSTS      = 'posts';
-
     /**
      *
      * @var integer
@@ -247,15 +244,7 @@ class Comment extends ModelBase
     {
 
         $this->createdAt  = time();
-        $this->userId     = (int)$this->getDI()->getAuth()->getAuth()['id'];
-    }
-    public static function getObjectsWithLabels()
-    {
-        return [
-            self::OBJECT_POSTSREPLY => t('Posts Reply'),
-            self::OBJECT_POSTS      => t('Posts')
-
-        ];
+        $this->userId     = (int) $this->getDI()->getAuth()->getUserId();
     }
     /**
      * To checking isset class, it use in function setActivityNotifications of ContrllerBase

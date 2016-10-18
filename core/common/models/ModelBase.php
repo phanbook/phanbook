@@ -26,6 +26,9 @@ use Phanbook\Models\Behavior\Blameable as ModelBlameable;
  */
 class ModelBase extends Model
 {
+    const OBJECT_POSTS       = 'posts';
+    const OBJECT_COMMENTS    = 'comments';
+    const OBJECT_POSTS_REPLIES = 'postsReplies';
 
     /**
      *
@@ -98,7 +101,7 @@ class ModelBase extends Model
             ORDER BY p.id DESC';
 
         $postsReply = new PostsReply();
-        $params = [Vote::OBJECT_POSTS_REPLY, Vote::OBJECT_POSTS_REPLY, ($postId ? $postId : $this->getId())];
+        $params = [Vote::OBJECT_POSTS_REPLIES, Vote::OBJECT_POSTS_REPLIES, ($postId ? $postId : $this->getId())];
         $pdoResult  = $postsReply->getReadConnection()->query($sql, $params);
         return (new Resultset(null, $postsReply, $pdoResult));
     }
@@ -308,5 +311,17 @@ class ModelBase extends Model
     public function getHumanCreatedAt()
     {
         return ZFunction::getHumanDate($this->createdAt);
+    }
+
+    /**
+     * @return array
+     */
+    public static function getObjectsWithLabels()
+    {
+        return [
+            self::OBJECT_POSTS      => t('Posts'),
+            self::OBJECT_COMMENTS    => t('Comments'),
+            self::OBJECT_POSTS_REPLIES => t('Posts Replies')
+        ];
     }
 }

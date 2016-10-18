@@ -316,7 +316,7 @@ class ControllerBase extends Controller
                 $this->setActivityNotifications($user, $post);
             }
         }
-        if ($object == Vote::OBJECT_POSTS_REPLY) {
+        if ($object == Vote::OBJECT_POSTS_REPLIES) {
             if (!$postReply = PostsReply::findFirstById($objectId)) {
                 $this->jsonMessages['messages'][] = [
                     'type'    => 'error',
