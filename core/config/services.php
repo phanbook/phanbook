@@ -342,16 +342,21 @@ $di->set(
     'translation',
     function () use ($di) {
         $language = $di->get('config')->language;
+        $code     = $language->code;
+        if ($di->getCookies()->has('code')) {
+            $code = $di->getCookies()->get('code')->getValue();
+        }
         if ($language->gettext) {
             $translation = new Gettext([
-                'locale' => $language->code,
+                'locale' => $code,
                 'directory' => ROOT_DIR . 'core/lang',
                 'defaultDomain'=> 'messages',
             ]);
         } else {
-            $path = ROOT_DIR . 'core/lang/messages/' . $language->code . '.php';
+            $path = ROOT_DIR . 'core/lang/messages/' . $code . '.php';
             if (!file_exists($path)) {
-                throw new \Exception("You must specify a language file for language '$language->code'");
+                $di->getLogger()->error("You must specify a language file for language '$code'");
+                $path = ROOT_DIR . 'core/lang/messages/en.php';
             }
             $translation = new NativeArray([
                'content' => require_once $path

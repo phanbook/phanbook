@@ -109,3 +109,7 @@ $router->add(
         'action'     => 'detail'
     ]
 );
+$router->add('/language/{code}', [
+    'controller' => 'language',
+    'action'     => 'index'
+]);
