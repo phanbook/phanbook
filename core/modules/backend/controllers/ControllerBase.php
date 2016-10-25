@@ -13,9 +13,10 @@
  */
 namespace Phanbook\Backend\Controllers;
 
+use PDO;
 use Phalcon\Mvc\Controller;
 use Phalcon\Mvc\Dispatcher;
-use Phalcon\Db\Adapter\Pdo;
+use Phalcon\Db\Adapter\Pdo as AbstractAdapter;
 use Phalcon\Paginator\Adapter\NativeArray as Paginator;
 use Phalcon\Paginator\Adapter\QueryBuilder as PaginatorQueryBuilder;
 
@@ -144,8 +145,9 @@ class ControllerBase extends Controller
         $this->view->currentOrder = $this->currentOrder;
         $this->loadDefaultAssets();
         $this->view->menuStruct = $this->menuStruct;
-        $this->view->constants = (object) get_defined_constants(true)["user"];
+        $this->view->constants = (object)get_defined_constants(true)["user"];
     }
+
     /**
      * loadDefaultAssets function.
      *
@@ -230,7 +232,7 @@ class ControllerBase extends Controller
             return false;
         }
 
-        $id     = $this->filter->sanitize($id, ['int']);
+        $id = $this->filter->sanitize($id, ['int']);
         $object = $class::findFirstById($id);
 
         if (!is_object($object)) {
@@ -273,7 +275,7 @@ class ControllerBase extends Controller
         }
 
         if (is_array($id)) {
-            $ids    = array_map(
+            $ids = array_map(
                 function ($key) {
                     return (int)$key;
                 },
@@ -281,7 +283,7 @@ class ControllerBase extends Controller
             );
             $object = $class::find('id IN (' . implode(',', $ids) . ')');
         } else {
-            $id     = $this->filter->sanitize($id, ['int']);
+            $id = $this->filter->sanitize($id, ['int']);
             $object = $class::findFirstById($id);
         }
         if (!$object) {
@@ -309,7 +311,6 @@ class ControllerBase extends Controller
     }
 
 
-
     /**
      * Attempt to determine the real file type of a file.
      *
@@ -335,17 +336,18 @@ class ControllerBase extends Controller
     /**
      * Create a QueryBuilder paginator, show 15 rows by page starting from $page
      *
-     * @param array $model The model need to retrieve and someoption {code} $mode = [ 'name'      => 'Phanbook\Models\Users' 'orderBy'   => 'username' 'currentOrder'=> 'users'// mean adding class for menu ] {/code}
-     * {code}
-     *      $mode = [
-     *          'name'      => 'Users'
-     *          'orderBy'   => 'username'
-     *          'currentOrder'=> 'users'// mean adding class for menu
-     *      ]
-     * {/code}
-     * @param int   $page  Current page to show
+     * <code>
+     *     $mode = [
+     *         'name'         => 'Users'
+     *         'orderBy'      => 'username'
+     *         'currentOrder' => 'users' // mean adding class for menu
+     *    ];
+     * </code>
      *
-     * @return array the conatainer object...
+     * @param array $model The model need to retrieve and some option
+     * @param int $page Current page to show
+     *
+     * @return array
      */
     public function paginatorQueryBuilder($model, $page)
     {
@@ -353,38 +355,41 @@ class ControllerBase extends Controller
             ->from('Phanbook\\Models\\' . $model['name'])
             ->orderBy($model['orderBy']);
         //Create a Model paginator, show 15 rows by page starting from $page
-        $paginator   = (new PaginatorQueryBuilder(
+        $paginator = (new PaginatorQueryBuilder(
             [
-                'builder'  => $builder,
-                'limit'     => self::ITEM_IN_PAGE,
-                'page'      => $page
+                'builder' => $builder,
+                'limit' => self::ITEM_IN_PAGE,
+                'page' => $page
             ]
         ))->getPaginate();
         $this->view->setVars(
             [
-                'currentOrder'  => $model['currentOrder'],
-                'object'        => $paginator->items,
-                'canonical'     => '',
-                'totalPages'    => $paginator->total_pages,
-                'currentPage'   => $page,
+                'currentOrder' => $model['currentOrder'],
+                'object' => $paginator->items,
+                'canonical' => '',
+                'totalPages' => $paginator->total_pages,
+                'currentPage' => $page,
             ]
         );
     }
+
     public function indexRedirect()
     {
         return $this->response->redirect($this->getPathController());
     }
+
     public function currentRedirect()
     {
         return $this->response->redirect($this->request->getHTTPReferer(), true);
     }
+
     public function getPathController()
     {
         return $this->router->getControllerName();
     }
 
-    //@todo : refactor gridAction !
     /**
+     * @todo: refactor gridAction
      * @return bool|\Phalcon\Http\ResponseInterface
      */
     public function gridAction()
@@ -395,7 +400,7 @@ class ControllerBase extends Controller
 
         $this->view->disable();
         $model = $this->router->getControllerName();
-        //Becuase controller pages use model posts render data
+        // Because controller pages use model posts render data
         if ($model == 'pages') {
             $model = 'posts';
         }
@@ -410,7 +415,7 @@ class ControllerBase extends Controller
 
         //order
         $orderby = $this->request->getPost('orderBy');
-        $order   = 'a.id';
+        $order = 'a.id';
         if (array_key_exists($orderby, static::$grid['grid'])) {
             if (!empty(static::$grid['grid'][$orderby]['orderKey'])) {
                 $order = static::$grid['grid'][$orderby]['orderKey'];
@@ -423,7 +428,7 @@ class ControllerBase extends Controller
             ? $this->request->getPost('orderWay')
             : 'ASC';
 
-        $filterKey                              = $this->router->getControllerName();
+        $filterKey = $this->router->getControllerName();
         $this->gridFilters[$filterKey]['order'] = $order . ' ' . $way;
 
         //paginator
@@ -434,10 +439,8 @@ class ControllerBase extends Controller
         $this->gridFilters[$filterKey]['page'] = $this->numberPage;
 
         //per page
-        if ($this->request->getPost('perPage') && in_array(
-            $this->request->getPost('perPage'),
-            10 //items per page.
-        )
+        if ($this->request->getPost('perPage') &&
+            in_array($this->request->getPost('perPage'), [10])
         ) {
             $this->perPage = $this->request->getPost('perPage');
         }
@@ -447,7 +450,7 @@ class ControllerBase extends Controller
         $post = array_filter($_POST);
 
         //reset last filters
-        $this->gridFilters[$filterKey]['conditions']           = null;
+        $this->gridFilters[$filterKey]['conditions'] = null;
         $this->gridFilters[$filterKey]['conditions']['having'] = 1;
 
         foreach ($post as $k => $v) {
@@ -459,24 +462,30 @@ class ControllerBase extends Controller
             } else {
                 $column = $k;
             }
+
             //@todo : refactor conditions.
+            $sanitize = self::$grid['grid'][$k]['filter']['sanitize'];
             if (isset(self::$grid['grid'][$k]['having'])) {
                 $this->gridFilters[$filterKey]['conditions']['having'] .= ' AND ' .
                     $k .
-                    (self::$grid['grid'][$k]['filter']['sanitize'] == 'string' ? ' LIKE \'%' . $v . '%\'' : ' = \'' . $v . '\'');
+                    ($sanitize == 'string' ? ' LIKE \'%' . $v . '%\'' : ' = \'' . $v . '\'');
             } else {
+                $condition3 = PDO::PARAM_INT;
+                if ($sanitize != 'int') {
+                    $condition3 = $sanitize == 'string' ? PDO::PARAM_STR : PDO::PARAM_BOOL;
+                }
                 $this->gridFilters[$filterKey]['conditions']['conditions'][] =
                     [
-                        $column . (self::$grid['grid'][$k]['filter']['sanitize'] == 'string' ? ' LIKE ' : ' = ') . ':' . $k . ':',
-                        [$k => self::$grid['grid'][$k]['filter']['sanitize'] == 'string' ? '%' . $v . '%' : $v],
-                        [$k => (self::$grid['grid'][$k]['filter']['sanitize'] == 'int' ? \PDO::PARAM_INT : (self::$grid['grid'][$k]['filter']['sanitize'] == 'string' ? \PDO::PARAM_STR : \PDO::PARAM_BOOL))]
+                        $column . ($sanitize == 'string' ? ' LIKE ' : ' = ') . ':' . $k . ':',
+                        [$k => $sanitize == 'string' ? '%' . $v . '%' : $v],
+                        [$k => $condition3]
                     ];
             }
         }
 
         $this->gridFilters[$filterKey]['post'] = $post;
 
-        //reset saved filters
+        // reset saved filters
         if ($this->request->getPost('resetFilter')) {
             if (!empty($this->gridFilters[$filterKey])) {
                 unset($this->gridFilters[$filterKey]);
@@ -499,7 +508,7 @@ class ControllerBase extends Controller
      */
     protected function renderGrid($class)
     {
-        $filterKey  = $this->router->getControllerName();
+        $filterKey = $this->router->getControllerName();
         $conditions = [];
         $this->gridFilters = $this->getGridFilters();
         if (!empty($this->gridFilters[$filterKey]['conditions'])) {
@@ -518,7 +527,7 @@ class ControllerBase extends Controller
                 $builder->columns(self::$grid['query']['columns']);
             }
             foreach (self::$grid['query']['joins'] as $join) {
-                $type = (string) $join['type'];
+                $type = (string)$join['type'];
                 if (in_array($type, ['innerJoin', 'leftJoin', 'rightJoin', 'join'])) {
                     $builder->$type('Phanbook\\Models\\' . $join['model'], $join['on'], $join['alias']);
                 }
@@ -540,25 +549,32 @@ class ControllerBase extends Controller
         if (!count($collections)) {
             if (!$this->request->isAjax()) {
                 $this->flashSession->notice(t("The search did not match any collection."));
-            } else {
-                /*
-                $this->setJsonResponse();
-                $this->jsonMessages['messages'][] = ['type'    => 'notice',
-                                                     'content' => t('The search did not match any collection.')
-                ];
-                */
-                //return $this->jsonMessages;
             }
         }
 
         $this->assets->addCss('core/assets/js/chosen/chosen.css');
         $this->assets->addJs('core/assets/js/datatables/jquery.dataTables.min.js');
 
+        $page = $this->numberPage;
+        if (!empty($this->gridFilters[$filterKey]['page'])) {
+            $page = $this->gridFilters[$filterKey]['page'];
+        }
+
+        $perPage = $this->perPage;
+        if (!empty($this->gridFilters[$filterKey]['perPage'])) {
+            $perPage = $this->gridFilters[$filterKey]['perPage'];
+        }
+
+        $postFilter = [];
+        if (!empty($this->gridFilters[$filterKey]['post'])) {
+            $postFilter = $this->gridFilters[$filterKey]['post'];
+        }
+
         $paginator = new Paginator(
             [
-                'data'  => $collections,
-                'limit' => (empty($this->gridFilters[$filterKey]['perPage']) ? $this->perPage : $this->gridFilters[$filterKey]['perPage']),
-                'page'  => (empty($this->gridFilters[$filterKey]['page']) ? $this->numberPage : $this->gridFilters[$filterKey]['page'])
+                'data' => $collections,
+                'limit' => $perPage,
+                'page' => $page
             ]
         );
 
@@ -566,9 +582,9 @@ class ControllerBase extends Controller
         $this->view->setVars(
             [
                 'paginator' => $paginator->getPaginate(),
-                'filters'   => (!empty($this->gridFilters[$filterKey]['post']) ? $this->gridFilters[$filterKey]['post'] : []),
-                'perPage'   => (empty($this->gridFilters[$filterKey]['perPage']) ? $this->perPage : $this->gridFilters[$filterKey]['perPage']),
-                'params'    => static::$grid,
+                'filters' => $postFilter,
+                'perPage' => $perPage,
+                'params' => static::$grid,
             ]
         );
     }
@@ -610,6 +626,7 @@ class ControllerBase extends Controller
             return $cookieValue;
         }
     }
+
     /**
      * The function sending log for nginx or apache, it will to analytic later
      *

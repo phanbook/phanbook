@@ -12,17 +12,20 @@
  */
 namespace Phanbook;
 
-use Phalcon\CLI\Console as CLIConsole;
-use Phalcon\DiInterface;
+use Phalcon\Loader;
 use Phalcon\Mvc\View;
-use Phalcon\Mvc\View\Engine\Volt;
-use Phalcon\Queue\Beanstalk;
-
-use Phanbook\Tools\Cli\Output;
-use Phanbook\Markdown\ParsedownExtra;
-use Phanbook\Mail\Mail;
+use Phalcon\Cli\Router;
 use Phanbook\Auth\Auth;
+use Phanbook\Mail\Mail;
+use Phalcon\DiInterface;
+use Phalcon\Events\Manager;
+use Phalcon\Queue\Beanstalk;
+use Phanbook\Tools\Cli\Output;
 use Phanbook\Queue\DummyServer;
+use Phalcon\Db\Adapter\Pdo\Mysql;
+use Phalcon\Mvc\View\Engine\Volt;
+use Phanbook\Markdown\ParsedownExtra;
+use Phalcon\Cli\Console as CLIConsole;
 
 /**
  * Console.
@@ -31,68 +34,76 @@ class Console extends CLIConsole
 {
     const ERROR_SINGLE = 999;
 
-    private $_di;
+    /**
+     * @var DiInterface
+     */
+    private $di;
 
-    private $_config;
+    private $config;
 
     /**
      * @var string filename that will store the pid
      */
-    protected $_pidFile;
+    protected $pidFile;
 
     /**
      * @var string directory path that will contain the pid file
      */
-    protected $_pidDir = '/tmp';
+    protected $pidDir = '/tmp';
 
     /**
      * @var bool if debug mode is on or off
      */
-    protected $_isDebug;
+    protected $isDebug;
 
     /**
-     * @var bool whether to record tasks by inserting into the database or not
+     * whether to record tasks by inserting into the database or not
+     * @var bool
      */
-    protected $_isRecording;
-
-    /**
-     * @var
-     */
-    protected $_argc;
+    protected $isRecording = false;
 
     /**
      * @var
      */
-    protected $_argv;
+    protected $argc;
 
     /**
      * @var
      */
-    protected $_isSingleInstance;
+    protected $argv;
+
+    /**
+     * @var bool
+     */
+    protected $isSingleInstance = false;
 
     /**
      * Task for cli handler to run.
      */
-    protected $_task;
+    protected $task = null;
 
     /**
      * Action for cli handler to run.
      */
-    protected $_action;
+    protected $action = null;
 
     /**
      * Parameters to be passed to Task.
      *
-     * @var
+     * @var array
      */
-    protected $_params;
+    protected $params = [];
 
     /**
      * Task Id from the database.
      *
-     * @var
+     * @var int
      */
-    protected $_taskId;
+    protected $taskId = null;
+
+    protected $stderr = '';
+    protected $stdout = '';
+    protected $mode;
 
     /**
      * Console constructor - set the dependency Injector.
@@ -101,15 +112,19 @@ class Console extends CLIConsole
      */
     public function __construct(DiInterface $di)
     {
-        $this->_di = $di;
-        $this->_stderr = $this->_stdout = '';
-        $this->_isSingleInstance = $this->_isRecording = false;
-        $this->_task = $this->_action = null;
-        $this->_params = array();
-        $this->_taskId = null;
+        $this->di = $di;
         $loaders = [
-            'config', 'loader', 'db', 'router', 'markdown', 'mail',
-            'view', 'queue', 'auth', 'session', 'isCli'
+            'config',
+            'loader',
+            'db',
+            'router',
+            'markdown',
+            'mail',
+            'view',
+            'queue',
+            'auth',
+            'session',
+            'isCli'
         ];
 
         // Register services
@@ -118,10 +133,10 @@ class Console extends CLIConsole
         }
 
         // Register the app itself as a service
-        $this->_di->set('app', $this);
+        $this->di->set('app', $this);
 
         // Set the dependency Injector
-        parent::__construct($this->_di);
+        parent::__construct($this->di);
     }
 
     /**
@@ -129,45 +144,50 @@ class Console extends CLIConsole
      */
     protected function loader()
     {
-        $loader = new \Phalcon\Loader();
-        $loader->registerNamespaces(
-            [
-                'Phanbook'              => ROOT_DIR . '/core/common/library/',
-                'Phanbook\Mail'         => ROOT_DIR . '/core/common/library/Mail/',
-                'Phanbook\Tools'        => ROOT_DIR . '/core/common/tools/',
-                'Phanbook\Models'       => ROOT_DIR . '/core/common/models/',
-                'Phanbook\Search'       => ROOT_DIR . '/core/common/library/Search/',
-                'Phanbook\Cli\Tasks'    => ROOT_DIR . '/core/modules/cli/tasks/',
-                'Phanbook\Seeder'       => ROOT_DIR . '/core/modules/seeder/'
-            ]
-        )->register();
+        $loader = new Loader();
+        $namespaces = [
+            'Phanbook' => ROOT_DIR . '/core/common/library/',
+            'Phanbook\Mail' => ROOT_DIR . '/core/common/library/Mail/',
+            'Phanbook\Tools' => ROOT_DIR . '/core/common/tools/',
+            'Phanbook\Models' => ROOT_DIR . '/core/common/models/',
+            'Phanbook\Search' => ROOT_DIR . '/core/common/library/Search/',
+            'Phanbook\Cli\Tasks' => ROOT_DIR . '/core/modules/cli/tasks/',
+            'Phanbook\Seeder' => ROOT_DIR . '/core/modules/seeder/'
+        ];
+
+        $loader
+            ->registerNamespaces($namespaces)
+            ->register();
     }
+
     protected function isCli()
     {
-        $this->_di->set(
+        $this->di->set(
             'isCli',
             function () {
                 return true;
             }
         );
     }
+
     protected function auth()
     {
-        $this->_di->set(
+        $this->di->set(
             'auth',
             function () {
                 return new Auth;
             }
         );
     }
+
     protected function session()
     {
-        $config = $this->_config;
-        $this->_di->set(
+        $config = $this->config;
+        $this->di->set(
             'session',
             function () use ($config) {
                 $sessionAdapter = $config->application->session->adapter;
-                $session        = new $sessionAdapter($config->application->session->options->toArray());
+                $session = new $sessionAdapter($config->application->session->options->toArray());
                 $session->start();
 
                 return $session;
@@ -186,12 +206,12 @@ class Console extends CLIConsole
             $overrideConfig = include ROOT_DIR . '/core/config/config.global.php';
             $config->merge($overrideConfig);
         }
-        if (file_exists(ROOT_DIR.'/core/config/config.'.APPLICATION_ENV.'.php')) {
-            $overrideConfig = include ROOT_DIR.'/core/config/config.'.APPLICATION_ENV.'.php';
+        if (file_exists(ROOT_DIR . '/core/config/config.' . APPLICATION_ENV . '.php')) {
+            $overrideConfig = include ROOT_DIR . '/core/config/config.' . APPLICATION_ENV . '.php';
             $config->merge($overrideConfig);
         }
-        $this->_di->set('config', $config);
-        $this->_config = $config;
+        $this->di->set('config', $config);
+        $this->config = $config;
     }
 
     /**
@@ -201,19 +221,19 @@ class Console extends CLIConsole
      */
     protected function db()
     {
-        $config = $this->_config;
-        $this->_di->set(
+        $config = $this->config;
+        $this->di->set(
             'db',
             function () use ($config) {
-                return new \Phalcon\Db\Adapter\Pdo\Mysql(
+                return new Mysql(
                     [
-                    "host"      => $config->database->mysql->host,
-                    "username"  => $config->database->mysql->username,
-                    "password"  => $config->database->mysql->password,
-                    "dbname"    => $config->database->mysql->dbname,
-                    "options"   => [
-                    \PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES '.$config->database->mysql->charset,
-                    ],
+                        "host" => $config->database->mysql->host,
+                        "username" => $config->database->mysql->username,
+                        "password" => $config->database->mysql->password,
+                        "dbname" => $config->database->mysql->dbname,
+                        "options" => [
+                            \PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES ' . $config->database->mysql->charset,
+                        ],
                     ]
                 );
             }
@@ -225,10 +245,10 @@ class Console extends CLIConsole
      */
     protected function router()
     {
-        $this->_di->set(
+        $this->di->set(
             'router',
             function () {
-                $router = new \Phalcon\CLI\Router();
+                $router = new Router();
 
                 return $router;
             }
@@ -237,26 +257,28 @@ class Console extends CLIConsole
 
     protected function markdown()
     {
-        $this->_di->set(
+        $this->di->set(
             'markdown',
             function () {
                 return new ParsedownExtra();
             }
         );
     }
+
     protected function mail()
     {
-        $this->_di->set(
+        $this->di->set(
             'mail',
             function () {
                 return new Mail();
             }
         );
     }
+
     protected function view()
     {
-        $config = $this->_config;
-        $this->_di->set(
+        $config = $this->config;
+        $this->di->set(
             'view',
             function () use ($config) {
                 $view = new View();
@@ -264,28 +286,29 @@ class Console extends CLIConsole
                 $view->disableLevel([View::LEVEL_MAIN_LAYOUT => true, View::LEVEL_LAYOUT => true]);
                 $view->registerEngines(
                     [
-                    '.volt' => function () use ($view, $config) {
+                        '.volt' => function () use ($view, $config) {
                             $volt = new Volt($view);
                             $volt->setOptions(
                                 [
-                                    'compiledPath'      => $config->application->view->compiledPath,
+                                    'compiledPath' => $config->application->view->compiledPath,
                                     'compiledSeparator' => $config->application->view->compiledSeparator,
                                     'compiledExtension' => $config->application->view->compiledExtension,
-                                    'compileAlways'     => $config->application->debug,
+                                    'compileAlways' => $config->application->debug,
                                 ]
                             );
                             return $volt;
-                    }
+                        }
                     ]
                 );
                 return $view;
             }
         );
     }
+
     protected function queue()
     {
-        $config = $this->_config;
-        $this->_di->set(
+        $config = $this->config;
+        $this->di->set(
             'queue',
             function () use ($config) {
                 if (isset($config->beanstalk->disabled) && $config->beanstalk->disabled) {
@@ -298,24 +321,27 @@ class Console extends CLIConsole
             }
         );
     }
+
     /**
      * Set Application arguments.
      *
-     * @param array of arguments
-     * @param count of arguments
+     * @param array $argv array of arguments
+     * @param int $argc count of arguments
      *
-     * @return mixed
+     * @return $this
      */
     public function setArgs($argv, $argc)
     {
-        $this->_argv = $argv;
-        $this->_argc = $argc;
+        $this->argv = $argv;
+        $this->argc = $argc;
+
+        return $this;
     }
 
     /**
      * Set events to be triggered before/after certain stages in Micro App.
      *
-     * @param object $event events to add
+     * @param Manager $events events to add
      */
     public function setEvents(Manager $events)
     {
@@ -332,21 +358,21 @@ class Console extends CLIConsole
             $taskId = null;
 
             // Check on stupid mistakes
-            $this->preTaskCheck($this->_argc);
+            $this->preTaskCheck($this->argc);
 
-            $this->determineTask($this->_argv);
+            $this->determineTask($this->argv);
             // Check Instance Mode (can only one run at a time)
-            $this->checkProcessInstance($this->_argv);
+            $this->checkProcessInstance($this->argv);
 
             // Add Record to DB that task started
-            if ($this->_isRecording) {
+            if ($this->isRecording) {
             }
 
             // Setup args (task, action, params) for console
-            $args['task'] = 'Phanbook\Cli\Tasks'."\\".$this->_task;
-            $args['action'] = !empty($this->_action) ? $this->_action : 'main';
-            if (!empty($this->_params)) {
-                $args['params'] = $this->_params;
+            $args['task'] = 'Phanbook\Cli\Tasks' . "\\" . $this->task;
+            $args['action'] = !empty($this->action) ? $this->action : 'main';
+            if (!empty($this->params)) {
+                $args['params'] = $this->params;
             }
             // Kick off Task
             $this->handle($args);
@@ -354,18 +380,18 @@ class Console extends CLIConsole
             $this->removeProcessInstance();
 
             // Update status
-            if ($this->_isRecording) {
-                $task->updateSuccessful($this->_taskId, Output::getStdout(), Output::getStderr(), $exit);
+            if ($this->isRecording) {
+                $task->updateSuccessful($this->taskId, Output::getStdout(), Output::getStderr(), $exit);
             }
-        } catch (Phanbook\Tools\Cli\Exception $e) {
+        } catch (\Phanbook\Tools\Cli\Exception $e) {
             $exit = 3;
-            $this->handleException($e, $this->_taskId, $exit);
-        } catch (Phalcon\Exception $e) {
+            $this->handleException($e, $this->taskId, $exit);
+        } catch (\Phalcon\Exception $e) {
             $exit = 2;
-            $this->handleException($e, $this->_taskId, $exit);
+            $this->handleException($e, $this->taskId, $exit);
         } catch (\Exception $e) {
             $exit = 1;
-            $this->handleException($e, $this->_taskId, $exit);
+            $this->handleException($e, $this->taskId, $exit);
         }
 
         return $exit;
@@ -378,14 +404,13 @@ class Console extends CLIConsole
      */
     public function checkProcessInstance($argv)
     {
-
         // Single Instance
         if ($this->isSingleInstance()) {
-            $file = sprintf('%s-%s.pid', $this->_task, $this->_action);
+            $file = sprintf('%s-%s.pid', $this->task, $this->action);
             $pid = \Cli\Pid::singleton($file);
 
             // Default
-            $this->_pidFile = $file;
+            $this->pidFile = $file;
 
             // Make sure only 1 app at a time is running
             if ($pid->exists()) {
@@ -401,14 +426,14 @@ class Console extends CLIConsole
 
                 if ($pid->create()) {
                     if ($this->isDebug()) {
-                        Output::stdout("[DEBUG] Created Pid File: ".$pid->getFileName());
+                        Output::stdout("[DEBUG] Created Pid File: " . $pid->getFileName());
                     }
                 } else {
                     $desc = '';
                     throw new \exceptions\System('unable to create pid file', $desc);
                 }
 
-                if (!file_put_contents($this->_pidFile, getmypid())) {
+                if (!file_put_contents($this->pidFile, getmypid())) {
                     $desc = '';
                     throw new \exceptions\System('unable to create pid file', $desc);
                 }
@@ -428,11 +453,11 @@ class Console extends CLIConsole
             if ($pid->created() && !$pid->removed()) {
                 if ($result = $pid->remove()) {
                     if ($this->isDebug()) {
-                        Output::stdout("[DEBUG] Removed Pid File: ".$pid->getFileName());
+                        Output::stdout("[DEBUG] Removed Pid File: " . $pid->getFileName());
                     }
                 } else {
-                    $msg = Output::COLOR_RED."[ERROR]".Output::COLOR_NONE." Failed to remove Pid File: $this->_pidFile";
-                    Output::stderr($msg);
+                    $msg = " Failed to remove Pid File: $this->pidFile";
+                    Output::stderr(Output::COLOR_RED . "[ERROR]" . Output::COLOR_NONE . $msg);
                 }
 
                 return $result;
@@ -447,7 +472,7 @@ class Console extends CLIConsole
      *
      * @param array $flags cli arguments to determine tasks/action/param
      *
-     * @throws Exception
+     * @throws \Exception
      */
     protected function determineTask($flags)
     {
@@ -457,27 +482,28 @@ class Console extends CLIConsole
 
         if (is_array($flags) && !empty($flags)) {
             foreach ($flags as $flag) {
-                if (empty($this->_task) && !$this->isFlag($flag)) {
-                    $this->_task = $flag;
-                } elseif (empty($this->_action) && !$this->isFlag($flag)) {
-                    $this->_action = $flag;
+                if (empty($this->task) && !$this->isFlag($flag)) {
+                    $this->task = $flag;
+                } elseif (empty($this->action) && !$this->isFlag($flag)) {
+                    $this->action = $flag;
                 } elseif (!$this->isFlag($flag)) {
-                    $this->_params[] = $flag;
+                    $this->params[] = $flag;
                 }
             }
-        } else {
-            throw new Exception('Unable to determine task/action/params');
+            return;
         }
+
+        throw new \Exception('Unable to determine task/action/params');
     }
 
     /**
-     * set mode of multiple or single instance at a time.
+     * Set mode of multiple or single instance at a time.
      *
      * @param int $mode
      */
     public function setMode($mode)
     {
-        $this->_mode = $mode;
+        $this->mode = $mode;
     }
 
     /**
@@ -487,14 +513,14 @@ class Console extends CLIConsole
      */
     public function setPidDir($dir)
     {
-        $this->_pidDir = $dir;
+        $this->pidDir = $dir;
     }
 
     /**
      * make sure everything required is setup before starting the task.
      *
      * @param array $argv array of arguments
-     * @param int   $argc count of arguments
+     * @param int $argc count of arguments
      *
      * @throws Exception
      */
@@ -513,7 +539,7 @@ class Console extends CLIConsole
      */
     public function setDebug($debug)
     {
-        $this->_isDebug = $debug;
+        $this->isDebug = $debug;
         if ($debug) {
             error_reporting(E_ALL);
             ini_set('display_errors', 1);
@@ -522,7 +548,7 @@ class Console extends CLIConsole
 
     public function isDebug()
     {
-        return $this->_isDebug;
+        return $this->isDebug;
     }
 
     /**
@@ -532,7 +558,7 @@ class Console extends CLIConsole
      */
     public function setRecording($record)
     {
-        $this->_isRecording = $record;
+        $this->isRecording = $record;
     }
 
     /**
@@ -542,7 +568,7 @@ class Console extends CLIConsole
      */
     public function isRecording()
     {
-        return $this->_isRecording;
+        return $this->isRecording;
     }
 
     /**
@@ -552,7 +578,7 @@ class Console extends CLIConsole
      */
     public function setSingleInstance($single)
     {
-        $this->_isSingleInstance = $single;
+        $this->isSingleInstance = $single;
     }
 
     /**
@@ -562,15 +588,15 @@ class Console extends CLIConsole
      */
     public function isSingleInstance()
     {
-        return $this->_isSingleInstance;
+        return $this->isSingleInstance;
     }
 
     /**
      * handle script ending exception.
      *
-     * @param Exception that caused the failure
-     * @param id of the task you started
-     * @param exit code status of the process
+     * @param \Exception $e Exception that caused the failure
+     * @param int $taskId id of the task you started
+     * @param int $exit exit code status of the process
      */
     protected function handleException(\Exception $e, $taskId, $exit)
     {
@@ -582,7 +608,7 @@ class Console extends CLIConsole
         }
 
         // Update Failure
-        if ($this->_isRecording && $taskId > 0) {
+        if ($this->isRecording && $taskId > 0) {
             $stdout = Output::getStdout();
             $stderr = Output::getStderr();
             //  Update Task w/ error messages
@@ -615,7 +641,7 @@ class Console extends CLIConsole
      */
     public function getPidFile()
     {
-        return $this->_pidFile;
+        return $this->pidFile;
     }
 
     /**
@@ -625,6 +651,6 @@ class Console extends CLIConsole
      */
     public function getTaskId()
     {
-        return $this->_taskId;
+        return $this->taskId;
     }
 }

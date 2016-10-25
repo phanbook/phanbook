@@ -25,6 +25,7 @@ use Phanbook\Models\MediaType;
 class MediaController extends ControllerBase
 {
     private $mediaModel;
+
     public function onConstruct()
     {
         $this->mediaModel = new Media();
@@ -34,12 +35,12 @@ class MediaController extends ControllerBase
     {
         $this->view->form = new MediaForm();
         $this->view->files = [];
-
     }
+
     public function settingAction()
     {
-
     }
+
     public function uploadAction()
     {
         if ($this->request->hasFiles()) {
@@ -60,6 +61,7 @@ class MediaController extends ControllerBase
             }
             return $this->response->send();
         }
+
         $this->assets->addCss('/core/assets/css/dropzone.css', false);
         $this->assets->addJs('/core/assets/js/dropzone.js', false);
         $this->view->acceptExt = implode(",", MediaType::getExtensionAllowed());

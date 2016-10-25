@@ -32,7 +32,6 @@ cache:
   timeout: 691200
   directories:
     - .temp
-    - vendor
     - $HOME/.ccache
     - $HOME/.composer/cache
 
@@ -76,7 +75,7 @@ before_script:
   - ulimit -c unlimited -S || true
 
 script:
-  - vendor/bin/phpcs --ignore=core/common/library/Markdown
+  - vendor/bin/phpcs --extensions=php
   - vendor/bin/codecept build
   - vendor/bin/codecept run
 

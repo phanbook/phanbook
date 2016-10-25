@@ -14,11 +14,10 @@ namespace Phanbook\Models;
 
 use Phanbook\Media\MediaFiles;
 use Phanbook\Utils\Constants;
-use Phalcon\Image\Adapter\GD;
+use Phalcon\Image\Adapter\Gd;
 
 class Media extends ModelBase
 {
-
     /**
      *
      * @var integer
@@ -51,7 +50,7 @@ class Media extends ModelBase
 
     /**
      * store error
-     * @var list
+     * @var array
      */
     protected $error;
 
@@ -65,6 +64,7 @@ class Media extends ModelBase
      * Constructer
      */
     protected $constants;
+
     public function initialize()
     {
         parent::initialize();
@@ -238,8 +238,8 @@ class Media extends ModelBase
         );
     }
     /**
-     * Get an error if occured
-     * @return list string List error
+     * Get an error if occurred
+     * @return array
      */
     public function getError()
     {
@@ -285,7 +285,6 @@ class Media extends ModelBase
         }
         if (!$this->fileSystem->uploadFile($localPath, $serverPath)) {
             return $this->setError(MEDIA_TEMP_NOT_FOUND);
-
         }
         $uploadStatus = $this->saveToDB(
             $userName,
@@ -308,6 +307,7 @@ class Media extends ModelBase
         }
         return true;
     }
+
     /**
      * Generate thumb file for image.
      * The thumb file has same type with original file. However it have small resolution and name has thumb_ prefix
@@ -329,6 +329,7 @@ class Media extends ModelBase
         }
         return false;
     }
+
     /**
      * Resize of image uploaded
      * @param  string  $source
@@ -339,7 +340,7 @@ class Media extends ModelBase
      */
     private function resizeImage($source, $dest, $new_width, $new_height)
     {
-        $image = new GD($source);
+        $image = new Gd($source);
         $source_height = $image->getHeight();
         $source_width = $image->getWidth();
         $source_aspect_ratio = $source_width / $source_height;
@@ -356,6 +357,7 @@ class Media extends ModelBase
         $image->resize($temp_width, $temp_height)->crop($new_width, $new_height, $x0, $y0);
         return $image->save($dest);
     }
+
     /**
      * Save file info uploaded to database
      * @param  string $userName

@@ -12,16 +12,12 @@
  */
 namespace Phanbook\Mail;
 
-use Phalcon\Mvc\User\Component;
-use Phalcon\Mvc\View;
-use Phalcon\Mvc\Model\Validator\Email as Email;
-use Phanbook\Models\Template;
-
-require_once ROOT_DIR . 'vendor/swiftmailer/swiftmailer/lib/swift_required.php';
-
 use Swift_Mailer;
 use Swift_Message;
+use Phalcon\Mvc\View;
 use Swift_SmtpTransport;
+use Phanbook\Models\Template;
+use Phalcon\Mvc\User\Component;
 
 class Mail extends Component
 {
@@ -58,9 +54,9 @@ class Mail extends Component
     /**
      * Send email
      *
-     * @param $to - email to send
-     * @param $templateKey - a unique key of the template
-     * @param array $params - array with params for template. If $params['subject'] not set we get subject from database;
+     * @param string $to Email to send
+     * @param string $templateKey A unique key of the template
+     * @param array $params Array with params for template. If $params['subject'] not set we get subject from database
      *
      * @return int
      */
@@ -110,6 +106,7 @@ class Mail extends Component
     {
         return $this->send($to, 'test');
     }
+
     /**
      * Send a test email
      *
@@ -121,6 +118,7 @@ class Mail extends Component
     {
         return $to;
     }
+
     public function renderTest()
     {
 

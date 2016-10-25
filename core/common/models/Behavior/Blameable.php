@@ -47,7 +47,7 @@ class Blameable extends Behavior implements BehaviorInterface
     }
 
     /**
-     * Creates an Audit isntance based on the current enviroment
+     * Creates an Audit instance based on the current environment
      *
      * @param  string                      $type
      * @param  \Phalcon\Mvc\ModelInterface $model
@@ -82,7 +82,6 @@ class Blameable extends Behavior implements BehaviorInterface
             $audit->setCreatedAt(date('Y-m-d H:i:s'));
             return $audit;
         }
-
     }
 
     /**
