@@ -54,25 +54,24 @@ before_install:
   - phpenv config-rm xdebug.ini || true
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
   - composer self-update -q
-  - travis_retry composer install --prefer-dist --no-interaction --ignore-platform-reqs
   - bash tests/_ci/install_zephir.sh
   - bash tests/_ci/install_prereqs_$PHP_MAJOR.sh
+  - pecl list
+  - php -m
 
 install:
   - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b ${PHALCON_VERSION}
   - '( cd cphalcon; zephir fullclean && zephir generate $ZEND_BACKEND )'
   - (cd cphalcon/ext; export CFLAGS="-g3 -O1 -std=gnu90 -Wall -DZEPHIR_RELEASE=1"; $PHPIZE_BIN &> /dev/null && ./configure --silent --enable-phalcon &> /dev/null && make --silent -j4 &> /dev/null && make --silent install)
   - phpenv config-add cphalcon/tests/_ci/phalcon.ini
+  - travis_retry composer install --prefer-dist --no-interaction
   - php --ri phalcon
-  - php -m
-  - pecl list
 
 before_script:
-  - echo "USE mysql;\nUPDATE user SET password=PASSWORD('password__phanbook') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
+  - echo 'CREATE DATABASE phanbook CHARSET=utf8 COLLATE=utf8_unicode_ci' | mysql -u root
+  - cat schema/phanbook.sql | mysql -uroot
   - cp ./core/config/config.example.php ./core/config/config.php
   - cp ./tests/config.travis.php ./core/config/config.travis.php
-  - mysql -e 'CREATE DATABASE phanbook CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;' -uroot -ppassword__phanbook
-  - cat schema/phanbook.sql | mysql -uroot phanbook -ppassword__phanbook
   #- (cd ./scripts/ && php random-entries.php > /dev/null)
   - php -S 127.0.0.1:8000 -t . .htrouter.php >/dev/null 2>&1 &
   - ulimit -c unlimited -S || true
