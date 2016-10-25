@@ -1,27 +1,53 @@
 {
-    "name": "Phanbook/phanbook",
-    "description": "Phanbook App",
-    "minimum-stability": "dev",
-    "license": "GNU",
-    "authors": [
-    {
-        "name": "Phanbook",
-        "email": "hello@phanbook.com"
-    }
+    "name": "phanbook/phanbook",
+    "type": "project",
+    "description": "Phanbook is the next-generation Q&A and Forum software that makes online discussion, question and answer site for professional and enthusiast people",
+    "keywords": [
+        "qa",
+        "forum",
+        "discussion",
+        "phanbook",
+        "question",
+        "answer"
     ],
-    "require-dev": {
-        "fzaninotto/faker": "1.5.*@dev",
-        "squizlabs/php_codesniffer": "1.*",
-        "codeception/codeception": "2.1.2"
-    },
+    "homepage": "http://phanbook.com/",
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "Phanbook",
+            "email": "hello@phanbook.com",
+            "homepage": "http://phanbook.com/"
+        },
+        {
+            "name": "Contributors",
+            "homepage": "https://github.com/phanbook/phanbook/graphs/contributors"
+        }
+    ],
     "require": {
+        "php": ">=5.5  <8.0",
         "swiftmailer/swiftmailer": "@stable",
-        "league/oauth2-client": "0.10.*@dev",
-        "league/fractal": "0.7.*",
-        "elasticsearch/elasticsearch": "~1.0",
-        "google/apiclient": "1.0.*@beta",
+        "league/oauth2-client": "^0.10",
+        "league/fractal": "^0.9",
+        "elasticsearch/elasticsearch": "^1.4",
+        "google/apiclient": "^1.0",
         "league/flysystem": "^1.1@dev",
-        "erusev/parsedown": "~1.6"
+        "erusev/parsedown": "^1.6"
 
+    },
+    "require-dev": {
+        "phpdocumentor/reflection-docblock": "^2.0.4",
+        "phpunit/phpunit": "4.8.*",
+        "fzaninotto/faker": "^1.6",
+        "squizlabs/php_codesniffer": "^2.7",
+        "codeception/codeception": "^2.2",
+        "phalcon/zephir": "dev-master"
+    },
+    "support": {
+        "issues": "https://github.com/phanbook/phanbook/issues",
+        "source": "https://github.com/phanbook/phanbook",
+        "forum": "http://meta.phanbook.com/"
+    },
+    "suggest": {
+        "ext-yaml" : "Best way to work with YAML"
     }
 }
