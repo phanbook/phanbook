@@ -16,7 +16,7 @@ matrix:
     - php: 7.0
       env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="3.0.x"
     - php: 7.1
-      env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="v3.0.0x"
+      env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="v3.0.0"
     - php: 7.1
       env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="3.0.x"
 
@@ -51,19 +51,15 @@ before_install:
   - export PHP_MAJOR="$(echo $TRAVIS_PHP_VERSION | cut -d '.' -f 1,2)"
   - phpenv config-rm xdebug.ini || true
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
-  - composer self-update -q
   - travis_retry composer install --prefer-dist --no-interaction
   - ( bash tests/_ci/install_zephir.sh )
   - bash tests/_ci/install_prereqs_$PHP_MAJOR.sh
-  - pecl list
-  - php -m
 
 install:
   - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b ${PHALCON_VERSION}
   - '( cd cphalcon; zephir fullclean && zephir generate $ZEND_BACKEND )'
   - (cd cphalcon/ext; export CFLAGS="-g3 -O1 -std=gnu90 -Wall -DZEPHIR_RELEASE=1"; $PHPIZE_BIN &> /dev/null && ./configure --silent --enable-phalcon &> /dev/null && make --silent -j4 &> /dev/null && make --silent install)
   - phpenv config-add cphalcon/tests/_ci/phalcon.ini
-  - php --ri phalcon
 
 before_script:
   - echo 'CREATE DATABASE phanbook CHARSET=utf8 COLLATE=utf8_unicode_ci' | mysql -u root
