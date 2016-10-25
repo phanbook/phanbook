@@ -17,6 +17,8 @@ class MailTest extends UnitTest
 
     public function testRender()
     {
+        $this->markTestSkipped('This test need to refactor');
+
         $mail       = $this->di->get('mail');
         $expected   = 'This is a test email.';
         $ouput      = exec('php cli Tests render');

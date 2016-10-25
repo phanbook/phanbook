@@ -4,8 +4,6 @@ namespace App\Test\Unit\Library;
 
 use App\Test\Module\UnitTest;
 
-require_once 'TestBase.php';
-
 class SlugTest extends UnitTest
 {
     public function nonAsciiStringProvider()
