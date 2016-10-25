@@ -7,23 +7,10 @@
 class_name: AcceptanceTester
 modules:
     enabled:
-        - Filesystem
-        - Phalcon2
-        #- WebDriver
+        - Helper\Acceptance
         - Db
-        - PhpBrowser
-    config:
-        Phalcon2:
-            bootstrap: 'tests/bootstrap.php'
-            cleanup: true
-            savepoints: true
-        PhpBrowser:
+        - Filesystem
+        - PhpBrowser:
             url: 'http://localhost:8000'
             curl:
-              CURLOPT_RETURNTRANSFER: true
-
-        # WebDriver:
-        #  url: 'http://localhost/'
-        #  browser: phantomjs
-        #  capabilities:
-        #      webStorageEnabled: true
+                CURLOPT_RETURNTRANSFER: true
