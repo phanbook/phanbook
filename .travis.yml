@@ -50,11 +50,13 @@ env:
     - PHALCON_VERSION="v3.0.0"
 
 before_install:
+  - export PHP_MAJOR="$(echo $TRAVIS_PHP_VERSION | cut -d '.' -f 1,2)"
   - phpenv config-rm xdebug.ini || true
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
   - composer self-update -q
   - travis_retry composer install --prefer-dist --no-interaction --ignore-platform-reqs
   - bash tests/_ci/install_zephir.sh
+  - bash tests/_ci/install_prereqs_$PHP_MAJOR.sh
 
 install:
   - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b ${PHALCON_VERSION}
