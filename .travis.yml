@@ -54,7 +54,8 @@ before_install:
   - phpenv config-rm xdebug.ini || true
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
   - composer self-update -q
-  - bash tests/_ci/install_zephir.sh
+  - travis_retry composer install --prefer-dist --no-interaction
+  - ( bash tests/_ci/install_zephir.sh )
   - bash tests/_ci/install_prereqs_$PHP_MAJOR.sh
   - pecl list
   - php -m
@@ -64,7 +65,6 @@ install:
   - '( cd cphalcon; zephir fullclean && zephir generate $ZEND_BACKEND )'
   - (cd cphalcon/ext; export CFLAGS="-g3 -O1 -std=gnu90 -Wall -DZEPHIR_RELEASE=1"; $PHPIZE_BIN &> /dev/null && ./configure --silent --enable-phalcon &> /dev/null && make --silent -j4 &> /dev/null && make --silent install)
   - phpenv config-add cphalcon/tests/_ci/phalcon.ini
-  - travis_retry composer install --prefer-dist --no-interaction
   - php --ri phalcon
 
 before_script:
