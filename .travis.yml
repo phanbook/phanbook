@@ -22,7 +22,6 @@ matrix:
 
 services:
   - mysql
-  - memcached
 
 git:
   depth: 1
@@ -69,7 +68,7 @@ install:
 
 before_script:
   - echo 'CREATE DATABASE phanbook CHARSET=utf8 COLLATE=utf8_unicode_ci' | mysql -u root
-  - cat schema/phanbook.sql | mysql -uroot
+  - cat schema/phanbook.sql | mysql -uroot phanbook
   - cp ./core/config/config.example.php ./core/config/config.php
   - cp ./tests/config.travis.php ./core/config/config.travis.php
   #- (cd ./scripts/ && php random-entries.php > /dev/null)
@@ -91,6 +90,9 @@ addons:
     packages:
       - gdb
       - re2c
+      - mysql-server-5.6
+      - mysql-client-core-5.6
+      - mysql-client-5.6
   hosts:
     - db
     - phanbook.dev
