@@ -83,7 +83,7 @@ script:
 notifications:
   email:
     - hello@phanbook.com
-  slack: phanbook:V3Gun19jnfnRafcTbvn5mFuY
+  slack: phanbook:"${SLAK_TOKEN}"
 
 addons:
   apt:
