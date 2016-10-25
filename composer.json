@@ -49,5 +49,11 @@
     },
     "suggest": {
         "ext-yaml" : "Best way to work with YAML"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Test\\Unit\\": "tests/unit/",
+            "App\\Test\\Module\\": "tests/_support/Module/"
+        }
     }
 }
