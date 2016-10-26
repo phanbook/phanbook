@@ -31,6 +31,7 @@ require ROOT_DIR . '/vendor/autoload.php';
         'Phanbook\Search' => ROOT_DIR . '/core/common/library/Search',
         'Phanbook\Tools\Cli' => ROOT_DIR . '/core/common/tools/cli/',
         'Phanbook\Cli\Tasks' => ROOT_DIR . '/core/modules/cli/tasks/',
+        'Phanbook\Common\Exceptions' => ROOT_DIR . '/core/common/exceptions/',
     ])
     ->register();
 
