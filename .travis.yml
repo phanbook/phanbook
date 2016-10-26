@@ -37,7 +37,6 @@ cache:
 
 env:
   global:
-    - APPLICATION_ENV="testing"
     - ZEND_DONT_UNLOAD_MODULES=1
     - CC="ccache gcc"
     - PATH="$PATH:~/bin"

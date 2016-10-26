@@ -1,2 +1,3 @@
 <?php
-//use Codeception\Util\Autoload;
+
+putenv('APPLICATION_ENV=testing');
