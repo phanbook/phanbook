@@ -41,3 +41,8 @@ defined('ENV_TESTING') || define('ENV_TESTING', 'testing');
  * @const APPLICATION_ENV Current application stage.
  */
 define('APPLICATION_ENV', getenv('APPLICATION_ENV') ?: ENV_LOCAL);
+
+/**
+ * @const COMPATIBLE_VERSION The compatible Phalcon version.
+ */
+define('COMPATIBLE_VERSION', 3000040);

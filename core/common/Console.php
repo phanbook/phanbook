@@ -10,7 +10,7 @@
  * @since   1.0.0
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
-namespace Phanbook;
+namespace Phanbook\Common;
 
 use Phalcon\Mvc\View;
 use Phalcon\Cli\Router;
@@ -26,6 +26,7 @@ use Phalcon\Mvc\View\Engine\Volt;
 use Phanbook\Markdown\ParsedownExtra;
 use Phalcon\Cli\Console as CLIConsole;
 use Phalcon\Di\FactoryDefault\Cli as CliDi;
+use Phanbook\Common\Exceptions\Cli\BadCliCallException;
 
 /**
  *\Phanbook\Console
@@ -177,19 +178,12 @@ class Console extends CLIConsole
     }
 
     /**
-     * Set the config service.
+     * Set the Application config.
      */
     protected function config()
     {
-        $config = include ROOT_DIR . '/core/config/config.php';
-        if (file_exists(ROOT_DIR . '/core/config/config.global.php')) {
-            $overrideConfig = include ROOT_DIR . '/core/config/config.global.php';
-            $config->merge($overrideConfig);
-        }
-        if (file_exists(ROOT_DIR . '/core/config/config.' . APPLICATION_ENV . '.php')) {
-            $overrideConfig = include ROOT_DIR . '/core/config/config.' . APPLICATION_ENV . '.php';
-            $config->merge($overrideConfig);
-        }
+        $config = Config::factory();
+
         $this->di->set('config', $config);
         $this->config = $config;
     }
@@ -499,14 +493,19 @@ class Console extends CLIConsole
      * make sure everything required is setup before starting the task.
      *
      * @param int $argc count of arguments
-     *
-     * @throws \Exception
+     * @throws BadCliCallException
      */
     protected function preTaskCheck($argc)
     {
         // Make sure task is added
         if ($argc < 2) {
-            throw new \Exception('Bad Number of Params needed for script');
+            throw new BadCliCallException(
+                'Invalid number of parameters required for for script.' . PHP_EOL . PHP_EOL .
+                'Examples:' . PHP_EOL .
+                '  cli [task] [action] [param1 [param2 ...]]' . PHP_EOL .
+                '  cli Example index' . PHP_EOL .
+                '  cli Example index --debug --single --no-record'. PHP_EOL . PHP_EOL
+            );
         }
     }
 
