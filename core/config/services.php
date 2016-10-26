@@ -42,6 +42,7 @@ use Phanbook\Utils\Phanbook;
 use Phanbook\Queue\DummyServer;
 use Phanbook\Markdown\ParsedownExtra;
 use Phanbook\Notifications\Checker     as NotificationsChecker;
+use Phanbook\Common\ThemeManager;
 
 /**
  * The FactoryDefault Dependency Injector automatically register the right services providing a full stack framework
@@ -53,6 +54,7 @@ $eventsManager = new EventsManager();
 
 /**
  * Register the configuration itself as a service
+ * @todo: Move to the \Phanbook\Common\Config
  */
 $config = include __DIR__ . '/config.php';
 if (file_exists(__DIR__ . '/config.global.php')) {
@@ -389,6 +391,7 @@ $di->set(
     'volt',
     function ($view, $di) use ($config) {
         $volt = new Volt($view);
+        $volt->setDI($di);
         $volt->setOptions(
             [
                 'compiledPath'      => $config->application->view->compiledPath,
@@ -430,6 +433,13 @@ $di->set(
     },
     true
 );
+
+// @todo: Move to the Separated Service
+$config = $di->getShared('config');
+$manager = new ThemeManager(ROOT_DIR . '/content/themes/' . $config->theme, $config->theme);
+$manager->setDI($di);
+$manager->initializeAssets();
+$di->setShared('theme', $manager);
 
 /**
  * Translation function call anywhere

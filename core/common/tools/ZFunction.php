@@ -178,6 +178,7 @@ class ZFunction extends Injectable
     /**
      * Helper - Safely add assets to your theme
      *
+     * @deprecated
      * @param  string
      * @return string
      */
