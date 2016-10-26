@@ -434,8 +434,8 @@ $di->set(
 /**
  * Translation function call anywhere
  *
+ * @todo Use bootstrap/helpers.php
  * @param $string
- *
  * @return mixed
  */
 if (!function_exists('t')) {
@@ -445,11 +445,15 @@ if (!function_exists('t')) {
         return $translation->_($string);
     }
 }
+
+// @TODO: Use bootstrap/helpers.php
 //Phalcon Debugger
 if ($config->application->debug) {
     (new \Phalcon\Debug)->listen();
     include ROOT_DIR . 'core/common/tools/Debug.php';
 }
+
+// @TODO: Use bootstrap/constants.php
 // For avoid re-define variables
 if (!defined("ALREADY_DEFINED")) {
     include 'constants.php';

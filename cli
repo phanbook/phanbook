@@ -21,9 +21,8 @@
  * @example cli Example index --debug --single --no-record
  */
 
+use Phanbook\Console;
 use Phanbook\Tools\Cli\PhpError;
-use Phalcon\Di\FactoryDefault\Cli;
-use Phanbook\Console as ConsoleApp;
 
 // Register The Auto Loader
 require __DIR__ . '/bootstrap/autoloader.php';
@@ -34,7 +33,7 @@ date_default_timezone_set('UTC');
 register_shutdown_function([PhpError::class, 'runtimeShutdown']);
 
 try {
-    $app = new ConsoleApp(new Cli());
+    $app = new Console();
     // Record any php warnings/errors
     set_error_handler([PhpError::class, 'errorHandler']);
 
@@ -65,13 +64,4 @@ try {
 } catch (Exception $e) {
     echo $e;
     exit(255);
-}
-
-/**
- * Fix undefined function t when save object which is have method
- * Validate in model
- */
-function t($string)
-{
-    //nothing
 }

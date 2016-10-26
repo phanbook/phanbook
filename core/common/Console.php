@@ -25,6 +25,7 @@ use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Mvc\View\Engine\Volt;
 use Phanbook\Markdown\ParsedownExtra;
 use Phalcon\Cli\Console as CLIConsole;
+use Phalcon\Di\FactoryDefault\Cli as CliDi;
 
 /**
  *\Phanbook\Console
@@ -109,11 +110,11 @@ class Console extends CLIConsole
     /**
      * Console constructor - set the dependency Injector.
      *
-     * @param \Phalcon\DiInterface $di
+     * @param DiInterface $di
      */
-    public function __construct(DiInterface $di)
+    public function __construct(DiInterface $di = null)
     {
-        $this->di = $di;
+        $this->di = $di ?: new CliDi();
         $loaders = [
             'config',
             'db',
@@ -455,7 +456,6 @@ class Console extends CLIConsole
      */
     protected function determineTask($flags)
     {
-
         // Since first argument is the name so script executing (pop it off the list)
         array_shift($flags);
 
@@ -498,10 +498,9 @@ class Console extends CLIConsole
     /**
      * make sure everything required is setup before starting the task.
      *
-     * @param array $argv array of arguments
      * @param int $argc count of arguments
      *
-     * @throws Exception
+     * @throws \Exception
      */
     protected function preTaskCheck($argc)
     {
