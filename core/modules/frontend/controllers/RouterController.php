@@ -21,13 +21,12 @@ namespace Phanbook\Frontend\Controllers;
  */
 class RouterController extends ControllerBase
 {
-
     public function initialize()
     {
         parent::initialize();
         $this->view->pick('page');
-
     }
+
     /**
      * indexAction function.
      */
@@ -43,6 +42,7 @@ class RouterController extends ControllerBase
         if (file_exists($this->phanbook->getPageFile($router))) {
             return $this->view->pick('pages/' . $router);
         }
+
         return $this->view->pick('page');
     }
 }

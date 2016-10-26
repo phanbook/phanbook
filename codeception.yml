@@ -33,9 +33,9 @@ modules:
         Db:
             dsn: 'mysql:host=localhost;dbname=phanbook'
             user: 'root'
-            password: 'password__phanbook'
+            password: ''
             dump: tests/_data/dump.sql
-        Phalcon2:
+        Phalcon:
             bootstrap: tests/bootstrap.php
             cleanup: true
             savepoints: true

@@ -7,33 +7,32 @@ class Execute
      * single instance of class (needed for singleton)
      * @var object
      */
-    protected static $_instance;
+    protected static $instance;
 
     /**
      * array of commands
      * @var array
      */
-    protected $_command;
+    protected $command = [];
 
     /**
      * constructor to initialize class
      */
     private function __construct()
     {
-        $this->_command = array();
     }
 
     /**
      * Get single instance of class
      *
-     * @return instance of this class
+     * @return $this
      */
     public static function singleton()
     {
-        if (empty(self::$_instance)) {
-            self::$_instance = new self();
+        if (empty(self::$instance)) {
+            self::$instance = new self();
         }
-        return self::$_instance;
+        return self::$instance;
     }
 
     /**
@@ -97,7 +96,7 @@ class Execute
         $command->stderr = $stderr;
         $command->time = ($end - $start);
 
-        $this->_command[] = $command;
+        $this->command[] = $command;
 
         return $return == 0 ? true : $return;
     }
@@ -106,11 +105,11 @@ class Execute
     /**
      * Get all commands executed
      *
-     * @return array of executed commands
+     * @return array
      */
     public function getCommands()
     {
-        return $this->_command;
+        return $this->command;
     }
 
 
@@ -120,9 +119,9 @@ class Execute
     public function __toString()
     {
         if (PHP_SAPI == 'cli') {
-            return print_r($this->_command, true);
+            return print_r($this->command, true);
         } else {
-            return "<pre>" . print_r($this->_command, true) . "</pre>";
+            return "<pre>" . print_r($this->command, true) . "</pre>";
         }
     }
 }

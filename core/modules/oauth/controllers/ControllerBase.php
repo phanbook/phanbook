@@ -24,12 +24,11 @@ use Phanbook\Models\Karma;
  */
 class ControllerBase extends Controller
 {
-
     public function initialize()
     {
         $this->loadDefaultAssets();
-
     }
+
     /**
      * Set a flash message with messages from objects
      *
@@ -45,10 +44,11 @@ class ControllerBase extends Controller
             $this->flashSession->error(t('No object found. No errors.'));
         }
     }
+
     /**
      * @param string $uid       to checking condition when authentication again
      * @param object $user      here is oauth
-     * @param object $toekn     here it is token get by oauth
+     * @param object $token     here it is token get by oauth
      * @param object $object    here is it is find in database
      * @param string $nameOauth there are google, github, facebook...
      *
@@ -92,11 +92,12 @@ class ControllerBase extends Controller
         //Store the user data in cookies
         $this->auth->setRememberEnviroment($object);
 
-        //Dispaly notification when user login
+        //Display notification when user login
         $this->notification($object);
 
         return $this->currentRedirect();
     }
+
     public function currentRedirect()
     {
         if ($this->cookies->has('HTTPBACK')) {
@@ -108,10 +109,12 @@ class ControllerBase extends Controller
         }
         return $this->response->redirect($this->request->getHTTPReferer(), true);
     }
+
     public function indexRedirect()
     {
         return $this->response->redirect('oauth/login');
     }
+
     /**
      * loadDefaultAssets function.
      *

@@ -12,15 +12,15 @@
  */
 namespace Phanbook\Utils;
 
-use Dropbox\AuthInfo;
-use Dropbox\Client;
 use Dropbox\Path;
+use Dropbox\Client;
+use Dropbox\AuthInfo;
 use Dropbox\WriteMode;
 use Phalcon\DI\Injectable;
 
 /**
  * Backup
- * @todo laster
+ * @todo later
  * Backups the default database to Dropbox (only MySQL/Unix)
  */
 class Backup extends Injectable
@@ -32,7 +32,9 @@ class Backup extends Injectable
         }
 
         $config = $this->config->database;
-        system('/usr/bin/mysqldump -u ' . $config->username . ' -p' . $config->password . ' -r /tmp/phosphorum.sql ' . $config->dbname);
+        system(
+            "/usr/bin/mysqldump -u {$config->username} -p{$config->password} -r /tmp/phosphorum.sql {$config->dbname}"
+        );
         system('bzip2 /tmp/phosphorum.sql');
 
         $sourcePath = '/tmp/phosphorum.sql.bz2';
