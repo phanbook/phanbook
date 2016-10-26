@@ -22,11 +22,16 @@ require ROOT_DIR . '/vendor/autoload.php';
 
 (new Loader)
     ->registerNamespaces([
-        'Phanbook' => ROOT_DIR . '/core/',
+        'Phanbook' => [ROOT_DIR . '/core/common/library/', ROOT_DIR . '/core/'],
+        'Phanbook\Mail' => ROOT_DIR . '/core/common/library/Mail/',
         'Phanbook\Tools' => ROOT_DIR . '/core/tools/',
+        'Phanbook\Models' => ROOT_DIR . '/core/common/models/',
+        'Phanbook\Seeder' => ROOT_DIR . '/core/modules/seeder/',
+        'Phanbook\Search' => ROOT_DIR . '/core/common/library/Search',
         'Phanbook\Tools\Cli' => ROOT_DIR . '/core/tools/cli/',
+        'Phanbook\Cli\Tasks' => ROOT_DIR . '/core/modules/cli/tasks/',
     ])
     ->register();
 
-// Load constants
+// Load helpers
 require 'helpers.php';

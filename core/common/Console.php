@@ -12,7 +12,6 @@
  */
 namespace Phanbook;
 
-use Phalcon\Loader;
 use Phalcon\Mvc\View;
 use Phalcon\Cli\Router;
 use Phanbook\Auth\Auth;
@@ -28,7 +27,9 @@ use Phanbook\Markdown\ParsedownExtra;
 use Phalcon\Cli\Console as CLIConsole;
 
 /**
- * Console.
+ *\Phanbook\Console
+ *
+ * @package Phanbook
  */
 class Console extends CLIConsole
 {
@@ -115,7 +116,6 @@ class Console extends CLIConsole
         $this->di = $di;
         $loaders = [
             'config',
-            'loader',
             'db',
             'router',
             'markdown',
@@ -137,27 +137,6 @@ class Console extends CLIConsole
 
         // Set the dependency Injector
         parent::__construct($this->di);
-    }
-
-    /**
-     * Register an autoloader.
-     */
-    protected function loader()
-    {
-        $loader = new Loader();
-        $namespaces = [
-            'Phanbook' => ROOT_DIR . '/core/common/library/',
-            'Phanbook\Mail' => ROOT_DIR . '/core/common/library/Mail/',
-            'Phanbook\Tools' => ROOT_DIR . '/core/common/tools/',
-            'Phanbook\Models' => ROOT_DIR . '/core/common/models/',
-            'Phanbook\Search' => ROOT_DIR . '/core/common/library/Search/',
-            'Phanbook\Cli\Tasks' => ROOT_DIR . '/core/modules/cli/tasks/',
-            'Phanbook\Seeder' => ROOT_DIR . '/core/modules/seeder/'
-        ];
-
-        $loader
-            ->registerNamespaces($namespaces)
-            ->register();
     }
 
     protected function isCli()
