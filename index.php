@@ -15,22 +15,19 @@ use Phalcon\Mvc\Application;
 error_reporting(E_ALL);
 ini_set('memory_limit', '-1');
 
-//  Global constants
-define('DS', DIRECTORY_SEPARATOR);
-define('ROOT_DIR', dirname(__FILE__) . DS);
-
-require ROOT_DIR . 'core/config/loader.php';
-require ROOT_DIR . 'vendor/autoload.php';
+require dirname(__FILE__) . '/bootstrap/constants.php';
+require ROOT_DIR . '/core/config/loader.php';
+require ROOT_DIR . '/vendor/autoload.php';
 
 try {
     /**
      * Include services
      */
-    require ROOT_DIR . 'core/config/services.php';
+    require ROOT_DIR . '/core/config/services.php';
 
-    $modules = require ROOT_DIR . 'core/config/modules.php';
+    $modules = require ROOT_DIR . '/core/config/modules.php';
 
-    require_once ROOT_DIR . 'core/config/routing.php';
+    require_once ROOT_DIR . '/core/config/routing.php';
 
     /**
      * Handle the request

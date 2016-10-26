@@ -6,7 +6,7 @@ $di['router'] = function () use ($modules, $di) {
 
     $router = new \Phalcon\Mvc\Router(false);
 
-    $moduleRouting = ROOT_DIR . 'core/modules/'. $defaultModule .'/config/routing.php';
+    $moduleRouting = ROOT_DIR . '/core/modules/'. $defaultModule .'/config/routing.php';
 
     if (file_exists($moduleRouting) && is_file($moduleRouting)) {
         include $moduleRouting;
@@ -38,7 +38,7 @@ $di['router'] = function () use ($modules, $di) {
         if (isset($module['router'])) {
             $routing = $module['router'];
         } else {
-            $routing = ROOT_DIR . 'core/modules/'. $moduleName .'/config/routing.php';
+            $routing = ROOT_DIR . '/core/modules/'. $moduleName .'/config/routing.php';
         }
 
         if (file_exists($routing) && is_file($routing)) {

@@ -1,6 +1,6 @@
 <?php
 
-$directory = new \RecursiveDirectoryIterator(ROOT_DIR . 'content/modules/');
+$directory = new \RecursiveDirectoryIterator(ROOT_DIR . '/content/modules/');
 $m = [];
 foreach ($directory as $item) {
     $name = $item->getFilename();
@@ -19,15 +19,15 @@ $modulesCore =
 [
     'frontend' => array(
         'className' => \Phanbook\Frontend\Module::class,
-        'path' => ROOT_DIR . 'core/modules/frontend/Module.php'
+        'path' => ROOT_DIR . '/core/modules/frontend/Module.php'
     ),
     'oauth' => array(
         'className' => \Phanbook\Oauth\Module::class,
-        'path' => ROOT_DIR . 'core/modules/oauth/Module.php'
+        'path' => ROOT_DIR . '/core/modules/oauth/Module.php'
     ),
     'backend' => array(
         'className' => \Phanbook\Backend\Module::class,
-        'path' => ROOT_DIR . 'core/modules/backend/Module.php'
+        'path' => ROOT_DIR . '/core/modules/backend/Module.php'
     )
 ];
 

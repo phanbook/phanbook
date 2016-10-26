@@ -60,8 +60,8 @@ if (file_exists(__DIR__ . '/config.global.php')) {
     $config->merge($overrideConfig);
 }
 //It created when save in admin dashboard
-if (file_exists(ROOT_DIR . 'content/options/options.php')) {
-    $overrideConfig = new AdapterPhp(ROOT_DIR . 'content/options/options.php');
+if (file_exists(ROOT_DIR . '/content/options/options.php')) {
+    $overrideConfig = new AdapterPhp(ROOT_DIR . '/content/options/options.php');
     $config->merge($overrideConfig);
 }
 
@@ -222,7 +222,7 @@ $di->set(
         );
         if ($config->application->debug) {
             $eventsManager = new EventsManager();
-            $logger = new FileLogger(ROOT_DIR. 'content/logs/db.log');
+            $logger = new FileLogger(ROOT_DIR. '/content/logs/db.log');
             //Listen all the database events
             $eventsManager->attach(
                 'db',
@@ -349,14 +349,14 @@ $di->set(
         if ($language->gettext) {
             $translation = new Gettext([
                 'locale' => $code,
-                'directory' => ROOT_DIR . 'core/lang',
+                'directory' => ROOT_DIR . '/core/lang',
                 'defaultDomain'=> 'messages',
             ]);
         } else {
-            $path = ROOT_DIR . 'core/lang/messages/' . $code . '.php';
+            $path = ROOT_DIR . '/core/lang/messages/' . $code . '.php';
             if (!file_exists($path)) {
                 $di->getLogger()->error("You must specify a language file for language '$code'");
-                $path = ROOT_DIR . 'core/lang/messages/en.php';
+                $path = ROOT_DIR . '/core/lang/messages/en.php';
             }
             $translation = new NativeArray([
                'content' => require_once $path
@@ -411,7 +411,7 @@ $di->set(
     'phanbook',
     function () use ($di) {
         $theme = $di->get('config')->theme;
-        $info  = ROOT_DIR . 'content/themes/' . $theme . '/info.php';
+        $info  = ROOT_DIR . '/content/themes/' . $theme . '/info.php';
         if (!file_exists($info)) {
             throw new \Exception('You need to created a file info theme', 1);
         }
@@ -425,7 +425,7 @@ $di->set(
 $di->set(
     'logger',
     function () use ($di) {
-        $logger = ROOT_DIR. 'content/logs/' . date('Y-m-d') . '.log';
+        $logger = ROOT_DIR. '/content/logs/' . date('Y-m-d') . '.log';
         return new FileLogger($logger, ['model' => 'a+']);
     },
     true
@@ -441,7 +441,7 @@ $di->set(
 if (!function_exists('t')) {
     function t($string)
     {
-        $translation = DI::getDefault()->get('translation');
+        $translation = Di::getDefault()->get('translation');
         return $translation->_($string);
     }
 }
@@ -450,7 +450,7 @@ if (!function_exists('t')) {
 //Phalcon Debugger
 if ($config->application->debug) {
     (new \Phalcon\Debug)->listen();
-    include ROOT_DIR . 'core/common/tools/Debug.php';
+    include ROOT_DIR . '/core/common/tools/Debug.php';
 }
 
 // @TODO: Use bootstrap/constants.php
