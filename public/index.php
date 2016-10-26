@@ -51,15 +51,14 @@ try {
 
     echo $application->handle()->getContent();
 } catch (Exception $e) {
+    $logger = $di->get('logger');
+    $logger->error($e->getMessage());
+    $logger->error($e->getTraceAsString());
 
     if (APPLICATION_ENV == 'local') {
         d($e->getMessage(), false);
         d($e->getTraceAsString());
     }
-
-    $logger = $di->get('logger');
-    $logger->error($e->getMessage());
-    $logger->error($e->getTraceAsString());
 
     $response = $di->get('response');
     $response->redirect('error-reporting');
