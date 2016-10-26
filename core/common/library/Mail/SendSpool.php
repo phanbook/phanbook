@@ -13,7 +13,6 @@
 namespace Phanbook\Mail;
 
 use Phalcon\Di\Injectable;
-
 use Phanbook\Models\Notifications;
 
 /**
@@ -27,7 +26,7 @@ class SendSpool extends Injectable
 
     protected $mailer;
 
-    private function _prerify($text)
+    protected function prerify($text)
     {
         if (preg_match_all('#```([a-z]+)(.+)```([\n\r]+)?#m', $text, $matches, PREG_SET_ORDER)) {
             foreach ($matches as $match) {

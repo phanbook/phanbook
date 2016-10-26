@@ -26,12 +26,20 @@ class CommentForm extends Form
         if (!is_null($entity)) {
             $this->add(new Hidden('id'));
         }
-        $content = new TextArea('content', ['placeholder' => t('Use comments to ask for more information or suggest improvements. Avoid comments like "+1" or "thanks".')]);
+        $content = new TextArea(
+            'content',
+            [
+                'placeholder' => t(
+                    'Use comments to ask for more information or suggest improvements. ' .
+                    'Avoid comments like "+1" or "thanks".'
+                )
+            ]
+        );
 
         $content->addValidator(
             new PresenceOf(
                 [
-                'message' => t('The content is required')
+                    'message' => t('The content is required')
                 ]
             )
         );
@@ -41,7 +49,7 @@ class CommentForm extends Form
         $this->add(new Hidden('object'));
 
         $csrf = new Hidden('csrf');
-        //@todo fix later
+        // @TODO: fix later
         /**$csrf->addValidator(
             new Identical(array(
                 'value'   => $this->security->getSessionToken(),

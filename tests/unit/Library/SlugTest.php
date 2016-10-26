@@ -1,10 +1,11 @@
 <?php
 
-require_once 'TestBase.php';
+namespace App\Test\Unit\Library;
 
-class SlugTest extends TestBase
+use App\Test\Module\UnitTest;
+
+class SlugTest extends UnitTest
 {
-
     public function nonAsciiStringProvider()
     {
         return [
@@ -14,14 +15,13 @@ class SlugTest extends TestBase
             "Giải thiết kế giao diện người dùng cho Phanbook" => 'giai-thiet-ke-giao-dien-nguoi-dung-cho-phanbook'
         ];
     }
-    // tests
+
     public function testSlug()
     {
         $slug = $this->di->get('phanbook')->slug();
 
         foreach ($this->nonAsciiStringProvider() as $value => $expected) {
             $this->assertEquals($expected, $slug->generate($value));
-
         }
     }
 }

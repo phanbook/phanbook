@@ -14,7 +14,6 @@ namespace Phanbook\Models;
 
 class PostsViews extends ModelBase
 {
-
     /**
      *
      * @var integer
@@ -109,11 +108,12 @@ class PostsViews extends ModelBase
     {
         return 'postsViews';
     }
+
     public function initialize()
     {
         $this->belongsTo('posts_id', __NAMESPACE__ .'\Posts', 'id', ['alias' => 'post']);
-
     }
+
     public function clearCache()
     {
         if ($this->id) {

@@ -73,7 +73,6 @@ class SearchController extends ControllerBase
                         }
                     );
                 }
-
             }
         }
     }

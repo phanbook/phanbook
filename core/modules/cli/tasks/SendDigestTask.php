@@ -24,10 +24,9 @@ class SendDigestTask extends Task
         $spool = new Digest();
         try {
             var_dump($spool->send());
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             Output::stdout($e->getMessage());
             Output::stdout($e->getTraceAsString());
         }
-
     }
 }

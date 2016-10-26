@@ -1,58 +1,93 @@
 language: php
 
 sudo: required
-dist: precise
+dist: trusty
 
 php:
   - 5.5
   - 5.6
-  - 7.0
+
+matrix:
+  allow_failures:
+    - php: 7.1
+  include:
+    - php: 7.0
+      env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="v3.0.0"
+    - php: 7.0
+      env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="3.0.x"
+    - php: 7.1
+      env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="v3.0.0"
+    - php: 7.1
+      env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="3.0.x"
 
 services:
   - mysql
-  - memcached
+
+git:
+  depth: 1
 
 cache:
+  apt: true
+  ccache: true
+  timeout: 691200
   directories:
-    - vendor
+    - .temp
+    - $HOME/.ccache
     - $HOME/.composer/cache
 
 env:
   global:
     - APPLICATION_ENV="travis"
+    - ZEND_DONT_UNLOAD_MODULES=1
+    - CC="ccache gcc"
+    - PATH="$PATH:~/bin"
+    - DISPLAY=":99.0"
+    - PHPIZE_BIN="$(which phpize 2> /dev/null || which phpize5 2> /dev/null)"
   matrix:
     - PHALCON_VERSION="3.0.x"
     - PHALCON_VERSION="v3.0.0"
 
+before_install:
+  - export PHP_MAJOR="$(echo $TRAVIS_PHP_VERSION | cut -d '.' -f 1,2)"
+  - phpenv config-rm xdebug.ini || true
+  - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
+  - travis_retry composer install --prefer-dist --no-interaction
+  - ( bash tests/_ci/install_zephir.sh )
+  - bash tests/_ci/install_prereqs_$PHP_MAJOR.sh
+
 install:
-  - composer self-update
   - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b ${PHALCON_VERSION}
-  - (cd cphalcon/build; bash install &>/dev/null && phpenv config-add ../tests/_ci/phalcon.ini &> /dev/null)
-  - php --ri phalcon
-  - composer install --prefer-source --no-interaction
+  - '( cd cphalcon; zephir fullclean && zephir generate $ZEND_BACKEND )'
+  - (cd cphalcon/ext; export CFLAGS="-g3 -O1 -std=gnu90 -Wall -DZEPHIR_RELEASE=1"; $PHPIZE_BIN &> /dev/null && ./configure --silent --enable-phalcon &> /dev/null && make --silent -j4 &> /dev/null && make --silent install)
+  - phpenv config-add cphalcon/tests/_ci/phalcon.ini
 
 before_script:
-  - echo "USE mysql;\nUPDATE user SET password=PASSWORD('password__phanbook') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
+  - echo 'CREATE DATABASE phanbook CHARSET=utf8 COLLATE=utf8_unicode_ci' | mysql -u root
+  - cat schema/phanbook.sql | mysql -uroot phanbook
   - cp ./core/config/config.example.php ./core/config/config.php
   - cp ./tests/config.travis.php ./core/config/config.travis.php
-  - mysql -e 'CREATE DATABASE phanbook CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;' -uroot -ppassword__phanbook
-  - cat schema/phanbook.sql | mysql -uroot phanbook -ppassword__phanbook
   #- (cd ./scripts/ && php random-entries.php > /dev/null)
   - php -S 127.0.0.1:8000 -t . .htrouter.php >/dev/null 2>&1 &
-
-after_script:
-  #- mysql -e 'DROP DATABASE phanbook;' -uroot -ppassword__phanbook
+  - ulimit -c unlimited -S || true
 
 script:
-  - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 --ignore=core/common/library/Markdown  core/
+  - vendor/bin/phpcs --extensions=php
   - vendor/bin/codecept build
   - vendor/bin/codecept run
 
 notifications:
   email:
     - hello@phanbook.com
-  slack: phanbook:V3Gun19jnfnRafcTbvn5mFuY
+  slack: phanbook:"${SLAK_TOKEN}"
+
 addons:
+  apt:
+    packages:
+      - gdb
+      - re2c
+      - mysql-server-5.6
+      - mysql-client-core-5.6
+      - mysql-client-5.6
   hosts:
     - db
     - phanbook.dev

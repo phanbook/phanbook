@@ -26,7 +26,6 @@ use Phanbook\Frontend\Forms\ChangePasswordForm;
  */
 class UsersController extends ControllerBase
 {
-
     /**
      * @var int
      */
@@ -41,7 +40,7 @@ class UsersController extends ControllerBase
     public function detailAction($user)
     {
         if (!$user = Users::findFirstByUsername($user)) {
-            $this->flashSession->error(t('The User dosen\'t exits'));
+            $this->flashSession->error(t("The User doesn't exits"));
             return $this->indexRedirect();
         }
         $tab     = $this->request->getQuery('tab');
@@ -141,13 +140,11 @@ class UsersController extends ControllerBase
                 break;
         }
 
-
         echo json_encode(['946721039'=>'2', '946706853'=>'3', '946706853'=> '1111']);
     }
 
     public function indexAction()
     {
-
         $sql = [
             'model' => 'Users',
             'joins' => []
@@ -231,7 +228,6 @@ class UsersController extends ControllerBase
                 }
             } else {
                 if ($object && $object->getStatus() == $object::STATUS_ACTIVE) {
-
                     if (!$this->security->checkHash($this->request->getPost('passwd'), $object->getPasswd())) {
                         $this->flashSession->error(t('Oops! Wrong password.'));
                     } else {
@@ -245,9 +241,13 @@ class UsersController extends ControllerBase
                         }
                     }
                 } elseif ($object && $object->getStatus() != Users::STATUS_ACTIVE) {
-                    $this->flashSession->error(t('User status is: ') . $object->getStatusesWithLabels()[$object->getStatus()] . '. You can\'t change your password.');
+                    $this->flashSession->error(
+                        t('User status is: ') .
+                        $object->getStatusesWithLabels()[$object->getStatus()] .
+                        ". You can't change your password."
+                    );
                 } else {
-                    $this->flashSession->error(t('User doesn\'t exist !'));
+                    $this->flashSession->error(t("User doesn't exist !"));
                 }
             }
         }

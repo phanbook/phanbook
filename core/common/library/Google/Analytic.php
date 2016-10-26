@@ -250,8 +250,8 @@ class Analytic extends Injectable
                 $data = $service->data_ga->get('ga:'.$profileID, $from, $to, $metrics);
                 return $data['rows'][0];
             }
-
         }
+
         return false;
     }
 
@@ -293,8 +293,8 @@ class Analytic extends Injectable
             $this->useBatch = false;
             $this->client->setUseBatch(false);
         }
-
     }
+
     public function batchExecute()
     {
         return $this->batch->execute();

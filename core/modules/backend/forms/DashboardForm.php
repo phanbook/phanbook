@@ -22,7 +22,6 @@ class DashboardForm extends Form
 {
     public function initialize()
     {
-
         // CSRF
         $csrf = new Hidden('csrf');
         $csrf->addValidator(
@@ -56,6 +55,5 @@ class DashboardForm extends Form
         );
         $profile->setLabel("You must select view before use this feature");
         $this->add($profile);
-
     }
 }

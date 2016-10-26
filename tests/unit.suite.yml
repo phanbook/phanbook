@@ -3,9 +3,10 @@
 # suite for unit (internal) tests.
 class_name: UnitTester
 modules:
-    enabled: [Asserts, Phalcon2]
-    config:
-        Phalcon2:
+    enabled:
+        - Helper\Unit
+        - Asserts
+        - Phalcon:
             bootstrap: tests/bootstrap.php
             cleanup: true
             savepoints: true

@@ -106,6 +106,7 @@ class PostsController extends ControllerBase
             $this->view->pick('partials/grid');
         }
     }
+
     /**
      * indexAction function.
      *
@@ -127,12 +128,14 @@ class PostsController extends ControllerBase
             $this->view->pick('partials/grid');
         }
     }
+
     public function newStickyAction()
     {
         $this->view->form = new StickyForm;
         $this->tag->setTitle('Adding sticked');
         $this->view->pick($this->router->getControllerName() . '/itemSticky');
     }
+
     /**
      * Create a new post
      *
@@ -147,6 +150,7 @@ class PostsController extends ControllerBase
         $this->addAssetsSelect();
         $this->view->pick($this->router->getControllerName() . '/item');
     }
+
     public function editAction($id)
     {
         if (!$object = Posts::findFirstById($id)) {
@@ -164,6 +168,7 @@ class PostsController extends ControllerBase
 
         return $this->view->pick($this->router->getControllerName() . '/item');
     }
+
     /**
      * @param $id
      *
@@ -182,6 +187,7 @@ class PostsController extends ControllerBase
 
         return $this->view->pick($this->router->getControllerName() . '/itemSticky');
     }
+
     public function saveStickyAction()
     {
         if (!$this->request->isPost()) {
@@ -202,6 +208,7 @@ class PostsController extends ControllerBase
         $this->flashSession->success(t('Data was successfully saved'));
         return $this->response->redirect('admin/posts/sticky');
     }
+
     /**
      * @return \Phalcon\Http\ResponseInterface
      */
@@ -218,7 +225,6 @@ class PostsController extends ControllerBase
         $tags = $this->request->getPost('tags', 'string', null);
         if (!empty($id)) {
             $object = Posts::findFirstById($id);
-
         } else {
             $object = new Posts();
             //@todo
@@ -254,6 +260,7 @@ class PostsController extends ControllerBase
 
         return $this->indexRedirect();
     }
+
     /**
      *
      * @return mixed
