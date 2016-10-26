@@ -18,7 +18,6 @@ error_reporting(E_ALL);
 //mb_internal_encoding('UTF-8');
 ini_set('memory_limit', '-1');
 
-require dirname(dirname(__FILE__)) . '/bootstrap/constants.php';
 require ROOT_DIR . '/vendor/autoload.php';
 require ROOT_DIR . '/core/config/loader.php';
 require ROOT_DIR . '/core/config/services.php';
