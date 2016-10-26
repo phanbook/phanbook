@@ -17,6 +17,7 @@ class MailTest extends UnitTest
 
     public function testRender()
     {
+        // @todo Move to CLI test suite
         $this->markTestSkipped('This test need to refactor');
 
         $mail       = $this->di->get('mail');

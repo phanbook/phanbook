@@ -1,0 +1,8 @@
+# Codeception Test Suite Configuration
+
+class_name: CliTester
+modules:
+    enabled:
+        - Helper\CliHelper
+        - Filesystem
+        - Cli
