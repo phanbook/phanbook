@@ -434,27 +434,12 @@ $di->set(
     true
 );
 
-// @todo: Move to the Separated Service
+// @todo: Move to the separated Service
 $config = $di->getShared('config');
 $manager = new ThemeManager(ROOT_DIR . '/content/themes/' . $config->theme, $config->theme);
 $manager->setDI($di);
 $manager->initializeAssets();
 $di->setShared('theme', $manager);
-
-/**
- * Translation function call anywhere
- *
- * @todo Use bootstrap/helpers.php
- * @param $string
- * @return mixed
- */
-if (!function_exists('t')) {
-    function t($string)
-    {
-        $translation = Di::getDefault()->get('translation');
-        return $translation->_($string);
-    }
-}
 
 //Phalcon Debugger
 if ($config->application->debug) {
