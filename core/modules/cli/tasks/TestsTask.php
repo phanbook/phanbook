@@ -12,21 +12,26 @@
  */
 namespace Phanbook\Cli\Tasks;
 
-use Phalcon\CLI\Task;
+use Phalcon\Cli\Task;
 use Phanbook\Tools\Cli\Output;
 
+/**
+ * \Phanbook\Cli\Tasks\TestsTask
+ *
+ * @property \Phanbook\Mail\Mail mail
+ * @package Phanbook\Cli\Tasks
+ */
 class TestsTask extends Task
 {
     public function test1Action()
     {
-        Output::stdout("Hello World!");
+        Output::stdout('Hello World!');
     }
 
     public function mainAction()
     {
         Output::stdout("Main Action");
     }
-
 
     public function cmdAction()
     {
@@ -36,13 +41,11 @@ class TestsTask extends Task
         Output::stdout("You're running this script under $output user");
     }
 
-
     public function test2Action($paramArray)
     {
         Output::stdout("First param: $paramArray[0]");
         Output::stdout("Second param: $paramArray[1]");
     }
-
 
     /**
      * Action to trigger a fatal error
@@ -53,6 +56,7 @@ class TestsTask extends Task
         //new TriggerARuntimeFatal();
         strpos();
     }
+
     public function renderAction()
     {
         echo $this->mail->renderTest();

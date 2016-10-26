@@ -14,17 +14,4 @@ class MailTest extends UnitTest
         //$this->assertEquals(1, $mail->sendTest('hello@phanbook.com'));
         $this->assertEquals('hello@phanbook.com', $mail->getToMailTest('hello@phanbook.com'));
     }
-
-    public function testRender()
-    {
-        // @todo Move to CLI test suite
-        $this->markTestSkipped('This test need to refactor');
-
-        $mail       = $this->di->get('mail');
-        $expected   = 'This is a test email.';
-        $ouput      = exec('php cli Tests render');
-        echo $ouput;
-
-        $this->assertContains($expected, ob_get_clean());
-    }
 }
