@@ -1,3 +1,5 @@
+AddDefaultCharset UTF-8
+
 Options +FollowSymLinks -MultiViews -Indexes
 
 DirectoryIndex index.html index.php
