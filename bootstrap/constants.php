@@ -13,6 +13,11 @@
  */
 
 /**
+ * @const DS The DIRECTORY_SEPARATOR shortcut.
+ */
+define('DS', DIRECTORY_SEPARATOR);
+
+/**
  * @const ROOT_DIR The path to the Phanbook project root
  */
 define('ROOT_DIR', dirname(dirname(__FILE__)));

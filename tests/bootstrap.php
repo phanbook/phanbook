@@ -18,15 +18,10 @@ error_reporting(E_ALL);
 //mb_internal_encoding('UTF-8');
 ini_set('memory_limit', '-1');
 
-
-if (!defined('ROOT_DIR')) {
-    define('ROOT_DIR', dirname(__DIR__) .'/');
-}
-
-
-require ROOT_DIR . 'vendor/autoload.php';
-require ROOT_DIR . 'core/config/loader.php';
-require ROOT_DIR . 'core/config/services.php';
+require dirname(dirname(__FILE__)) . '/bootstrap/constants.php';
+require ROOT_DIR . '/vendor/autoload.php';
+require ROOT_DIR . '/core/config/loader.php';
+require ROOT_DIR . '/core/config/services.php';
 
 /**
  * Handle the request
@@ -41,6 +36,6 @@ $application->setDI($di);
 /**
  * Include modules
  */
-$application->registerModules(require ROOT_DIR . 'core/config/modules.php');
+$application->registerModules(require ROOT_DIR . '/core/config/modules.php');
 
 return new \Phalcon\Mvc\Application($di);
