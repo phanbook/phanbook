@@ -27,12 +27,13 @@ class Module implements ModuleDefinitionInterface
 {
     public function registerAutoloaders(DiInterface $dependencyInjector = null)
     {
-
     }
 
     /**
      * Register the services here to make them general
      * or register in the ModuleDefinition to make them module-specific
+     *
+     * @param DiInterface $di
      */
     public function registerServices(DiInterface $di)
     {

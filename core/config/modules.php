@@ -13,7 +13,6 @@ foreach ($directory as $item) {
             'router' => $path . '/config/routing.php'
         ];
     }
-
 }
 
 $modulesCore =

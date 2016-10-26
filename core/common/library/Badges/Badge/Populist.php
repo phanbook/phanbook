@@ -34,7 +34,6 @@ class Populist extends BadgeBase
      */
     public function has(Users $user)
     {
-
     }
 
     /**
@@ -45,7 +44,6 @@ class Populist extends BadgeBase
      */
     public function canHave(Users $user)
     {
-
     }
 
     /**
@@ -56,6 +54,5 @@ class Populist extends BadgeBase
      */
     public function add(Users $user, $extra = null)
     {
-
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Phanbook\Tools\Cli;
 
 class Output
@@ -33,17 +34,17 @@ class Output
      */
     const COLOR_NONE = "\e[0m";
 
+    /**
+     * output sent to standard error
+     * @var string
+     */
+    protected static $stderr;
 
     /**
-     * @var string output sent to standard error
+     * output sent to standard output
+     * @var string
      */
-    protected static $_stderr;
-
-    /**
-     * @var string output sent to standard output
-     */
-    protected static $_stdout;
-
+    protected static $stdout;
 
     /**
      * output to standard error
@@ -53,9 +54,8 @@ class Output
     public static function stderr($msg)
     {
         fwrite(STDERR, $msg . PHP_EOL);
-        self::$_stderr .= $msg . PHP_EOL;
+        self::$stderr .= $msg . PHP_EOL;
     }
-
 
     /**
      * output to standard output
@@ -65,9 +65,8 @@ class Output
     public static function stdout($msg)
     {
         fwrite(STDOUT, $msg . PHP_EOL);
-        self::$_stdout .= $msg . PHP_EOL;
+        self::$stdout .= $msg . PHP_EOL;
     }
-
 
     /**
      * get all standard output text
@@ -76,9 +75,8 @@ class Output
      */
     public static function getStdout()
     {
-        return self::$_stdout;
+        return self::$stdout;
     }
-
 
     /**
      * get all standard error text
@@ -87,7 +85,7 @@ class Output
      */
     public static function getStderr()
     {
-        return self::$_stderr;
+        return self::$stderr;
     }
 
     /**
@@ -95,9 +93,10 @@ class Output
      */
     public static function clear()
     {
-        unset(self::$_stderr);
-        self::$_stderr = '';
-        unset(self::$_stdout);
-        self::$_stdout = '';
+        unset(self::$stderr);
+        self::$stderr = '';
+
+        unset(self::$stdout);
+        self::$stdout = '';
     }
 }

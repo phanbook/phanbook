@@ -37,7 +37,6 @@ $di['router'] = function () use ($modules, $di) {
 
         if (isset($module['router'])) {
             $routing = $module['router'];
-
         } else {
             $routing = ROOT_DIR . 'core/modules/'. $moduleName .'/config/routing.php';
         }

@@ -20,7 +20,7 @@ use Phanbook\Models\Settings;
 class TopDashboard implements TopDashboardInterface
 {
     /**
-     * @var Phanbook\Google\Analytic object
+     * @var \Phanbook\Google\Analytic object
      */
     public $analytic;
 
@@ -77,8 +77,8 @@ class TopDashboard implements TopDashboardInterface
 
     public function initialize()
     {
-
     }
+
     /**
      * Set invert display warning level in dashboard
      * @param int $type set invert
@@ -89,6 +89,7 @@ class TopDashboard implements TopDashboardInterface
             $this->ratio = -$this->ratio;
         }
     }
+
     public function setDimension($dimension)
     {
         $this->dimension = $dimension;
@@ -99,25 +100,30 @@ class TopDashboard implements TopDashboardInterface
             }
         }
     }
+
     public function setAnalytic($analytic)
     {
         $this->analytic = $analytic;
     }
+
     public function setNumbDate($numbDate)
     {
         $this->numbDate = $numbDate;
         $this->setTimeRanger();
     }
+
     public function setAnalyticValue($value)
     {
         if (is_numeric($value)) {
             $this->analyticValue = round($value, 2);
         }
     }
+
     public function setTitle($title)
     {
         $this->title = t($title);
     }
+
     public function setTimeRanger()
     {
         switch ($this->numbDate) {
@@ -128,18 +134,21 @@ class TopDashboard implements TopDashboardInterface
                 $this->timeRanger = t("Last Month");
                 break;
             default:
-                $this->timeRanger = t("Last ".$numbDate." days");
+                $this->timeRanger = t("Last {$this->numbDate} days");
                 break;
         }
     }
+
     public function setDescription($description)
     {
         $this->description = t($description);
     }
+
     public function setStatus($status)
     {
         $this->status = $status;
     }
+
     /**
      * Check if main value is increase or decrease
      * If ratio > 0, main value's increase. Otherwise, main value's decrease
@@ -154,12 +163,14 @@ class TopDashboard implements TopDashboardInterface
         }
         unset($this->analytic);
     }
+
     public function setAnalyticPrevValue($prevValue)
     {
         if (is_numeric($prevValue)) {
             $this->analyticPrevValue = $prevValue;
         }
     }
+
     /**
      * [create description]
      * @return [type] [description]
@@ -171,9 +182,12 @@ class TopDashboard implements TopDashboardInterface
         //get analytic from last ranger time
         $this->analytic->getAnalyticDataFromPrev("ga:". $this->dimension, $this->numbDate, "_prev");
     }
+
     public function update(AbstractSubject $subject)
     {
-        if ($subject->compareKey("response-ga:".$this->dimension."_now") || $subject->compareKey("response-ga:".$this->dimension."_prev")) {
+        if ($subject->compareKey("response-ga:".$this->dimension."_now") ||
+            $subject->compareKey("response-ga:".$this->dimension."_prev")
+        ) {
             if ($subject->compareKey("response-ga:".$this->dimension."_now")) {
                 $this->setAnalyticValue($subject->getValue()['ga:'.$this->dimension]);
             } else {
@@ -185,13 +199,15 @@ class TopDashboard implements TopDashboardInterface
             }
         }
     }
+
     public function fixValue()
     {
     }
+
     /**
-     * Convert seconds to time string
-     * @param  int $s seconds
-     * @return string    Time string
+     * Convert seconds to time string.
+     *
+     * @return string
      */
     protected function convertToTime()
     {
@@ -200,6 +216,7 @@ class TopDashboard implements TopDashboardInterface
         $s -= $h * 3600;
         $m = floor($s / 60);
         $s -= $m * 60;
-        $this->analyticValue = $h.':'.sprintf('%02d', $m).':'.sprintf('%02d', $s);
+
+        return $this->analyticValue = $h.':'.sprintf('%02d', $m).':'.sprintf('%02d', $s);
     }
 }

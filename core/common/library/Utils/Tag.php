@@ -90,7 +90,6 @@ class Tag
             }
             //Update the total of posts related to a tags
             if ($object->getOperationMade() == \Phalcon\Mvc\Model::OP_CREATE) {
-
                 $tags    = Tags::findFirstById($tagId);
                 $number  = $tags->getNumberposts();
                 $tags->setNumberPosts($number + 1);

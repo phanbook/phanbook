@@ -47,6 +47,7 @@ class Indexer extends Injectable
      * @param array   $fields
      * @param int     $limit
      * @param boolean $returnPosts
+     * @return array
      */
     public function search(array $fields, $limit = 10, $returnPosts = false)
     {
@@ -79,7 +80,9 @@ class Indexer extends Injectable
                 foreach ($queryResponse['hits']['hits'] as $hit) {
                     $post = Posts::findFirstById($hit['fields']['id'][0]);
                     if ($post) {
-                        if ($hit['fields']['karma'][0] > 0 && ($post->getNumberReply() > 0 || $post->getAcceptedAnswer() == 'Y')) {
+                        if ($hit['fields']['karma'][0] > 0 &&
+                            ($post->getNumberReply() > 0 || $post->getAcceptedAnswer() == 'Y')
+                        ) {
                             $score = $hit['_score'] * 250 + $hit['fields']['karma'][0] + $d;
                             if (!$returnPosts) {
                                 $results[$score] = array(
@@ -100,7 +103,7 @@ class Indexer extends Injectable
 
             return array_values($results);
         } catch (\Exception $e) {
-            return array();
+            return [];
         }
     }
 
@@ -110,7 +113,7 @@ class Indexer extends Injectable
      * @param Client $client
      * @param Posts  $post
      */
-    protected function _doIndex($client, $post)
+    protected function doIndex($client, $post)
     {
         $karma = $post->getNumberViews() + 0 + $post->getNumberReply();
         if ($karma > 0) {
@@ -118,7 +121,6 @@ class Indexer extends Injectable
             $params['body']  = [
                 'id'       => $post->getId(),
                 'title'    => $post->getTitle(),
-                //'category' => $post->categories_id,
                 'content'  => $post->getContent(),
                 'karma'    => $karma
             ];
@@ -126,7 +128,6 @@ class Indexer extends Injectable
             $params['type']  = $this->type;
             $params['id']    = 'post-' . $post->getId();
             $ret = $client->index($params);
-            var_dump($ret);
         }
     }
 
@@ -152,7 +153,7 @@ class Indexer extends Injectable
     public function index($post)
     {
         $client = new Client();
-        $this->_doIndex($client, $post);
+        $this->doIndex($client, $post);
     }
 
     /**
@@ -170,7 +171,7 @@ class Indexer extends Injectable
         }
 
         foreach (Posts::find('deleted != 1') as $post) {
-            $this->_doIndex($client, $post);
+            $this->doIndex($client, $post);
         }
     }
 }

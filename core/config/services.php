@@ -59,7 +59,7 @@ if (file_exists(__DIR__ . '/config.global.php')) {
     $overrideConfig = include __DIR__ . '/config.global.php';
     $config->merge($overrideConfig);
 }
-//It crreated when save in admin dashboard
+//It created when save in admin dashboard
 if (file_exists(ROOT_DIR . 'content/options/options.php')) {
     $overrideConfig = new AdapterPhp(ROOT_DIR . 'content/options/options.php');
     $config->merge($overrideConfig);
@@ -414,7 +414,6 @@ $di->set(
         $info  = ROOT_DIR . 'content/themes/' . $theme . '/info.php';
         if (!file_exists($info)) {
             throw new \Exception('You need to created a file info theme', 1);
-
         }
         return new Phanbook(include $info);
     },

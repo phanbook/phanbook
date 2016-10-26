@@ -834,7 +834,7 @@ class Posts extends ModelBase
      *
      * @return boolean
      */
-    public function _isPost()
+    public function isPost()
     {
         return true;
     }

@@ -37,7 +37,6 @@ class GoodReply extends BadgeBase
      */
     public function has(Users $user)
     {
-
     }
 
     /**
@@ -48,17 +47,15 @@ class GoodReply extends BadgeBase
      */
     public function canHave(Users $user)
     {
-
     }
 
     /**
-     * Add the badge to ther user
+     * Add the badge to the user
      *
      * @param Users $user
      * @param array $extra
      */
     public function add(Users $user, $extra = null)
     {
-
     }
 }
