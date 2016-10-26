@@ -17,7 +17,6 @@ use Phalcon\Cli\Router;
 use Phanbook\Auth\Auth;
 use Phanbook\Mail\Mail;
 use Phalcon\DiInterface;
-use Phanbook\Common\Config;
 use Phalcon\Events\Manager;
 use Phalcon\Queue\Beanstalk;
 use Phanbook\Tools\Cli\Output;
@@ -27,6 +26,7 @@ use Phalcon\Mvc\View\Engine\Volt;
 use Phanbook\Markdown\ParsedownExtra;
 use Phalcon\Cli\Console as CLIConsole;
 use Phalcon\Di\FactoryDefault\Cli as CliDi;
+use Phanbook\Common\Exceptions\Cli\BadCliCallException;
 
 /**
  *\Phanbook\Console
@@ -493,14 +493,19 @@ class Console extends CLIConsole
      * make sure everything required is setup before starting the task.
      *
      * @param int $argc count of arguments
-     *
-     * @throws \Exception
+     * @throws BadCliCallException
      */
     protected function preTaskCheck($argc)
     {
         // Make sure task is added
         if ($argc < 2) {
-            throw new \Exception('Bad Number of Params needed for script');
+            throw new BadCliCallException(
+                'Invalid number of parameters required for for script.' . PHP_EOL . PHP_EOL .
+                'Examples:' . PHP_EOL .
+                '  cli [task] [action] [param1 [param2 ...]]' . PHP_EOL .
+                '  cli Example index' . PHP_EOL .
+                '  cli Example index --debug --single --no-record'. PHP_EOL . PHP_EOL
+            );
         }
     }
 
