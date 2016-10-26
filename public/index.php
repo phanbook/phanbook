@@ -6,18 +6,17 @@
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @link          http://phanbook.com Phanbook Project
- * @since         1.0.0
- * @license       http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
+ * @link    http://phanbook.com Phanbook Project
+ * @since   1.0.0
+ * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
 use Phalcon\Mvc\Application;
 
 error_reporting(E_ALL);
+
 ini_set('memory_limit', '-1');
 
-require dirname(__FILE__) . '/bootstrap/constants.php';
-require ROOT_DIR . '/core/config/loader.php';
-require ROOT_DIR . '/vendor/autoload.php';
+require dirname(dirname(__FILE__)) . '/bootstrap/autoloader.php';
 
 try {
     /**
@@ -53,7 +52,7 @@ try {
     echo $application->handle()->getContent();
 } catch (Exception $e) {
 
-    if (APPLICATION_ENV == 'development') {
+    if (APPLICATION_ENV == 'local') {
         d($e->getMessage(), false);
         d($e->getTraceAsString());
     }
