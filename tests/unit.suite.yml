@@ -6,7 +6,4 @@ modules:
     enabled:
         - Helper\Unit
         - Asserts
-        - Phalcon:
-            bootstrap: tests/_config/bootstrap.php
-            cleanup: true
-            savepoints: true
+        - Phalcon

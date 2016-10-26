@@ -10,7 +10,3 @@ modules:
     enabled:
         - Helper\Functional
         - Filesystem
-        - Phalcon:
-            bootstrap: 'tests/bootstrap.php'
-            cleanup: true
-            savepoints: true
