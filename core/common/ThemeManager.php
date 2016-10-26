@@ -124,7 +124,7 @@ class ThemeManager extends Component
         $coreCss
             ->setTargetPath('/css/style.css')
             ->setTargetUri('/css/style.css?v=1')
-            ->setSourcePath(ROOT_DIR . '/core')
+            ->setSourcePath(ROOT_DIR . '/public')
             ->addCss('/assets/css/responsive.css')
             ->addCss('/assets/css/bootstrap.min.css')
             ->addCss('/assets/css/base.css')

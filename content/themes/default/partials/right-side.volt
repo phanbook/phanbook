@@ -72,8 +72,8 @@
 {% if tags is defined %}
 <div class="widget widget_tag_cloud">
 <h3 class="widget_title">Tags</h3>
-{% for tag in tags %}
-    {{ link_to('tags/' ~ tag.id ~ '/' ~ tag.slug, tag.name)}}
+{% for tagModel in tags %}
+    {{ link_to('tags/' ~ tagModel.getId() ~ '/' ~ tagModel.getSlug(), tagModel.getName())}}
 {% endfor %}
 </div>
 {% endif %}

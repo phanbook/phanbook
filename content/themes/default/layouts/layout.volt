@@ -1,9 +1,8 @@
-<!DOCTYPE html>
+{{ get_doctype() }}
 <!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
 <!--[if IE 9 ]><html class="ie ie9" lang="en"> <![endif]-->
 <!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
 <head>
-
     <!-- Basic Page Needs -->
     {% set controller = this.view.getControllerName(), action =  this.view.getActionName()%}
     {% set name = this.config.application.name, publicUrl = this.config.application.publicUrl %}
@@ -21,11 +20,12 @@
     <link rel="shortcut icon" href="{{ getImageSrc('favicon.png') }}">
     <title>{% block title%}{% endblock %} - {{name}}</title>
 
-    <!-- Main Style -->
-    <link rel="stylesheet" type="text/css" href="{{assets('css/app.css')}}" />
+    <!-- Core Style -->
+    {{ assets.outputCss('core_css') }}
 
-    <!-- Responsive Style -->
-    <link rel="stylesheet" href="/core/assets/css/responsive.css">
+    <!-- Main Style -->
+    {{ assets.outputCss('theme_css') }}
+
     {{ this.assets.outputCss() }}
     <script type="text/javascript">
         var baseUri     = '{{ this.config.application.baseUri }}';
@@ -59,10 +59,10 @@
 {{ javascript_include('core/assets/js/app.function.js')}}
 {{ javascript_include('core/assets/js/app.ajax.js')}}
 {{ javascript_include('core/assets/js/app.js')}}
-<script src="{{assets('js/custom.js')}}"></script>
-{{ this.assets.outputJs() }}
+
+{{ assets.outputCss('theme_css') }}
+{{ assets.outputJs() }}
 {% block scripts%} {% endblock %}
 <!-- End js -->
-
 </body>
 </html>
