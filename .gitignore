@@ -3,7 +3,6 @@ vendor/
 core/config/config.local.php
 core/config/config.php
 apps/frontend/cache/volt/*
-tests/_output
 PayPal.log
 sftp-config.json
 .DS_Store
