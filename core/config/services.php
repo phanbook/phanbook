@@ -446,11 +446,9 @@ if (!function_exists('t')) {
     }
 }
 
-// @TODO: Use bootstrap/helpers.php
 //Phalcon Debugger
 if ($config->application->debug) {
     (new \Phalcon\Debug)->listen();
-    include ROOT_DIR . '/core/common/tools/Debug.php';
 }
 
 // @TODO: Use bootstrap/constants.php
