@@ -60,7 +60,7 @@
 {{ javascript_include('core/assets/js/app.ajax.js')}}
 {{ javascript_include('core/assets/js/app.js')}}
 
-{{ assets.outputCss('theme_css') }}
+{{ assets.outputCss('theme_js') }}
 {{ assets.outputJs() }}
 {% block scripts%} {% endblock %}
 <!-- End js -->
