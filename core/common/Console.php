@@ -12,7 +12,6 @@
  */
 namespace Phanbook;
 
-use Phalcon\Loader;
 use Phalcon\Mvc\View;
 use Phalcon\Cli\Router;
 use Phanbook\Auth\Auth;
@@ -26,9 +25,12 @@ use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Mvc\View\Engine\Volt;
 use Phanbook\Markdown\ParsedownExtra;
 use Phalcon\Cli\Console as CLIConsole;
+use Phalcon\Di\FactoryDefault\Cli as CliDi;
 
 /**
- * Console.
+ *\Phanbook\Console
+ *
+ * @package Phanbook
  */
 class Console extends CLIConsole
 {
@@ -108,14 +110,13 @@ class Console extends CLIConsole
     /**
      * Console constructor - set the dependency Injector.
      *
-     * @param \Phalcon\DiInterface $di
+     * @param DiInterface $di
      */
-    public function __construct(DiInterface $di)
+    public function __construct(DiInterface $di = null)
     {
-        $this->di = $di;
+        $this->di = $di ?: new CliDi();
         $loaders = [
             'config',
-            'loader',
             'db',
             'router',
             'markdown',
@@ -137,27 +138,6 @@ class Console extends CLIConsole
 
         // Set the dependency Injector
         parent::__construct($this->di);
-    }
-
-    /**
-     * Register an autoloader.
-     */
-    protected function loader()
-    {
-        $loader = new Loader();
-        $namespaces = [
-            'Phanbook' => ROOT_DIR . '/core/common/library/',
-            'Phanbook\Mail' => ROOT_DIR . '/core/common/library/Mail/',
-            'Phanbook\Tools' => ROOT_DIR . '/core/common/tools/',
-            'Phanbook\Models' => ROOT_DIR . '/core/common/models/',
-            'Phanbook\Search' => ROOT_DIR . '/core/common/library/Search/',
-            'Phanbook\Cli\Tasks' => ROOT_DIR . '/core/modules/cli/tasks/',
-            'Phanbook\Seeder' => ROOT_DIR . '/core/modules/seeder/'
-        ];
-
-        $loader
-            ->registerNamespaces($namespaces)
-            ->register();
     }
 
     protected function isCli()
@@ -476,7 +456,6 @@ class Console extends CLIConsole
      */
     protected function determineTask($flags)
     {
-
         // Since first argument is the name so script executing (pop it off the list)
         array_shift($flags);
 
@@ -519,10 +498,9 @@ class Console extends CLIConsole
     /**
      * make sure everything required is setup before starting the task.
      *
-     * @param array $argv array of arguments
      * @param int $argc count of arguments
      *
-     * @throws Exception
+     * @throws \Exception
      */
     protected function preTaskCheck($argc)
     {
