@@ -64,7 +64,7 @@ before_script:
   - echo 'CREATE DATABASE phanbook CHARSET=utf8 COLLATE=utf8_unicode_ci' | mysql -u root
   - cat schema/phanbook.sql | mysql -uroot phanbook
   - cp ./core/config/config.example.php ./core/config/config.php
-  - cp ./tests/config.travis.php ./core/config/config.testing.php
+  - cp ./tests/_ci/config.travis.php ./core/config/config.testing.php
   #- (cd ./scripts/ && php random-entries.php > /dev/null)
   - php -S 127.0.0.1:8000 -t . .htrouter.php >/dev/null 2>&1 &
   - ulimit -c unlimited -S || true
