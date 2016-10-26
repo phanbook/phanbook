@@ -10,9 +10,23 @@
  * @since   1.0.0
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
+use Phalcon\Mvc\Application;
 
-putenv('APPLICATION_ENV=testing');
+require ROOT_DIR . '/core/config/services.php';
 
-ini_set('memory_limit', '-1');
+/**
+ * Handle the request
+ */
+$application = new Application();
 
-require dirname(dirname(__FILE__)) . '/bootstrap/autoloader.php';
+/**
+ * Assign the DI
+ */
+$application->setDI($di);
+
+/**
+ * Include modules
+ */
+$application->registerModules(require ROOT_DIR . '/core/config/modules.php');
+
+return new Application($di);

@@ -27,6 +27,7 @@ coverage:
 extensions:
     enabled:
         - Codeception\Extension\RunFailed # default extension
+
 # Global modules configuration.
 modules:
     config:
@@ -36,8 +37,12 @@ modules:
             password: ''
             dump: tests/_data/dump.sql
         Phalcon:
-            bootstrap: tests/bootstrap.php
+            bootstrap: 'tests/_config/bootstrap.php'
             cleanup: true
             savepoints: true
+        PhpBrowser:
+            url: 'http://localhost:8000'
+            curl:
+                CURLOPT_RETURNTRANSFER: true
 
-error_level: "E_ALL | E_STRICT"
+error_level: "E_ALL"
