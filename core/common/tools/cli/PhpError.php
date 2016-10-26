@@ -1,17 +1,36 @@
 <?php
+/**
+ * Phanbook : Delightfully simple forum and Q&A software
+ *
+ * Licensed under The GNU License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @link    http://phanbook.com Phanbook Project
+ * @since   1.0.0
+ * @author  Phanbook <hello@phanbook.com>
+ * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
+ */
 namespace Phanbook\Tools\Cli;
 
+/**
+ * \Phanbook\Tools\Cli\PhpError
+ *
+ * @package Phanbook\Tools\Cli
+ */
 class PhpError
 {
     /**
      * Record any warnings/errors by php
      *
-     * @param int       php error number
-     * @param string    php error description
-     * @param string    php file where the error occured
-     * @param int       php line where the error occured
+     * @param int $errNo The error number
+     * @param string $errStr The error description
+     * @param string $errFile The file where the error occurred
+     * @param int $errLine The line where the error occurred
+     * @param array $errContext The error context
+     * @return bool
      */
-    public static function errorHandler($errNo, $errStr, $errFile, $errLine, $errContext = null)
+    public static function errorHandler($errNo, $errStr, $errFile, $errLine, array $errContext = null)
     {
         if ($errNo != E_STRICT) {
             // Get Remote Ip or CLI script?
@@ -23,7 +42,7 @@ class PhpError
                 $script = $protocol . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
                 $ip = $_SERVER['REMOTE_ADDR'];
             }
-            //@todo laster
+            // @TODO: later
             /*$rt = new \Models\RuntimeError();
             $rt->title = $errStr;
             $rt->file = $errFile;
