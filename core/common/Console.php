@@ -10,7 +10,7 @@
  * @since   1.0.0
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
-namespace Phanbook;
+namespace Phanbook\Common;
 
 use Phalcon\Mvc\View;
 use Phalcon\Cli\Router;

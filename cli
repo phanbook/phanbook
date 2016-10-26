@@ -21,7 +21,7 @@
  * @example cli Example index --debug --single --no-record
  */
 
-use Phanbook\Console;
+use Phanbook\Common\Console;
 use Phanbook\Tools\Cli\PhpError;
 
 // Register The Auto Loader
