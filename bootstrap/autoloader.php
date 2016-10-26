@@ -27,3 +27,6 @@ require ROOT_DIR . '/vendor/autoload.php';
         'Phanbook\Tools\Cli' => ROOT_DIR . '/core/tools/cli/',
     ])
     ->register();
+
+// Load constants
+require 'helpers.php';

@@ -34,7 +34,7 @@ date_default_timezone_set('UTC');
 register_shutdown_function([PhpError::class, 'runtimeShutdown']);
 
 try {
-    $app = new ConsoleApp( new Cli());
+    $app = new ConsoleApp(new Cli());
     // Record any php warnings/errors
     set_error_handler([PhpError::class, 'errorHandler']);
 
@@ -67,17 +67,9 @@ try {
     exit(255);
 }
 
-function d($object, $kill = true)
-{
-    var_export($object);
-    if ($kill) {
-        exit;
-    }
-}
 /**
  * Fix undefined function t when save object which is have method
  * Validate in model
- *
  */
 function t($string)
 {
