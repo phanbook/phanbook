@@ -17,6 +17,7 @@ use Phalcon\Cli\Router;
 use Phanbook\Auth\Auth;
 use Phanbook\Mail\Mail;
 use Phalcon\DiInterface;
+use Phanbook\Common\Config;
 use Phalcon\Events\Manager;
 use Phalcon\Queue\Beanstalk;
 use Phanbook\Tools\Cli\Output;
@@ -177,19 +178,12 @@ class Console extends CLIConsole
     }
 
     /**
-     * Set the config service.
+     * Set the Application config.
      */
     protected function config()
     {
-        $config = include ROOT_DIR . '/core/config/config.php';
-        if (file_exists(ROOT_DIR . '/core/config/config.global.php')) {
-            $overrideConfig = include ROOT_DIR . '/core/config/config.global.php';
-            $config->merge($overrideConfig);
-        }
-        if (file_exists(ROOT_DIR . '/core/config/config.' . APPLICATION_ENV . '.php')) {
-            $overrideConfig = include ROOT_DIR . '/core/config/config.' . APPLICATION_ENV . '.php';
-            $config->merge($overrideConfig);
-        }
+        $config = Config::factory();
+
         $this->di->set('config', $config);
         $this->config = $config;
     }
