@@ -16,6 +16,13 @@ use Phalcon\Validation;
 use Phalcon\Validation\Validator\Email as EmailValidator;
 use Phalcon\Validation\Validator\Uniqueness as UniquenessValidator;
 
+/**
+ * \Phanbook\Models\Users
+ *
+ * @method static Users|false findFirstById(int $id)
+ *
+ * @package Phanbook\Models
+ */
 class Users extends ModelBase
 {
     const STATUS_ACTIVE   = 1;
@@ -1186,7 +1193,7 @@ class Users extends ModelBase
             return $user;
         }
     }
-    
+
     /**
      * Independent Column Mapping.
      */

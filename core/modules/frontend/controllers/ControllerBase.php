@@ -30,6 +30,10 @@ use Phalcon\Paginator\Adapter\NativeArray  as PaginatorNativeArray;
 /**
  * Class ControllerBase
  *
+ * @property \Phanbook\Auth\Auth $auth
+ * @property \Phalcon\Config $config
+ * @property \Phanbook\Utils\Phanbook $phanbook
+ *
  * @package Phanbook\Controllers
  */
 class ControllerBase extends Controller
