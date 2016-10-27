@@ -339,35 +339,42 @@ $di->set(
     },
     true
 );
-//Translation application use Gettext or Native Array
-$di->set(
+// Translation application use Gettext or Native Array
+$di->setShared(
     'translation',
-    function () use ($di) {
-        $language = $di->get('config')->language;
+    function () {
+        $language = $this->get('config')->language;
         $code     = $language->code;
-        if ($di->getCookies()->has('code')) {
-            $code = $di->getCookies()->get('code')->getValue();
+
+        if ($this->getCookies()->has('code')) {
+            $code = $this->getCookies()->get('code')->getValue();
         }
+
         if ($language->gettext) {
-            $translation = new Gettext([
+            return new Gettext([
                 'locale' => $code,
                 'directory' => ROOT_DIR . '/core/lang',
                 'defaultDomain'=> 'messages',
             ]);
-        } else {
-            $path = ROOT_DIR . '/core/lang/messages/' . $code . '.php';
-            if (!file_exists($path)) {
-                $di->getLogger()->error("You must specify a language file for language '$code'");
-                $path = ROOT_DIR . '/core/lang/messages/en.php';
-            }
-            $translation = new NativeArray([
-               'content' => require_once $path
-            ]);
         }
 
-        return $translation;
-    },
-    true
+        $path = ROOT_DIR . '/core/lang/messages/' . $code . '.php';
+        if (!file_exists($path)) {
+            $this->getLogger()->error("You must specify a language file for language '$code'");
+            $path = ROOT_DIR . '/core/lang/messages/en.php';
+        }
+
+        /** @noinspection PhpIncludeInspection */
+        $data = include $path;
+        if (!is_array($data)) {
+            $this->getLogger()->error(
+                "Translation data [{$path}] for language '$code' must be an array. Got: " . gettype($data)
+            );
+            $data = [];
+        }
+
+        return new NativeArray(['content' => $data]);
+    }
 );
 //Queue to deliver e-mails in real-time
 $di->set(
