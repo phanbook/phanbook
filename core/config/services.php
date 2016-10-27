@@ -42,6 +42,7 @@ use Phanbook\Utils\Phanbook;
 use Phanbook\Queue\DummyServer;
 use Phanbook\Markdown\ParsedownExtra;
 use Phanbook\Notifications\Checker     as NotificationsChecker;
+use Phanbook\Common\ThemeManager;
 
 /**
  * The FactoryDefault Dependency Injector automatically register the right services providing a full stack framework
@@ -53,6 +54,7 @@ $eventsManager = new EventsManager();
 
 /**
  * Register the configuration itself as a service
+ * @todo: Move to the \Phanbook\Common\Config
  */
 $config = include __DIR__ . '/config.php';
 if (file_exists(__DIR__ . '/config.global.php')) {
@@ -389,6 +391,7 @@ $di->set(
     'volt',
     function ($view, $di) use ($config) {
         $volt = new Volt($view);
+        $volt->setDI($di);
         $volt->setOptions(
             [
                 'compiledPath'      => $config->application->view->compiledPath,
@@ -431,26 +434,16 @@ $di->set(
     true
 );
 
-/**
- * Translation function call anywhere
- *
- * @todo Use bootstrap/helpers.php
- * @param $string
- * @return mixed
- */
-if (!function_exists('t')) {
-    function t($string)
-    {
-        $translation = Di::getDefault()->get('translation');
-        return $translation->_($string);
-    }
-}
+// @todo: Move to the separated Service
+$config = $di->getShared('config');
+$manager = new ThemeManager(ROOT_DIR . '/content/themes/' . $config->theme, $config->theme);
+$manager->setDI($di);
+$manager->initializeAssets();
+$di->setShared('theme', $manager);
 
-// @TODO: Use bootstrap/helpers.php
 //Phalcon Debugger
 if ($config->application->debug) {
     (new \Phalcon\Debug)->listen();
-    include ROOT_DIR . '/core/common/tools/Debug.php';
 }
 
 // @TODO: Use bootstrap/constants.php

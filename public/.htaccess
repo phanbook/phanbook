@@ -1,0 +1,36 @@
+AddDefaultCharset UTF-8
+
+Options +FollowSymLinks -MultiViews -Indexes
+
+DirectoryIndex index.php index.html
+
+AddType application/x-font-ttf           ttc ttf
+AddType application/x-font-otf           otf
+AddType application/font-woff            woff
+AddType application/font-woff2           woff2
+AddType application/vnd.ms-fontobject    eot
+
+<FilesMatch ".(eot|ttf|otf|woff|woff2)">
+    Header set Access-Control-Allow-Origin "*"
+</FilesMatch>
+
+# [R] - redirect
+# [NC] - causes the RewriteRule to be matched in a case-insensitive manner
+# [L] - no further rules will be processed
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    RewriteRule ^index\.php$ - [L]
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^core/assets/(.*)$ assets/$1 [NC,L]
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^fonts/(.*)$ assets/fonts/$1 [NC,L]
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php?_url=/$1 [QSA,L]
+</IfModule>

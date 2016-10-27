@@ -84,7 +84,7 @@ class ModelBase extends Model
             'SELECT COALESCE(SUM(positive),0) AS positive, ',
             'COALESCE(SUM(negative),0) AS negative ',
             'FROM ' . Vote::class,
-            'WHERE objectId = :objectId: AND object = :object:',
+            ' WHERE objectId = :objectId: AND object = :object:',
         ];
 
         return $this

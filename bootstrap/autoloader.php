@@ -24,7 +24,7 @@ require ROOT_DIR . '/vendor/autoload.php';
     ->registerNamespaces([
         'Phanbook' => ROOT_DIR . '/core/common/library/',
         'Phanbook\Forms' => ROOT_DIR . '/core/common/forms/',
-        'Phanbook\Tools' => ROOT_DIR . '/core/tools/',
+        'Phanbook\Tools' => ROOT_DIR . '/core/common/tools/',
         'Phanbook\Common' => ROOT_DIR . '/core/common/',
         'Phanbook\Models' => ROOT_DIR . '/core/common/models/',
         'Phanbook\Seeder' => ROOT_DIR . '/core/modules/seeder/',
