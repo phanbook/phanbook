@@ -26,12 +26,6 @@ use Phalcon\Config as PhalconConfig;
 class Config extends PhalconConfig
 {
     /**
-     * The Application config location.
-     * @type string
-     */
-    const CONFIG_DIR = '/core/config/';
-
-    /**
      * Current Application stage.
      * @var string
      */
@@ -61,7 +55,7 @@ class Config extends PhalconConfig
      */
     public static function factory($stage = ENV_LOCAL)
     {
-        $configPath = ROOT_DIR. self::CONFIG_DIR . 'config.php';
+        $configPath = config_path('config.php');
         if (!file_exists($configPath) || !is_file($configPath)) {
             throw new RuntimeException(
                 sprintf(
@@ -87,9 +81,9 @@ class Config extends PhalconConfig
             );
         }
 
-        if (file_exists(ROOT_DIR. self::CONFIG_DIR . 'config.global.php')) {
+        if (file_exists(config_path('config.global.php'))) {
             /** @noinspection PhpIncludeInspection */
-            $global = require ROOT_DIR. self::CONFIG_DIR . 'config.global.php';
+            $global = require config_path('config.global.php');
 
             if (is_array($global)) {
                 $global = new self($config, $stage);
@@ -101,9 +95,9 @@ class Config extends PhalconConfig
         }
 
         if ($stage !== ENV_PRODUCTION) {
-            if (file_exists(ROOT_DIR. self::CONFIG_DIR . 'config.' . APPLICATION_ENV . '.php')) {
+            if (file_exists(config_path('config.' . APPLICATION_ENV . '.php'))) {
                 /** @noinspection PhpIncludeInspection */
-                $local = require ROOT_DIR. self::CONFIG_DIR . 'config.' . APPLICATION_ENV . '.php';
+                $local = require config_path('config.' . APPLICATION_ENV . '.php');
 
                 if (is_array($local)) {
                     $local = new self($config, $stage);

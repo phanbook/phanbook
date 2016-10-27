@@ -87,22 +87,23 @@ class Phanbook
      */
     public function getTemplate()
     {
-        return ROOT_DIR . '/content/themes/' . $this->theme;
+        return themes_path($this->theme);
     }
     /**
      * Retrieves the file name of the current theme with url.
      * /about it will return such as content/themes/default/pages/about.volt
      *
+     * @param  string $name
      * @return string
      */
     public function getPageFile($name)
     {
-        return ROOT_DIR . '/content/themes/' . $this->theme . '/pages/'. $name . '.volt';
+        return themes_path($this->theme . "/pages/{$name}.volt");
     }
 
     public function saveConfig($arrayConfig)
     {
-        $filename = ROOT_DIR . '/content/options/options.php';
+        $filename = config_path('options/options.php');
         if (!file_exists($filename)) {
             $makeFile = ZFunction::makeFile($filename);
             file_put_contents($filename, "<?php return [];");

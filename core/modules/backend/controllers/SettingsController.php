@@ -131,7 +131,7 @@ class SettingsController extends ControllerBase
                     // $image = new Imagick($file->getTempName());
                     // $image->resize(200, 200)->crop(100, 100);
                     // $image->save('images/thumb.jpg');
-                    $path = ROOT_DIR . '/content/uploads/';
+                    $path = config_path('uploads/');
                     if ($file->getRealType() == "image/x-icon") {
                         $result = $file->moveTo($path . $name .'.ico');
                     } else {
@@ -139,7 +139,7 @@ class SettingsController extends ControllerBase
                     }
                     if (!$result) {
                         $this->flashSession->error(
-                            t('Data was not saved, you need to change permisson for directory upload')
+                            t('Data was not saved, you need to change permission for directory upload')
                         );
                         return $this->currentRedirect();
                     }

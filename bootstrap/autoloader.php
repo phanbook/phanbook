@@ -36,7 +36,7 @@ require ROOT_DIR . '/vendor/autoload.php';
         'Phanbook\Common\Exceptions' => ROOT_DIR . '/core/common/exceptions/',
 
     ])
+    ->registerFiles([
+        ROOT_DIR . '/bootstrap/helpers.php',
+    ])
     ->register();
-
-// Load helpers
-require 'helpers.php';

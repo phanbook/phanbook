@@ -14,15 +14,15 @@
 
 use Phalcon\Di;
 
-/**
- * Translation function call anywhere.
- * Returns the translation string of the given key.
- *
- * @param string $string The string to be translated
- * @param array $placeholders The placeholders
- * @return string
- */
 if (!function_exists('t')) {
+    /**
+     * Translation function call anywhere.
+     * Returns the translation string of the given key.
+     *
+     * @param  string $string       The string to be translated
+     * @param  array  $placeholders The placeholders
+     * @return string
+     */
     function t($string, array $placeholders = null)
     {
         $di = Di::getDefault();
@@ -39,7 +39,8 @@ if (!function_exists('t')) {
 
 if (!function_exists('vd')) {
     /**
-     * The var_dump helper
+     * The var_dump helper.
+     *
      * @param mixed $expression
      */
     function vd($expression)
@@ -61,7 +62,8 @@ if (!function_exists('vd')) {
 
 if (!function_exists('vdd')) {
     /**
-     * The var_dump helper
+     * The var_dump helper.
+     *
      * @param mixed $expression
      */
     function vdd($expression)
@@ -73,7 +75,8 @@ if (!function_exists('vdd')) {
 
 if (!function_exists('pr')) {
     /**
-     * The print_r helper
+     * The print_r helper.
+     *
      * @param mixed $expression
      */
     function pr($expression)
@@ -84,7 +87,8 @@ if (!function_exists('pr')) {
 
 if (!function_exists('prd')) {
     /**
-     * The print_r helper
+     * The print_r helper.
+     *
      * @param mixed $expression
      */
     function prd($expression)
@@ -96,7 +100,8 @@ if (!function_exists('prd')) {
 
 if (!function_exists('e')) {
     /**
-     * The echo helper
+     * The echo helper.
+     *
      * @param string $string
      */
     function e($string)
@@ -118,8 +123,9 @@ if (!function_exists('e')) {
 
 if (!function_exists('gcm')) {
     /**
-     * The get_class_methods helper
-     * @param string $class
+     * The get_class_methods helper.
+     *
+     * @param  string $class
      * @return array
      */
     function gcm($class)
@@ -136,10 +142,10 @@ if (!function_exists('gcm')) {
 
 if (!function_exists('d')) {
     /**
-     * The echo && die helper
+     * The echo && die helper.
      *
      * @param mixed $expression
-     * @param bool $kill Exit?
+     * @param bool  $kill Exit?
      */
     function d($expression, $kill = true)
     {
@@ -148,5 +154,83 @@ if (!function_exists('d')) {
         if ($kill) {
             die();
         }
+    }
+}
+
+if (!function_exists('app_path')) {
+    /**
+     * Get the Application path.
+     *
+     * @param  string $path
+     * @return string
+     */
+    function app_path($path = '')
+    {
+        return ROOT_DIR . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+    }
+}
+
+if (!function_exists('config_path')) {
+    /**
+     * Get the configuration path.
+     *
+     * @param  string $path
+     * @return string
+     */
+    function config_path($path = '')
+    {
+        return app_path('core' . DIRECTORY_SEPARATOR . 'config') . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+    }
+}
+
+if (!function_exists('content_path')) {
+    /**
+     * Get the content path.
+     *
+     * @param  string $path
+     * @return string
+     */
+    function content_path($path = '')
+    {
+        return app_path('content') . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+    }
+}
+
+if (!function_exists('themes_path')) {
+    /**
+     * Get the themes path.
+     *
+     * @param  string $path
+     * @return string
+     */
+    function themes_path($path = '')
+    {
+        return content_path('themes') . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+    }
+}
+
+if (!function_exists('modules_path')) {
+    /**
+     * Get the modules path.
+     *
+     * @param  string $path
+     * @return string
+     */
+    function modules_path($path = '')
+    {
+        return app_path('core' . DIRECTORY_SEPARATOR . 'modules') . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+    }
+}
+
+if (!function_exists('logs_path')) {
+    /**
+     * Get the logs path.
+     *
+     * @param  string $path
+     * @return string
+     */
+    function logs_path($path = '')
+    {
+        return content_path('logs') . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
 }

@@ -98,7 +98,7 @@ class Module implements ModuleDefinitionInterface
             function () use ($di) {
                 $config = $di->get('config');
                 $view = new View();
-                $view->setViewsDir(ROOT_DIR . '/content/themes/' . $config->theme);
+                $view->setViewsDir(themes_path($config->theme));
                 $view->disableLevel([View::LEVEL_MAIN_LAYOUT => true, View::LEVEL_LAYOUT => true]);
                 $view->registerEngines(['.volt' => 'volt']);
 
