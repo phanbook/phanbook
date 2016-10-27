@@ -1,4 +1,8 @@
 <?php
+/**
+ * @var   Codeception\Scenario $scenario
+ */
+
 $I = new AcceptanceTester($scenario);
 $I->wantTo('add a new user and see it in database');
 $I->amOnPage('/oauth/login');
