@@ -19,7 +19,8 @@ use Phalcon\Mvc\Model\Resultset\Simple as Resultset;
 use Phanbook\Models\Behavior\Blameable as ModelBlameable;
 
 /**
- * Class ModelBase
+ * \Phanbook\Models\ModelBase
+ *
  * It is common model basics for Mysql
  *
  * @package Phanbook\Models
@@ -97,13 +98,13 @@ class ModelBase extends Model
     public function getPostsWithVotes($postId = false)
     {
         $sql = 'SELECT p.*, pr.usersId as editorId, u.email,
-            (SELECT COALESCE(SUM(v.positive),0) FROM  vote v  WHERE p.id = v.objectId AND v.object = ?) AS positive,
-            (SELECT COALESCE(SUM(v.negative),0) FROM  vote v  WHERE p.id = v.objectId AND v.object = ?) AS negative
+            (SELECT COALESCE(SUM(v.positive),0) FROM vote v WHERE p.id = v.objectId AND v.object = ?) AS positive,
+            (SELECT COALESCE(SUM(v.negative),0) FROM vote v WHERE p.id = v.objectId AND v.object = ?) AS negative
             FROM postsReply p
             LEFT JOIN postsReplyHistory pr ON p.id = pr.postsReplyId
             LEFT JOIN users u ON u.id = p.usersId
-            WHERE p.postsId= ? AND p.deleted = 0
-            GROUP BY p.id
+            WHERE p.postsId = ? AND p.deleted = 0
+            GROUP BY p.id, pr.usersId
             ORDER BY p.id DESC';
 
         $postsReply = new PostsReply();
