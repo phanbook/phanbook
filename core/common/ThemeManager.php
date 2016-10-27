@@ -94,7 +94,6 @@ class ThemeManager extends Component
 
         $this
             ->initializeThemeCss()
-            ->initializeCoreCss()
             ->initializeThemeJs();
     }
 
@@ -112,29 +111,6 @@ class ThemeManager extends Component
             ->addFilter(new Cssmin());
 
         $assets->set('theme_css', $themeCss);
-
-        return $this;
-    }
-
-    protected function initializeCoreCss()
-    {
-        $assets = $this->getAssetsManager();
-
-        $coreCss = new Collection();
-        $coreCss
-            ->setTargetPath('/css/style.css')
-            ->setTargetUri('/css/style.css?v=1')
-            ->setSourcePath(ROOT_DIR . '/public')
-            ->addCss('/assets/css/responsive.css')
-            ->addCss('/assets/css/bootstrap.min.css')
-            ->addCss('/assets/css/base.css')
-            ->addCss('/assets/css/prettyPhoto.css')
-            ->addCss('/assets/css/font-awesome.min.css')
-
-            ->setLocal(true)
-            ->addFilter(new Cssmin());
-
-        $assets->set('core_css', $coreCss);
 
         return $this;
     }
