@@ -8,8 +8,8 @@
 
                 <div class="share-tags page-content">
                     <div class="question-tags"><i class="fa fa-tags"></i>
-                    {% for tag in post.tag%}
-                        {{link_to('tags/' ~ tag.id ~ '/' ~ tag.slug, tag.name) }},
+                    {% for modelTag in post.tag%}
+                        {{link_to('tags/' ~ modelTag.id ~ '/' ~ modelTag.slug, modelTag.name) }},
                     {% endfor %}
                     </div>
                     <div class="share-inside-warp">
