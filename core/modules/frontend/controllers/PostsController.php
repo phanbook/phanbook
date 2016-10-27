@@ -335,7 +335,7 @@ class PostsController extends ControllerBase
     public function viewAction($id, $slug)
     {
         $id     = (int) $id;
-        $userId = $this->auth->getAuth()['id'];
+        $userId = $this->auth->getUserId();
 
         if (!$object = Posts::findFirstById($id)) {
             $this->flashSession->error(t("Posts doesn't exist."));
@@ -359,8 +359,9 @@ class PostsController extends ControllerBase
         ];
         $viewed = PostsViews::count($parameters);
 
-        //A view is stored by ipaddress
-        if (!$viewed) {
+        // A view is stored by ipaddress
+        // @todo: Move this logic to separated method
+        if (!$viewed && $userId) {
             //Increase the number of views in the post
             $object->setNumberViews($object->getNumberViews() + 1);
             if ($object->getUsersId() != $userId) {
