@@ -688,7 +688,7 @@ class Posts extends ModelBase
             /**
              * Register the user in the post's notifications
              */
-            $notification = new Postsnotifications();
+            $notification = new PostsNotifications();
             $notification->setUsersId($this->usersId);
             $notification->setPostsId($this->id);
             $notification->save();
