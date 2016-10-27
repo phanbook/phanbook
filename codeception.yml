@@ -28,6 +28,10 @@ extensions:
     enabled:
         - Codeception\Extension\RunFailed # default extension
 
+# Disable linter to avoid PHP 7.1 issues
+settings:
+    lint: false
+
 # Global modules configuration.
 modules:
     config:

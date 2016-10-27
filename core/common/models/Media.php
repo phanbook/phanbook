@@ -264,7 +264,7 @@ class Media extends ModelBase
 
         // Check if file extension's allowed
         if (!in_array($fileExt, $filesAccept)) {
-            return $this->setError(MEDIA_FILE_NOT_ACCEPT. ": ". $fileExt);
+            return $this->setError(t("Can't upload because file type's not allowed"). ": ". $fileExt);
         }
          // determine directory for this file. <username>/<file type>/<year>/<month>/<filename>
         $userName = $this->getDI()->getAuth()->getUsername();
@@ -278,13 +278,18 @@ class Media extends ModelBase
         $localPath = $fileObj->getTempName();
 
         if (!file_exists($localPath)) {
-            return $this->setError(MEDIA_TEMP_NOT_FOUND);
+            return $this->setError(t("Can't find temp file for upload. This maybe caused by server configure"));
         }
         if ($this->fileSystem->checkFileExists($serverPath)) {
-            return $this->setError(MEDIA_ALREADY_EXISTS);
+            return $this->setError(
+                t(
+                    'An error(s) occured when uploading file(s), ' .
+                    'Another file have same name with this file. Please change file name before upload'
+                )
+            );
         }
         if (!$this->fileSystem->uploadFile($localPath, $serverPath)) {
-            return $this->setError(MEDIA_TEMP_NOT_FOUND);
+            return $this->setError(t("Can't find temp file for upload. This maybe caused by server configure"));
         }
         $uploadStatus = $this->saveToDB(
             $userName,
@@ -293,7 +298,7 @@ class Media extends ModelBase
             $fileName
         );
         if (!$uploadStatus) {
-            return $this->setError(MEDIA_UPLOAD_ERROR);
+            return $this->setError(t("An error(s) occured when uploading file(s). Please try again later"));
         }
         // Update analytic file
         $config        = $this->fileSystem->getConfigFile($userName);

@@ -51,3 +51,7 @@ define('APPLICATION_ENV', getenv('APPLICATION_ENV') ?: ENV_LOCAL);
  * @const COMPATIBLE_VERSION The compatible Phalcon version.
  */
 define('COMPATIBLE_VERSION', 3000040);
+
+define("MAX_WIDTH_THUMB", 200);
+
+define("MAX_HEIGHT_THUMB", 200);

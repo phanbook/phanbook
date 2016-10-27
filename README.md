@@ -97,7 +97,7 @@ The original Phanbook code contributors can be found in [AUTHORS.MD](https://git
 
 ## Copyright / License
 
-Copyright 2014 - 2015 Phanbook Construction Kit, Inc.
+Copyright 2014 - 2016 Phanbook Construction Kit, Inc.
 
 Licensed under the GNU General Public License Version 2.0 (or later); you may not use this work except in compliance with the License. You may obtain a copy of the License in the LICENSE file, or at http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
 
