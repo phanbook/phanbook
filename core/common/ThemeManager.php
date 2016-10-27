@@ -145,8 +145,8 @@ class ThemeManager extends Component
 
         $themeJs = new Collection();
         $themeJs
-            ->setTargetPath('/css/theme.js')
-            ->setTargetUri('/css/theme.js?v=1')
+            ->setTargetPath('/js/theme.js')
+            ->setTargetUri('/js/theme.js?v=1')
             ->setSourcePath($this->themePath)
             ->addJs('/assets/js/app.js');
 
