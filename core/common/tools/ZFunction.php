@@ -40,17 +40,17 @@ class ZFunction extends Injectable
     /**
      * Retrieve an image to represent an attachment.
      *
-     * @param string  A name images you want to get
-     *
+     * @todo Use Apache (Nginx) instead of this (PHP)
+     * @param  string $name A name images you want to get
      * @return string
      */
     public static function getImageSrc($name = 'logo.png')
     {
-        $path = '/content/uploads/' . $name;
-        if (file_exists(ROOT_DIR . $path)) {
-            return $path;
+        if (file_exists(content_path("uploads/$name"))) {
+            return "/content/uploads/$name";
         }
-        return '/core/assets/images/' . $name;
+
+        return "/core/assets/images/$name";
     }
     /**
      * Display date to human easy  understand

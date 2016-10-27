@@ -26,36 +26,19 @@ use Phalcon\Assets\Manager as AssetsManager;
 class ThemeManager extends Component
 {
     /**
-     * The Theme path.
-     * @var string
-     */
-    protected $themePath;
-
-    /**
      * The Theme name.
      * @var string
      */
-    protected $themeName;
+    protected $name;
 
     /**
      * ThemeManager constructor.
-     * @param string $themePath The Theme path.
-     * @param string $themeName The Theme name.
-     */
-    public function __construct($themePath, $themeName)
-    {
-        $this->themePath = rtrim($themePath, '\\/');
-        $this->themeName = $themeName;
-    }
-
-    /**
-     * Get Theme path.
      *
-     * @return string
+     * @param string $name The Theme name.
      */
-    public function getThemePath()
+    public function __construct($name)
     {
-        return $this->themePath;
+        $this->name = $name;
     }
 
     /**
@@ -65,7 +48,7 @@ class ThemeManager extends Component
      */
     public function getThemeName()
     {
-        return $this->themeName;
+        return $this->name;
     }
 
     /**
@@ -89,7 +72,7 @@ class ThemeManager extends Component
     {
         $assets = $this->getAssetsManager();
         $assets->setOptions([
-            'targetBasePath' => ROOT_DIR . '/public'
+            'targetBasePath' => app_path('public')
         ]);
 
         $this
@@ -105,7 +88,7 @@ class ThemeManager extends Component
         $themeCss
             ->setTargetPath('/css/theme.css')
             ->setTargetUri('/css/theme.css?v=1')
-            ->setSourcePath($this->themePath)
+            ->setSourcePath(themes_path($this->name))
             ->addCss('/assets/css/app.css')
             ->setLocal(true)
             ->addFilter(new Cssmin());
@@ -123,10 +106,10 @@ class ThemeManager extends Component
         $themeJs
             ->setTargetPath('/js/theme.js')
             ->setTargetUri('/js/theme.js?v=1')
-            ->setSourcePath($this->themePath)
+            ->setSourcePath(themes_path($this->name))
             ->addJs('/assets/js/app.js');
 
-        if (file_exists($this->themePath . '/assets/js/custom.js')) {
+        if (file_exists(themes_path($this->name . '/assets/js/custom.js'))) {
             $themeJs->addJs('/assets/js/custom.js');
         }
 

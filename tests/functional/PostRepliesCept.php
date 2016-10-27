@@ -7,6 +7,7 @@
 use Step\Functional\PostReply as ReplyTester;
 
 $I = new ReplyTester($scenario);
+$I->wantToTest('see post replies');
 
 $userId = $I->haveUser();
 $postId = $I->havePost(['usersId' => $userId]);

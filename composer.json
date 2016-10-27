@@ -48,7 +48,7 @@
         "forum": "http://meta.phanbook.com/"
     },
     "suggest": {
-        "ext-yaml" : "Best way to work with YAML"
+        "ext-yaml": "Best way to work with YAML"
     },
     "autoload-dev": {
         "psr-4": {

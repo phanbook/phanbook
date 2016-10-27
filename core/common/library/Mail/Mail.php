@@ -35,7 +35,7 @@ class Mail extends Component
             $params['subject'] = $this->template->getSubject();
         }
         //Set views layout
-        $this->view->setViewsDir(ROOT_DIR . '/core/data/');
+        $this->view->setViewsDir(app_path('core/data/'));
         $render = $this->view->getRender(
             rtrim($this->config->mail->templatesDir, '/'),
             $key,

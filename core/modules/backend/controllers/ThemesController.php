@@ -38,7 +38,7 @@ class ThemesController extends ControllerBase
      */
     public function customAction()
     {
-        $themePath = ROOT_DIR . '/content/themes/' . $this->config->theme;
+        $themePath = themes_path($this->config->theme);
         $tab = $this->request->getQuery('tab');
         switch ($tab) {
             case 'assets':
