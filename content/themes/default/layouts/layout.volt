@@ -20,11 +20,11 @@
     <link rel="shortcut icon" href="{{ getImageSrc('favicon.png') }}">
     <title>{% block title%}{% endblock %} - {{name}}</title>
 
-    <!-- Core Style -->
-    {{ assets.outputCss('core_css') }}
-
     <!-- Main Style -->
     {{ assets.outputCss('theme_css') }}
+
+    <!-- Responsive Style -->
+    <link rel="stylesheet" href="/core/assets/css/responsive.css">
 
     {{ this.assets.outputCss() }}
     <script type="text/javascript">
@@ -60,7 +60,7 @@
 {{ javascript_include('core/assets/js/app.ajax.js')}}
 {{ javascript_include('core/assets/js/app.js')}}
 
-{{ assets.outputCss('theme_js') }}
+{{ assets.outputJs('theme_js') }}
 {{ assets.outputJs() }}
 {% block scripts%} {% endblock %}
 <!-- End js -->

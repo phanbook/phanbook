@@ -1,0 +1,26 @@
+AddDefaultCharset UTF-8
+
+Options +FollowSymLinks -MultiViews -Indexes
+
+DirectoryIndex index.php index.html
+
+AddType application/x-font-ttf         ttc ttf
+AddType application/x-font-otf         otf
+AddType application/font-woff          woff
+AddType application/font-woff2         woff2
+AddType application/vnd.ms-fontobject  eot
+
+<FilesMatch ".(eot|ttf|otf|woff|woff2)">
+    Header set Access-Control-Allow-Origin "*"
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    RewriteRule ^(core/assets)($|/) - [NC,L]
+    RewriteRule ^(content/themes)($|/) - [NC,L]
+
+    RewriteRule  ^$ public/    [L]
+    RewriteRule  ((?s).*) public/$1 [L]
+</IfModule>

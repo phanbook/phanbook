@@ -1,4 +1,8 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,300,600,700);
+@import url("/core/assets/css/bootstrap.min.css");
+@import url("/core/assets/css/base.css");
+@import url("/core/assets/css/prettyPhoto.css");
+@import url("/core/assets/css/font-awesome.min.css");
 
 body {
     background-color: #f3f3f3;
