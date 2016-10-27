@@ -28,4 +28,5 @@ install_extension() {
     enable_extension $1
 }
 
-install_extension imagick
+# Already installed for Travis PHP 5.6
+# install_extension imagick
