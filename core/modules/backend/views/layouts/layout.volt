@@ -5,7 +5,7 @@
     {% set name = this.config.application.name, publicUrl = this.config.application.publicUrl %}
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <meta name="description" content="">
     <meta name="keywords" content="{{name}}, Phalcon, PHP, Stack">
     <meta name="author" content="Phanbook Team">
