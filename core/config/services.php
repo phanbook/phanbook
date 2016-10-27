@@ -10,10 +10,8 @@
  * @since   1.0.0
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
-use Phalcon\DI;
 use Phalcon\Crypt;
 use Phalcon\Security;
-use Phalcon\Mvc\Router;
 use Phalcon\Flash\Session;
 use Phalcon\DI\FactoryDefault;
 use Phalcon\Http\Response\Cookies;
@@ -451,13 +449,7 @@ $manager->setDI($di);
 $manager->initializeAssets();
 $di->setShared('theme', $manager);
 
-//Phalcon Debugger
+// Phalcon Debugger
 if ($config->application->debug) {
     (new \Phalcon\Debug)->listen();
-}
-
-// @TODO: Use bootstrap/constants.php
-// For avoid re-define variables
-if (!defined("ALREADY_DEFINED")) {
-    include 'constants.php';
 }
