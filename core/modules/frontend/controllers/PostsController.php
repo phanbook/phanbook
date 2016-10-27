@@ -327,8 +327,8 @@ class PostsController extends ControllerBase
     /**
      * Displays a post and its comments
      *
-     * @param $id
-     * @param $slug
+     * @param int $id The Post id
+     * @param string $slug The Post slug
      *
      * @return \Phalcon\Http\ResponseInterface
      */
@@ -338,23 +338,27 @@ class PostsController extends ControllerBase
         $userId = $this->auth->getAuth()['id'];
 
         if (!$object = Posts::findFirstById($id)) {
-            $this->flashSession->error(t('Posts doesn\'t exist.'));
+            $this->flashSession->error(t("Posts doesn't exist."));
             return $this->indexRedirect();
         }
+
         if ($object->getDeleted()) {
-            $this->flashSession->error('The Post is deleted');
+            $this->flashSession->error(t('The Post is deleted.'));
             return $this->indexRedirect();
         }
+
         if (!$object->isPublish()) {
-            $this->flashSession->error('The Post have not publish');
+            $this->flashSession->error(t('The Post have not publish.'));
             return $this->indexRedirect();
         }
+
         $ipAddress = $this->request->getClientAddress();
         $parameters = [
             'postsId = ?0 AND ipaddress = ?1',
             'bind' => [$id, $ipAddress]
         ];
         $viewed = PostsViews::count($parameters);
+
         //A view is stored by ipaddress
         if (!$viewed) {
             //Increase the number of views in the post
@@ -386,7 +390,7 @@ class PostsController extends ControllerBase
                 $this->saveLoger($postView->getMessages());
             }
         }
-        //d($object->getPostsWithVotes($id));
+
         $this->view->setVars(
             [
                 'post'          => $object,
