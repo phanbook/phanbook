@@ -24,9 +24,13 @@ $application = new Application();
  */
 $application->setDI($di);
 
+$modules = require ROOT_DIR . '/core/config/modules.php';
+
+require ROOT_DIR . '/core/config/routing.php';
+
 /**
  * Include modules
  */
-$application->registerModules(require ROOT_DIR . '/core/config/modules.php');
+$application->registerModules($modules);
 
-return new Application($di);
+return $application;

@@ -10,3 +10,4 @@ modules:
     enabled:
         - Helper\Functional
         - Filesystem
+        - Phalcon
