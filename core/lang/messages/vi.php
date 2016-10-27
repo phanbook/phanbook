@@ -88,7 +88,7 @@ $messages = [
     'password_not_match' => 'Mật khẩu không trùng khớp',
     'invalid_activation_request' => 'Yêu cầu kích hoạt không hợp lệ',
     'internal_error_occurred' => 'Có lỗi xảy ra, chúng tôi sẽ quay lại trong vài phút nữa',
-    'send_confirmation_mail' => 'Gửi email xác thực',    
+    'send_confirmation_mail' => 'Gửi email xác thực'    
 ];
 
 return $messages;
