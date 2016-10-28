@@ -66,7 +66,7 @@ class TagsController extends ControllerBase
         if (empty(parent::$grid)) {
             self::setGrid();
         }
-        $this->renderGrid('Phanbook\Models\Tags');
+        $this->renderGrid('Tags');
         $this->view->setVars(['grid' => parent::$grid]);
         $this->tag->setTitle(t('All tags'));
         if ($this->request->isAjax()) {

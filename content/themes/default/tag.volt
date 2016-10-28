@@ -5,16 +5,16 @@
     <div class="col-md-12">
         <div class="carousel slide" id="myCarousel">
             <div class="carousel-inner">
-                {% for tag in paginator.items %}
+                {% for modelTag in paginator.items %}
                 <div class="item active">
                     <ul class="thumbnails">
                         <li class="col-sm-3">
                             <div class="fff">
                                 <div class="caption">
                                     <h4>
-                                    {{ link_to('tags/' ~ tag.id ~ '/' ~ tag.slug, tag.name )}}
+                                    {{ link_to('tags/' ~ modelTag.id ~ '/' ~ modelTag.slug, modelTag.name )}}
                                     </h4>
-                                    <p>{{ truncate(tag.description, '50', '...') }}</p>
+                                    <p>{{ truncate(modelTag.description, '50', '...') }}</p>
                                 </div>
                             </div>
                         </li>
