@@ -81,7 +81,7 @@ class TagsController extends ControllerBase
     public function editAction($id)
     {
         if (!$object = Tags::findFirstById($id)) {
-            $this->flashSession->error(t('Tag doesn\'t exist.'));
+            $this->flashSession->error(t("Tag doesn't exist."));
 
             return $this->currentRedirect();
         }
@@ -150,7 +150,7 @@ class TagsController extends ControllerBase
     public function deleteAction($id)
     {
         if (!$object = Tags::findFirstById($id)) {
-            $this->flashSession->error(t('Tag doesn\'t exist.'));
+            $this->flashSession->error(t("Tag doesn't exist."));
             return $this->response->redirect('tag');
         }
         if (!$object->delete()) {

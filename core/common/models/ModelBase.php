@@ -184,7 +184,7 @@ class ModelBase extends Model
      *
      * @param $e
      */
-    public function saveLoger($e)
+    public function saveLogger($e)
     {
         $logger = $this->getDI()->getLogger();
         if (is_object($e)) {

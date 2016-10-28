@@ -15,7 +15,7 @@ namespace Phanbook\Controllers;
 /**
  * Class ShortUrlsController
  *
- * @toddo
+ * @todo
  */
 class ShortUrlsController extends ControllerBase
 {

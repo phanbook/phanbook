@@ -12,7 +12,7 @@
  */
 namespace Phanbook\Models;
 
-class Auditdetail extends ModelBase
+class AuditDetail extends ModelBase
 {
 
     /**
@@ -174,7 +174,7 @@ class Auditdetail extends ModelBase
      * Allows to query a set of records that match the specified conditions
      *
      * @param  mixed $parameters
-     * @return Auditdetail[]
+     * @return AuditDetail[]
      */
     public static function find($parameters = null)
     {
@@ -185,7 +185,7 @@ class Auditdetail extends ModelBase
      * Allows to query the first record that match the specified conditions
      *
      * @param  mixed $parameters
-     * @return Auditdetail
+     * @return AuditDetail
      */
     public static function findFirst($parameters = null)
     {

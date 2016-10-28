@@ -15,7 +15,7 @@ namespace Phanbook\Queue;
 /**
  * DummyServer
  *
- * This classs replaces Beanstalkd by a dummy server
+ * This class replaces Beanstalkd by a dummy server
  */
 class DummyServer
 {

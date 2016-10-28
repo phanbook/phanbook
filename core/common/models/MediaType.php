@@ -190,7 +190,7 @@ class MediaType extends ModelBase
     }
     /**
      * get file extension allowed for upload from db
-     * @return list extension allowed
+     * @return array
      */
     public static function getExtensionAllowed()
     {

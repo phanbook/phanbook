@@ -17,11 +17,11 @@ use Phalcon\Mvc\Model\Behavior\Timestampable;
 /**
  * To use Sends e-mails to users in the spool
  *
- * @property Phanbook\Models\Users        user
- * @property Phanbook\Models\Posts        post
- * @property Phanbook\Models\PostsReply   reply
+ * @property Users        user
+ * @property Posts        post
+ * @property PostsReply   reply
  *
- * @see Phanbook\Mail\SendSpool
+ * @see \Phanbook\Mail\SendSpool
  */
 class Notifications extends ModelBase
 {
@@ -126,9 +126,9 @@ class Notifications extends ModelBase
     }
 
     /**
-     * Method to set the value of field postsReplysId
+     * Method to set the value of field postsReplyId
      *
-     * @param  integer $postsReplysId
+     * @param  integer $postsReplyId
      * @return $this
      */
     public function setPostsreplyId($postsReplyId)
@@ -234,7 +234,7 @@ class Notifications extends ModelBase
     }
 
     /**
-     * Returns the value of field postsReplysId
+     * Returns the value of field postsReplyId
      *
      * @return integer
      */

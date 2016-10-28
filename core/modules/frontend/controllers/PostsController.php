@@ -166,11 +166,11 @@ class PostsController extends ControllerBase
             return $this->indexRedirect();
         }
         if (!$object) {
-            $this->flashSession->error(t('Post doesn\'t exist.'));
+            $this->flashSession->error(t("Post doesn't exist."));
             return $this->indexRedirect();
         }
         if (!$this->auth->isTrustModeration() && $auth['id'] != $object->getUsersId()) {
-            $this->flashSession->error(t('You don\'t have permission'));
+            $this->flashSession->error(t("You don't have permission"));
             return $this->currentRedirect();
         }
 
@@ -214,8 +214,8 @@ class PostsController extends ControllerBase
         if (!empty($id)) {
             $object = Posts::findFirstById($id);
             $object->setSlug(Slug::generate($this->request->getPost('title')));
-            //@Todo continue When moderator or admin edit post
-            //Just to save history when user is TrustModarator and the user not owner the post
+            // @Todo continue When moderator or admin edit post
+            // Just to save history when user is TrustModerator and the user not owner the post
             if ($this->auth->isTrustModeration() && $auth['id'] != $object->getUsersId()) {
                 $object->setEditedAt(time());
                 $postHistory = new PostsHistory();
@@ -223,7 +223,7 @@ class PostsController extends ControllerBase
                 $postHistory->setUsersId($auth['id']);
                 $postHistory->setContent($this->request->getPost('content'));
                 if (!$postHistory->save()) {
-                    $this->saveLoger($postHistory->getMessages());
+                    $this->saveLogger($postHistory->getMessages());
                 }
             }
         } else {
@@ -235,7 +235,7 @@ class PostsController extends ControllerBase
             $user = Users::findFirstById($auth['id']);
             $user->increaseKarma(Karma::ADD_NEW_POST);
             if (!$user->save()) {
-                $this->saveLoger($user->getMessages());
+                $this->saveLogger($user->getMessages());
             }
         }
 
@@ -244,7 +244,7 @@ class PostsController extends ControllerBase
 
         //  Form isn't valid
         if (!$form->isValid($this->request->getPost())) {
-            $this->saveLoger($form->getMessages());
+            $this->saveLogger($form->getMessages());
             // Redirect to edit form if we have an ID in page, otherwise redirect to add a new item page
             return $this->response->redirect(
                 $this->router->getControllerName().(!is_null($id) ? '/edit/'.$id : '/new')
@@ -253,7 +253,7 @@ class PostsController extends ControllerBase
             $this->db->begin();
             if (!$object->save()) {
                 $this->db->rollback();
-                $this->saveLoger($object->getMessages());
+                $this->saveLogger($object->getMessages());
                 return $this->dispatcher->forward(
                     ['controller' => $this->router->getControllerName(), 'action' => 'new']
                 );
@@ -287,12 +287,12 @@ class PostsController extends ControllerBase
             "bind" => [$id, $auth['id'], $auth['moderator'], $auth['admin']]
         ];
         if (!$object = Posts::findFirst($parameters)) {
-            $this->flashSession->error(t('Post doesn\'t exist.'));
+            $this->flashSession->error(t("Post doesn't exist."));
 
             return $this->indexRedirect();
         }
         if (!$object->delete()) {
-            $this->saveLoger($object->getMessages());
+            $this->saveLogger($object->getMessages());
         }
         $this->flashSession->success(t('Data was successfully deleted do late'));
         return $this->indexRedirect();
@@ -376,19 +376,19 @@ class PostsController extends ControllerBase
                         }
                         //send log to server
                         if (!$user->save()) {
-                            $this->saveLoger($user->getMessages());
+                            $this->saveLogger($user->getMessages());
                         }
                     }
                 }
             }
             if (!$object->save()) {
-                $this->saveLoger($object->getMessages());
+                $this->saveLogger($object->getMessages());
             }
             $postView = new PostsViews();
             $postView->setPostsId($id);
             $postView->setIpaddress($ipAddress);
             if (!$postView->save()) {
-                $this->saveLoger($postView->getMessages());
+                $this->saveLogger($postView->getMessages());
             }
         }
 

@@ -201,12 +201,12 @@ class RepliesController extends ControllerBase
             "bind" => [$id, $auth['id'], $auth['moderator'], $auth['admin']]
         ];
         if (!$object = PostsReply::findFirst($parameters)) {
-            $this->flashSession->error(t('Post doesn\'t exist.'));
+            $this->flashSession->error(t("Post doesn't exist."));
 
             return $this->indexRedirect();
         }
         if (!$object->delete()) {
-            $this->saveLoger($object->getMessages());
+            $this->saveLogger($object->getMessages());
         }
         $this->flashSession->success(t('Data was successfully deleted'));
         return $this->currentRedirect();
@@ -236,13 +236,13 @@ class RepliesController extends ControllerBase
                 $postReplyHistory->setPostsReplyId($id);
                 $postReplyHistory->setUsersId($auth['id']);
                 if (!$postReplyHistory->save()) {
-                    $this->saveLoger($postReplyHistory->getMessages());
+                    $this->saveLogger($postReplyHistory->getMessages());
                 }
             }
             //Update replies post
             $postReply->setContent($this->request->getPost('content'));
             if (!$postReply->save()) {
-                $this->saveLoger($postReply->getMessages());
+                $this->saveLogger($postReply->getMessages());
             }
             $this->flashSession->success(t('Data was successfully saved'));
             return $this->response->redirect($this->request->getHTTPReferer());

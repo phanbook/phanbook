@@ -60,7 +60,7 @@ class Digest extends Injectable
                     'posts'     => $this->getData()
                 ];
                 if (!$this->mail->send($email, 'senddigest', $params)) {
-                    var_dump('send disgest email false');
+                    var_dump('send digest email false');
                 }
             } catch (\Exception $e) {
                 echo $e->getMessage(), PHP_EOL;

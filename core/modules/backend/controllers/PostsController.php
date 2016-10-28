@@ -154,7 +154,7 @@ class PostsController extends ControllerBase
     public function editAction($id)
     {
         if (!$object = Posts::findFirstById($id)) {
-            $this->flashSession->error(t('Posts doesn\'t exist.'));
+            $this->flashSession->error(t("Posts doesn't exist."));
 
             return $this->currentRedirect();
         }
@@ -177,7 +177,7 @@ class PostsController extends ControllerBase
     public function editStickyAction($id)
     {
         if (!$object = Posts::findFirstById($id)) {
-            $this->flashSession->error(t('Posts doesn\'t exist.'));
+            $this->flashSession->error(t("Posts doesn't exist."));
 
             return $this->currentRedirect();
         }
@@ -202,7 +202,7 @@ class PostsController extends ControllerBase
         }
         $object->setSticked($this->request->getPost('sticked'));
         if (!$object->save()) {
-            $this->saveLoger($object->getMessages());
+            $this->saveLogger($object->getMessages());
             return false;
         }
         $this->flashSession->success(t('Data was successfully saved'));
@@ -236,7 +236,7 @@ class PostsController extends ControllerBase
 
         //  Form isn't valid
         if (!$form->isValid($this->request->getPost())) {
-            $this->saveLoger($form->getMessages());
+            $this->saveLogger($form->getMessages());
             // Redirect to edit form if we have an ID in page, otherwise redirect to add a new item page
             return $this->response->redirect(
                 $this->getPathController().(!is_null($id) ? '/edit/'.$id : '/new')
@@ -249,7 +249,7 @@ class PostsController extends ControllerBase
             $object->setStatus(Posts::DRAFT_STATUS);
         }
         if (!$object->save()) {
-            $this->saveLoger($object->getMessages());
+            $this->saveLogger($object->getMessages());
             return $this->dispatcher->forward(
                 ['controller' => $this->getPathController(), 'action' => 'new']
             );

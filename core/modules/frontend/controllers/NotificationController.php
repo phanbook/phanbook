@@ -45,7 +45,7 @@ class NotificationController extends ControllerBase
             if ($notify) {
                 $notify->setWasRead('Y');
                 if (!$notify->save()) {
-                    $this->saveLoger($notify->getMessages());
+                    $this->saveLogger($notify->getMessages());
                 }
             }
         }

@@ -19,7 +19,7 @@ use League\OAuth2\Client\Provider\Twitter;
 
 /**
  * Class Auth
- * @todo laster
+ * @todo later
  * @package Phanbook\Twitter
  */
 class Auth extends Injectable

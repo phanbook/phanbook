@@ -78,7 +78,7 @@ class Controller extends ControllerPhalcon
 
 
     /**
-     * Check if we need to throw a json respone. For ajax calls.
+     * Check if we need to throw a json response. For ajax calls.
      *
      * @return bool
      */
@@ -601,7 +601,7 @@ class Controller extends ControllerPhalcon
      *
      * @param $e
      */
-    public function saveLoger($e)
+    public function saveLogger($e)
     {
 
         $logger = $this->logger;

@@ -244,7 +244,7 @@ class SettingsController extends ControllerBase
                 }
             }
         }
-        $this->flashSession->error(t('An error occured when verify access code!'));
+        $this->flashSession->error(t('An error occurred when verify access code!'));
         return $this->currentRedirect();
     }
     /**
@@ -291,15 +291,15 @@ class SettingsController extends ControllerBase
                                 $this->flashSession->success(t('Save Analytic setting success!'));
                             }
                         } else {
-                            $this->flashSession->error(t('An error occured, We can\'t save tracking ID!'));
+                            $this->flashSession->error(t('An error occurred, We can\'t save tracking ID!'));
                         }
                     } else {
-                        $this->flashSession->error(t('An error occured, We can\'t find Profile information!'));
+                        $this->flashSession->error(t('An error occurred, We can\'t find Profile information!'));
                     }
                     return $this->currentRedirect();
                 }
             }
-            $this->flashSession->error(t('An error occured when save setting!'));
+            $this->flashSession->error(t('An error occurred when save setting!'));
         }
         return $this->currentRedirect();
     }
@@ -314,7 +314,7 @@ class SettingsController extends ControllerBase
             if (Settings::setListTopActivity($listActivity)) {
                 $this->flashSession->success(t('Save Analytic module(s) position success!'));
             } else {
-                $this->flashSession->error(t('An error occured, We can\'t save this change!'));
+                $this->flashSession->error(t('An error occurred, We can\'t save this change!'));
             }
         }
         return $this->currentRedirect();
