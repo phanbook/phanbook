@@ -273,7 +273,7 @@ class Controller extends ControllerPhalcon
     /**
      * Create a QueryBuilder paginator, show 15 rows by page starting from $page
      *
-     * @param array $model The model need to retrieve and someoption {code} $mode = [ 'name'      => 'Phanbook\Models\Users' 'orderBy'   => 'username' 'currentOrder'=> 'users'// mean adding class for menu ] {/code}
+     * @param array $model The model need to retrieve and some option
      * {code}
      *      $mode = [
      *          'name'      => 'Users'
@@ -283,7 +283,7 @@ class Controller extends ControllerPhalcon
      * {/code}
      * @param int   $page  Current page to show
      *
-     * @return array the conatainer object...
+     * @return array the container object...
      */
     public function paginatorQueryBuilder($model, $page)
     {
@@ -443,13 +443,18 @@ class Controller extends ControllerPhalcon
             if (isset(self::$grid['grid'][$k]['having'])) {
                 $this->gridFilters[$filterKey]['conditions']['having'] .= ' AND ' .
                     $k .
-                    (self::$grid['grid'][$k]['filter']['sanitize'] == 'string' ? ' LIKE \'%' . $v . '%\'' : ' = \'' . $v . '\'');
+                    (self::$grid['grid'][$k]['filter']['sanitize']
+                    == 'string' ? ' LIKE \'%' . $v . '%\'' : ' = \'' . $v . '\'');
             } else {
                 $this->gridFilters[$filterKey]['conditions']['conditions'][] =
                     [
-                        $column . (self::$grid['grid'][$k]['filter']['sanitize'] == 'string' ? ' LIKE ' : ' = ') . ':' . $k . ':',
-                        [$k => self::$grid['grid'][$k]['filter']['sanitize'] == 'string' ? '%' . $v . '%' : $v],
-                        [$k => (self::$grid['grid'][$k]['filter']['sanitize'] == 'int' ? \PDO::PARAM_INT : (self::$grid['grid'][$k]['filter']['sanitize'] == 'string' ? \PDO::PARAM_STR : \PDO::PARAM_BOOL))]
+                        $column . (self::$grid['grid'][$k]['filter']['sanitize']
+                            == 'string' ? ' LIKE ' : ' = ') . ':' . $k . ':',
+                        [$k => self::$grid['grid'][$k]['filter']['sanitize']
+                            == 'string' ? '%' . $v . '%' : $v],
+                        [$k => (self::$grid['grid'][$k]['filter']['sanitize']
+                            == 'int' ? \PDO::PARAM_INT : (self::$grid['grid'][$k]['filter']['sanitize']
+                            == 'string' ? \PDO::PARAM_STR : \PDO::PARAM_BOOL))]
                     ];
             }
         }
@@ -534,8 +539,10 @@ class Controller extends ControllerPhalcon
         $paginator = new Paginator(
             [
                 'data'  => $collections,
-                'limit' => (empty($this->gridFilters[$filterKey]['perPage']) ? $this->perPage : $this->gridFilters[$filterKey]['perPage']),
-                'page'  => (empty($this->gridFilters[$filterKey]['page']) ? $this->numberPage : $this->gridFilters[$filterKey]['page'])
+                'limit' => (empty($this->gridFilters[$filterKey]['perPage']) ?
+                            $this->perPage : $this->gridFilters[$filterKey]['perPage']),
+                'page'  => (empty($this->gridFilters[$filterKey]['page']) ?
+                            $this->numberPage : $this->gridFilters[$filterKey]['page'])
             ]
         );
 
@@ -543,8 +550,10 @@ class Controller extends ControllerPhalcon
         $this->view->setVars(
             [
                 'paginator' => $paginator->getPaginate(),
-                'filters'   => (!empty($this->gridFilters[$filterKey]['post']) ? $this->gridFilters[$filterKey]['post'] : []),
-                'perPage'   => (empty($this->gridFilters[$filterKey]['perPage']) ? $this->perPage : $this->gridFilters[$filterKey]['perPage']),
+                'filters'   => (!empty($this->gridFilters[$filterKey]['post']) ?
+                                $this->gridFilters[$filterKey]['post'] : []),
+                'perPage'   => (empty($this->gridFilters[$filterKey]['perPage']) ?
+                                 $this->perPage : $this->gridFilters[$filterKey]['perPage']),
                 'params'    => static::$grid,
             ]
         );
