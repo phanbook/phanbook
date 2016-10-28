@@ -20,6 +20,7 @@ $(document).ready(function () {
         }
     }
 
+    // Placeholder for promo page
     var question = document.getElementById('question-promo');
     if (question.elements.length) {
         var textArea = question.elements.q;

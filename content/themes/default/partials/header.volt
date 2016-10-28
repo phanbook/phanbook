@@ -45,11 +45,14 @@
                             <i class="fa fa-plus"></i>{{ t('Settings') }}
                         </a>
                     </li>
-                    <li><a href="/notifications">
-                        {% if this.notifications.has()%}
-                        <span class="mail-status unread"></span>
-                        {% endif %}<i class="fa fa-inbox"></i>
-                    </a></li>
+                    <li>
+                        <a href="/notifications">
+                            {%- if notifications.has() -%}
+                                <span class="mail-status unread"></span>
+                            {%- endif -%}
+                            <i class="fa fa-inbox"></i>
+                        </a>
+                    </li>
                 {% else %}
                     <li><a href="contact_us.html"><i class="fa fa-envelope"></i>{{ t('Contact') }}</a></li>
                     <li><a href="/oauth/login"><i class="fa fa-user"></i>{{ t('Login Area') }}</a></li>
@@ -83,23 +86,12 @@
                     {% continue %}
                 {%- endif -%}
 
-                {%- if key == tab -%}
-                    {% set currentClass = "current_page_item" %}
-                {%- else -%}
-                    {% set currentClass = "" %}
-                {%- endif -%}
                 <li class="{{ currentClass }}">
-                    {{ link_to('questions?tab=' ~ key, t(value), 'title': t(value)) }}
+                    {{ link_to('questions?tab=' ~ key, t(value), 'title': t(value), 'class': key == tab ? 'current_page_item' : '') }}
                 </li>
             {%- endfor -%}
 
-            {%- if key == 'new' -%}
-                {% set currentClass = "current_page_item" %}
-            {%- else -%}
-                {% set currentClass = "" %}
-            {%- endif -%}
-
-            <li class="{{ currentClass }}">
+            <li class="{{ key == 'new' ? 'current_page_item' : '' }}">
                 {{ link_to('posts/new', t('Ask Question')) }}
             </li>
 
@@ -112,13 +104,8 @@
             -%}
 
             {%- for value, key in menu -%}
-                {%- if key == tab -%}
-                    {% set currentClass = "current_page_item" %}
-                {%- else -%}
-                    {% set currentClass = "" %}
-                {%- endif -%}
                 <li class="{{ currentClass }}">
-                    {{ link_to(key, t(value),'title': t(value)) }}
+                    {{ link_to(key, t(value),'title': t(value), 'class': key == tab ? 'current_page_item' : '') }}
                 </li>
             {%- endfor -%}
             </ul>
