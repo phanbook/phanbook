@@ -4,14 +4,14 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="page-content">
-                        <h2>Settings</h2>
+                        <h2>{{ t('Settings') }}</h2>
                         <div class="form-style form-style-3">
                             <ul>
-                                <li><a href="/users/setting">Edit Setting</a></li>
-                                <li><a href="">User Questions</a></li>
-                                <li><a href="">User Answers</a></li>
-                                <li><a href="/users/profile">Edit Profile</a></li>
-                                <li><a href="/users/changepassword">Change Password</a></li>
+                                <li><a href="/users/setting">{{ t('Edit Setting') }}</a></li>
+                                <li><a href="">{{ t('My Questions') }}</a></li>
+                                <li><a href="">{{ t('My Answers') }}</a></li>
+                                <li><a href="/users/profile">{{ t('Edit Profile') }}</a></li>
+                                <li><a href="/users/changepassword">{{ t('Change Password') }}</a></li>
 
                             </ul>
                         </div>
@@ -19,13 +19,13 @@
                 </div><!-- End col-md-6 -->
                 <div class="col-md-6">
                     <div class="page-content Register">
-                        <h2>Dashboard</h2>
+                        <h2>{{ t('Dashboard') }}</h2>
                         <div class="form-style form-style-3">
                             <ul>
-                                <li><a href="/backend/dashboard">Dashboard</a></li>
-                                <li><a href="/backend/themes/custom">Edit Theme</a></li>
-                                <li><a href="/users/profile">Edit Profile</a></li>
-                                <li><a href="/oauth/logout">Logout</a></li>
+                                <li><a href="/backend/dashboard">{{ t('Dashboard') }}</a></li>
+                                <li><a href="/backend/themes/custom">{{ t('Edit Theme') }}</a></li>
+                                <li><a href="/users/profile">{{ t('Edit Profile') }}</a></li>
+                                <li><a href="/oauth/logout">{{ t('Logout') }}</a></li>
                             </ul>
                         </div>
                     </div><!-- End page-content -->
@@ -38,17 +38,21 @@
     <section class="container clearfix">
         <nav class="header-top-nav">
             <ul>
-                <li><a href="#"><i class="fa fa-headphones"></i>Support</a></li>
+                <li><a href="#"><i class="fa fa-headphones"></i>{{ t('Support') }}</a></li>
                 {% if isLogin() %}
-                    <li><a href="/oauth/logout" id="setting-panel"><i class="fa fa-plus"></i>Setting</a></li>
+                    <li>
+                        <a href="/oauth/logout" id="setting-panel">
+                            <i class="fa fa-plus"></i>{{ t('Settings') }}
+                        </a>
+                    </li>
                     <li><a href="/notifications">
                         {% if this.notifications.has()%}
                         <span class="mail-status unread"></span>
                         {% endif %}<i class="fa fa-inbox"></i>
                     </a></li>
                 {% else %}
-                    <li><a href="contact_us.html"><i class="fa fa-envelope"></i>Contact</a></li>
-                    <li><a href="/oauth/login"><i class="fa fa-user"></i>Login Area</a></li>
+                    <li><a href="contact_us.html"><i class="fa fa-envelope"></i>{{ t('Contact') }}</a></li>
+                    <li><a href="/oauth/login"><i class="fa fa-user"></i>{{ t('Login Area') }}</a></li>
                 {% endif %}
             </ul>
         </nav>
@@ -65,34 +69,58 @@
         </div>
         <nav class="navigation">
             <ul>
-            {% set menu1 = ['Questions' : 'questions', 'Hot' : 'hot',
-                'My questions': 'my', 'My answers': 'answers'
-            ]%}
-            {% set menu2 = ['Users' : 'users', 'Tags' : 'tags', 'Badges' : 'badges'] %}
-            {% for value, key in menu1 %}
-                {% if (key == 'my' or key == 'answers') and !isLogin() %}
-                    {% continue %}
-                {% endif %}
-                {% if key == tab %}
-                    <li class="current_page_item">
-                {% else %}
+            {%- set menu =
+                [
+                    'Questions': 'questions',
+                    'Hot': 'hot',
+                    'My Questions': 'my',
+                    'My Answers': 'answers'
+                ]
+            -%}
 
-                    <li>
-              {% endif %}
-              {{ link_to('questions?tab=' ~ key, t(value) ,'title' : value) }}</li>
-            {% endfor %}
-        {##}
-            <li {% if tab == 'new' %}class="current_page_item"{% endif %}>
-                {{ link_to('posts/new', 'Ask Question') }}
+            {%- for value, key in menu -%}
+                {%- if (key == 'my' or key == 'answers') and not isLogin() -%}
+                    {% continue %}
+                {%- endif -%}
+
+                {%- if key == tab -%}
+                    {% set currentClass = "current_page_item" %}
+                {%- else -%}
+                    {% set currentClass = "" %}
+                {%- endif -%}
+                <li class="{{ currentClass }}">
+                    {{ link_to('questions?tab=' ~ key, t(value), 'title': t(value)) }}
+                </li>
+            {%- endfor -%}
+
+            {%- if key == 'new' -%}
+                {% set currentClass = "current_page_item" %}
+            {%- else -%}
+                {% set currentClass = "" %}
+            {%- endif -%}
+
+            <li class="{{ currentClass }}">
+                {{ link_to('posts/new', t('Ask Question')) }}
             </li>
-            {% for value, key in menu2 %}
-                {% if key == tab %}
-                    <li class="current_page_item">
-                {% else %}
-                    <li>
-              {% endif %}
-              {{ link_to(key, t(value) ,'title' : value) }}</li>
-            {% endfor %}
+
+            {%- set menu =
+                [
+                    'Users': 'users',
+                    'Tags': 'tags',
+                    'Badges': 'badges'
+                ]
+            -%}
+
+            {%- for value, key in menu -%}
+                {%- if key == tab -%}
+                    {% set currentClass = "current_page_item" %}
+                {%- else -%}
+                    {% set currentClass = "" %}
+                {%- endif -%}
+                <li class="{{ currentClass }}">
+                    {{ link_to(key, t(value),'title': t(value)) }}
+                </li>
+            {%- endfor -%}
             </ul>
         </nav>
     </section><!-- End container -->
