@@ -15,14 +15,15 @@ namespace Phanbook\Controllers;
 
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Db\Adapter\Pdo;
+use Phanbook\Models\ModelBase;
 use Phalcon\Mvc\Controller as ControllerPhalcon;
-use Phalcon\Paginator\Adapter\NativeArray as Paginator;
+use Phalcon\Paginator\Adapter\NativeArray as PaginatorNativeArray;
 use Phalcon\Paginator\Adapter\QueryBuilder as PaginatorQueryBuilder;
 
 /**
- * Class TestsController
+ * Class Controller
  *
- * @package Phanbook\Blog\Controllers
+ * @package Phanbook\Controllers
  */
 class Controller extends ControllerPhalcon
 {
@@ -234,6 +235,10 @@ class Controller extends ControllerPhalcon
         return $this->response->redirect($this->request->getHTTPReferer(), true);
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function deleteAction($id)
     {
         $this->view->disable();
@@ -303,12 +308,55 @@ class Controller extends ControllerPhalcon
             ]
         );
     }
+    /**
+     * Create a paginator default use adapter PaginatorQueryBuilder,
+     * show 30 rows by page starting from $page
+     *
+     * @return array
+     */
+    public function paginator($query, $adapter = null)
+    {
+        $page  = isset($_GET['page']) ? (int)$_GET['page'] : $this->numberPage;
+        $perPage  = isset($_GET['perPage']) ? (int)$_GET['perPage'] : $this->perPage;
+        $builder  = ModelBase::modelQuery($query);
+
+        if (is_null($adapter)) {
+            $paginator  = new PaginatorQueryBuilder(
+                [
+                    'builder'  => $builder,
+                    'limit'     => $perPage,
+                    'page'      => $page
+                ]
+            );
+        } else {
+            $paginator = new PaginatorNativeArray(
+                [
+                    'data'  => $builder->getQuery()->execute()->toArray(),
+                    'limit' => $perPage,
+                    'page'  => $page
+                ]
+            );
+        }
+        return $paginator;
+    }
+
+    /**
+     * @return \Phalcon\Http\Response|\Phalcon\Http\ResponseInterface
+     */
     public function indexRedirect()
     {
         return $this->response->redirect($this->getPathController());
     }
+
+    /**
+     * @return \Phalcon\Http\Response|\Phalcon\Http\ResponseInterface
+     */
     public function currentRedirect()
     {
+        if ($url = $this->cookies->get('urlCurrent')->getValue()) {
+            $this->cookies->delete('urlCurrent');
+            return $this->response->redirect($url);
+        }
         return $this->response->redirect($this->request->getHTTPReferer(), true);
     }
     public function getPathController()
@@ -482,7 +530,7 @@ class Controller extends ControllerPhalcon
                 //return $this->jsonMessages;
             }
         }
-   
+
         $paginator = new Paginator(
             [
                 'data'  => $collections,
