@@ -56,7 +56,7 @@ try {
     $logger->error($e->getTraceAsString());
 
     if (APPLICATION_ENV == 'local') {
-        d($e->getMessage(), false);
+        d(get_class($e) . ': ' . $e->getMessage(), false);
         d($e->getTraceAsString());
     }
 

@@ -21,7 +21,8 @@ use Phanbook\Google\Analytic;
 use Phanbook\Backend\Forms\SettingReadingForm;
 
 /**
- * Class SettingsController
+ * \Phanbook\Backend\Controllers\SettingsController
+ *
  * @package Phanbook\Backend\Controller
  */
 class SettingsController extends ControllerBase
@@ -197,10 +198,17 @@ class SettingsController extends ControllerBase
     {
         $analytic = new Analytic();
         $this->view->isLogged = false;
+
         // We check if user authorization
-        if ($analytic->checkAccessToken()) {
-            $this->view->isLogged = true;
+        try {
+            if ($analytic->checkAccessToken()) {
+                $this->view->isLogged = true;
+            }
+        } catch (\Google_Exception $e) {
+            // Skip Google errors
+            $this->logger->error($e->getMessage() . PHP_EOL . $e->getTraceAsString());
         }
+
         $this->assets->addCss('assets/css/bootstrap-multiselect.css');
         $this->assets->addJs('assets/js/bootstrap-multiselect.js');
         $trackingID = Settings::getAnalyticTrackingID();

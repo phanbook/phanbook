@@ -1,3 +1,11 @@
+@charset "UTF-8";
+
+/***********************************************************************************************
+ Note: all theme related assets can be mapped to the <theme-name> path.
+ For example:
+     "/content/themes/<theme-name>/assets/images/chrome.png" => "/<theme-name>/images/chrome.png"
+ ***********************************************************************************************/
+
 /*noinspection CssUnknownTarget*/
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,300,600,700);
 @import url("/core/assets/css/bootstrap.min.css");
@@ -74,8 +82,8 @@ body {
     width: 970px;
     margin: 0 auto;
     -webkit-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
-    -moz-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
-    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+       -moz-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
     position: relative;
 }
 .index-no-box {
@@ -101,8 +109,8 @@ body {
     border: none;
     padding: 0;
     -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
+       -moz-box-shadow: none;
+            box-shadow: none;
 }
 .login-panel h2 {
     font-size: 16px;
@@ -334,7 +342,7 @@ div[class*="slider_shadow"]:before, div[class^="header_shadow"] {
     line-height: 35px;
     position: relative;
     width: 300px;
-    margin-top: 25.5px;
+    margin-top: 25px;
     float: right;
 }
 .navigation_mobile ul {
@@ -514,7 +522,8 @@ div[class*="slider_shadow"]:before, div[class^="header_shadow"] {
     margin-bottom: 30px !important;
 }
 .ask-me .col-md-9 form {
-    background: url("../images/chrome.png") no-repeat center bottom;
+    /*noinspection CssUnknownTarget*/
+    background: url("/default/images/chrome.png") no-repeat center bottom;
     height: 324px;
     width: 100%;
     background-size: 100% 100%;

@@ -17,8 +17,9 @@ use Phanbook\Controllers\Controller;
 use Phalcon\Mvc\Dispatcher;
 
 /**
- * Class ControllerBase
+ * \Phanbook\Backend\Controllers\ControllerBase
  *
+ * @property \Phalcon\Logger\Adapter\File $logger
  * @package Phanbook\Backend\Controllers
  */
 class ControllerBase extends Controller

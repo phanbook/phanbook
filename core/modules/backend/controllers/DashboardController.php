@@ -12,51 +12,59 @@
  */
 namespace Phanbook\Backend\Controllers;
 
-use Phalcon\Mvc\View;
-use Phanbook\Forms\PagesForm;
-use Phanbook\Models\Pages;
 use Phanbook\Models\Dashboard;
 use Phanbook\Backend\Forms\DashboardForm;
 
 /**
- * Class TestsController
+ * \Phanbook\Backend\Controllers\DashboardController
  *
  * @package Phanbook\Blog\Controllers
  */
 class DashboardController extends ControllerBase
 {
     /**
-     * @var object
+     * @var \Phanbook\Google\Analytic
      */
     private $analytic;
     /**
-     * @var object
+     * @var \Phanbook\Models\Dashboard
      */
     private $model;
 
     public function initialize()
     {
         parent::initialize();
+
         $this->model = new Dashboard();
         $this->analytic = $this->model->getAnalyticObject();
     }
 
     /**
-     * indexAction function.
-     *
-     * @return string
+     * Dashboard index.
      */
     public function indexAction()
     {
         $isLogged = false;
-        // We check if user authorization
-        if ($this->analytic->checkAccessToken()) {
-            $isLogged = true;
-            $this->view->analyticTopActivity = $this->model->getAnalyticData();
-            $this->view->analyticData = true;
+
+        try {
+            // We check if user authorization
+            if ($this->analytic->checkAccessToken()) {
+                $isLogged = true;
+                $this->view->setVars([
+                    'analyticTopActivity' => $this->model->getAnalyticData(),
+                    'analyticData'        => true,
+                ]);
+            }
+        } catch (\Google_Exception $e) {
+            // Skip Google errors
+            $this->logger->error($e->getMessage() . PHP_EOL . $e->getTraceAsString());
         }
+
         $this->tag->setTitle(t('Dashboard'));
-        $this->view->form = new DashboardForm();
-        $this->view->isLogged = $isLogged;
+
+        $this->view->setVars([
+            'form'     => new DashboardForm(),
+            'isLogged' => $isLogged,
+        ]);
     }
 }
