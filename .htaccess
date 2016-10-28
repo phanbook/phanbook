@@ -25,6 +25,9 @@ AddType application/vnd.ms-fontobject  eot
     RewriteCond %{REQUEST_URI} !^core/modules
     RewriteRule ^(.+)/assets/(.+)$ core/modules/$1/assets/$2 [L,NC]
 
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.+)/(css|fonts|images|js)/(.+)$ content/themes/$1/assets/$2/$3 [L,NC]
+
     RewriteRule ^$ public/ [L]
 
     RewriteCond %{REQUEST_URI} !^(.+)/assets
