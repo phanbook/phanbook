@@ -28,6 +28,6 @@
     </footer><!-- End footer -->
     <footer id="footer-bottom">
         <section class="container">
-            <div class="copyrights f_left">site design / logo &copy;2015 | <a href="#">By Phanbook</a></div>
+            <div class="copyrights f_left">site design / logo &copy; 2015 - {{ date("Y") }} | <a href="http://phanbook.com">By Phanbook</a></div>
         </section><!-- End container -->
     </footer><!-- End footer-bottom -->
