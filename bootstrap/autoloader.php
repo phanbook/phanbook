@@ -33,8 +33,8 @@ require ROOT_DIR . '/vendor/autoload.php';
         'Phanbook\Tools\Cli' => ROOT_DIR . '/core/common/tools/cli/',
         'Phanbook\Cli\Tasks' => ROOT_DIR . '/core/modules/cli/tasks/',
         'Phanbook\Validators' => ROOT_DIR . '/core/common/validators/',
-        'Phanbook\Common\Exceptions' => ROOT_DIR . '/core/common/exceptions/',
-
+        'Phanbook\Controllers' => ROOT_DIR . '/core/common/controllers/',
+        'Phanbook\Common\Exceptions' => ROOT_DIR . '/core/common/exceptions/'
     ])
     ->registerFiles([
         ROOT_DIR . '/bootstrap/helpers.php',

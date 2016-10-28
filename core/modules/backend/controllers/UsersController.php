@@ -118,7 +118,7 @@ class UsersController extends ControllerBase
             self::setGrid();
         }
 
-        $this->renderGrid('Phanbook\Models\Users');
+        $this->renderGrid('Users');
         $this->view->setVars(['grid' => parent::$grid]);
         $this->tag->setTitle(t('Lists all users'));
 

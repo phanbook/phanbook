@@ -69,7 +69,7 @@ class TemplateController extends ControllerBase
             self::setGrid();
         }
 
-        $this->renderGrid('Phanbook\Models\Template');
+        $this->renderGrid('Template');
         $this->view->setVars(['grid' => parent::$grid]);
         $this->tag->setTitle(t('Configuration templates'));
 

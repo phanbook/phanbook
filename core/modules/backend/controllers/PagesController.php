@@ -80,7 +80,7 @@ class PagesController extends ControllerBase
             self::setGrid();
         }
 
-        $this->renderGrid('Phanbook\Models\Posts');
+        $this->renderGrid('Posts');
         $this->view->setVars(['grid' => parent::$grid]);
         $this->tag->setTitle(t('List pages'));
 
