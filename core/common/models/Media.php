@@ -61,7 +61,7 @@ class Media extends ModelBase
     protected $fileSystem;
 
     /**
-     * Constructer
+     * Constructor
      */
     protected $constants;
 
@@ -283,7 +283,7 @@ class Media extends ModelBase
         if ($this->fileSystem->checkFileExists($serverPath)) {
             return $this->setError(
                 t(
-                    'An error(s) occured when uploading file(s), ' .
+                    'An error(s) occurred when uploading file(s), ' .
                     'Another file have same name with this file. Please change file name before upload'
                 )
             );
@@ -298,7 +298,7 @@ class Media extends ModelBase
             $fileName
         );
         if (!$uploadStatus) {
-            return $this->setError(t("An error(s) occured when uploading file(s). Please try again later"));
+            return $this->setError(t("An error(s) occurred when uploading file(s). Please try again later"));
         }
         // Update analytic file
         $config        = $this->fileSystem->getConfigFile($userName);

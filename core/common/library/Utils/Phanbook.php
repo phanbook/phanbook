@@ -24,7 +24,7 @@ use Phanbook\Utils\Slug;
 class Phanbook
 {
     /**
-     * Themeing name
+     * Theme name
      *
      * @var string
      */

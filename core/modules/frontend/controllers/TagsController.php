@@ -112,7 +112,7 @@ class TagsController extends ControllerBase
             $itemBuilder->offset((int) $offset);
         }
 
-        //@todo refacttor
+        //@todo refactor
         $this->view->setVars(
             [
                 'tab'         => 'tags',
@@ -124,7 +124,7 @@ class TagsController extends ControllerBase
                 'tags'        => Tags::find()
             ]
         );
-        $this->tag->setTitle(t('These posts fillter by tags'));
+        $this->tag->setTitle(t('These posts filter by tags'));
         return $this->view->pick('post');
     }
 }

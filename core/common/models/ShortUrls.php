@@ -90,7 +90,7 @@ class Shorturls extends ModelBase
      * @param  integer $createdAt
      * @return $this
      */
-    public function setCreatedat($createdAt)
+    public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
 
@@ -145,7 +145,7 @@ class Shorturls extends ModelBase
      *
      * @return integer
      */
-    public function getCreatedat()
+    public function getCreatedAt()
     {
         return $this->createdAt;
     }

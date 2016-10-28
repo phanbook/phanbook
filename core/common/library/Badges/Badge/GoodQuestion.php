@@ -17,7 +17,7 @@ use Phanbook\Badges\BadgeBase;
 
 /**
  * Phanbook\Badges\Badge\GoodQuestion
- * @todo  laster
+ * @todo  later
  * Awarded one time per every question with more than 5 positive votes
  */
 class GoodQuestion extends BadgeBase

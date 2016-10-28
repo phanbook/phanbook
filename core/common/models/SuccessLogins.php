@@ -147,7 +147,7 @@ class SuccessLogins extends ModelBase
      * Allows to query a set of records that match the specified conditions
      *
      * @param  mixed $parameters
-     * @return Successlogins[]
+     * @return SuccessLogins[]
      */
     public static function find($parameters = null)
     {
@@ -158,7 +158,7 @@ class SuccessLogins extends ModelBase
      * Allows to query the first record that match the specified conditions
      *
      * @param  mixed $parameters
-     * @return Successlogins
+     * @return SuccessLogins
      */
     public static function findFirst($parameters = null)
     {

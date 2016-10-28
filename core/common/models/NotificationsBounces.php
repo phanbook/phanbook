@@ -220,7 +220,7 @@ class NotificationsBounces extends ModelBase
     }
 
     /**
-     * @return Notificationsbounces[]
+     * @return NotificationsBounces[]
      */
     public static function find($parameters = array())
     {
@@ -228,7 +228,7 @@ class NotificationsBounces extends ModelBase
     }
 
     /**
-     * @return Notificationsbounces
+     * @return NotificationsBounces
      */
     public static function findFirst($parameters = array())
     {

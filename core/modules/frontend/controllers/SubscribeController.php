@@ -18,7 +18,7 @@ use Phanbook\Models\Subscribe;
 use Phanbook\Models\PostsSubscribers;
 
 /**
- * Class SubcribeController
+ * Class SubscribeController
  */
 class SubscribeController extends ControllerBase
 {
@@ -83,7 +83,7 @@ class SubscribeController extends ControllerBase
             ];
             return $this->jsonMessages;
         } else {
-            //unsubsribe posts
+            // unsubscribe posts
             if (!$subscription->delete()) {
                 foreach ($subscription->getMessages() as $message) {
                     $this->logger->error('Unsubscribe delete false '. $message . __LINE__ .'and'. __CLASS__);
@@ -109,7 +109,7 @@ class SubscribeController extends ControllerBase
         }
         $email = $this->request->getPost('email');
         if (!$email) {
-            $this->flashSession->error(t('Please input your Emai'));
+            $this->flashSession->error(t('Please input your Email'));
             return $this->indexRedirect();
         }
         $subscribe = new Subscribe();

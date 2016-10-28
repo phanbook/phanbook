@@ -87,7 +87,7 @@ class TemplateController extends ControllerBase
     public function editAction($id)
     {
         if (!$object = Template::findFirstById($id)) {
-            $this->flashSession->error(t('Template doesn\'t exist.'));
+            $this->flashSession->error(t("Template doesn't exist."));
 
             return $this->indexRedirect();
         }

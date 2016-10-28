@@ -322,7 +322,7 @@ class Posts extends ModelBase
      * @param  integer $createdAt
      * @return $this
      */
-    public function setCreatedaAt($createdAt)
+    public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
 
@@ -827,7 +827,7 @@ class Posts extends ModelBase
         $diff = time() - $this->createdAt;
         if ($diff > 86400) {
             if ($diff < (86400 * 30)) {
-                //@sory this hardcode :)
+                // sorry for this hardcode :)
                 return ['type' => 'old', 'value' => 150 + intval($diff / 86400 * 3)];
             }
         } else {

@@ -35,13 +35,13 @@ use Phanbook\Models\ActivityNotifications;
  */
 class ControllerBase extends Controller
 {
-    
+
     /**
      * @var int
      */
     public $perPage = 30;
 
-    
+
     /**
      * @param Dispatcher $dispatcher
      *
@@ -55,7 +55,7 @@ class ControllerBase extends Controller
         }
     }
 
-    
+
 
     public function initialize()
     {
@@ -127,7 +127,7 @@ class ControllerBase extends Controller
                 return $this->jsonMessages;
             }
 
-            //Set karam Voting someone else's post (positive or negative) on posts reply
+            // Set karma Voting someone else's post (positive or negative) on posts reply
             $this->setPointReply($way, $user, $postReply);
         }
         $vote = Vote::vote($objectId, $object, $way);
@@ -215,8 +215,8 @@ class ControllerBase extends Controller
         if ($postReply->getUsersId() != $user->getId()) {
             if ($way == 'positive') {
                 if ($postReply->post->getUsersId() != $user->getId()) {
-                    $karamCount = intval(abs($user->getKarma() - $postReply->user->getKarma()) / 1000);
-                    $points = Karma::VOTE_UP_ON_MY_REPLY_ON_MY_POST + $karamCount;
+                    $karmaCount = intval(abs($user->getKarma() - $postReply->user->getKarma()) / 1000);
+                    $points = Karma::VOTE_UP_ON_MY_REPLY_ON_MY_POST + $karmaCount;
                 } else {
                     $points = Karma::VOTE_UP_ON_MY_REPLY;
                     $points += intval(abs($user->getKarma() - $postReply->user->getKarma()) / 1000);
@@ -225,8 +225,8 @@ class ControllerBase extends Controller
                 $user->increaseKarma(Karma::VOTE_UP_ON_SOMEONE_ELSE_REPLY);
             } else {
                 if ($postReply->post->getUsersId() != $user->getId()) {
-                    $karamCount = intval(abs($user->getKarma() - $postReply->user->getKarma()) / 1000);
-                    $points = Karma::VOTE_DOWN_ON_MY_REPLY_ON_MY_POST + $karamCount;
+                    $karmaCount = intval(abs($user->getKarma() - $postReply->user->getKarma()) / 1000);
+                    $points = Karma::VOTE_DOWN_ON_MY_REPLY_ON_MY_POST + $karmaCount;
                 } else {
                     $points = Karma::VOTE_DOWN_ON_MY_REPLY;
                     $points += intval(abs($user->getKarma() - $postReply->user->getKarma()) / 1000);
@@ -283,7 +283,7 @@ class ControllerBase extends Controller
                 }
             }
         } else {
-            $this->saveLoger('todo setPointReply');
+            $this->saveLogger('todo setPointReply');
         }
     }
 
@@ -320,18 +320,18 @@ class ControllerBase extends Controller
         }
 
         if (!$activity->save()) {
-            $this->saveLoger('Save fail, I am on here' . __LINE__);
+            $this->saveLogger('Save fail, I am on here' . __LINE__);
         }
     }
 
     /**
      * Transfer values from the controller to views
      *
-     * @param array $parmas
+     * @param array $params
      */
-    public function setViewVariable($parmas)
+    public function setViewVariable($params)
     {
-        foreach ($parmas as $key => $value) {
+        foreach ($params as $key => $value) {
             $this->view->setVar($key, $value);
         }
     }
