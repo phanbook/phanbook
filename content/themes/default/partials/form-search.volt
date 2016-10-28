@@ -1,4 +1,5 @@
-<form method="get" action="/search">
-    <input type="text" value="Search here ..." onfocus="if(this.value=='Search here ...')this.value='';" onblur="if(this.value=='')this.value='Search here ...';" name="q">
+{%- set defaultValue = t('Search here ...') -%}
+<form method="get" action="/search" id="search-top">
+    <input type="text" value="{{ defaultValue }}" data-hint="{{ defaultValue }}" name="q">
     <button type="submit" class="search-submit"></button>
 </form>
