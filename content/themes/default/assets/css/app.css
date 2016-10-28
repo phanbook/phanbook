@@ -1,3 +1,4 @@
+/*noinspection CssUnknownTarget*/
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,300,600,700);
 @import url("/core/assets/css/bootstrap.min.css");
 @import url("/core/assets/css/base.css");
@@ -57,18 +58,16 @@ body {
     animation: spin 1s linear infinite;
 }
 .boxed_body {
-    background: url(images/patterns/bg13.png) repeat;
 }
+
 .boxed_body_2 {
-    background: url(../ask-me/images/demo/bg_big.jpg) no-repeat center center fixed;
     background-size: 100% 100%;
 }
 .boxed_body2 {
-    background: url(../ask-me/images/demo/bg-image1.jpg) no-repeat center center fixed;
     -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
+       -moz-background-size: cover;
+         -o-background-size: cover;
+            background-size: cover;
 }
 .boxed,.boxed2 {
     background-color: #f3f3f3;
@@ -2662,7 +2661,7 @@ span.date i,span.comment i {
 .box_icon .form-style textarea {
     border-color: #E8E7E7;
 }
-.form-style-2 .form-style input:not(tpye=checkbox) {
+.form-style-2 .form-style input:not([type='checkbox']) {
     width: 100%;
 }
 .form-style-3 .form-inputs p {
@@ -2670,7 +2669,7 @@ span.date i,span.comment i {
     margin-right: 0;
     float: none;
 }
-.form-style-3 .form-style input:not(tpye=checkbox) {
+.form-style-3 .form-style input:not([type='checkbox']) {
     width: 100%;
 }
 .form-style-4 .form-inputs p {
@@ -3252,9 +3251,7 @@ span.small_arrow_dowm {
 [class^="icons-"],
 [class*=" icons-"] {
     display: inline-block;
-    background-image: url(images/icons.png);
-    background-position: top left;
-    background-repeat: no-repeat;
+    background: transparent url(/core/assets/images/icons.png) no-repeat top left;
     line-height: 1;
     vertical-align: middle !important;
     width: 32px;
@@ -4190,9 +4187,9 @@ h2 [class^="icons-"], h2 [class*=" icons-"] {
     box-shadow: inset 0 1px rgba(255,255,255,0.3),inset 0 0 0 rgba(0, 0, 0, 0.1);
 }
 .custom-button:hover {
-    -moz-box-shadow: inset 0 rgba(0,0,0,0.2);
-    -webkit-box-shadow: inset 0 rgba(0,0,0,0.2);
-    box-shadow: inset 0 rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: inset 0 1px rgba(0,0,0,0.2);
+    -webkit-box-shadow: inset 0 1px rgba(0,0,0,0.2);
+    box-shadow: inset 0 1px rgba(0,0,0,0.2);
 }
 /* Audio */
 .audio-soundcloud {
@@ -4218,7 +4215,7 @@ h2 [class^="icons-"], h2 [class*=" icons-"] {
     line-height: 35px;
     font-size: 22px;
     text-align: center;
-    margin-top: 5px 10px 0 0;
+    margin: 5px 10px 0 0;
 }
 .dropcap.dropcap_soft_r {
     -moz-border-radius: 5px;
@@ -4232,7 +4229,7 @@ h2 [class^="icons-"], h2 [class*=" icons-"] {
     line-height: 40px;
     font-size: 22px;
     text-align: center;
-    margin-top: 5px 10px 0 0;
+    margin: 5px 10px 0 0;
     border-radius: 50%;
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
@@ -4260,7 +4257,6 @@ h2 [class^="icons-"], h2 [class*=" icons-"] {
 }
 .divider-3:after {
     height: 7px;
-    background: url(images/shadow_1.html) repeat-x;
     content: '';
     position: absolute;
     width: 100%;
@@ -4272,7 +4268,6 @@ h2 [class^="icons-"], h2 [class*=" icons-"] {
 }
 .divider-4:after {
     height: 10px;
-    background: url(images/splitter.html) bottom repeat-x;
     content: '';
     position: absolute;
     width: 100%;
@@ -4280,7 +4275,6 @@ h2 [class^="icons-"], h2 [class*=" icons-"] {
     left: 0;
 }
 .divider-4-dark:after {
-    background: url(images/splitter_dark.html) bottom repeat-x;
 }
 /* Quote */
 .quote-left {
@@ -4313,7 +4307,7 @@ h2 [class^="icons-"], h2 [class*=" icons-"] {
 .progressbar-percent {
     height: 100%;
     background-image: -webkit-gradient(linear,0 0,100% 100%,color-stop(.25,rgba(255,255,255,.2)),color-stop(.25,transparent),color-stop(.5,transparent),color-stop(.5,rgba(255,255,255,.2)),color-stop(.75,rgba(255,255,255,.2)),color-stop(.75,transparent),to(transparent) );
-    background-image: -moz-linear-gradient( -45deg,rgba(255,255,255,.2) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.2) 50%,rgba(255,255,255,.2) 75%,transparent 75%,transparent );
+    background-image: -moz-linear-gradient(45deg,rgba(255,255,255,.2) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.2) 50%,rgba(255,255,255,.2) 75%,transparent 75%,transparent );
     -webkit-background-size: 30px 30px;
     -moz-background-size: 30px 30px;
     background-size: 30px 30px;
@@ -4325,8 +4319,18 @@ h2 [class^="icons-"], h2 [class*=" icons-"] {
     -webkit-border-radius: 2px;
     border-radius: 2px;
 }
-@-webkit-animation expandWidth { 0%{width:0} 100%{width:auto} }
-@-webkit-keyframes move { 0%{background-position:0 0} 100%{background-position:90px 90px} }
+
+/*noinspection CssInvalidAtRule*/
+@-webkit-animation expandWidth {
+    0% { width:0 }
+    100% { width:auto }
+}
+
+@-webkit-keyframes move {
+    0% { background-position:0 0 }
+    100% { background-position:90px 90px }
+}
+
 .progressbar-title {
     font-size: 13px;
     color: #2f3239;
@@ -4672,7 +4676,7 @@ a.carousel-next {
     box-sizing: border-box;
 }
 .testimonial-warp-2 .testimonial {
-    background-color: transperant;
+    background-color: transparent;
     border: none;
     padding: 0;
 }
