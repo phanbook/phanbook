@@ -16,8 +16,8 @@ getThemeBlog() {
         git clone --depth=1 https://github.com/phanbook/blog.git
     fi
 }
-#Setup some dependency
-#rm -rf opsfiles
+# Setup some dependency
+# rm -rf opsfiles
 if [ ! -d "opsfiles" ]; then
     git clone --depth=1 git@github.com:phanbook/opsfiles.git
 fi
@@ -46,7 +46,7 @@ if [ "blog" == "$2" ]; then
     getThemeBlog
 fi
 
-#Docker setup
+# Docker setup
 if [ "docker" == "$1" ]; then
     if ! which docker > /dev/null; then
         echo "Docker doesn't seem to be installed. Please download and install it"
@@ -69,9 +69,9 @@ if [ "docker" == "$1" ]; then
     docker-compose up -d
 fi
 
-#Fix PSR2
+# Fix PSR2
 if [ 'psr2' == "$1" ]; then
-    php phpcbf.phar --standard=PSR2 $2
+    vendor/bin/phpcbf --standard=PSR2 $2
 fi
 
 
