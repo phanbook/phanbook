@@ -25,22 +25,22 @@
         </div>
         <div class="question-details">
             {% if post.acceptedAnswer == "Y"%}
-                <span class="question-answered question-answered-done"> <i class="fa fa-check"></i>solved</span>
+                <span class="question-answered question-answered-done"> <i class="fa fa-check"></i>{{ t('solved') }}</span>
             {% else %}
-                <span class="question-answered"><i class="fa fa-check"></i>in progress</span>
+                <span class="question-answered"><i class="fa fa-check"></i>{{ t('in progress') }}</span>
             {% endif %}
             <span class="question-favorite iam-subscribe" data-object-id="{{ post.id }}">
                 <i class="fa fa-star"></i>{{ post.postFavorite() }}
             </span>
         </div>
-        {#<span class="question-category"><a href="#"><i class="icon-folder-close"></i>Phanbook</a></span>#}
+
         <span class="question-date">
             <i class="fa fa-time"></i>{{post.getHumanCreatedAt()}}
         </span>
         <span class="question-comment">
-            <a href="#"><i class="fa fa-comment"></i>{{post.numberReply}} Answer</a>
+            <a href="#"><i class="fa fa-comment"></i>{{ post.numberReply }} {{ t('Answers') }}</a>
         </span>
-        <span class="question-view"><i class="fa fa-user"></i>{{post.numberViews}} views</span>
+        <span class="question-view"><i class="fa fa-user"></i>{{post.numberViews}} {{ t('Views') }}</span>
         {% if single is defined %}
             {{ partial('partials/vote', ['objectId' : post.id, 'object' : 'posts'])}}
         {% endif %}
