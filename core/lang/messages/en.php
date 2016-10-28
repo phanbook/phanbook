@@ -145,6 +145,7 @@ $messages = [
     'internal_error_occurred' => 'Internal error occurred. We apologize for the inconvenience.',
     'send_confirmation_mail' => 'Send confirmation mail',
     'try_free' => 'Try for Free',
+    'flag_question' => 'flag',
     'country_AND' => 'Andorra',
     'country_ARE' => 'United Arab Emirates',
     'country_AFG' => 'Afghanistan',
