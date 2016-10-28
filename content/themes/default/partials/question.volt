@@ -4,8 +4,8 @@
     <h2>
          {{ link_to(postLink, post.title) }}
     </h2>
-    <a class="question-report" href="#">Flag</a>
-    <a class="question-type-main"><i class="fa fa-question-circle-o"></i>{{post.type}}</a>
+    <a class="question-report" href="#">{{ t('flag_question') }}</a>
+    <a class="question-type-main"><i class="fa fa-question-circle-o"></i>{{ t(post.type | capitalize ) }}</a>
     {% if listPost is defined %}
     <div class="question-author">
         <a href="/@{{post.user.username}}" class="question-author-img tooltip-n"><span></span>

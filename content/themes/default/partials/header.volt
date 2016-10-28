@@ -86,8 +86,8 @@
                     {% continue %}
                 {%- endif -%}
 
-                <li class="{{ currentClass }}">
-                    {{ link_to('questions?tab=' ~ key, t(value), 'title': t(value), 'class': key == tab ? 'current_page_item' : '') }}
+                <li class="{{ key == tab ? 'current_page_item' : '' }}">
+                    {{ link_to('questions?tab=' ~ key, t(value), 'title': t(value)) }}
                 </li>
             {%- endfor -%}
 
@@ -104,8 +104,8 @@
             -%}
 
             {%- for value, key in menu -%}
-                <li class="{{ currentClass }}">
-                    {{ link_to(key, t(value),'title': t(value), 'class': key == tab ? 'current_page_item' : '') }}
+                <li class="{{ key == tab ? 'current_page_item' : '' }}">
+                    {{ link_to(key, t(value),'title': t(value)) }}
                 </li>
             {%- endfor -%}
             </ul>
