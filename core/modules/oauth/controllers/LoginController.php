@@ -22,9 +22,9 @@ use Phanbook\Twitter\Auth as TwitterAuth;
 use Phanbook\Facebook\Auth as FacebookAuth;
 
 /**
- * AuthController class.
+ * \Phanbook\Oauth\Controllers\LoginController
  *
- * @extends ControllerBase
+ * @package Phanbook\Oauth\Controllers
  */
 class LoginController extends ControllerBase
 {

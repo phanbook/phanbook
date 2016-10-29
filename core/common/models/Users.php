@@ -20,6 +20,7 @@ use Phalcon\Validation\Validator\Uniqueness as UniquenessValidator;
  * \Phanbook\Models\Users
  *
  * @method static Users|false findFirstById(int $id)
+ * @method static Users|false findFirstByUsername(string $name)
  *
  * @package Phanbook\Models
  */
