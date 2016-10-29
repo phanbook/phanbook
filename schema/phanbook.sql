@@ -6005,7 +6005,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `karma` int(11) DEFAULT NULL,
   `vote` int(10) unsigned DEFAULT NULL,
   `votePoint` int(11) DEFAULT NULL,
-  `gender` int(1) NOT NULL DEFAULT '9' COMMENT 'unknow-9, male-1,2-female',
+  `gender` int(1) NOT NULL DEFAULT '9' COMMENT '9-unknown,1-male,2-femaleq',
   `birthdate` date DEFAULT NULL,
   `passwd` varchar(60) NOT NULL,
   `registerHash` varchar(60) DEFAULT NULL,
@@ -6472,7 +6472,7 @@ ALTER TABLE `translations`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `accesToken` (`tokenGithub`),
+  ADD KEY `accessToken` (`tokenGithub`),
   ADD KEY `email` (`email`),
   ADD KEY `karma` (`karma`),
   ADD KEY `notifications` (`notifications`);

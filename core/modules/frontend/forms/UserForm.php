@@ -23,6 +23,7 @@ use Phanbook\Validators\BirthDate;
 use Phalcon\Forms\Element\TextArea;
 use Phalcon\Validation\Validator\Email;
 use Phalcon\Validation\Validator\PresenceOf;
+use Phalcon\Forms\Element\Email as EmailElement;
 
 class UserForm extends Form
 {
@@ -157,7 +158,7 @@ class UserForm extends Form
         ));
 
         // Email
-        $email = new Text(
+        $email = new EmailElement(
             'email',
             [
                 'placeholder' => 'Email',
@@ -179,6 +180,9 @@ class UserForm extends Form
             ]
         );
         $this->add($email);
+
+        $website = new Text('website');
+        $this->add($website);
 
         // Bio
         $bio = new TextArea(
@@ -202,36 +206,17 @@ class UserForm extends Form
         );
         $this->add($bio);
 
-        $twitter = new Text(
-            'twitter',
-            [
-                'placeholder' => 'Please add twitTer of your',
-            ]
-        );
+        $twitter = new Text('twitter', ['placeholder' => t('Twitter profile')]);
         $this->add($twitter);
 
-        $github = new Text(
-            'github',
-            [
-                'placeholder' => 'Please add github of your',
-            ]
-        );
+        $github = new Text('github', ['placeholder' => t('GitHub profile')]);
         $this->add($github);
 
         // Birth date
-        $birthDate = new Text(
-            'birthDate',
-            [
-                'placeholder' => 'yyyy-mm-dd'
-            ]
-        );
+        $birthDate = new Text('birthDate', ['placeholder' => 'yyyy-mm-dd']);
         $birthDate->addValidators(
             [
-                new BirthDate(
-                    array(
-                        'message' => t('Birthdate is invalid.')
-                    )
-                )
+                new BirthDate(['message' => t('Birthdate is invalid.')])
             ]
         );
         $this->add($birthDate);

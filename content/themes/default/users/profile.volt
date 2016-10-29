@@ -4,10 +4,10 @@
             <h2 class="text-normal">{{ t('Edit Profile') }}</h2>
         </div>
         <div class="form-style form-style-4">
-        {{ form( this.view.getControllerName() | lower ~ '/profile', 'enctype': 'multipart/form-data') }}
-        {% if object is defined %}
-            {{ form.render('id') }}
-        {% endif %}
+        {{ form( '/users/profile', 'enctype': 'multipart/form-data') }}
+            {%- if object is defined -%}
+                {{ form.render('id') }}
+            {%- endif -%}
              <div class="form-inputs clearfix">
                 <p>
                     <label>{{ t('First Name') }}</label>
@@ -22,63 +22,51 @@
                     {{ form.render('email') }}
                 </p>
                 <p>
-                    <label>{{ t('Website') }}</label>
-                    <input type="text">
-                </p>
-                <p>
                     <label class="required">{{ t('Username') }}<span>*</span></label>
                     {{ form.render('username') }}
                 </p>
                 <p>
-                    <label>Birthday</label>
-                    {{ form.render('birthDate')}}
+                    <label>{{ t('Birthday') }}</label>
+                    {{ form.render('birthDate') }}
+                </p>
+             </div>
+            <div class="form-style form-style-2">
+                <div class="user-profile-img">
+                    <img src="{{ getUrlAvatar(email) }}">
+                </div>
+                <p class="user-profile-p">
+                    <label>{{ t('Profile Picture') }}</label>
+                    <div class="fileinputs">
+                        <input type="file" class="file">
+                        <div class="fakefile">
+                            <button type="button" class="button small margin_0">{{ t('Select file') }}</button>
+                            <span><i class="fa fa-arrow-up"></i>{{ t('Browse') }}</span>
+                        </div>
+                    </div>
+                <p></p>
+                <div class="clearfix"></div>
+                <p>
+                    <label>{{ t('About Yourself') }}</label>
+                    {{ form.render('bio') }}
                 </p>
             </div>
-                <div class="form-style form-style-2">
-                    <div class="user-profile-img">
-                        <img src="{{getUrlAvatar(this.auth.getAuth()['email'])}}">
-                    </div>
-                    <p class="user-profile-p">
-                        <label>Profile Picture</label>
-                        <div class="fileinputs">
-                            <input type="file" class="file">
-                            <div class="fakefile">
-                                <button type="button" class="button small margin_0">Select file</button>
-                                <span><i class="fa fa-arrow-up"></i>Browse</span>
-                            </div>
-                        </div>
-                    <p></p>
-                    <div class="clearfix"></div>
-                    <p>
-                        <label>About Yourself</label>
-                        {{ form.render('bio')}}
-                    </p>
-                </div>
-                <div class="form-inputs clearfix">
-                    <p>
-                        <label>Facebook</label>
-                        <input type="text">
-                    </p>
-                    <p>
-                        <label>Twitter</label>
-                        {{ form.render('twitter') }}
-                    </p>
-                    <p>
-                        <label>Github</label>
-                        {{ form.render('github') }}
-                    </p>
-                    <p>
-                        <label>Google plus</label>
-                        <input type="text">
-                    </p>
-                </div>
-                <p class="form-submit">
-                    <input type="submit" value="Update" class="button color small login-submit submit">
+            <div class="form-inputs clearfix">
+                <p>
+                    <label>{{ t('Twitter') }}</label>
+                    {{ form.render('twitter') }}
                 </p>
+                <p>
+                    <label>{{ t('GitHub') }}</label>
+                    {{ form.render('github') }}
+                </p>
+            </div>
+            <p class="form-submit">
+                <input type="submit" value="{{ t('Update') }}" class="button color small login-submit submit">
+            </p>
             </form>
         </div>
     </div><!-- End page-content -->
 </div><!-- End main -->
 <aside class="col-md-3 sidebar">
-    {{partial('partials/right-side')}}
+    {{ partial('partials/right-side') }}
 </aside>

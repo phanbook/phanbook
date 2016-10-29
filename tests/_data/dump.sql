@@ -25,7 +25,7 @@ SET time_zone = "+00:00";
 --
 -- Table structure for table `activities`
 --
-
+DROP TABLE IF EXISTS `activities`;
 CREATE TABLE IF NOT EXISTS `activities` (
   `id` int(10) unsigned NOT NULL,
   `usersId` int(10) unsigned NOT NULL,
@@ -49,7 +49,7 @@ INSERT INTO `activities` (`id`, `usersId`, `type`, `postsId`, `createdAt`) VALUE
 --
 -- Table structure for table `activityNotifications`
 --
-
+DROP TABLE IF EXISTS `activityNotifications`;
 CREATE TABLE IF NOT EXISTS `activityNotifications` (
   `id` int(10) unsigned NOT NULL,
   `usersId` int(10) unsigned NOT NULL COMMENT 'this is user display in notification',
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `activityNotifications` (
 --
 -- Table structure for table `audit`
 --
-
+DROP TABLE IF EXISTS `audit`;
 CREATE TABLE IF NOT EXISTS `audit` (
   `id` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `userId` mediumint(8) unsigned NOT NULL,
@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS `audit` (
 --
 -- Table structure for table `auditDetail`
 --
-
+DROP TABLE IF EXISTS `auditDetail`;
 CREATE TABLE IF NOT EXISTS `auditDetail` (
   `id` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `auditId` char(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS `auditDetail` (
 --
 -- Table structure for table `categories`
 --
-
+DROP TABLE IF EXISTS `categories`;
 CREATE TABLE IF NOT EXISTS `categories` (
   `id` int(10) unsigned NOT NULL,
   `name` varchar(72) NOT NULL,
@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS `categories` (
 --
 -- Table structure for table `comment`
 --
-
+DROP TABLE IF EXISTS `comment`;
 CREATE TABLE IF NOT EXISTS `comment` (
   `id` int(11) unsigned NOT NULL,
   `userId` int(11) unsigned NOT NULL,
@@ -128,7 +128,7 @@ CREATE TABLE IF NOT EXISTS `comment` (
 --
 -- Table structure for table `failedLogins`
 --
-
+DROP TABLE IF EXISTS `failedLogins`;
 CREATE TABLE IF NOT EXISTS `failedLogins` (
   `id` int(15) NOT NULL DEFAULT '0',
   `usersId` int(15) NOT NULL,
@@ -148,7 +148,7 @@ INSERT INTO `failedLogins` (`id`, `usersId`, `ipAddress`, `attempted`) VALUES
 --
 -- Table structure for table `media`
 --
-
+DROP TABLE IF EXISTS `media`;
 CREATE TABLE IF NOT EXISTS `media` (
   `id` int(11) NOT NULL,
   `username` varchar(72) NOT NULL,
@@ -162,7 +162,7 @@ CREATE TABLE IF NOT EXISTS `media` (
 --
 -- Table structure for table `mediaType`
 --
-
+DROP TABLE IF EXISTS `mediaType`;
 CREATE TABLE IF NOT EXISTS `mediaType` (
   `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
@@ -173,7 +173,6 @@ CREATE TABLE IF NOT EXISTS `mediaType` (
 --
 -- Dumping data for table `mediaType`
 --
-
 INSERT INTO `mediaType` (`id`, `name`, `code`, `note`) VALUES
 (1, 'Images', 'jpg,png,bmp,gif,sgv', ''),
 (2, 'Videos', 'mp4,avi,mkv', ''),
@@ -186,7 +185,7 @@ INSERT INTO `mediaType` (`id`, `name`, `code`, `note`) VALUES
 --
 -- Table structure for table `notifications`
 --
-
+DROP TABLE IF EXISTS `notifications`;
 CREATE TABLE IF NOT EXISTS `notifications` (
   `id` int(10) unsigned NOT NULL,
   `usersId` int(10) unsigned NOT NULL,
@@ -211,7 +210,7 @@ INSERT INTO `notifications` (`id`, `usersId`, `postsId`, `postsReplyId`, `type`,
 --
 -- Table structure for table `notificationsBounces`
 --
-
+DROP TABLE IF EXISTS `notificationsBounces`;
 CREATE TABLE IF NOT EXISTS `notificationsBounces` (
   `id` int(10) unsigned NOT NULL,
   `email` varchar(120) NOT NULL,
@@ -226,7 +225,7 @@ CREATE TABLE IF NOT EXISTS `notificationsBounces` (
 --
 -- Table structure for table `posts`
 --
-
+DROP TABLE IF EXISTS `posts`;
 CREATE TABLE IF NOT EXISTS `posts` (
   `id` int(10) unsigned NOT NULL,
   `usersId` int(10) unsigned NOT NULL,
@@ -261,7 +260,7 @@ INSERT INTO `posts` (`id`, `usersId`, `type`, `title`, `link`, `slug`, `content`
 --
 -- Table structure for table `postsBounties`
 --
-
+DROP TABLE IF EXISTS `postsBounties`;
 CREATE TABLE IF NOT EXISTS `postsBounties` (
   `id` int(10) unsigned NOT NULL,
   `postsId` int(10) unsigned NOT NULL,
@@ -276,7 +275,7 @@ CREATE TABLE IF NOT EXISTS `postsBounties` (
 --
 -- Table structure for table `postsHistory`
 --
-
+DROP TABLE IF EXISTS `postsHistory`;
 CREATE TABLE IF NOT EXISTS `postsHistory` (
   `id` int(10) unsigned NOT NULL,
   `postsId` int(10) unsigned NOT NULL,
@@ -290,7 +289,7 @@ CREATE TABLE IF NOT EXISTS `postsHistory` (
 --
 -- Table structure for table `postsNotifications`
 --
-
+DROP TABLE IF EXISTS `postsNotifications`;
 CREATE TABLE IF NOT EXISTS `postsNotifications` (
   `id` int(10) unsigned NOT NULL,
   `usersId` int(10) unsigned NOT NULL,
@@ -319,7 +318,7 @@ INSERT INTO `postsNotifications` (`id`, `usersId`, `postsId`) VALUES
 --
 -- Table structure for table `postsReply`
 --
-
+DROP TABLE IF EXISTS `postsReply`;
 CREATE TABLE IF NOT EXISTS `postsReply` (
   `id` int(10) unsigned NOT NULL,
   `postsId` int(10) unsigned NOT NULL,
@@ -337,7 +336,7 @@ CREATE TABLE IF NOT EXISTS `postsReply` (
 --
 -- Table structure for table `postsReplyHistory`
 --
-
+DROP TABLE IF EXISTS `postsReplyHistory`;
 CREATE TABLE IF NOT EXISTS `postsReplyHistory` (
   `id` int(10) unsigned NOT NULL,
   `postsReplyId` int(10) unsigned NOT NULL,
@@ -351,7 +350,7 @@ CREATE TABLE IF NOT EXISTS `postsReplyHistory` (
 --
 -- Table structure for table `postsSubscribers`
 --
-
+DROP TABLE IF EXISTS `postsSubscribers`;
 CREATE TABLE IF NOT EXISTS `postsSubscribers` (
   `id` int(10) unsigned NOT NULL,
   `postsId` int(10) unsigned NOT NULL,
@@ -364,7 +363,7 @@ CREATE TABLE IF NOT EXISTS `postsSubscribers` (
 --
 -- Table structure for table `postsTags`
 --
-
+DROP TABLE IF EXISTS `postsTags`;
 CREATE TABLE IF NOT EXISTS `postsTags` (
   `id` int(11) NOT NULL,
   `postsId` int(11) NOT NULL,
@@ -383,7 +382,7 @@ INSERT INTO `postsTags` (`id`, `postsId`, `tagsId`) VALUES
 --
 -- Table structure for table `postsViews`
 --
-
+DROP TABLE IF EXISTS `postsViews`;
 CREATE TABLE IF NOT EXISTS `postsViews` (
   `id` int(10) unsigned NOT NULL,
   `postsId` int(10) unsigned NOT NULL,
@@ -403,7 +402,7 @@ INSERT INTO `postsViews` (`id`, `postsId`, `ipaddress`) VALUES
 --
 -- Table structure for table `rememberTokens`
 --
-
+DROP TABLE IF EXISTS `rememberTokens`;
 CREATE TABLE IF NOT EXISTS `rememberTokens` (
   `id` int(11) unsigned NOT NULL,
   `usersId` int(11) unsigned NOT NULL,
@@ -429,7 +428,7 @@ INSERT INTO `rememberTokens` (`id`, `usersId`, `token`, `userAgent`, `createdAt`
 --
 -- Table structure for table `settings`
 --
-
+DROP TABLE IF EXISTS `settings`;
 CREATE TABLE IF NOT EXISTS `settings` (
   `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
@@ -454,7 +453,7 @@ INSERT INTO `settings` (`id`, `name`, `value`, `note`) VALUES
 --
 -- Table structure for table `shortUrls`
 --
-
+DROP TABLE IF EXISTS `shortUrls`;
 CREATE TABLE IF NOT EXISTS `shortUrls` (
   `id` int(15) unsigned NOT NULL,
   `longUrl` varchar(255) NOT NULL,
@@ -468,7 +467,7 @@ CREATE TABLE IF NOT EXISTS `shortUrls` (
 --
 -- Table structure for table `subscribe`
 --
-
+DROP TABLE IF EXISTS `subscribe`;
 CREATE TABLE IF NOT EXISTS `subscribe` (
   `id` int(11) unsigned NOT NULL,
   `email` varchar(40) NOT NULL,
@@ -480,7 +479,7 @@ CREATE TABLE IF NOT EXISTS `subscribe` (
 --
 -- Table structure for table `successLogins`
 --
-
+DROP TABLE IF EXISTS `successLogins`;
 CREATE TABLE IF NOT EXISTS `successLogins` (
   `id` int(15) NOT NULL,
   `usersId` int(15) NOT NULL,
@@ -545,7 +544,7 @@ INSERT INTO `successLogins` (`id`, `usersId`, `ipAddress`, `userAgent`) VALUES
 --
 -- Table structure for table `tags`
 --
-
+DROP TABLE IF EXISTS `tags`;
 CREATE TABLE IF NOT EXISTS `tags` (
   `id` int(10) unsigned NOT NULL,
   `name` varchar(72) NOT NULL,
@@ -569,7 +568,7 @@ INSERT INTO `tags` (`id`, `name`, `description`, `slug`, `numberPosts`, `noBount
 --
 -- Table structure for table `template`
 --
-
+DROP TABLE IF EXISTS `template`;
 CREATE TABLE IF NOT EXISTS `template` (
   `id` int(11) unsigned NOT NULL,
   `name` varchar(128) NOT NULL DEFAULT '',
@@ -595,7 +594,7 @@ INSERT INTO `template` (`id`, `name`, `key`, `subject`, `content`) VALUES
 --
 -- Table structure for table `topicTracking`
 --
-
+DROP TABLE IF EXISTS `topicTracking`;
 CREATE TABLE IF NOT EXISTS `topicTracking` (
   `userId` int(11) NOT NULL,
   `topicId` text NOT NULL
@@ -606,7 +605,7 @@ CREATE TABLE IF NOT EXISTS `topicTracking` (
 --
 -- Table structure for table `users`
 --
-
+DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(10) unsigned NOT NULL,
   `username` varchar(72) DEFAULT NULL,
@@ -654,7 +653,7 @@ INSERT INTO `users` (`id`, `username`, `email`, `firstname`, `lastname`, `tokenT
 --
 -- Table structure for table `usersBadges`
 --
-
+DROP TABLE IF EXISTS `usersBadges`;
 CREATE TABLE IF NOT EXISTS `usersBadges` (
   `id` int(10) unsigned NOT NULL,
   `usersId` int(10) unsigned NOT NULL,
@@ -671,7 +670,7 @@ CREATE TABLE IF NOT EXISTS `usersBadges` (
 --
 -- Table structure for table `vote`
 --
-
+DROP TABLE IF EXISTS `vote`;
 CREATE TABLE IF NOT EXISTS `vote` (
   `id` int(11) unsigned NOT NULL,
   `usersId` int(11) unsigned NOT NULL,

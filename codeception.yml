@@ -42,8 +42,7 @@ modules:
             dump: tests/_data/dump.sql
         Phalcon:
             bootstrap: 'tests/_config/bootstrap.php'
-            cleanup: true
-            savepoints: true
+            cleanup: false
         PhpBrowser:
             url: 'http://localhost:8000'
             curl:

@@ -19,8 +19,11 @@ use Phanbook\Models\SuccessLogins;
 use Phanbook\Models\FailedLogins;
 
 /**
- * Phanbook\Auth\Auth
+ * \Phanbook\Auth\Auth
+ *
  * Manages Authentication/Identity Management in Phanbook
+ *
+ * @package Phanbook\Auth
  */
 class Auth extends Component
 {
@@ -249,6 +252,7 @@ class Auth extends Component
         $identity = $this->session->get('auth');
         return $identity['fullname'];
     }
+
     /**
      * Returns the current identity
      *
@@ -259,6 +263,23 @@ class Auth extends Component
         $identity = $this->session->get('auth');
         return $identity['username'];
     }
+
+    /**
+     * Gets current user's email if any.
+     *
+     * @return string|null
+     */
+    public function getEmail()
+    {
+        if (!$this->session->has('auth')) {
+            return null;
+        }
+
+        $identity = $this->session->get('auth');
+
+        return $identity['email'];
+    }
+
     /**
      * Checking user is have permission admin
      *
@@ -370,7 +391,9 @@ class Auth extends Component
 
         return $user->getVote();
     }
+
     /**
+     * Save user session.
      *
      * @param \Phanbook\Models\Users $object
      */
@@ -378,16 +401,16 @@ class Auth extends Component
     {
         $this->session->set(
             'auth',
-            array(
-            'id'        => $object->getId(),
-            'admin'     => $object->getAdmin(),
-            'moderator' => $object->getModerator(),
-            'theme'     => $object->getTheme(),
-            'name'      => $object->getInforUser(),
-            'fullname'  => $object->getFullName(),
-            'username'  => $object->getUsername(),
-            'email'     => $object->getEmail()
-            )
+            [
+                'id'        => $object->getId(),
+                'admin'     => $object->getAdmin(),
+                'moderator' => $object->getModerator(),
+                'theme'     => $object->getTheme(),
+                'name'      => $object->getInforUser(),
+                'fullname'  => $object->getFullName(),
+                'username'  => $object->getUsername(),
+                'email'     => $object->getEmail(),
+            ]
         );
     }
 }

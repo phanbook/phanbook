@@ -18,9 +18,12 @@ use Phanbook\Models\Users;
 use Phanbook\Models\Karma;
 
 /**
- * Class TestsController
+ * \Phanbook\Oauth\Controllers\ControllerBase
  *
- * @package Phanbook\Frontend\Controllers
+ * @property \Phanbook\Auth\Auth $auth
+ * @property \Phalcon\Config $config
+ *
+ * @package Phanbook\Oauth\Controllers
  */
 class ControllerBase extends Controller
 {
