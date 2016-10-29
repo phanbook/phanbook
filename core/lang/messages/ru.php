@@ -40,6 +40,7 @@ $messages = [
     'Home' => 'Главная',
     'Hot' => 'Горячее',
     // I
+    'I forgot my password' => 'Я забыл пароль',
     'in progress' => 'не решён',
     'Index' => 'Главная',
     'Interesting' => 'Интересное',
@@ -59,7 +60,9 @@ $messages = [
     // N
     'No Answers' => 'Без ответа',
     // O
+    'OR' => 'ИЛИ',
     // P
+    'Password' => 'Пароль',
     'People like it' => 'Людей любят нас',
     'Points' => 'Репутация',
     'Profile Picture' => 'Фотография',
@@ -69,10 +72,17 @@ $messages = [
     'Quick Links' => 'Быстрые ссылки',
     // R
     'Recent Questions' => 'Недавние вопросы',
+    'Register a new membership' => 'Зарегистрировать новую учетную запись',
+    'Remember Me' => 'Запомнить меня',
     'Router' => 'Роутер',
     // S
     'Search here...' => 'Поиск...',
     'Settings' => 'Настройки',
+    'Sign In' => 'Войти',
+    'Sign in to start your session' => 'Войдите, чтобы начать сеанс',
+    'Sign in using Facebook' => 'Войти с помощью Facebook',
+    'Sign in using GitHub' => 'Войти с помощью GitHub',
+    'Sign in using Google+' => 'Войти с помощью Google+',
     'site design' => 'дизайн сайта',
     'solved' => 'решён',
     'Stats' => 'Статистика',
@@ -81,12 +91,15 @@ $messages = [
     'Support:' => 'Поддержка:',
     // T
     'Tags' => 'Метки',
+    'The password is required' => 'Пароль обязателен для заполнения',
+    'The Username or E-Mail is required' => 'Логин или Email обязательны для заполнения',
     'To RSS Feed' => 'На RSS рассылку',
     'Twitter' => 'Twitter',
     'Twitter profile' => 'Аккаунт в Twitter',
     // U
     'Update' => 'Обновить',
     'Username' => 'Логин',
+    'Username or Email' => 'Логин или Email',
     'Users' => 'Участники',
     // V
     'Views' => 'Просмотры',
