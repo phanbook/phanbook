@@ -24,7 +24,7 @@ class ErrorsController extends Controller
         $this->view->message = t('The router not found');
     }
     /**
-     * 404 paga
+     * 404 page
      */
     public function show404Action()
     {

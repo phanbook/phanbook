@@ -10,10 +10,8 @@
  * @since   1.0.0
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
-use Phalcon\DI;
 use Phalcon\Crypt;
 use Phalcon\Security;
-use Phalcon\Mvc\Router;
 use Phalcon\Flash\Session;
 use Phalcon\DI\FactoryDefault;
 use Phalcon\Http\Response\Cookies;
@@ -42,6 +40,7 @@ use Phanbook\Utils\Phanbook;
 use Phanbook\Queue\DummyServer;
 use Phanbook\Markdown\ParsedownExtra;
 use Phanbook\Notifications\Checker     as NotificationsChecker;
+use Phanbook\Common\ThemeManager;
 
 /**
  * The FactoryDefault Dependency Injector automatically register the right services providing a full stack framework
@@ -53,20 +52,25 @@ $eventsManager = new EventsManager();
 
 /**
  * Register the configuration itself as a service
+ * @todo: Move to the \Phanbook\Common\Config
  */
-$config = include __DIR__ . '/config.php';
-if (file_exists(__DIR__ . '/config.global.php')) {
-    $overrideConfig = include __DIR__ . '/config.global.php';
+/** @noinspection PhpIncludeInspection */
+$config = require config_path('config.php');
+
+if (file_exists(config_path('config.global.php'))) {
+    /** @noinspection PhpIncludeInspection */
+    $overrideConfig = require config_path('config.global.php');
     $config->merge($overrideConfig);
 }
 //It created when save in admin dashboard
-if (file_exists(ROOT_DIR . 'content/options/options.php')) {
-    $overrideConfig = new AdapterPhp(ROOT_DIR . 'content/options/options.php');
+if (file_exists(content_path('options/options.php'))) {
+    $overrideConfig = new AdapterPhp(content_path('options/options.php'));
     $config->merge($overrideConfig);
 }
 
-if (file_exists(__DIR__ . '/config.' . APPLICATION_ENV . '.php')) {
-    $overrideConfig = include __DIR__ . '/config.' . APPLICATION_ENV . '.php';
+if (file_exists(config_path('config.' . APPLICATION_ENV . '.php'))) {
+    /** @noinspection PhpIncludeInspection */
+    $overrideConfig = require config_path('config.' . APPLICATION_ENV . '.php');
     $config->merge($overrideConfig);
 }
 $di->set('config', $config, true);
@@ -222,14 +226,14 @@ $di->set(
         );
         if ($config->application->debug) {
             $eventsManager = new EventsManager();
-            $logger = new FileLogger(ROOT_DIR. 'content/logs/db.log');
+            $logger = new FileLogger(logs_path('db.log'));
             //Listen all the database events
             $eventsManager->attach(
                 'db',
                 function ($event, $connection) use ($logger) {
                     /** @var Phalcon\Events\Event $event */
                     if ($event->getType() == 'beforeQuery') {
-                        /** @var DatabaseConnection $connection */
+                        /** @var Mysql $connection */
                         $variables = $connection->getSQLVariables();
                         if ($variables) {
                             $logger->log($connection->getSQLStatement() . ' [' . join(',', $variables) . ']', \Phalcon\Logger::INFO);
@@ -337,35 +341,42 @@ $di->set(
     },
     true
 );
-//Translation application use Gettext or Native Array
-$di->set(
+// Translation application use Gettext or Native Array
+$di->setShared(
     'translation',
-    function () use ($di) {
-        $language = $di->get('config')->language;
+    function () {
+        $language = $this->get('config')->language;
         $code     = $language->code;
-        if ($di->getCookies()->has('code')) {
-            $code = $di->getCookies()->get('code')->getValue();
+
+        if ($this->getCookies()->has('code')) {
+            $code = $this->getCookies()->get('code')->getValue();
         }
+
         if ($language->gettext) {
-            $translation = new Gettext([
+            return new Gettext([
                 'locale' => $code,
-                'directory' => ROOT_DIR . 'core/lang',
+                'directory' => app_path('core/lang'),
                 'defaultDomain'=> 'messages',
-            ]);
-        } else {
-            $path = ROOT_DIR . 'core/lang/messages/' . $code . '.php';
-            if (!file_exists($path)) {
-                $di->getLogger()->error("You must specify a language file for language '$code'");
-                $path = ROOT_DIR . 'core/lang/messages/en.php';
-            }
-            $translation = new NativeArray([
-               'content' => require_once $path
             ]);
         }
 
-        return $translation;
-    },
-    true
+        $path = app_path("core/lang/messages/{$code}.php");
+        if (!file_exists($path)) {
+            $this->getLogger()->error("You must specify a language file for language '$code'");
+            $path = app_path('core/lang/messages/en.php');
+        }
+
+        /** @noinspection PhpIncludeInspection */
+        $data = include $path;
+        if (!is_array($data)) {
+            $this->getLogger()->error(
+                "Translation data [{$path}] for language '$code' must be an array. Got: " . gettype($data)
+            );
+            $data = [];
+        }
+
+        return new NativeArray(['content' => $data]);
+    }
 );
 //Queue to deliver e-mails in real-time
 $di->set(
@@ -389,6 +400,7 @@ $di->set(
     'volt',
     function ($view, $di) use ($config) {
         $volt = new Volt($view);
+        $volt->setDI($di);
         $volt->setOptions(
             [
                 'compiledPath'      => $config->application->view->compiledPath,
@@ -411,11 +423,12 @@ $di->set(
     'phanbook',
     function () use ($di) {
         $theme = $di->get('config')->theme;
-        $info  = ROOT_DIR . 'content/themes/' . $theme . '/info.php';
+        $info  = themes_path("{$theme}/info.php");
         if (!file_exists($info)) {
             throw new \Exception('You need to created a file info theme', 1);
         }
-        return new Phanbook(include $info);
+        /** @noinspection PhpIncludeInspection */
+        return new Phanbook(require $info);
     },
     true
 );
@@ -425,32 +438,18 @@ $di->set(
 $di->set(
     'logger',
     function () use ($di) {
-        $logger = ROOT_DIR. 'content/logs/' . date('Y-m-d') . '.log';
-        return new FileLogger($logger, ['model' => 'a+']);
+        return new FileLogger(logs_path(date('Y-m-d') . '.log'), ['mode' => 'a+']);
     },
     true
 );
 
-/**
- * Translation function call anywhere
- *
- * @param $string
- *
- * @return mixed
- */
-if (!function_exists('t')) {
-    function t($string)
-    {
-        $translation = DI::getDefault()->get('translation');
-        return $translation->_($string);
-    }
-}
-//Phalcon Debugger
+// @todo: Move to the separated Service
+$manager = new ThemeManager($di->getShared('config')->theme);
+$manager->setDI($di);
+$manager->initializeAssets();
+$di->setShared('theme', $manager);
+
+// Phalcon Debugger
 if ($config->application->debug) {
     (new \Phalcon\Debug)->listen();
-    include ROOT_DIR . 'core/common/tools/Debug.php';
-}
-// For avoid re-define variables
-if (!defined("ALREADY_DEFINED")) {
-    include 'constants.php';
 }

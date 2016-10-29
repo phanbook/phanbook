@@ -28,7 +28,7 @@ class Auth extends Component
      * Checks the user credentials
      *
      * @param  array $credentials
-     * @return boolan
+     * @return boolean
      */
     public function check(array $credentials)
     {
@@ -56,7 +56,7 @@ class Auth extends Component
 
         // Check if the remember me was selected
         if (isset($credentials['remember'])) {
-            $this->setRememberEnviroment($user);
+            $this->setRememberEnvironment($user);
         }
 
         $this->setSession($user);
@@ -66,7 +66,7 @@ class Auth extends Component
     /**
      * Creates the remember me environment settings the related cookies and generating tokens
      *
-     * @param Phanbook\Models\Users $user
+     * @param \Phanbook\Models\Users $user
      */
     public function saveSuccessLogin(Users $user)
     {
@@ -83,7 +83,7 @@ class Auth extends Component
 
     /**
      * Implements login throttling
-     * Reduces the efectiveness of brute force attacks
+     * Reduces the effectiveness of brute force attacks
      *
      * @param int $userId
      */
@@ -124,9 +124,9 @@ class Auth extends Component
      * Creates the remember me environment settings the related cookies
      * and generating tokens there is only remember token
      *
-     * @param Phanbook\Models\Users $user
+     * @param \Phanbook\Models\Users $user
      */
-    public function setRememberEnviroment(Users $user)
+    public function setRememberEnvironment(Users $user)
     {
         $userAgent = $this->request->getUserAgent();
         $token = md5($user->getEmail() . $user->getPasswd() . $userAgent);
@@ -152,9 +152,9 @@ class Auth extends Component
     }
 
     /**
-     * Logs on using the information in the coookies, it will call in beforeExecuteRoute
+     * Logs on using the information in the cookies, it will call in beforeExecuteRoute
      *
-     * @return Phalcon\Http\Response
+     * @return \Phalcon\Http\Response
      */
     public function loginWithRememberMe()
     {
@@ -171,7 +171,7 @@ class Auth extends Component
                     [
                     'usersId = ?0 AND token = ?1',
                     'bind' => [ $user->getId(), $token ],
-                    'order' => 'createdAt DESC' //it mean onlly remember token
+                    'order' => 'createdAt DESC' //it mean only remember token
                     ]
                 );
                 if ($remember) {
@@ -198,7 +198,7 @@ class Auth extends Component
     /**
      * Checks if the user is banned/inactive/suspended
      *
-     * @param  Phanbook\Models\Users $user
+     * @param  \Phanbook\Models\Users $user
      * @return bool
      */
     public function checkUserFlags(Users $user)
@@ -316,9 +316,10 @@ class Auth extends Component
     }
 
     /**
-     * Auths the user by his/her id
+     * Authorize the user by his/her id
      *
      * @param int $id
+     * @return Users|bool
      */
     public function authUserById($id)
     {
@@ -371,7 +372,7 @@ class Auth extends Component
     }
     /**
      *
-     * @param Phanbook\Models\Users $object
+     * @param \Phanbook\Models\Users $object
      */
     public function setSession($object)
     {

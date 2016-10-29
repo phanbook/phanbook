@@ -10,9 +10,8 @@
  * @since   1.0.0
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
-namespace Phanbook;
+namespace Phanbook\Common;
 
-use Phalcon\Loader;
 use Phalcon\Mvc\View;
 use Phalcon\Cli\Router;
 use Phanbook\Auth\Auth;
@@ -26,9 +25,13 @@ use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Mvc\View\Engine\Volt;
 use Phanbook\Markdown\ParsedownExtra;
 use Phalcon\Cli\Console as CLIConsole;
+use Phalcon\Di\FactoryDefault\Cli as CliDi;
+use Phanbook\Common\Exceptions\Cli\BadCliCallException;
 
 /**
- * Console.
+ *\Phanbook\Console
+ *
+ * @package Phanbook
  */
 class Console extends CLIConsole
 {
@@ -108,14 +111,13 @@ class Console extends CLIConsole
     /**
      * Console constructor - set the dependency Injector.
      *
-     * @param \Phalcon\DiInterface $di
+     * @param DiInterface $di
      */
-    public function __construct(DiInterface $di)
+    public function __construct(DiInterface $di = null)
     {
-        $this->di = $di;
+        $this->di = $di ?: new CliDi();
         $loaders = [
             'config',
-            'loader',
             'db',
             'router',
             'markdown',
@@ -137,27 +139,6 @@ class Console extends CLIConsole
 
         // Set the dependency Injector
         parent::__construct($this->di);
-    }
-
-    /**
-     * Register an autoloader.
-     */
-    protected function loader()
-    {
-        $loader = new Loader();
-        $namespaces = [
-            'Phanbook' => ROOT_DIR . '/core/common/library/',
-            'Phanbook\Mail' => ROOT_DIR . '/core/common/library/Mail/',
-            'Phanbook\Tools' => ROOT_DIR . '/core/common/tools/',
-            'Phanbook\Models' => ROOT_DIR . '/core/common/models/',
-            'Phanbook\Search' => ROOT_DIR . '/core/common/library/Search/',
-            'Phanbook\Cli\Tasks' => ROOT_DIR . '/core/modules/cli/tasks/',
-            'Phanbook\Seeder' => ROOT_DIR . '/core/modules/seeder/'
-        ];
-
-        $loader
-            ->registerNamespaces($namespaces)
-            ->register();
     }
 
     protected function isCli()
@@ -197,19 +178,12 @@ class Console extends CLIConsole
     }
 
     /**
-     * Set the config service.
+     * Set the Application config.
      */
     protected function config()
     {
-        $config = include ROOT_DIR . '/core/config/config.php';
-        if (file_exists(ROOT_DIR . '/core/config/config.global.php')) {
-            $overrideConfig = include ROOT_DIR . '/core/config/config.global.php';
-            $config->merge($overrideConfig);
-        }
-        if (file_exists(ROOT_DIR . '/core/config/config.' . APPLICATION_ENV . '.php')) {
-            $overrideConfig = include ROOT_DIR . '/core/config/config.' . APPLICATION_ENV . '.php';
-            $config->merge($overrideConfig);
-        }
+        $config = Config::factory();
+
         $this->di->set('config', $config);
         $this->config = $config;
     }
@@ -476,7 +450,6 @@ class Console extends CLIConsole
      */
     protected function determineTask($flags)
     {
-
         // Since first argument is the name so script executing (pop it off the list)
         array_shift($flags);
 
@@ -519,16 +492,20 @@ class Console extends CLIConsole
     /**
      * make sure everything required is setup before starting the task.
      *
-     * @param array $argv array of arguments
      * @param int $argc count of arguments
-     *
-     * @throws Exception
+     * @throws BadCliCallException
      */
     protected function preTaskCheck($argc)
     {
         // Make sure task is added
         if ($argc < 2) {
-            throw new \Exception('Bad Number of Params needed for script');
+            throw new BadCliCallException(
+                'Invalid number of parameters required for for script.' . PHP_EOL . PHP_EOL .
+                'Examples:' . PHP_EOL .
+                '  cli [task] [action] [param1 [param2 ...]]' . PHP_EOL .
+                '  cli Example index' . PHP_EOL .
+                '  cli Example index --debug --single --no-record'. PHP_EOL . PHP_EOL
+            );
         }
     }
 

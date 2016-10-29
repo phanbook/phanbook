@@ -1,15 +1,16 @@
 <ul class="tabs">
-    {% set menu = ['hot': 'Recent Questions', 'unanswered': 'No Answers', 'week' : 'Week',
-        'month' : 'Month', 'interesting': 'Interesting'
-    ]%}
-    {% for key, item in menu %}
+    {%- set menu =
+        [
+            'Recent Questions': 'hot',
+            'No Answers': 'unanswered',
+            'Week': 'week',
+            'Month': 'month',
+            'Interesting': 'interesting'
+        ]
+    -%}
+    {%- for value, key in menu -%}
         <li class="tab">
-        {% if tab == key %}
-            <a href="/posts?tab={{key}}" class="current">
-        {% else %}
-            <a href="/posts?tab={{key}}">
-        {% endif %}
-        {{ item }}
-        </a></li>
-    {% endfor %}
+            {{ link_to('posts?tab=' ~ key, t(value), 'title': t(value), 'class': tab == key ? 'current' : '') }}
+        </li>
+    {%- endfor -%}
 </ul>

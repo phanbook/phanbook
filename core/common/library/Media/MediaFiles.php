@@ -24,7 +24,7 @@ class MediaFiles
     private $adapter;
     public function __construct()
     {
-        $this->adapter = new Adapter(ROOT_DIR. 'content/uploads/');
+        $this->adapter = new Adapter(config_path('uploads/'));
         $this->fileSystem = new Filesystem($this->adapter);
     }
 

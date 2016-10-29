@@ -16,9 +16,17 @@ use Phalcon\Mvc\Model\Behavior\SoftDelete;
 use Phanbook\Tools\ZFunction;
 use Phanbook\Search\Indexer;
 
+/**
+ * \Phanbook\Models\Posts
+ *
+ * @property \Phanbook\Models\Users $user
+ * @method static Posts|false findFirstById(int $id)
+ * @method static int countByUsersId(int $id)
+ *
+ * @package Phanbook\Models
+ */
 class Posts extends ModelBase
 {
-
     const POST_ALL       = 'all';
     const POST_BLOG      = 'blog';
     const POST_PAGE      = 'pages';
@@ -188,12 +196,12 @@ class Posts extends ModelBase
     /**
      * Method to set the value of field tagsId
      *
-     * @param  integer $tagsId
+     * @param  integer $type
      * @return $this
      */
     public function setType($type)
     {
-        $this->type= $type;
+        $this->type = $type;
 
         return $this;
     }
@@ -314,7 +322,7 @@ class Posts extends ModelBase
      * @param  integer $createdAt
      * @return $this
      */
-    public function setCreatedaAt($createdAt)
+    public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
 
@@ -819,7 +827,7 @@ class Posts extends ModelBase
         $diff = time() - $this->createdAt;
         if ($diff > 86400) {
             if ($diff < (86400 * 30)) {
-                //@sory this hardcode :)
+                // sorry for this hardcode :)
                 return ['type' => 'old', 'value' => 150 + intval($diff / 86400 * 3)];
             }
         } else {

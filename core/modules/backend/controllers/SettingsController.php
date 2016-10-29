@@ -21,7 +21,8 @@ use Phanbook\Google\Analytic;
 use Phanbook\Backend\Forms\SettingReadingForm;
 
 /**
- * Class SettingsController
+ * \Phanbook\Backend\Controllers\SettingsController
+ *
  * @package Phanbook\Backend\Controller
  */
 class SettingsController extends ControllerBase
@@ -131,7 +132,7 @@ class SettingsController extends ControllerBase
                     // $image = new Imagick($file->getTempName());
                     // $image->resize(200, 200)->crop(100, 100);
                     // $image->save('images/thumb.jpg');
-                    $path = ROOT_DIR . '/content/uploads/';
+                    $path = config_path('uploads/');
                     if ($file->getRealType() == "image/x-icon") {
                         $result = $file->moveTo($path . $name .'.ico');
                     } else {
@@ -139,7 +140,7 @@ class SettingsController extends ControllerBase
                     }
                     if (!$result) {
                         $this->flashSession->error(
-                            t('Data was not saved, you need to change permisson for directory upload')
+                            t('Data was not saved, you need to change permission for directory upload')
                         );
                         return $this->currentRedirect();
                     }
@@ -197,10 +198,17 @@ class SettingsController extends ControllerBase
     {
         $analytic = new Analytic();
         $this->view->isLogged = false;
+
         // We check if user authorization
-        if ($analytic->checkAccessToken()) {
-            $this->view->isLogged = true;
+        try {
+            if ($analytic->checkAccessToken()) {
+                $this->view->isLogged = true;
+            }
+        } catch (\Google_Exception $e) {
+            // Skip Google errors
+            $this->logger->error($e->getMessage() . PHP_EOL . $e->getTraceAsString());
         }
+
         $this->assets->addCss('assets/css/bootstrap-multiselect.css');
         $this->assets->addJs('assets/js/bootstrap-multiselect.js');
         $trackingID = Settings::getAnalyticTrackingID();
@@ -236,7 +244,7 @@ class SettingsController extends ControllerBase
                 }
             }
         }
-        $this->flashSession->error(t('An error occured when verify access code!'));
+        $this->flashSession->error(t('An error occurred when verify access code!'));
         return $this->currentRedirect();
     }
     /**
@@ -283,15 +291,15 @@ class SettingsController extends ControllerBase
                                 $this->flashSession->success(t('Save Analytic setting success!'));
                             }
                         } else {
-                            $this->flashSession->error(t('An error occured, We can\'t save tracking ID!'));
+                            $this->flashSession->error(t('An error occurred, We can\'t save tracking ID!'));
                         }
                     } else {
-                        $this->flashSession->error(t('An error occured, We can\'t find Profile information!'));
+                        $this->flashSession->error(t('An error occurred, We can\'t find Profile information!'));
                     }
                     return $this->currentRedirect();
                 }
             }
-            $this->flashSession->error(t('An error occured when save setting!'));
+            $this->flashSession->error(t('An error occurred when save setting!'));
         }
         return $this->currentRedirect();
     }
@@ -306,7 +314,7 @@ class SettingsController extends ControllerBase
             if (Settings::setListTopActivity($listActivity)) {
                 $this->flashSession->success(t('Save Analytic module(s) position success!'));
             } else {
-                $this->flashSession->error(t('An error occured, We can\'t save this change!'));
+                $this->flashSession->error(t('An error occurred, We can\'t save this change!'));
             }
         }
         return $this->currentRedirect();

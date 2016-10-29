@@ -58,7 +58,7 @@ class UsersBadges extends ModelBase
     protected $code2;
 
     /**
-     * Broneze badges encourage users to try out new features on the site.
+     * Bronze badges encourage users to try out new features on the site.
      * @var integer
      */
     protected $code3;
@@ -233,7 +233,7 @@ class UsersBadges extends ModelBase
      *
      * @return integer
      */
-    public function getCreatedat()
+    public function getCreatedAt()
     {
         return $this->createdAt;
     }
@@ -268,7 +268,7 @@ class UsersBadges extends ModelBase
      * Allows to query a set of records that match the specified conditions
      *
      * @param  mixed $parameters
-     * @return Usersbadges[]
+     * @return UsersBadges[]
      */
     public static function find($parameters = null)
     {
@@ -279,7 +279,7 @@ class UsersBadges extends ModelBase
      * Allows to query the first record that match the specified conditions
      *
      * @param  mixed $parameters
-     * @return Usersbadges
+     * @return UsersBadges
      */
     public static function findFirst($parameters = null)
     {

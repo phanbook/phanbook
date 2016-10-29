@@ -1,6 +1,19 @@
-#Task 'composer install'
+# Task 'composer install'
+
 set :composer_command, 'php composer.phar'
+set :composer_download_url, 'https://getcomposer.org/installer'
+
 namespace :deploy do
+  task :install_executable do
+    on roles(:web) do
+      within shared_path do
+        unless test "[", "-e", "composer.phar", "]"
+          execute :curl, "-s", fetch(:composer_download_url), "|", :php
+        end
+      end
+    end
+  end
+
   task :install_composer do
     on roles(:web) do
         execute "cd '#{release_path}'; #{fetch(:composer_command)} install --no-dev --optimize-autoloader"

@@ -19,3 +19,9 @@ indent_style = tab
 
 [*.yml]
 indent_size = 2
+
+[*.rb]
+indent_size = 2
+
+[*.suite.yml]
+indent_size = 4

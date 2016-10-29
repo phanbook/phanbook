@@ -199,7 +199,7 @@ class RegisterController extends ControllerBase
      */
     public function forgotpasswordAction()
     {
-        //Resets any "template before" layouts because we use mutiple theme
+        // Resets any "template before" layouts because we use multiple theme
         $this->view->cleanTemplateBefore();
         if ($this->session->has('auth')) {
             $this->view->disable();
@@ -246,7 +246,7 @@ class RegisterController extends ControllerBase
                                         . '/oauth/resetpassword?forgothash=' . $passwordForgotHash
                     ];
                     if (!$this->mail->send($object->getEmail(), 'forgotpassword', $params)) {
-                        $this->flashSession->error(t('Error sendig email.'));
+                        $this->flashSession->error(t('Error sending email.'));
                     } else {
                         $this->flashSession->success(
                             t('An email was sent to your address in order to continue with the reset password process.')

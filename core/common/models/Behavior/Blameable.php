@@ -113,7 +113,7 @@ class Blameable extends Behavior implements BehaviorInterface
                 }
                 $audit->details = $details;
                 if (!$audit->save()) {
-                    ModelBase::saveLoger($audit->getMessages());
+                    ModelBase::saveLogger($audit->getMessages());
                 }
             }
         }
@@ -152,7 +152,7 @@ class Blameable extends Behavior implements BehaviorInterface
             }
             $audit->details = $details;
             if (!$audit->save()) {
-                ModelBase::saveLoger($audit->getMessages());
+                ModelBase::saveLogger($audit->getMessages());
             }
         }
     }

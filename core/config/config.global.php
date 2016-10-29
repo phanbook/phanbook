@@ -1,4 +1,7 @@
 <?php
+
+use Phalcon\Session\Adapter\Files;
+
 /**
  * The base configuration for Phanbook
  *
@@ -28,19 +31,19 @@ return new \Phalcon\Config(
             /**
              * Please don't change it
              */
-            'httpStatusCode'      => 200, //503
-            'modelsDir'           => ROOT_DIR . 'core/models/',
+            'httpStatusCode'      => 200, // 503
+            'modelsDir'           => app_path('core/models/'),
             'baseUri'             => '/',
-            'view'                      => [
-                'viewsDir'          => ROOT_DIR . '/views/',
-                'compiledPath'      => ROOT_DIR . 'content/cache/volt/',
+            'view' => [
+                'viewsDir'          => app_path('views/'),
+                'compiledPath'      => content_path('cache/volt/'),
                 'compiledSeparator' => '_',
                 'compiledExtension' => '.php',
                 'paginator'         => [
                     'limit'             => 10,
                 ],
             ],
-            'dataDir'             => ROOT_DIR . 'core/data/',
+            'dataDir'             => app_path('core/data/'),
             'repo'                => 'https://github.com/phanbook',
             'timezone'            => 'UTC',
             /**
@@ -79,10 +82,10 @@ return new \Phalcon\Config(
                 'lifetime' => '86400',
                 'prefix'   => 'cache_',
                 'adapter'  => 'File',
-                'cacheDir' => ROOT_DIR . 'content/cache/html/',
+                'cacheDir' => content_path('cache/html/'),
             ],
             'session'             => [
-                'adapter' => '\Phalcon\Session\Adapter\Files',
+                'adapter' => Files::class,
                 'options' => [
                     'lifetime' => 600,
                     'uniqueId' => 'phanbook_'

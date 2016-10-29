@@ -198,7 +198,7 @@ class PostsBounties extends ModelBase
     }
 
     /**
-     * @return Postsbounties[]
+     * @return PostsBounties[]
      */
     public static function find($parameters = array())
     {
@@ -206,7 +206,7 @@ class PostsBounties extends ModelBase
     }
 
     /**
-     * @return Postsbounties
+     * @return PostsBounties
      */
     public static function findFirst($parameters = array())
     {

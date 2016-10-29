@@ -47,7 +47,7 @@ class Populist extends BadgeBase
     }
 
     /**
-     * Add the badge to ther user
+     * Add the badge to the user
      *
      * @param Users $user
      * @param array $extra

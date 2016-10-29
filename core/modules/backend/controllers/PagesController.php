@@ -80,7 +80,7 @@ class PagesController extends ControllerBase
             self::setGrid();
         }
 
-        $this->renderGrid('Phanbook\Models\Posts');
+        $this->renderGrid('Posts');
         $this->view->setVars(['grid' => parent::$grid]);
         $this->tag->setTitle(t('List pages'));
 
@@ -108,7 +108,7 @@ class PagesController extends ControllerBase
     public function editAction($id)
     {
         if (!$object = Posts::findFirstById($id)) {
-            $this->flashSession->error(t('Posts doesn\'t exist.'));
+            $this->flashSession->error(t("Posts doesn't exist."));
 
             return $this->currentRedirect();
         }
@@ -144,14 +144,14 @@ class PagesController extends ControllerBase
 
         //  Form isn't valid
         if (!$form->isValid($this->request->getPost())) {
-            $this->saveLoger($form->getMessages());
+            $this->saveLogger($form->getMessages());
             // Redirect to edit form if we have an ID in page, otherwise redirect to add a new item page
             return $this->response->redirect(
                 $this->getPathController().(!is_null($id) ? '/edit/'.$id : '/new')
             );
         } else {
             if (!$object->save()) {
-                $this->saveLoger($object->getMessages());
+                $this->saveLogger($object->getMessages());
                 return $this->dispatcher->forward(
                     ['controller' => $this->getPathController(), 'action' => 'new']
                 );

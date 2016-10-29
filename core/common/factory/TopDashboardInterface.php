@@ -53,9 +53,9 @@ interface TopDashboardInterface
      */
     public function fixValue();
     /**
-     * Observar Pattern
+     * Observer Pattern
      * Update value to target class
-     * @param  AbstractSubject $subject object parrent
+     * @param  AbstractSubject $subject object parent
      */
     public function update(AbstractSubject $subject);
     public function create();

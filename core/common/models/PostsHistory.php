@@ -169,7 +169,7 @@ class PostsHistory extends ModelBase
     }
 
     /**
-     * @return Postshistory[]
+     * @return PostsHistory[]
      */
     public static function find($parameters = array())
     {
@@ -177,7 +177,7 @@ class PostsHistory extends ModelBase
     }
 
     /**
-     * @return Postshistory
+     * @return PostsHistory
      */
     public static function findFirst($parameters = array())
     {

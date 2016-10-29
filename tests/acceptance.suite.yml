@@ -10,7 +10,4 @@ modules:
         - Helper\Acceptance
         - Db
         - Filesystem
-        - PhpBrowser:
-            url: 'http://localhost:8000'
-            curl:
-                CURLOPT_RETURNTRANSFER: true
+        - PhpBrowser

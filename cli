@@ -1,35 +1,41 @@
+#!/usr/bin/env php
 <?php
-
 /**
- * a cli launcher and a cli script that launches phalcon tasks
+ * Phanbook : Delightfully simple forum and Q&A software
  *
- * @example php cli.php [task] [action] [param1 [param2 ...]]
- * @example php cli.php Example index
- * @example php cli.php Example index --debug --single --no-record
+ * Licensed under The GNU License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @link    http://phanbook.com Phanbook Project
+ * @since   1.0.0
+ * @author  Phanbook <hello@phanbook.com>
+ * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
 
+/**
+ * A CLI launcher and a CLI script that launches Phalcon tasks
+ *
+ * @example cli [task] [action] [param1 [param2 ...]]
+ * @example cli Example index
+ * @example cli Example index --debug --single --no-record
+ */
 
-define('ROOT_DIR', __DIR__ . '/');
-define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'local'));
+use Phanbook\Common\Console;
+use Phanbook\Tools\Cli\PhpError;
+
+// Register The Auto Loader
+require __DIR__ . '/bootstrap/autoloader.php';
+
 date_default_timezone_set('UTC');
 
-// Necessary requires to get things going
-require ROOT_DIR . '/vendor/autoload.php';
-require ROOT_DIR . '/core/common/tools/cli/PhpError.php';
-require ROOT_DIR . '/core/common/tools/cli/IRun.php';
-require ROOT_DIR . '/core/common/tools/cli/Output.php';
-require ROOT_DIR . '/core/common/Console.php';
-
-use Phalcon\DI\FactoryDefault\CLI;
-use Phanbook\Console as ConsoleApp;
-
 // Capture runtime errors
-register_shutdown_function(['Phanbook\Tools\Cli\PhpError', 'runtimeShutdown']);
+register_shutdown_function([PhpError::class, 'runtimeShutdown']);
 
 try {
-    $app = new ConsoleApp( new CLI());
+    $app = new Console();
     // Record any php warnings/errors
-    set_error_handler(['Phanbook\Tools\Cli\PhpError', 'errorHandler']);
+    set_error_handler([PhpError::class, 'errorHandler']);
 
     // Check if only run single instance
     if ($key = array_search('--single', $argv)) {
@@ -46,7 +52,7 @@ try {
     // Check if debug mode
     if ($key = array_search('--debug', $argv)) {
         $app->setDebug(true);
-        //todo laster
+        // @TODO: later
         // Ensure debug display even on fatal error
         //register_shutdown_function([new Events\Cli\Debug(FALSE), 'display'], $app);
     }
@@ -56,23 +62,6 @@ try {
     // Boom, Run
     $app->run();
 } catch (Exception $e) {
-    echo $e;
-    exit(255);
-}
-
-function d($object, $kill = true)
-{
-    var_export($object);
-    if ($kill) {
-        exit;
-    }
-}
-/**
- * Fix undefined function t when save object which is have method
- * Validate in model
- *
- */
-function t($string)
-{
-    //nothing
+    fwrite(STDERR, $e->getMessage() . PHP_EOL);
+    exit(1);
 }

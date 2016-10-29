@@ -48,12 +48,13 @@
         "forum": "http://meta.phanbook.com/"
     },
     "suggest": {
-        "ext-yaml" : "Best way to work with YAML"
+        "ext-yaml": "Best way to work with YAML"
     },
     "autoload-dev": {
         "psr-4": {
             "App\\Test\\Unit\\": "tests/unit/",
-            "App\\Test\\Module\\": "tests/_support/Module/"
+            "App\\Test\\Module\\": "tests/_support/Module/",
+            "App\\Test\\Step\\": "tests/_support/Step/"
         }
     }
 }

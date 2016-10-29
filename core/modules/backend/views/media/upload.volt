@@ -1,5 +1,5 @@
 {% extends 'layouts/layout.volt' %}
-{% block title %}{{constants.MEDIA_UPLOAD}}{% endblock %}
+{% block title %}{{t("Upload")}}{% endblock %}
 {% block content %}
     {{ form('media/upload', 'class':'form-inline dropzone', 'id':'myAwesomeDropzone') }}
         <div class="dz-message">

@@ -1,6 +1,11 @@
 <?php
 
-$directory = new \RecursiveDirectoryIterator(ROOT_DIR . 'content/modules/');
+use Phanbook\Oauth\Module as oAuth;
+use Phanbook\Backend\Module as Backend;
+use Phanbook\Frontend\Module as Frontend;
+
+$directory = new RecursiveDirectoryIterator(modules_path());
+
 $m = [];
 foreach ($directory as $item) {
     $name = $item->getFilename();
@@ -9,26 +14,25 @@ foreach ($directory as $item) {
         $path = $item->getPathname();
         $m[$name] = [
             'className' => 'Phanbook\\' . ucfirst($name) . '\\Module',
-            'path' => $path .  '/Module.php',
-            'router' => $path . '/config/routing.php'
+            'path'      => $path .  '/Module.php',
+            'router'    => $path . '/config/routing.php'
         ];
     }
 }
 
-$modulesCore =
-[
-    'frontend' => array(
-        'className' => \Phanbook\Frontend\Module::class,
-        'path' => ROOT_DIR . 'core/modules/frontend/Module.php'
-    ),
-    'oauth' => array(
-        'className' => \Phanbook\Oauth\Module::class,
-        'path' => ROOT_DIR . 'core/modules/oauth/Module.php'
-    ),
-    'backend' => array(
-        'className' => \Phanbook\Backend\Module::class,
-        'path' => ROOT_DIR . 'core/modules/backend/Module.php'
-    )
+$modulesCore = [
+    'frontend' => [
+        'className' => Frontend::class,
+        'path'      => modules_path('frontend/Module.php')
+    ],
+    'oauth' => [
+        'className' => oAuth::class,
+        'path'      => modules_path('oauth/Module.php')
+    ],
+    'backend' => [
+        'className' => Backend::class,
+        'path'      => modules_path('backend/Module.php')
+    ]
 ];
 
 return array_merge($m, $modulesCore);

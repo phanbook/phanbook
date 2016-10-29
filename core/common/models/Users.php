@@ -16,6 +16,13 @@ use Phalcon\Validation;
 use Phalcon\Validation\Validator\Email as EmailValidator;
 use Phalcon\Validation\Validator\Uniqueness as UniquenessValidator;
 
+/**
+ * \Phanbook\Models\Users
+ *
+ * @method static Users|false findFirstById(int $id)
+ *
+ * @package Phanbook\Models
+ */
 class Users extends ModelBase
 {
     const STATUS_ACTIVE   = 1;
@@ -171,7 +178,7 @@ class Users extends ModelBase
     protected $votePoint;
 
     /**
-     * 9-unknow,1-male,2-female
+     * 9-unknown,1-male,2-female
      *
      * @var integer
      */
@@ -348,9 +355,9 @@ class Users extends ModelBase
         return $this;
     }
     /**
-     * Method to set the value of field accesToken
+     * Method to set the value of field tokenGithub
      *
-     * @param  string $accesToken
+     * @param  string $tokenGithub
      * @return $this
      */
     public function setTokenGithub($tokenGithub)
@@ -480,7 +487,7 @@ class Users extends ModelBase
     /**
      * Method to set the value of field votesPoints
      *
-     * @param  integer $votesPoint
+     * @param  integer $votePoint
      * @return $this
      */
     public function setVotepoint($votePoint)
@@ -677,7 +684,7 @@ class Users extends ModelBase
     }
 
     /**
-     * Returns the value of field accesToken
+     * Returns the value of field tokenGithub
      *
      * @return string
      */
@@ -916,7 +923,7 @@ class Users extends ModelBase
     {
         return $this->bio;
     }
-    public function getTwiter()
+    public function getTwitter()
     {
         return $this->twitter;
     }
@@ -1186,7 +1193,7 @@ class Users extends ModelBase
             return $user;
         }
     }
-    
+
     /**
      * Independent Column Mapping.
      */

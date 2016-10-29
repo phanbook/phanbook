@@ -22,7 +22,7 @@ class BadgesTask extends Task
 {
     public function mainAction()
     {
-        echo "\n Statrt processes badges for users \n";
+        echo "\n Start processes badges for users \n";
 
         $badge = new BadgesManager();
         $badge->process();

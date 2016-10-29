@@ -247,7 +247,7 @@ class Comment extends ModelBase
         $this->userId     = $this->getDI()->getAuth()->getUserId();
     }
     /**
-     * To checking isset class, it use in function setActivityNotifications of ContrllerBase
+     * To checking isset class, it use in function setActivityNotifications of ControllerBase
      *
      * @return boolean
      */

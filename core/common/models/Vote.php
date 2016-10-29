@@ -294,7 +294,7 @@ class Vote extends ModelBase
      * @param  integer $objectId this is id of posts
      * @param  string  $object   there are some object comments, posts, postsReplay see constant the above
      * @param  string  $way      positive or negative
-     * @return boolen|array
+     * @return boolean|array
      */
     public static function vote($objectId, $object, $way)
     {

@@ -20,9 +20,9 @@ install_extension() {
     INSTALLED=$(pecl list $1 | grep 'not installed')
 
     if [ -z "${INSTALLED}" ]; then
-        printf "\n" | pecl upgrade $1
+        printf "\n" | pecl upgrade $1 &> /dev/null
     else
-        printf "\n" | pecl install $1
+        printf "\n" | pecl install $1 &> /dev/null
     fi
 
     enable_extension $1

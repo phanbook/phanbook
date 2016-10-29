@@ -17,74 +17,30 @@ use Phanbook\Models\Vote;
 use Phanbook\Models\Users;
 use Phanbook\Models\Karma;
 use Phanbook\Models\Posts;
-use Phalcon\Mvc\Controller;
 use Phalcon\Mvc\Dispatcher;
 use Phanbook\Models\Comment;
-use Phanbook\Models\ModelBase;
 use Phanbook\Models\PostsReply;
+use Phanbook\Controllers\Controller;
 use Phanbook\Frontend\Forms\CommentForm;
 use Phanbook\Models\ActivityNotifications;
-use Phalcon\Paginator\Adapter\QueryBuilder as PaginatorQueryBuilder;
-use Phalcon\Paginator\Adapter\NativeArray  as PaginatorNativeArray;
 
 /**
  * Class ControllerBase
+ *
+ * @property \Phanbook\Auth\Auth $auth
+ * @property \Phalcon\Config $config
+ * @property \Phanbook\Utils\Phanbook $phanbook
  *
  * @package Phanbook\Controllers
  */
 class ControllerBase extends Controller
 {
-    /**
-     * @var array
-     */
-    private $unsecuredRoutes = [];
-
-    /**
-     * @var bool
-     */
-    protected $jsonResponse = false;
-
-    /**
-     * @var array
-     */
-    public $jsonMessages = [];
-
-    /**
-     * @var string
-     */
-    public $currentOrder = null;
-
-    /**
-     * @var int
-     */
-    public $numberPage = 1;
 
     /**
      * @var int
      */
     public $perPage = 30;
 
-    /**
-     * Check if we need to throw a json response. For ajax calls.
-     *
-     * @return bool
-     */
-    public function isJsonResponse()
-    {
-        return $this->jsonResponse;
-    }
-
-    /**
-     * Set a flag in order to know if we need to throw a json response.
-     *
-     * @return $this
-     */
-    public function setJsonResponse()
-    {
-        $this->jsonResponse = true;
-
-        return $this;
-    }
 
     /**
      * @param Dispatcher $dispatcher
@@ -100,174 +56,22 @@ class ControllerBase extends Controller
     }
 
 
-    /**
-     * After execute route event
-     *
-     * @param Dispatcher $dispatcher
-     */
-    public function afterExecuteRoute(Dispatcher $dispatcher)
-    {
-        if ($this->request->isAjax() && $this->isJsonResponse()) {
-            $this->view->disable();
-            $this->response->setContentType('application/json', 'UTF-8');
-
-            $data = $dispatcher->getReturnedValue();
-            if (is_array($data)) {
-                $this->response->setJsonContent($data);
-            }
-            echo $this->response->getContent();
-        }
-    }
 
     public function initialize()
     {
         $this->view->setVars(
             [
-            'tab'           => $this->currentOrder,
-            'tags'          => Tags::find(),
-            'hotPosts'      => Posts::getHotPosts(5),
-            'totalPost'     => Posts::totalPost(),
-            'highestKarma'  => Users::highestKarma(),
-            'totalReply'    => PostsReply::totalReply(),
-
+                'tab'           => $this->currentOrder,
+                'tags'          => Tags::find(),
+                'hotPosts'      => Posts::getHotPosts(5),
+                'totalPost'     => Posts::totalPost(),
+                'highestKarma'  => Users::highestKarma(),
+                'totalReply'    => PostsReply::totalReply(),
             ]
         );
         if (isset($this->config->perPage)) {
             $this->perPage = $this->config->perPage;
         }
-    }
-
-
-    /**
-     * @param Dispatcher $dispatcher
-     *
-     * @return bool
-     */
-    private function isUnsecuredRoute(Dispatcher $dispatcher)
-    {
-        foreach ($this->unsecuredRoutes as $route) {
-            if ($route['controller'] == $dispatcher->getControllerName()
-                && $route['action'] == $dispatcher->getActionName()
-            ) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Set a flash message with messages from objects
-     *
-     * @param $object
-     */
-    public function displayModelErrors($object)
-    {
-        if (is_object($object) && method_exists($object, 'getMessages')) {
-            foreach ($object->getMessages() as $message) {
-                $this->flashSession->error($message);
-            }
-        } else {
-            $this->flashSession->error(t('No object found. No errors.'));
-        }
-    }
-
-
-    public function toggleAction($id)
-    {
-        $this->view->disable();
-        if ($this->toggleObject($id)) {
-            $this->flashSession->success(t('Entry status changed successfully'));
-        } else {
-            $this->flashSession->error(t('An error occurred on changing entry status'));
-        }
-
-        return $this->response->redirect($this->request->getHTTPReferer(), true);
-    }
-
-    /**
-     * Method to toggle objects
-     *
-     * @return mixed
-     */
-    private function toggleObject($id, $method = 'status')
-    {
-        $class = 'Phanbook\Models\\' . ucfirst($this->router->getControllerName());
-
-        if (!class_exists($class)) {
-            return false;
-        }
-
-        $id     = $this->filter->sanitize($id, ['int']);
-        $object = $class::findFirstById($id);
-
-        if (!is_object($object)) {
-            return false;
-        }
-        $setter = 'set' . ucfirst($method);
-        $getter = 'get' . ucfirst($method);
-
-        if (!method_exists($object, $getter) || !method_exists($object, $setter)) {
-            return false;
-        }
-
-        $value = $object->$getter() == 0 ? 1 : 0;
-        $object->$setter($value);
-
-        return $object->save();
-    }
-
-    /**
-     * Method to delete objects
-     *
-     * @return mixed
-     */
-    private function delete($id, $model = null)
-    {
-        $this->view->disable();
-
-        if (empty($model)) {
-            $class = 'Phanbook\Models\\' . ucfirst($this->router->getControllerName());
-        }
-
-        if (!class_exists($class)) {
-            return false;
-        }
-
-        if (is_array($id)) {
-            $ids    = array_map(
-                function ($key) {
-                    return (int)$key;
-                },
-                $id
-            );
-            $object = $class::find('id IN (' . implode(',', $ids) . ')');
-        } else {
-            $id     = $this->filter->sanitize($id, ['int']);
-            $object = $class::findFirstById($id);
-        }
-        if (!$object) {
-            $this->flashSession->error(t('Entry was not found'));
-
-            return $this->response->redirect($this->request->getHTTPReferer(), true);
-        }
-
-        if (!$object->delete()) {
-            foreach ($object->getMessages() as $message) {
-                $this->flashSession->error($message->getMessage());
-            }
-        } else {
-            $this->flashSession->success(t('Entry was successfully deleted'));
-        }
-
-        return $this->response->redirect($this->request->getHTTPReferer(), true);
-    }
-
-    public function deleteAction($id)
-    {
-        $this->view->disable();
-
-        return $this->delete($id);
     }
 
     /**
@@ -323,7 +127,7 @@ class ControllerBase extends Controller
                 return $this->jsonMessages;
             }
 
-            //Set karam Voting someone else's post (positive or negative) on posts reply
+            // Set karma Voting someone else's post (positive or negative) on posts reply
             $this->setPointReply($way, $user, $postReply);
         }
         $vote = Vote::vote($objectId, $object, $way);
@@ -399,72 +203,6 @@ class ControllerBase extends Controller
     }
 
     /**
-     * Attempt to determine the real file type of a file.
-     *
-     * @param string $extension Extension (eg 'jpg')
-     *
-     * @return boolean
-     */
-    public function imageCheck($extension)
-    {
-        $allowedTypes = [
-            'image/gif',
-            'image/jpg',
-            'image/png',
-            'image/bmp',
-            'image/jpeg'
-        ];
-
-        return in_array($extension, $allowedTypes);
-    }
-
-    /**
-     * Create a paginator default use adapter PaginatorQueryBuilder,
-     * show 30 rows by page starting from $page
-     *
-     * @return array
-     */
-    public function paginator($query, $adapter = null)
-    {
-        $page  = isset($_GET['page']) ? (int)$_GET['page'] : $this->numberPage;
-        $perPage  = isset($_GET['perPage']) ? (int)$_GET['perPage'] : $this->perPage;
-        $builder  = ModelBase::modelQuery($query);
-
-        if (is_null($adapter)) {
-            $paginator  = new PaginatorQueryBuilder(
-                [
-                    'builder'  => $builder,
-                    'limit'     => $perPage,
-                    'page'      => $page
-                ]
-            );
-        } else {
-            $paginator = new PaginatorNativeArray(
-                [
-                    'data'  => $builder->getQuery()->execute()->toArray(),
-                    'limit' => $perPage,
-                    'page'  => $page
-                ]
-            );
-        }
-        return $paginator;
-    }
-
-    public function indexRedirect()
-    {
-        return $this->response->redirect();
-    }
-
-    public function currentRedirect()
-    {
-        if ($url = $this->cookies->get('urlCurrent')->getValue()) {
-            $this->cookies->delete('urlCurrent');
-            return $this->response->redirect($url);
-        }
-        return $this->response->redirect($this->request->getHTTPReferer(), true);
-    }
-
-    /**
      * Set karma Voting someone else's post (positive or negative) on posts reply.
      *
      * @param string $way
@@ -477,8 +215,8 @@ class ControllerBase extends Controller
         if ($postReply->getUsersId() != $user->getId()) {
             if ($way == 'positive') {
                 if ($postReply->post->getUsersId() != $user->getId()) {
-                    $karamCount = intval(abs($user->getKarma() - $postReply->user->getKarma()) / 1000);
-                    $points = Karma::VOTE_UP_ON_MY_REPLY_ON_MY_POST + $karamCount;
+                    $karmaCount = intval(abs($user->getKarma() - $postReply->user->getKarma()) / 1000);
+                    $points = Karma::VOTE_UP_ON_MY_REPLY_ON_MY_POST + $karmaCount;
                 } else {
                     $points = Karma::VOTE_UP_ON_MY_REPLY;
                     $points += intval(abs($user->getKarma() - $postReply->user->getKarma()) / 1000);
@@ -487,8 +225,8 @@ class ControllerBase extends Controller
                 $user->increaseKarma(Karma::VOTE_UP_ON_SOMEONE_ELSE_REPLY);
             } else {
                 if ($postReply->post->getUsersId() != $user->getId()) {
-                    $karamCount = intval(abs($user->getKarma() - $postReply->user->getKarma()) / 1000);
-                    $points = Karma::VOTE_DOWN_ON_MY_REPLY_ON_MY_POST + $karamCount;
+                    $karmaCount = intval(abs($user->getKarma() - $postReply->user->getKarma()) / 1000);
+                    $points = Karma::VOTE_DOWN_ON_MY_REPLY_ON_MY_POST + $karmaCount;
                 } else {
                     $points = Karma::VOTE_DOWN_ON_MY_REPLY;
                     $points += intval(abs($user->getKarma() - $postReply->user->getKarma()) / 1000);
@@ -545,7 +283,7 @@ class ControllerBase extends Controller
                 }
             }
         } else {
-            $this->saveLoger('todo setPointReply');
+            $this->saveLogger('todo setPointReply');
         }
     }
 
@@ -582,38 +320,18 @@ class ControllerBase extends Controller
         }
 
         if (!$activity->save()) {
-            $this->saveLoger('Save fail, I am on here' . __LINE__);
+            $this->saveLogger('Save fail, I am on here' . __LINE__);
         }
     }
 
     /**
-     * The function sending log for nginx or apache, it will to analytic later
-     *
-     * @param $e
-     */
-    public function saveLoger($e)
-    {
-        $logger = $this->logger;
-        if (is_object($e)) {
-            $logger->error($e[0]->getMessage());
-        }
-        if (is_array($e)) {
-            foreach ($e as $message) {
-                $logger->error($message->getMessage());
-            }
-        }
-        if (is_string($e)) {
-            $logger->error($e);
-        }
-    }
-    /**
      * Transfer values from the controller to views
      *
-     * @param array $parmas
+     * @param array $params
      */
-    public function setViewVariable($parmas)
+    public function setViewVariable($params)
     {
-        foreach ($parmas as $key => $value) {
+        foreach ($params as $key => $value) {
             $this->view->setVar($key, $value);
         }
     }
