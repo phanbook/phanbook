@@ -10,6 +10,7 @@ $messages = [
     'Ask Question' => 'Задать вопрос',
     // B
     'Badges' => 'Знаки',
+    'Birthday' => 'День рождения',
     'By Phanbook' => 'Разработано Phanbook',
     // C
     'Change Password' => 'Изменить пароль',
@@ -21,7 +22,9 @@ $messages = [
     'Edit Profile' => 'Изменить профиль',
     'Edit Setting' => 'Изменить настройки',
     'Edit Theme' => 'Изменить тему',
+    'E-Mail' => 'E-Mail',
     // F
+    'First Name' => 'Имя',
     'flag_question' => 'Тревога',
     'Follow along' => 'Следите за нами',
     'Followers' => 'Подписчиков',
@@ -40,6 +43,7 @@ $messages = [
     'Join Now' => 'Присоединиться',
     // K
     // L
+    'Last Name' => 'Фамилия',
     'Login Area' => 'Вход',
     'logo' => 'логотип',
     'Logout' => 'Выход',
@@ -72,11 +76,13 @@ $messages = [
     'Tags' => 'Метки',
     'To RSS Feed' => 'На RSS рассылку',
     // U
+    'Username' => 'Логин',
     'Users' => 'Участники',
     // V
     'Views' => 'Просмотры',
     // W
     'We are Phanbook.' => 'Мы &mdash; Phanbook.',
+    'Website' => 'Сайт',
     'Week' => 'За неделю',
     'Welcome!' => 'Добро пожаловать!',
     'Who We Are' => 'Кто мы',
