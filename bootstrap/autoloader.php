@@ -34,6 +34,7 @@ require ROOT_DIR . '/vendor/autoload.php';
         'Phanbook\Cli\Tasks' => ROOT_DIR . '/core/modules/cli/tasks/',
         'Phanbook\Validators' => ROOT_DIR . '/core/common/validators/',
         'Phanbook\Controllers' => ROOT_DIR . '/core/common/controllers/',
+        'Phanbook\Common\Library' => ROOT_DIR . '/core/common/library/',
         'Phanbook\Common\Exceptions' => ROOT_DIR . '/core/common/exceptions/'
     ])
     ->registerFiles([

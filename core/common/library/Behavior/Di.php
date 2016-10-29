@@ -19,8 +19,8 @@ use Phalcon\DiInterface;
  * \Phanbook\Common\Library\Behavior\Di
  *
  * Dependency Injection Trait.
- * It should be used for classes which do not extend DiInterface
- * or do not implement Injectable interface.
+ * It should be used for classes which do not extend Injectable
+ * and do not implement DiInterface interface.
  *
  * <code>
  * class A {
