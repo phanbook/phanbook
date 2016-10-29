@@ -1,6 +1,8 @@
 <div class="col-md-9">
     <div class="page-content">
-        <div class="boxedtitle page-title"><h2>Edit Profile</h2></div>
+        <div class="boxedtitle page-title">
+            <h2 class="text-normal">{{ t('Edit Profile') }}</h2>
+        </div>
         <div class="form-style form-style-4">
         {{ form( this.view.getControllerName() | lower ~ '/profile', 'enctype': 'multipart/form-data') }}
         {% if object is defined %}
@@ -8,23 +10,23 @@
         {% endif %}
              <div class="form-inputs clearfix">
                 <p>
-                    <label>First Name</label>
+                    <label>{{ t('First Name') }}</label>
                     {{ form.render('firstname') }}
                 </p>
                 <p>
-                    <label>Last Name</label>
+                    <label>{{ t('Last Name') }}</label>
                     {{ form.render('lastname') }}
                 </p>
                 <p>
-                    <label class="required">E-Mail<span>*</span></label>
+                    <label class="required">{{ t('E-Mail') }}<span>*</span></label>
                     {{ form.render('email') }}
                 </p>
                 <p>
-                    <label>Website</label>
+                    <label>{{ t('Website') }}</label>
                     <input type="text">
                 </p>
                 <p>
-                    <label class="required">Username<span>*</span></label>
+                    <label class="required">{{ t('Username') }}<span>*</span></label>
                     {{ form.render('username') }}
                 </p>
                 <p>

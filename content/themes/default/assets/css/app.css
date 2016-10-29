@@ -2347,6 +2347,12 @@ span.date i,span.comment i {
     margin: 0;
     text-transform: capitalize;
 }
+
+.text-normal {
+    /* Not all languages use capital letters for titles */
+    text-transform: none!important;
+}
+
 .question .boxedtitle h2,.post-meta .boxedtitle h2,.post-meta .boxedtitle h3,.single-post .boxedtitle h2,.single-question-title h2 {
     padding-bottom: 1px;
     margin-bottom: 1px;
