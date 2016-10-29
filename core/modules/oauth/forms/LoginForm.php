@@ -14,70 +14,56 @@ namespace Phanbook\Oauth\Forms;
 
 use Phalcon\Forms\Form;
 use Phalcon\Forms\Element\Text;
-use Phalcon\Forms\Element\Hidden;
-use Phalcon\Forms\Element\Password;
-use Phalcon\Forms\Element\Submit;
 use Phalcon\Forms\Element\Check;
+use Phalcon\Forms\Element\Submit;
+use Phalcon\Forms\Element\Password;
 use Phalcon\Validation\Validator\PresenceOf;
-use Phalcon\Validation\Validator\Email;
-use Phalcon\Validation\Validator\Identical;
 
+/**
+ * \Phanbook\Oauth\Forms\LoginForm
+ *
+ * @package Phanbook\Oauth\Forms
+ */
 class LoginForm extends Form
 {
     public function initialize()
     {
-        //Email
+        // Email
         $email = new Text(
             'email',
             [
-            'class'       => 'text-box',
-            'required'    => 'true',
-            'autofocus'   => 'true',
-            'placeholder' => 'Username or Email'
+                'class'       => 'text-box',
+                'required'    => true,
+                'autofocus'   => true,
+                'placeholder' => t('Username or Email'),
             ]
         );
-        $email->addValidators(
-            [
-                new PresenceOf(
-                    [
-                    'message' => t('The e-mail is required')
-                    ]
-                )
-            ]
-        );
+        $email->addValidator(new PresenceOf(['message' => t('The Username or E-Mail is required')]));
         $this->add($email);
 
-        //Password
+        // Password
         $password = new Password(
             'password',
             [
-            'placeholder' => t('Password'),
-            'class'       => 'text-box',
-            'required'    => 'true'
+                'placeholder' => t('Password'),
+                'class'       => 'text-box',
+                'required'    => true,
             ]
         );
-        $password->addValidator(
-            new PresenceOf(
-                [
-                'message' => t('The password is required')
-                ]
-            )
-        );
+        $password->addValidator(new PresenceOf(['message' => t('The password is required')]));
         $this->add($password);
 
-        //Remember me
+        // Remember me
         $remember = new Check(
             'remember',
             [
-                'value'     => 'yes',
-                'checked'   => 'checked'
+                'value'   => 'yes',
+                'checked' => 'checked'
             ]
         );
         $this->add($remember);
 
-
-
-        //Submit
+        // Submit
         $this->add(
             new Submit(
                 'submit',
@@ -90,7 +76,8 @@ class LoginForm extends Form
     }
 
     /**
-     * Prints messages for a specific element
+     * Prints messages for a specific element.
+     * @param string $name
      */
     public function messages($name)
     {
