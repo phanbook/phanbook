@@ -2,15 +2,18 @@
 
 $messages = [
     // A
-    'A non-profit, open source Q&A site, discussion and blogging platform.' => 'Некоммерческий, открытый проект вопрсосв и ответов, обсуждений и блогинг платформа. ',
+    'A non-profit, open source Q&A site, discussion and blogging platform.' => 'Некоммерческий, открытый проект вопрсосв и ответов, обсуждений и блогинг платформа.',
     'About Us' => 'О нас',
+    'About Yourself' => 'Обо мне',
     'Answers' => 'Ответы',
     'Ask any question and you be sure find your answer...' => 'Задайте любой вопрос и вы обязательно найдете ответ на него...',
     'Ask Now' => 'Задать вопрос',
     'Ask Question' => 'Задать вопрос',
+    'Attempt to access non-existent user.' => 'Попытка получить доступ к несуществующему пользователю.',
     // B
     'Badges' => 'Знаки',
     'Birthday' => 'День рождения',
+    'Browse' => 'Обзор',
     'By Phanbook' => 'Разработано Phanbook',
     // C
     'Change Password' => 'Изменить пароль',
@@ -29,6 +32,8 @@ $messages = [
     'Follow along' => 'Следите за нами',
     'Followers' => 'Подписчиков',
     // G
+    'GitHub' => 'GitHub',
+    'GitHub profile' => 'Аккаунт на GitHub',
     'GitHub Project' => 'Мы на GitHub',
     // H
     'Highest points' => 'Самые популярные',
@@ -57,6 +62,8 @@ $messages = [
     // P
     'People like it' => 'Людей любят нас',
     'Points' => 'Репутация',
+    'Profile Picture' => 'Фотография',
+    'Profile successfully updated.' => 'Профиль успешно обновлен.',
     // Q
     'Questions' => 'Вопросы',
     'Quick Links' => 'Быстрые ссылки',
@@ -75,7 +82,10 @@ $messages = [
     // T
     'Tags' => 'Метки',
     'To RSS Feed' => 'На RSS рассылку',
+    'Twitter' => 'Twitter',
+    'Twitter profile' => 'Аккаунт в Twitter',
     // U
+    'Update' => 'Обновить',
     'Username' => 'Логин',
     'Users' => 'Участники',
     // V
