@@ -58,7 +58,8 @@ class LoginForm extends Form
             'remember',
             [
                 'value'   => 'yes',
-                'checked' => 'checked'
+                'checked' => 'checked',
+                'id'      => 'remember-me',
             ]
         );
         $this->add($remember);

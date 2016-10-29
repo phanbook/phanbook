@@ -42,6 +42,7 @@ env:
     - PATH="$PATH:~/bin"
     - DISPLAY=":99.0"
     - PHPIZE_BIN="$(which phpize 2> /dev/null || which phpize5 2> /dev/null)"
+    - APPLICATION_ENV=testing
   matrix:
     - PHALCON_VERSION="3.0.x"
     - PHALCON_VERSION="v3.0.0"
