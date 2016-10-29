@@ -536,7 +536,7 @@ class Controller extends ControllerPhalcon
             }
         }
 
-        $paginator = new Paginator(
+        $paginator = new PaginatorNativeArray(
             [
                 'data'  => $collections,
                 'limit' => (empty($this->gridFilters[$filterKey]['perPage']) ?
