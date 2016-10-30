@@ -33,6 +33,11 @@ abstract class Service implements ServiceInterface
     }
 
     /**
+     * @var ServiceInterface[]
+     */
+    private static $services = [];
+
+    /**
      * Service constructor.
      *
      * @param DiInterface|null $di
@@ -53,6 +58,11 @@ abstract class Service implements ServiceInterface
     public static function getService($name)
     {
         $className = "\\Phanbook\\Models\\Services\\Service\\{$name}";
+
+        if (!empty(self::$services[$className])) {
+            return self::$services[$className];
+        }
+
         if (!class_exists($className)) {
             throw new InvalidServiceException(
                 "Service class '{$className}' doesn't exists."
@@ -66,6 +76,8 @@ abstract class Service implements ServiceInterface
                 "Service {$className} must implement " . ServiceInterface::class . '.'
             );
         }
+
+        self::$services[$className] = $service;
 
         return $service;
     }

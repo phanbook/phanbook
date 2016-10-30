@@ -128,7 +128,9 @@ class Post extends Service
             'ipaddress' => $this->resolveClientAddress($ipAddress),
         ]);
 
-        if (!$view->save()) {
+        if ($view->save()) {
+            Repository::getPostViews()->saveEntity($view);
+        } else {
             foreach ($post->getMessages() as $message) {
                 $this->logError($message);
             }
@@ -138,7 +140,9 @@ class Post extends Service
 
         $this->increaseAuthorKarmaByVisit($id, $visitorId);
 
-        if (!$post->save()) {
+        if ($post->save()) {
+            Repository::getPost()->saveEntity($post);
+        } else {
             foreach ($post->getMessages() as $message) {
                 $this->logError($message);
             }
