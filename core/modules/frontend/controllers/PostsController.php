@@ -13,9 +13,9 @@
 namespace Phanbook\Frontend\Controllers;
 
 use Phanbook\Utils\Slug;
+use Phanbook\Models\Vote;
 use Phanbook\Utils\Editor;
 use Phanbook\Models\Posts;
-use Phanbook\Models\Vote;
 use Phanbook\Models\Karma;
 use Phanbook\Models\Users;
 use Phanbook\Models\ModelBase;
@@ -26,7 +26,9 @@ use Phanbook\Frontend\Forms\CommentForm;
 use Phanbook\Frontend\Forms\QuestionsForm;
 
 /**
- * Class QuestionsController.
+ * \Phanbook\Frontend\Controllers\PostsController
+ *
+ * @package Phanbook\Frontend\Controllers
  */
 class PostsController extends ControllerBase
 {
@@ -35,7 +37,6 @@ class PostsController extends ControllerBase
      */
     public function initialize()
     {
-
         parent::initialize();
 
         $editor = new Editor();
@@ -330,7 +331,7 @@ class PostsController extends ControllerBase
      * @param int $id The Post id
      * @param string $slug The Post slug
      *
-     * @return \Phalcon\Http\ResponseInterface
+     * @return \Phalcon\Mvc\View|void
      */
     public function viewAction($id, $slug)
     {
@@ -338,18 +339,30 @@ class PostsController extends ControllerBase
         $userId = $this->auth->getUserId();
 
         if (!$object = Posts::findFirstById($id)) {
-            $this->flashSession->error(t("Posts doesn't exist."));
-            return $this->indexRedirect();
+            $this->response->setStatusCode(404);
+            $this->flashSession->error(t("Sorry! We can't seem to find the page you're looking for."));
+            return $this->dispatcher->forward([
+                'controller' => 'posts',
+                'action'     => 'index',
+            ]);
         }
 
         if ($object->getDeleted()) {
-            $this->flashSession->error(t('The Post is deleted.'));
-            return $this->indexRedirect();
+            $this->response->setStatusCode(404);
+            $this->flashSession->error(t("Sorry! We can't seem to find the page you're looking for."));
+            return $this->dispatcher->forward([
+                'controller' => 'posts',
+                'action'     => 'index',
+            ]);
         }
 
         if (!$object->isPublish()) {
-            $this->flashSession->error(t('The Post have not publish.'));
-            return $this->indexRedirect();
+            $this->response->setStatusCode(404);
+            $this->flashSession->error(t("Sorry! We can't seem to find the page you're looking for."));
+            return $this->dispatcher->forward([
+                'controller' => 'posts',
+                'action'     => 'index',
+            ]);
         }
 
         $ipAddress = $this->request->getClientAddress();
@@ -408,6 +421,7 @@ class PostsController extends ControllerBase
         $this->tag->setTitle($this->escaper->escapeHtml($object->getTitle()));
         return $this->view->pick('single');
     }
+
     protected function addAssetsSelect()
     {
         $this->assets->addCss('core/assets/js/select/select2.min.css');
