@@ -19,8 +19,8 @@ use Phanbook\Models\Posts;
 use Phanbook\Models\Karma;
 use Phanbook\Models\Users;
 use Phanbook\Models\ModelBase;
-use Phanbook\Models\PostsViews;
 use Phanbook\Models\PostsHistory;
+use Phanbook\Models\Services\Service;
 use Phanbook\Frontend\Forms\ReplyForm;
 use Phanbook\Frontend\Forms\CommentForm;
 use Phanbook\Frontend\Forms\QuestionsForm;
@@ -326,100 +326,55 @@ class PostsController extends ControllerBase
     }
 
     /**
-     * Displays a post and its comments
+     * Displays a Post and its comments.
      *
-     * @param int $id The Post id
+     * @param int    $id   The Post ID
      * @param string $slug The Post slug
-     *
-     * @return \Phalcon\Mvc\View|void
      */
     public function viewAction($id, $slug)
     {
-        $id     = (int) $id;
-        $userId = $this->auth->getUserId();
+        $postService = new Service\Post();
+        $userService = new Service\User();
 
-        if (!$object = Posts::findFirstById($id)) {
+        $post = $postService->findFirstById($id);
+
+        if (!$post || !$postService->isPublished($post)) {
             $this->response->setStatusCode(404);
             $this->flashSession->error(t("Sorry! We can't seem to find the page you're looking for."));
-            return $this->dispatcher->forward([
+
+            $this->dispatcher->forward([
                 'controller' => 'posts',
                 'action'     => 'index',
             ]);
+            return;
         }
 
-        if ($object->getDeleted()) {
-            $this->response->setStatusCode(404);
-            $this->flashSession->error(t("Sorry! We can't seem to find the page you're looking for."));
-            return $this->dispatcher->forward([
-                'controller' => 'posts',
-                'action'     => 'index',
-            ]);
-        }
+        $visitor = $userService->findFirstById($this->auth->getUserId());
 
-        if (!$object->isPublish()) {
-            $this->response->setStatusCode(404);
-            $this->flashSession->error(t("Sorry! We can't seem to find the page you're looking for."));
-            return $this->dispatcher->forward([
-                'controller' => 'posts',
-                'action'     => 'index',
-            ]);
-        }
+        if (!$hasView = $postService->hasViewsByIpAddress($post)) {
+            $postService->increaseNumberViews($post);
 
-        $ipAddress = $this->request->getClientAddress();
-        $parameters = [
-            'postsId = ?0 AND ipaddress = ?1',
-            'bind' => [$id, $ipAddress]
-        ];
-        $viewed = PostsViews::count($parameters);
-
-        // A view is stored by ipaddress
-        // @todo: Move this logic to separated method
-        if (!$viewed && $userId) {
-            //Increase the number of views in the post
-            $object->setNumberViews($object->getNumberViews() + 1);
-            if ($object->getUsersId() != $userId) {
-                $object->user->increaseKarma(Karma::VISIT_ON_MY_POST);
-                if ($userId > 0) {
-                    $user = Users::findFirstById($userId);
-                    if ($user) {
-                        if ($user->getModerator() == 'Y') {
-                            $user->increaseKarma(Karma::MODERATE_VISIT_POST);
-                        } else {
-                            $user->increaseKarma(Karma::VISIT_POST);
-                        }
-                        //send log to server
-                        if (!$user->save()) {
-                            $this->saveLogger($user->getMessages());
-                        }
-                    }
-                }
-            }
-            if (!$object->save()) {
-                $this->saveLogger($object->getMessages());
-            }
-            $postView = new PostsViews();
-            $postView->setPostsId($id);
-            $postView->setIpaddress($ipAddress);
-            if (!$postView->save()) {
-                $this->saveLogger($postView->getMessages());
+            if ($visitor && !$postService->isAuthorVisitor($post)) {
+                $userService->increaseAuthorKarmaByVisit($visitor);
             }
         }
 
         $this->view->setVars(
             [
-                'post'          => $object,
-                'form'          => new ReplyForm(),
-                'votes'         => $object->getVotes($id, Vote::OBJECT_POSTS),
-                'postsReply'    => $object->getPostsWithVotes($id),
-                'commentForm'   => new CommentForm(),
-                'userPosts'     => $object->user,
-                'type'          => Posts::POST_QUESTIONS,
-                'postRelated'   => Posts::postRelated($object)
+                'post'        => $post,
+                'form'        => new ReplyForm(),
+                'votes'       => $post->getVotes($id, Vote::OBJECT_POSTS),
+                'postsReply'  => $post->getPostsWithVotes($id),
+                'commentForm' => new CommentForm(),
+                'userPosts'   => $post->user,
+                'type'        => Posts::POST_QUESTIONS,
+                'postRelated' => Posts::postRelated($post)
             ]
         );
 
-        $this->tag->setTitle($this->escaper->escapeHtml($object->getTitle()));
-        return $this->view->pick('single');
+        $this->tag->setTitle($this->escaper->escapeHtml($post->getTitle()));
+
+        $this->view->pick('single');
     }
 
     protected function addAssetsSelect()
