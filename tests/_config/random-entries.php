@@ -83,7 +83,7 @@ for ($i = 0; $i <= 50; $i++) {
 }
 $database->commit();
 
-$types   = [Posts::POST_ALL, Posts::POST_BLOG, Posts::POST_HACKERNEWS, Posts::POST_PAGE, Posts::POST_QUESTIONS];
+$types   = [Posts::POST_BLOG, Posts::POST_HACKERNEWS, Posts::POST_PAGE, Posts::POST_QUESTIONS];
 $userIds = array_column(Users::find(['columns' => 'id'])->toArray(), 'id');
 
 $database->begin();
