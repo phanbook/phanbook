@@ -12,7 +12,6 @@
  */
 namespace Phanbook\Models\Repositories\Repository;
 
-use Phanbook\Models\Karma;
 use Phanbook\Models\Users as Entity;
 use Phanbook\Models\Repositories\Repository;
 
@@ -27,61 +26,20 @@ class User extends Repository
      * @param  int $id The User ID.
      * @return Entity|null
      */
-    public function findFirstById($id)
+    public function findById($id)
     {
+        if (!$id) {
+            return null;
+        }
+
         if ($this->has($id)) {
             return $this->get($id);
         }
 
         if ($entity = Entity::findFirstById((int) $id) ?: null) {
-            $this->add($id, $entity);
+            $this->addEntity($id, $entity);
         }
 
         return $entity;
-    }
-
-    /**
-     * Checks whether the User is moderator.
-     *
-     * @param  Entity $user The User.
-     * @return bool
-     */
-    public function isModerator(Entity $user)
-    {
-        return $user->getModerator() == 'Y';
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @param  array  $data The Entity fields.
-     * @return Entity
-     */
-    public function create(array $data = [])
-    {
-        return new Entity($data);
-    }
-
-    /**
-     * Increase User karma.
-     *
-     * @param  Entity $user he User Entity.
-     * @return $this
-     */
-    public function increaseAuthorKarmaByVisit(Entity $user)
-    {
-        if ($this->isModerator($user)) {
-            $user->increaseKarma(Karma::MODERATE_VISIT_POST);
-        } else {
-            $user->increaseKarma(Karma::VISIT_POST);
-        }
-
-        if (!$user->save()) {
-            foreach ($user->getMessages() as $message) {
-                $this->logError($message);
-            }
-        }
-
-        return $this;
     }
 }

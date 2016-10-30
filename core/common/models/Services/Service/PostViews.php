@@ -10,36 +10,27 @@
  * @since   1.0.0
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
-namespace Phanbook\Models\Repositories\Repository;
+namespace Phanbook\Models\Services\Service;
 
+use Phanbook\Models\Services\Service;
 use Phanbook\Models\PostsViews as Entity;
 use Phanbook\Models\Repositories\Repository;
 
 /**
- * \Phanbook\Models\Repositories\Repository\PostViews
+ * \Phanbook\Models\Services\Service\PostViews
  *
- * @package Phanbook\Models\Repositories\Repository
+ * @package Phanbook\Models\Services\Service
  */
-class PostViews extends Repository
+class PostViews extends Service
 {
     /**
+     * Finds Entity by PK.
+     *
      * @param  int $id The PostViews ID.
      * @return Entity|null
      */
     public function findById($id)
     {
-        if (!$id) {
-            return null;
-        }
-
-        if ($this->has($id)) {
-            return $this->get($id);
-        }
-
-        if ($entity = Entity::findFirstById((int) $id) ?: null) {
-            $this->addEntity($id, $entity);
-        }
-
-        return $entity;
+        return Repository::getPostViews()->findById($id);
     }
 }

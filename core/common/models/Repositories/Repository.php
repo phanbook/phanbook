@@ -13,13 +13,11 @@
 namespace Phanbook\Models\Repositories;
 
 
-use Phalcon\DiInterface;
+
 use Phalcon\Mvc\ModelInterface;
-use Phanbook\Common\Library\Behavior\Di as DiBehavior;
-use Phanbook\Models\Repositories\Exceptions\LogicException;
+use Phanbook\Models\Repositories\Exceptions;
+
 use Phanbook\Models\Repositories\Repository\RepositoryInterface;
-use Phanbook\Models\Repositories\Exceptions\EntityNotFoundException;
-use Phanbook\Models\Repositories\Exceptions\InvalidRepositoryException;
 
 /**
  * \Phanbook\Models\Repositories\Repository
@@ -37,21 +35,6 @@ abstract class Repository implements RepositoryInterface
      * @var ModelInterface[]
      */
     protected $data = [];
-
-    use DiBehavior {
-        DiBehavior::__construct as protected injectDi;
-    }
-
-    /**
-     * Repository constructor.
-     *
-     * @param DiInterface|null $di
-     */
-    public function __construct(DiInterface $di = null)
-    {
-        $this->injectDi($di);
-    }
-
 
     /**
      * {@inheritdoc}
@@ -77,15 +60,16 @@ abstract class Repository implements RepositoryInterface
     /**
      * {@inheritdoc}
      *
-     * @param mixed          $id
-     * @param ModelInterface $entity
-     *
+     * @param  mixed          $id
+     * @param  ModelInterface $entity
      * @return $this
+     *
+     * @throws Exceptions\LogicException
      */
-    public function add($id, ModelInterface $entity)
+    public function addEntity($id, ModelInterface $entity)
     {
         if (!$this->has($id)) {
-            throw new LogicException(
+            throw new Exceptions\LogicException(
                 sprintf(
                     'An entity with id "%s" already exists.',
                     is_scalar($id) ? $id : json_encode($id)
@@ -99,17 +83,32 @@ abstract class Repository implements RepositoryInterface
     }
 
     /**
+     * {@inheritdoc}
+     *
+     * @param  ModelInterface[] $entities
+     * @return RepositoryInterface
+     */
+    public function addEntities(array $entities)
+    {
+        foreach ($entities as $id => $entity) {
+            $this->addEntity($id, $entity);
+        }
+
+        return $this;
+    }
+
+    /**
      * Get Entity from the collection.
      *
      * @param  mixed $id
      * @return mixed
      *
-     * @throws EntityNotFoundException
+     * @throws Exceptions\EntityNotFoundException
      */
     public function get($id)
     {
         if (!$this->has($id)) {
-            throw new EntityNotFoundException(
+            throw new Exceptions\EntityNotFoundException(
                 sprintf(
                     'No entity found for ID %d',
                     is_scalar($id) ? $id : json_encode($id)
@@ -121,18 +120,28 @@ abstract class Repository implements RepositoryInterface
     }
 
     /**
+     * {@inheritdoc}
+     *
+     * @return ModelInterface[]
+     */
+    public function getAll()
+    {
+        return $this->data;
+    }
+
+    /**
      * Get concrete Entity repository.
      *
-     * @param string $name The repository class name.
-     *
+     * @param  string $name The repository class name.
      * @return RepositoryInterface
-     * @throws InvalidRepositoryException
+     *
+     * @throws Exceptions\InvalidRepositoryException
      */
     public static function getRepository($name)
     {
         $className = "\\Phanbook\\Models\\Repositories\\Repository\\{$name}";
         if (!class_exists($className)) {
-            throw new InvalidRepositoryException(
+            throw new Exceptions\InvalidRepositoryException(
                 "Repository class '{$className}' doesn't exists."
             );
         }
@@ -140,7 +149,7 @@ abstract class Repository implements RepositoryInterface
         $repository = new $className();
 
         if (!$repository instanceof RepositoryInterface) {
-            throw new InvalidRepositoryException(
+            throw new Exceptions\InvalidRepositoryException(
                 "Repository {$className} must implement " . RepositoryInterface::class . '.'
             );
         }
@@ -155,19 +164,10 @@ abstract class Repository implements RepositoryInterface
      * @param  array  $parameters
      * @return RepositoryInterface
      *
-     * @throws InvalidRepositoryException
+     * @throws Exceptions\InvalidRepositoryException
      */
     public static function __callStatic($method, $parameters)
     {
         return self::getRepository(substr($method, 3));
-    }
-
-    protected function logError($message)
-    {
-        if (!$this->getDI()->has('logger')) {
-            return;
-        }
-
-        $this->getDI()->getShared('logger')->error((string) $message);
     }
 }

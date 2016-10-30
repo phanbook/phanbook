@@ -28,15 +28,7 @@ interface RepositoryInterface extends Countable
      * @param  int $id Entity Primary Key
      * @return ModelInterface|null
      */
-    public function findFirstById($id);
-
-    /**
-     * Creates new Entity.
-     *
-     * @param  array  $data The Entity fields.
-     * @return ModelInterface
-     */
-    public function create(array $data = []);
+    public function findById($id);
 
     /**
      * Find Entity in the collection.
@@ -61,7 +53,15 @@ interface RepositoryInterface extends Countable
      *
      * @return RepositoryInterface
      */
-    public function add($id, ModelInterface $entity);
+    public function addEntity($id, ModelInterface $entity);
+
+    /**
+     * Add entities to the collection.
+     *
+     * @param  ModelInterface[] $entities
+     * @return RepositoryInterface
+     */
+    public function addEntities(array $entities);
 
     /**
      * Get Entity from the collection.
@@ -70,4 +70,11 @@ interface RepositoryInterface extends Countable
      * @return ModelInterface
      */
     public function get($id);
+
+    /**
+     * Get all entities.
+     *
+     * @return ModelInterface[]
+     */
+    public function getAll();
 }
