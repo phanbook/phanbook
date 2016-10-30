@@ -37,7 +37,7 @@ class Post extends Repository
         }
 
         if ($entity = Entity::findFirstById((int) $id) ?: null) {
-            $this->addEntity($id, $entity);
+            $this->saveEntity($entity);
         }
 
         return $entity;

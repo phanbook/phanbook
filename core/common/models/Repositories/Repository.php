@@ -12,11 +12,10 @@
  */
 namespace Phanbook\Models\Repositories;
 
-
-
+use Phalcon\DiInterface;
 use Phalcon\Mvc\ModelInterface;
 use Phanbook\Models\Repositories\Exceptions;
-
+use Phanbook\Common\Library\Behavior\Di as DiBehavior;
 use Phanbook\Models\Repositories\Repository\RepositoryInterface;
 
 /**
@@ -28,8 +27,27 @@ use Phanbook\Models\Repositories\Repository\RepositoryInterface;
  *
  * @package Phanbook\Models\Repositories
  */
-abstract class Repository implements RepositoryInterface
+abstract class Repository implements RepositoryInterface, ObjectIdentifier
 {
+    use DiBehavior {
+        DiBehavior::__construct as protected injectDi;
+    }
+
+    /**
+     * @var RepositoryInterface[]
+     */
+    private static $repositories = [];
+
+    /**
+     * Repository constructor.
+     *
+     * @param DiInterface|null $di
+     */
+    public function __construct(DiInterface $di = null)
+    {
+        $this->injectDi($di);
+    }
+
     /**
      * The Posts collection.
      * @var ModelInterface[]
@@ -60,22 +78,12 @@ abstract class Repository implements RepositoryInterface
     /**
      * {@inheritdoc}
      *
-     * @param  mixed          $id
      * @param  ModelInterface $entity
      * @return $this
-     *
-     * @throws Exceptions\LogicException
      */
-    public function addEntity($id, ModelInterface $entity)
+    public function saveEntity(ModelInterface $entity)
     {
-        if (!$this->has($id)) {
-            throw new Exceptions\LogicException(
-                sprintf(
-                    'An entity with id "%s" already exists.',
-                    is_scalar($id) ? $id : json_encode($id)
-                )
-            );
-        }
+        $id = $this->getIdentity($entity);
 
         $this->data[$id] = $entity;
 
@@ -88,11 +96,25 @@ abstract class Repository implements RepositoryInterface
      * @param  ModelInterface[] $entities
      * @return RepositoryInterface
      */
-    public function addEntities(array $entities)
+    public function saveEntities(array $entities)
     {
-        foreach ($entities as $id => $entity) {
-            $this->addEntity($id, $entity);
+        foreach ($entities as $entity) {
+            $this->saveEntity($entity);
         }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param ModelInterface $entity
+     * @return $this
+     */
+    public function removeEntity(ModelInterface $entity)
+    {
+        $id = $this->getIdentity($entity);
+        unset($this->data[$id]);
 
         return $this;
     }
@@ -130,6 +152,18 @@ abstract class Repository implements RepositoryInterface
     }
 
     /**
+     * {@inheritdoc}
+     *
+     * @return $this
+     */
+    public function clear()
+    {
+        $this->data = [];
+
+        return $this;
+    }
+
+    /**
      * Get concrete Entity repository.
      *
      * @param  string $name The repository class name.
@@ -140,6 +174,11 @@ abstract class Repository implements RepositoryInterface
     public static function getRepository($name)
     {
         $className = "\\Phanbook\\Models\\Repositories\\Repository\\{$name}";
+
+        if (!empty(self::$repositories[$className])) {
+            return self::$repositories[$className];
+        }
+
         if (!class_exists($className)) {
             throw new Exceptions\InvalidRepositoryException(
                 "Repository class '{$className}' doesn't exists."
@@ -153,6 +192,8 @@ abstract class Repository implements RepositoryInterface
                 "Repository {$className} must implement " . RepositoryInterface::class . '.'
             );
         }
+
+        self::$repositories[$className] = $repository;
 
         return $repository;
     }
@@ -169,5 +210,39 @@ abstract class Repository implements RepositoryInterface
     public static function __callStatic($method, $parameters)
     {
         return self::getRepository(substr($method, 3));
+    }
+
+    /**
+     * Get Entity Identity.
+     *
+     * @param  ModelInterface $entity
+     * @return mixed
+     */
+    public function getIdentity(ModelInterface $entity)
+    {
+        if (property_exists($entity, 'id')) {
+            return $entity->id;
+        }
+
+        if (method_exists($entity, 'getId')) {
+            return $entity->getId();
+        }
+
+        if (!$this->getDI()->has('modelsMetadata')) {
+            $modelsMetadata = $this->getDI()->getShared('modelsMetadata');
+        } else {
+            $modelsMetadata = $entity->getModelsMetaData();
+        }
+
+        $primaryKeys = $modelsMetadata->getPrimaryKeyAttributes($entity);
+
+        switch (count($primaryKeys)) {
+            case 0:
+                return null;
+            case 1:
+                return $entity->{$primaryKeys[0]};
+            default:
+                return array_intersect_key(get_object_vars($entity), array_flip($primaryKeys));
+        }
     }
 }

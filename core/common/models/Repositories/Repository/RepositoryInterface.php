@@ -48,12 +48,11 @@ interface RepositoryInterface extends Countable
     /**
      * Add entity to the collection.
      *
-     * @param mixed          $id
      * @param ModelInterface $entity
      *
      * @return RepositoryInterface
      */
-    public function addEntity($id, ModelInterface $entity);
+    public function saveEntity(ModelInterface $entity);
 
     /**
      * Add entities to the collection.
@@ -61,7 +60,15 @@ interface RepositoryInterface extends Countable
      * @param  ModelInterface[] $entities
      * @return RepositoryInterface
      */
-    public function addEntities(array $entities);
+    public function saveEntities(array $entities);
+
+    /**
+     * Removes Entity.
+     *
+     * @param ModelInterface $entity
+     * @return RepositoryInterface
+     */
+    public function removeEntity(ModelInterface $entity);
 
     /**
      * Get Entity from the collection.
@@ -77,4 +84,11 @@ interface RepositoryInterface extends Countable
      * @return ModelInterface[]
      */
     public function getAll();
+
+    /**
+     * Clear Entity collection.
+     *
+     * @return RepositoryInterface
+     */
+    public function clear();
 }
