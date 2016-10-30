@@ -26,6 +26,7 @@ use Phalcon\Mvc\Model\Behavior\SoftDelete;
  * @method static Posts|false findFirstById(int $id)
  * @method static int countByUsersId(int $id)
  * @method Simple getPostview(array $parameters = null)
+ * @method Users getUser(array $parameters = null)
  *
  * @package Phanbook\Models
  */
