@@ -20,5 +20,4 @@ namespace Phanbook\Models\Repositories\Exceptions;
  */
 class LogicException extends \LogicException
 {
-
 }

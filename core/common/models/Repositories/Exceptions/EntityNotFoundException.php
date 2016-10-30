@@ -13,13 +13,11 @@
  */
 namespace Phanbook\Models\Repositories\Exceptions;
 
-use OutOfRangeException;
-
 /**
  * \Phanbook\Models\Repositories\Exceptions\EntityNotFoundException
  *
  * @package Phanbook\Models\Repositories\Exceptions
  */
-class EntityNotFoundException extends OutOfRangeException
+class EntityNotFoundException extends \OutOfRangeException
 {
 }

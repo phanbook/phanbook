@@ -13,13 +13,11 @@
  */
 namespace Phanbook\Models\Repositories\Exceptions;
 
-use Exception;
-
 /**
  * \Phanbook\Models\Repositories\Exceptions\InvalidRepositoryException
  *
  * @package Phanbook\Models\Repositories\Exceptions
  */
-class InvalidRepositoryException extends Exception
+class InvalidRepositoryException extends \InvalidArgumentException
 {
 }
