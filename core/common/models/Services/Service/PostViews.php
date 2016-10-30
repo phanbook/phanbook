@@ -15,6 +15,7 @@ namespace Phanbook\Models\Services\Service;
 use Phanbook\Models\Services\Service;
 use Phanbook\Models\PostsViews as Entity;
 use Phanbook\Models\Repositories\Repository;
+use Phanbook\Models\Repositories\Exceptions\EntityNotFoundException;
 
 /**
  * \Phanbook\Models\Services\Service\PostViews
@@ -24,7 +25,7 @@ use Phanbook\Models\Repositories\Repository;
 class PostViews extends Service
 {
     /**
-     * Finds Entity by PK.
+     * Finds PostsViews by ID.
      *
      * @param  int $id The PostViews ID.
      * @return Entity|null
@@ -32,5 +33,18 @@ class PostViews extends Service
     public function findById($id)
     {
         return Repository::getPostViews()->findById($id);
+    }
+
+    /**
+     * Get PostsViews by ID.
+     *
+     * @param  int $id The PostsViews ID.
+     * @return Entity
+     *
+     * @throws EntityNotFoundException
+     */
+    public function getById($id)
+    {
+        return Repository::getPost()->get($id);
     }
 }

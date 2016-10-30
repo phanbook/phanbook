@@ -16,6 +16,7 @@ use Phanbook\Models\Karma;
 use Phanbook\Models\Users as Entity;
 use Phanbook\Models\Services\Service;
 use Phanbook\Models\Repositories\Repository;
+use Phanbook\Models\Repositories\Exceptions\EntityNotFoundException;
 
 /**
  * \Phanbook\Models\Services\Service\User
@@ -39,7 +40,9 @@ class User extends Service
      * Get User by ID.
      *
      * @param  int $id The User ID.
-     * @return Entity|null
+     * @return Entity
+     *
+     * @throws EntityNotFoundException
      */
     public function getById($id)
     {

@@ -18,6 +18,7 @@ use Phanbook\Models\Services\Service;
 use Phanbook\Models\Users as UsersEntity;
 use Phanbook\Models\Repositories\Repository;
 use Phanbook\Models\PostsViews as PostsViewsEntity;
+use Phanbook\Models\Repositories\Exceptions\EntityNotFoundException;
 
 /**
  * \Phanbook\Models\Services\Service\Post
@@ -41,7 +42,9 @@ class Post extends Service
      * Get Post by ID.
      *
      * @param  int $id The Posts ID.
-     * @return Entity|null
+     * @return Entity
+     *
+     * @throws EntityNotFoundException
      */
     public function getById($id)
     {

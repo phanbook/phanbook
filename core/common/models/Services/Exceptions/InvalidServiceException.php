@@ -13,13 +13,11 @@
  */
 namespace Phanbook\Models\Services\Exceptions;
 
-use Exception;
-
 /**
  * \Phanbook\Models\Services\Exceptions\InvalidServiceException
  *
  * @package Phanbook\Models\Services\Exceptions
  */
-class InvalidServiceException extends Exception
+class InvalidServiceException extends \InvalidArgumentException
 {
 }
