@@ -23,6 +23,7 @@ use Phanbook\Models\FailedLogins;
  *
  * Manages Authentication/Identity Management in Phanbook
  *
+ * @property \Phalcon\Config $config
  * @package Phanbook\Auth
  */
 class Auth extends Component
@@ -133,10 +134,12 @@ class Auth extends Component
     {
         $userAgent = $this->request->getUserAgent();
         $token = md5($user->getEmail() . $user->getPasswd() . $userAgent);
+
         $remember = new RememberTokens();
         $remember->setUsersId($user->getId());
         $remember->setToken($token);
         $remember->setUserAgent($userAgent);
+
         if ($remember->save()) {
             $expire = time() + $this->config->application->cookieLifetime;
             $this->cookies->set('RMU', $user->getId(), $expire);

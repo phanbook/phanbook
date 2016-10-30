@@ -407,7 +407,7 @@ CREATE TABLE IF NOT EXISTS `rememberTokens` (
   `id` int(11) unsigned NOT NULL,
   `usersId` int(11) unsigned NOT NULL,
   `token` varchar(32) NOT NULL,
-  `userAgent` varchar(120) NOT NULL,
+  `userAgent` varchar(250) NOT NULL,
   `createdAt` int(10) unsigned NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
@@ -484,7 +484,7 @@ CREATE TABLE IF NOT EXISTS `successLogins` (
   `id` int(15) NOT NULL,
   `usersId` int(15) NOT NULL,
   `ipAddress` varchar(100) NOT NULL,
-  `userAgent` varchar(200) NOT NULL
+  `userAgent` varchar(250) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
 
 --
