@@ -1034,6 +1034,10 @@ class Users extends ModelBase
     */
     public function beforeCreate()
     {
+        if (empty($this->birthdate)) {
+            $this->birthdate = null;
+        }
+
         $this->karma       += Karma::INITIAL_KARMA;
         $this->votePoint   += Karma::INITIAL_KARMA;
         $this->vote         = 0;
@@ -1066,6 +1070,10 @@ class Users extends ModelBase
      */
     public function beforeUpdate()
     {
+        if (empty($this->birthdate)) {
+            $this->birthdate = null;
+        }
+
         $this->modifiedAt = time();
     }
 
