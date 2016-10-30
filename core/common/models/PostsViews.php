@@ -12,6 +12,13 @@
  */
 namespace Phanbook\Models;
 
+/**
+ * \Phanbook\Models\PostsViews
+ *
+ * @method static PostsViews|false findFirstById(int $id)
+ *
+ * @package Phanbook\Models
+ */
 class PostsViews extends ModelBase
 {
     /**
