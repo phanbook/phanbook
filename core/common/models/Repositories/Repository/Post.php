@@ -30,7 +30,15 @@ class Post extends Repository
      */
     public function findFirstById($id)
     {
-        return Entity::findFirstById((int) $id) ?: null;
+        if ($this->has($id)) {
+            return $this->get($id);
+        }
+
+        if ($entity = Entity::findFirstById((int) $id) ?: null) {
+            $this->add($id, $entity);
+        }
+
+        return $entity;
     }
 
     /**

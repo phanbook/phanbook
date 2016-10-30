@@ -24,12 +24,20 @@ use Phanbook\Models\Repositories\Repository;
 class User extends Repository
 {
     /**
-     * @param  int $id User ID
+     * @param  int $id The User ID.
      * @return Entity|null
      */
     public function findFirstById($id)
     {
-        return Entity::findFirstById($id) ?: null;
+        if ($this->has($id)) {
+            return $this->get($id);
+        }
+
+        if ($entity = Entity::findFirstById((int) $id) ?: null) {
+            $this->add($id, $entity);
+        }
+
+        return $entity;
     }
 
     /**

@@ -12,9 +12,13 @@
  */
 namespace Phanbook\Models\Repositories;
 
+
 use Phalcon\DiInterface;
+use Phalcon\Mvc\ModelInterface;
 use Phanbook\Common\Library\Behavior\Di as DiBehavior;
+use Phanbook\Models\Repositories\Exceptions\LogicException;
 use Phanbook\Models\Repositories\Repository\RepositoryInterface;
+use Phanbook\Models\Repositories\Exceptions\EntityNotFoundException;
 use Phanbook\Models\Repositories\Exceptions\InvalidRepositoryException;
 
 /**
@@ -28,6 +32,12 @@ use Phanbook\Models\Repositories\Exceptions\InvalidRepositoryException;
  */
 abstract class Repository implements RepositoryInterface
 {
+    /**
+     * The Posts collection.
+     * @var ModelInterface[]
+     */
+    protected $data = [];
+
     use DiBehavior {
         DiBehavior::__construct as protected injectDi;
     }
@@ -40,6 +50,74 @@ abstract class Repository implements RepositoryInterface
     public function __construct(DiInterface $di = null)
     {
         $this->injectDi($di);
+    }
+
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param  mixed $id
+     * @return bool
+     */
+    public function has($id)
+    {
+        return isset($this->data[$id]);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return int
+     */
+    public function count()
+    {
+        return count($this->data);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param mixed          $id
+     * @param ModelInterface $entity
+     *
+     * @return $this
+     */
+    public function add($id, ModelInterface $entity)
+    {
+        if (!$this->has($id)) {
+            throw new LogicException(
+                sprintf(
+                    'An entity with id "%s" already exists.',
+                    is_scalar($id) ? $id : json_encode($id)
+                )
+            );
+        }
+
+        $this->data[$id] = $entity;
+
+        return $this;
+    }
+
+    /**
+     * Get Entity from the collection.
+     *
+     * @param  mixed $id
+     * @return mixed
+     *
+     * @throws EntityNotFoundException
+     */
+    public function get($id)
+    {
+        if (!$this->has($id)) {
+            throw new EntityNotFoundException(
+                sprintf(
+                    'No entity found for ID %d',
+                    is_scalar($id) ? $id : json_encode($id)
+                )
+            );
+        }
+
+        return $this->data[$id];
     }
 
     /**

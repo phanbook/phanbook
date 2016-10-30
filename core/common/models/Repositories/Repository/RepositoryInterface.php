@@ -12,6 +12,7 @@
  */
 namespace Phanbook\Models\Repositories\Repository;
 
+use Countable;
 use Phalcon\Mvc\ModelInterface;
 
 /**
@@ -19,7 +20,7 @@ use Phalcon\Mvc\ModelInterface;
  *
  * @package Phanbook\Models\Repositories\Repository
  */
-interface RepositoryInterface
+interface RepositoryInterface extends Countable
 {
     /**
      * Finds Entity by PK.
@@ -36,4 +37,37 @@ interface RepositoryInterface
      * @return ModelInterface
      */
     public function create(array $data = []);
+
+    /**
+     * Find Entity in the collection.
+     *
+     * @param  mixed $id
+     * @return bool
+     */
+    public function has($id);
+
+    /**
+     * Count elements of entity collection.
+     *
+     * @return int
+     */
+    public function count();
+
+    /**
+     * Add entity to the collection.
+     *
+     * @param mixed          $id
+     * @param ModelInterface $entity
+     *
+     * @return RepositoryInterface
+     */
+    public function add($id, ModelInterface $entity);
+
+    /**
+     * Get Entity from the collection.
+     *
+     * @param  mixed $id
+     * @return ModelInterface
+     */
+    public function get($id);
 }
