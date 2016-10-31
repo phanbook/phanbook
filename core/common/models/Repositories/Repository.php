@@ -12,10 +12,8 @@
  */
 namespace Phanbook\Models\Repositories;
 
-use Phalcon\DiInterface;
 use Phalcon\Mvc\ModelInterface;
 use Phanbook\Models\Repositories\Exceptions;
-use Phanbook\Common\Library\Behavior\Di as DiBehavior;
 use Phanbook\Models\Repositories\Repository\RepositoryInterface;
 
 /**
@@ -29,15 +27,17 @@ use Phanbook\Models\Repositories\Repository\RepositoryInterface;
  */
 abstract class Repository implements RepositoryInterface
 {
-    use DiBehavior {
-        DiBehavior::__construct as protected injectDi;
-    }
-
     /**
      * The identity accessor.
      * @var ObjectIdentifier
      */
-    private $accessor;
+    protected $accessor;
+
+    /**
+     * The Entity collection.
+     * @var ModelInterface[]
+     */
+    protected $data = [];
 
     /**
      * @var RepositoryInterface[]
@@ -48,20 +48,11 @@ abstract class Repository implements RepositoryInterface
      * Repository constructor.
      *
      * @param ObjectIdentifier $accessor The identity accessor.
-     * @param DiInterface      $di       The Dependency Injection Container. [Optional]
      */
-    public function __construct(ObjectIdentifier $accessor, DiInterface $di = null)
+    public function __construct(ObjectIdentifier $accessor)
     {
-        $this->injectDi($di);
-
         $this->accessor = $accessor;
     }
-
-    /**
-     * The Posts collection.
-     * @var ModelInterface[]
-     */
-    protected $data = [];
 
     /**
      * {@inheritdoc}
