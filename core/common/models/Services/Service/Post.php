@@ -116,11 +116,7 @@ class Post extends Service
     {
         $visitorId = $this->resolveVisitorId($visitorId);
 
-        if (!$visitorId) {
-            return $this;
-        }
-
-        if ($this->hasViewsByIpAddress($id, $visitorId)) {
+        if (!$visitorId || $this->hasViewsByIpAddress($id, $visitorId)) {
             return $this;
         }
 

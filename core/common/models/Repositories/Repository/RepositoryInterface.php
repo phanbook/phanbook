@@ -48,11 +48,10 @@ interface RepositoryInterface extends Countable
     /**
      * Add entity to the collection.
      *
-     * @param ModelInterface $entity
-     *
+     * @param  ModelInterface $entity
      * @return RepositoryInterface
      */
-    public function saveEntity(ModelInterface $entity);
+    public function addEntity(ModelInterface $entity);
 
     /**
      * Add entities to the collection.
@@ -60,12 +59,12 @@ interface RepositoryInterface extends Countable
      * @param  ModelInterface[] $entities
      * @return RepositoryInterface
      */
-    public function saveEntities(array $entities);
+    public function addEntities(array $entities);
 
     /**
      * Removes Entity.
      *
-     * @param ModelInterface $entity
+     * @param  ModelInterface $entity
      * @return RepositoryInterface
      */
     public function removeEntity(ModelInterface $entity);
