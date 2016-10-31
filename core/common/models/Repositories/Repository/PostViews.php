@@ -37,7 +37,7 @@ class PostViews extends Repository
         }
 
         if ($entity = Entity::findFirstById((int) $id) ?: null) {
-            $this->saveEntity($entity);
+            $this->addEntity($entity);
         }
 
         return $entity;

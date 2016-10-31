@@ -27,11 +27,17 @@ use Phanbook\Models\Repositories\Repository\RepositoryInterface;
  *
  * @package Phanbook\Models\Repositories
  */
-abstract class Repository implements RepositoryInterface, ObjectIdentifier
+abstract class Repository implements RepositoryInterface
 {
     use DiBehavior {
         DiBehavior::__construct as protected injectDi;
     }
+
+    /**
+     * The identity accessor.
+     * @var ObjectIdentifier
+     */
+    private $accessor;
 
     /**
      * @var RepositoryInterface[]
@@ -41,11 +47,14 @@ abstract class Repository implements RepositoryInterface, ObjectIdentifier
     /**
      * Repository constructor.
      *
-     * @param DiInterface|null $di
+     * @param ObjectIdentifier $accessor The identity accessor.
+     * @param DiInterface      $di       The Dependency Injection Container. [Optional]
      */
-    public function __construct(DiInterface $di = null)
+    public function __construct(ObjectIdentifier $accessor, DiInterface $di = null)
     {
         $this->injectDi($di);
+
+        $this->accessor = $accessor;
     }
 
     /**
@@ -81,11 +90,9 @@ abstract class Repository implements RepositoryInterface, ObjectIdentifier
      * @param  ModelInterface $entity
      * @return $this
      */
-    public function saveEntity(ModelInterface $entity)
+    public function addEntity(ModelInterface $entity)
     {
-        $id = $this->getIdentity($entity);
-
-        $this->data[$id] = $entity;
+        $this->data[$this->accessor->getIdentity($entity)] = $entity;
 
         return $this;
     }
@@ -96,10 +103,10 @@ abstract class Repository implements RepositoryInterface, ObjectIdentifier
      * @param  ModelInterface[] $entities
      * @return RepositoryInterface
      */
-    public function saveEntities(array $entities)
+    public function addEntities(array $entities)
     {
         foreach ($entities as $entity) {
-            $this->saveEntity($entity);
+            $this->addEntity($entity);
         }
 
         return $this;
@@ -113,8 +120,7 @@ abstract class Repository implements RepositoryInterface, ObjectIdentifier
      */
     public function removeEntity(ModelInterface $entity)
     {
-        $id = $this->getIdentity($entity);
-        unset($this->data[$id]);
+        unset($this->data[$this->accessor->getIdentity($entity)]);
 
         return $this;
     }
@@ -130,12 +136,7 @@ abstract class Repository implements RepositoryInterface, ObjectIdentifier
     public function get($id)
     {
         if (!$this->has($id)) {
-            throw new Exceptions\EntityNotFoundException(
-                sprintf(
-                    'No entity found for ID %d',
-                    is_scalar($id) ? $id : json_encode($id)
-                )
-            );
+            throw new Exceptions\EntityNotFoundException(sprintf('No entity found for ID %d', $id));
         }
 
         return $this->data[$id];
@@ -185,7 +186,7 @@ abstract class Repository implements RepositoryInterface, ObjectIdentifier
             );
         }
 
-        $repository = new $className();
+        $repository = new $className(new AccessorObjectIdentifier('getId'));
 
         if (!$repository instanceof RepositoryInterface) {
             throw new Exceptions\InvalidRepositoryException(
@@ -210,39 +211,5 @@ abstract class Repository implements RepositoryInterface, ObjectIdentifier
     public static function __callStatic($method, $parameters)
     {
         return self::getRepository(substr($method, 3));
-    }
-
-    /**
-     * Get Entity Identity.
-     *
-     * @param  ModelInterface $entity
-     * @return mixed
-     */
-    public function getIdentity(ModelInterface $entity)
-    {
-        if (property_exists($entity, 'id')) {
-            return $entity->id;
-        }
-
-        if (method_exists($entity, 'getId')) {
-            return $entity->getId();
-        }
-
-        if (!$this->getDI()->has('modelsMetadata')) {
-            $modelsMetadata = $this->getDI()->getShared('modelsMetadata');
-        } else {
-            $modelsMetadata = $entity->getModelsMetaData();
-        }
-
-        $primaryKeys = $modelsMetadata->getPrimaryKeyAttributes($entity);
-
-        switch (count($primaryKeys)) {
-            case 0:
-                return null;
-            case 1:
-                return $entity->{$primaryKeys[0]};
-            default:
-                return array_intersect_key(get_object_vars($entity), array_flip($primaryKeys));
-        }
     }
 }
