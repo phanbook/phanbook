@@ -13,7 +13,6 @@
 namespace Phanbook\Models\Repositories;
 
 use Phalcon\Mvc\ModelInterface;
-use Phanbook\Models\Repositories\Exceptions\RuntimeException;
 
 /**
  * \Phanbook\Models\Repositories\AccessorObjectIdentifier

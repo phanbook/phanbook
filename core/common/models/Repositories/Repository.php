@@ -13,66 +13,36 @@
 namespace Phanbook\Models\Repositories;
 
 use Phalcon\Mvc\ModelInterface;
-use Phanbook\Models\Repositories\Exceptions;
-use Phanbook\Models\Repositories\Repository\RepositoryInterface;
 
 /**
  * \Phanbook\Models\Repositories\Repository
  *
- * @method static Repository\Post getPost()
- * @method static Repository\PostViews getPostViews()
- * @method static Repository\User getUser()
+ * The collection-oriented Entity repository.
  *
  * @package Phanbook\Models\Repositories
  */
-abstract class Repository implements RepositoryInterface
+final class Repository implements RepositoryInterface
 {
     /**
      * The identity accessor.
      * @var ObjectIdentifier
      */
-    protected $accessor;
+    private $identifier;
 
     /**
      * The Entity collection.
      * @var ModelInterface[]
      */
-    protected $data = [];
-
-    /**
-     * @var RepositoryInterface[]
-     */
-    private static $repositories = [];
+    private $storage = [];
 
     /**
      * Repository constructor.
      *
-     * @param ObjectIdentifier $accessor The identity accessor.
+     * @param ObjectIdentifier $identifier The identity accessor.
      */
-    public function __construct(ObjectIdentifier $accessor)
+    public function __construct(ObjectIdentifier $identifier)
     {
-        $this->accessor = $accessor;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @param  mixed $id
-     * @return bool
-     */
-    public function has($id)
-    {
-        return isset($this->data[$id]);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return int
-     */
-    public function count()
-    {
-        return count($this->data);
+        $this->identifier = $identifier;
     }
 
     /**
@@ -81,24 +51,10 @@ abstract class Repository implements RepositoryInterface
      * @param  ModelInterface $entity
      * @return $this
      */
-    public function addEntity(ModelInterface $entity)
+    public function save(ModelInterface $entity)
     {
-        $this->data[$this->accessor->getIdentity($entity)] = $entity;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @param  ModelInterface[] $entities
-     * @return RepositoryInterface
-     */
-    public function addEntities(array $entities)
-    {
-        foreach ($entities as $entity) {
-            $this->addEntity($entity);
-        }
+        $id = $this->stringify($this->getIdentity($entity));
+        $this->storage[$id] = $entity;
 
         return $this;
     }
@@ -109,28 +65,27 @@ abstract class Repository implements RepositoryInterface
      * @param ModelInterface $entity
      * @return $this
      */
-    public function removeEntity(ModelInterface $entity)
+    public function remove(ModelInterface $entity)
     {
-        unset($this->data[$this->accessor->getIdentity($entity)]);
+        $id = $this->stringify($this->getIdentity($entity));
+        unset($this->storage[$id]);
 
         return $this;
     }
 
     /**
-     * Get Entity from the collection.
-     *
-     * @param  mixed $id
-     * @return mixed
-     *
-     * @throws Exceptions\EntityNotFoundException
+     * @param  mixed $id The Entity ID.
+     * @return ModelInterface|null
      */
-    public function get($id)
+    public function findById($id)
     {
-        if (!$this->has($id)) {
-            throw new Exceptions\EntityNotFoundException(sprintf('No entity found for ID %d', $id));
+        $id = $this->stringify($id);
+
+        if (!isset($this->storage[$id])) {
+            return null;
         }
 
-        return $this->data[$id];
+        return $this->storage[$id];
     }
 
     /**
@@ -140,7 +95,7 @@ abstract class Repository implements RepositoryInterface
      */
     public function getAll()
     {
-        return $this->data;
+        return array_values($this->storage);
     }
 
     /**
@@ -150,57 +105,18 @@ abstract class Repository implements RepositoryInterface
      */
     public function clear()
     {
-        $this->data = [];
+        $this->storage = [];
 
         return $this;
     }
 
-    /**
-     * Get concrete Entity repository.
-     *
-     * @param  string $name The repository class name.
-     * @return RepositoryInterface
-     *
-     * @throws Exceptions\InvalidRepositoryException
-     */
-    public static function getRepository($name)
+    private function getIdentity(ModelInterface $entity)
     {
-        $className = "\\Phanbook\\Models\\Repositories\\Repository\\{$name}";
-
-        if (!empty(self::$repositories[$className])) {
-            return self::$repositories[$className];
-        }
-
-        if (!class_exists($className)) {
-            throw new Exceptions\InvalidRepositoryException(
-                "Repository class '{$className}' doesn't exists."
-            );
-        }
-
-        $repository = new $className(new AccessorObjectIdentifier('getId'));
-
-        if (!$repository instanceof RepositoryInterface) {
-            throw new Exceptions\InvalidRepositoryException(
-                "Repository {$className} must implement " . RepositoryInterface::class . '.'
-            );
-        }
-
-        self::$repositories[$className] = $repository;
-
-        return $repository;
+        return $this->identifier->getIdentity($entity);
     }
 
-    /**
-     * Handle dynamic static method calls into the Repository::getRepository method.
-     *
-     * @param  string $method
-     * @param  array  $parameters
-     * @return RepositoryInterface
-     *
-     * @throws Exceptions\InvalidRepositoryException
-     */
-    public static function __callStatic($method, $parameters)
+    private function stringify($id)
     {
-        return self::getRepository(substr($method, 3));
+        return md5(serialize($id));
     }
 }
