@@ -53,6 +53,7 @@
     "autoload-dev": {
         "psr-4": {
             "App\\Test\\Unit\\": "tests/unit/",
+            "App\\Test\\Fixtures\\": "tests/_fixtures/",
             "App\\Test\\Module\\": "tests/_support/Module/",
             "App\\Test\\Step\\": "tests/_support/Step/"
         }
