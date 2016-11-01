@@ -54,6 +54,8 @@ before_install:
   - travis_retry composer install --prefer-dist --no-interaction
   - ( bash tests/_ci/install_zephir.sh )
   - bash tests/_ci/install_prereqs_$PHP_MAJOR.sh
+  # Fix https://github.com/Codeception/Codeception/pull/3664
+  - travis_retry composer require "codeception/codeception:>=2.2.x-dev#6db18e683d5400c70ba3738079781ca891dd2308"
 
 install:
   - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b ${PHALCON_VERSION}
