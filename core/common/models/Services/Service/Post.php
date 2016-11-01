@@ -73,15 +73,11 @@ class Post extends Service
      * @param Posts  $post
      * @param string $ipAddress
      *
-     * @return int
+     * @return bool
      */
     public function hasViewsByIpAddress(Posts $post, $ipAddress = null)
     {
-        if (!$ipAddress && $this->getDI()->has('request')) {
-            $ipAddress = $this->getDI()->getShared('request')->getClientAddress();
-        }
-
-        return $this->countViewsByIpAddress($post, $this->resolveClientAddress($ipAddress)) > 0;
+        return $this->countViewsByIpAddress($post, $ipAddress) > 0;
     }
 
     /**
@@ -94,7 +90,7 @@ class Post extends Service
      */
     public function countViewsByIpAddress($post, $ipAddress)
     {
-        if (!$ipAddress) {
+        if (!$ipAddress = $this->resolveClientAddress($ipAddress)) {
             return 0;
         }
 
@@ -107,19 +103,19 @@ class Post extends Service
      * @param  Posts  $post
      * @param  int    $visitorId
      * @param  string $ipAddress
-     * @return $this
+     * @return bool
      */
-    public function increaseNumberViews($post, $visitorId = null, $ipAddress = null)
+    public function increaseNumberViews($post, $visitorId, $ipAddress = null)
     {
-        $visitorId = $this->resolveVisitorId($visitorId);
+        $ipAddress = $this->resolveClientAddress($ipAddress);
 
-        if (!$visitorId || $this->hasViewsByIpAddress($post, $visitorId)) {
-            return $this;
+        if (!$visitorId || !$ipAddress || $this->hasViewsByIpAddress($post, $ipAddress)) {
+            return false;
         }
 
         $view = new PostsViews([
             'postsId'   => $post->getId(),
-            'ipaddress' => $this->resolveClientAddress($ipAddress),
+            'ipaddress' => $ipAddress,
         ]);
 
         if (!$view->save()) {
@@ -130,15 +126,17 @@ class Post extends Service
 
         $post->setNumberViews($post->getNumberViews() + 1);
 
-        $this->increaseAuthorKarmaByVisit($post, $visitorId);
+        $this->increaseAuthorKarmaForVisit($post, $visitorId);
 
         if ($post->save()) {
             foreach ($post->getMessages() as $message) {
                 $this->logError($message);
             }
+
+            return false;
         }
 
-        return $this;
+        return true;
     }
 
     /**
@@ -146,21 +144,21 @@ class Post extends Service
      *
      * @param  Posts  $post
      * @param  int    $visitorId
-     * @return $this
+     * @return bool
      */
-    public function increaseAuthorKarmaByVisit($post, $visitorId = null)
+    public function increaseAuthorKarmaForVisit($post, $visitorId)
     {
         if ($this->isAuthorVisitor($post, $visitorId)) {
-            return $this;
+            return false;
         }
 
         if ($post->user->getStatus() != Users::STATUS_ACTIVE) {
-            return $this;
+            return false;
         }
 
         $post->user->increaseKarma(Karma::VISIT_ON_MY_POST);
 
-        return $this;
+        return true;
     }
 
     /**
@@ -171,10 +169,8 @@ class Post extends Service
      *
      * @return bool
      */
-    public function isAuthorVisitor($post, $visitorId = null)
+    public function isAuthorVisitor($post, $visitorId)
     {
-        $visitorId = $this->resolveVisitorId($visitorId);
-
-        return $visitorId && $post->getUsersId() == $visitorId;
+        return $post->getUsersId() == $visitorId;
     }
 }

@@ -349,13 +349,12 @@ class PostsController extends ControllerBase
             return;
         }
 
-        $visitor = $userService->findFirstById($this->auth->getUserId());
+        if ($this->auth->isAuthorizedVisitor() && !$postService->hasViewsByIpAddress($post)) {
+            $postService->increaseNumberViews($post, $this->auth->getUserId());
+            $visitor = $userService->findFirstById($this->auth->getUserId());
 
-        if (!$hasView = $postService->hasViewsByIpAddress($post)) {
-            $postService->increaseNumberViews($post);
-
-            if ($visitor && !$postService->isAuthorVisitor($post)) {
-                $userService->increaseAuthorKarmaByVisit($visitor);
+            if ($visitor && !$postService->isAuthorVisitor($post, $visitor->getId())) {
+                $userService->increaseVisitorKarmaForViewingPost($visitor);
             }
         }
 

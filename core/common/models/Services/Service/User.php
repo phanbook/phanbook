@@ -46,9 +46,7 @@ class User extends Service
     public function getById($id)
     {
         if (!$user = $this->findFirstById($id)) {
-            throw new Exception(
-                sprintf('No Users found for ID %d', $id)
-            );
+            throw new Exception(sprintf('No Users found for ID %d', $id));
         }
 
         return $user;
@@ -66,25 +64,42 @@ class User extends Service
     }
 
     /**
-     * Increase User karma.
+     * Checks whether the User is active.
      *
      * @param  Users $user
-     * @return $this
+     * @return bool
      */
-    public function increaseAuthorKarmaByVisit(Users $user)
+    public function isActiveMember(Users $user)
     {
-        if ($this->isModerator($user)) {
-            $user->increaseKarma(Karma::MODERATE_VISIT_POST);
-        } else {
-            $user->increaseKarma(Karma::VISIT_POST);
+        return $user->getStatus() == Users::STATUS_ACTIVE;
+    }
+
+    /**
+     * Increase User karma.
+     *
+     * @param  Users $visitor
+     * @return bool
+     */
+    public function increaseVisitorKarmaForViewingPost(Users $visitor)
+    {
+        if (!$this->isActiveMember($visitor)) {
+            return false;
         }
 
-        if (!$user->save()) {
-            foreach ($user->getMessages() as $message) {
+        if ($this->isModerator($visitor)) {
+            $visitor->increaseKarma(Karma::MODERATE_VISIT_POST);
+        } else {
+            $visitor->increaseKarma(Karma::VISIT_POST);
+        }
+
+        if (!$visitor->save()) {
+            foreach ($visitor->getMessages() as $message) {
                 $this->logError($message);
             }
+
+            return false;
         }
 
-        return $this;
+        return true;
     }
 }
