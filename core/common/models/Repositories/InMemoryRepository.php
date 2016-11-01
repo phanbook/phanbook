@@ -17,7 +17,7 @@ use Phalcon\Mvc\ModelInterface;
 /**
  * \Phanbook\Models\Repositories\InMemoryRepository
  *
- * The collection-oriented Entity repository.
+ * The base collection-oriented in-memory Entity repository.
  *
  * @package Phanbook\Models\Repositories
  */

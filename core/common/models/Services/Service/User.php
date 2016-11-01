@@ -13,10 +13,9 @@
 namespace Phanbook\Models\Services\Service;
 
 use Phanbook\Models\Karma;
-use Phanbook\Models\Users as Entity;
+use Phanbook\Models\Users;
+use Phalcon\Mvc\Model\Exception;
 use Phanbook\Models\Services\Service;
-use Phanbook\Models\Repositories\Repository;
-use Phanbook\Models\Repositories\Exceptions\EntityNotFoundException;
 
 /**
  * \Phanbook\Models\Services\Service\User
@@ -29,50 +28,52 @@ class User extends Service
      * Finds User by ID.
      *
      * @param  int $id The User ID.
-     * @return Entity|null
+     * @return Users|null
      */
-    public function findById($id)
+    public function findFirstById($id)
     {
-        return Repository::getUser()->findById($id);
+        return Users::findFirstById($id) ?: null;
     }
 
     /**
      * Get User by ID.
      *
      * @param  int $id The User ID.
-     * @return Entity
+     * @return Users
      *
-     * @throws EntityNotFoundException
+     * @throws Exception
      */
     public function getById($id)
     {
-        return Repository::getPost()->get($id);
+        if (!$user = $this->findFirstById($id)) {
+            throw new Exception(
+                sprintf('No Users found for ID %d', $id)
+            );
+        }
+
+        return $user;
     }
 
     /**
      * Checks whether the User is moderator.
      *
-     * @param  int $id The User ID.
+     * @param  Users $user
      * @return bool
      */
-    public function isModerator($id)
+    public function isModerator(Users $user)
     {
-        $user = $this->getById($id);
-
         return $user->getModerator() == 'Y';
     }
 
     /**
      * Increase User karma.
      *
-     * @param  int $id The User ID.
+     * @param  Users $user
      * @return $this
      */
-    public function increaseAuthorKarmaByVisit($id)
+    public function increaseAuthorKarmaByVisit(Users $user)
     {
-        $user = $this->getById($id);
-
-        if ($this->isModerator($id)) {
+        if ($this->isModerator($user)) {
             $user->increaseKarma(Karma::MODERATE_VISIT_POST);
         } else {
             $user->increaseKarma(Karma::VISIT_POST);
