@@ -204,18 +204,20 @@ class Auth extends Component
     /**
      * Checks if the user is banned/inactive/suspended
      *
+     * @deprecated
+     * @todo Use Users service/model instead. Do not check entity in session/cookie-related class
      * @param  \Phanbook\Models\Users $user
      * @return bool
      */
     public function checkUserFlags(Users $user)
     {
-        return ($user->getStatus() == Users::STATUS_ACTIVE);
+        return $user->getStatus() == Users::STATUS_ACTIVE;
     }
 
     /**
      * Returns the current identity
      *
-     * @return array
+     * @return array|null
      */
     public function getAuth()
     {
@@ -225,45 +227,64 @@ class Auth extends Component
     /**
      * Returns the current identity
      *
-     * @return string
+     * @return string|null
      */
     public function getName()
     {
+        if (!$this->isAuthorizedVisitor()) {
+            return null;
+        }
+
         $identity = $this->session->get('auth');
+
         return $identity['name'];
     }
+
     /**
      * Returns the current user id
      *
-     * @return int
+     * @return int|null
      */
     public function getUserId()
     {
-        if (!$this->session->has('auth')) {
+        if (!$this->isAuthorizedVisitor()) {
             return null;
         }
+
         $identity = $this->session->get('auth');
+
         return (int) $identity['id'];
     }
+
     /**
      * Returns the current identity
      *
-     * @return string
+     * @return string|null
      */
     public function getFullName()
     {
+        if (!$this->isAuthorizedVisitor()) {
+            return null;
+        }
+
         $identity = $this->session->get('auth');
+
         return $identity['fullname'];
     }
 
     /**
      * Returns the current identity
      *
-     * @return string
+     * @return string|null
      */
     public function getUsername()
     {
+        if (!$this->isAuthorizedVisitor()) {
+            return null;
+        }
+
         $identity = $this->session->get('auth');
+
         return $identity['username'];
     }
 
@@ -274,7 +295,7 @@ class Auth extends Component
      */
     public function getEmail()
     {
-        if (!$this->session->has('auth')) {
+        if (!$this->isAuthorizedVisitor()) {
             return null;
         }
 
@@ -290,35 +311,55 @@ class Auth extends Component
      */
     public function isAdmin()
     {
+        if ($this->isAuthorizedVisitor()) {
+            return false;
+        }
+
         $identity = $this->session->get('auth');
 
-        return ($identity['admin'] == 'Y');
+        return $identity['admin'] == 'Y';
     }
+
     public function isModerator()
     {
+        if ($this->isAuthorizedVisitor()) {
+            return false;
+        }
+
         $identity = $this->session->get('auth');
 
-        return ($identity['moderator'] == 'Y');
+        return $identity['moderator'] == 'Y';
     }
+
+    /**
+     * See Auth::isAuthorizedVisitor
+     *
+     * @deprecated
+     * @return bool
+     */
     public function isLogin()
     {
-        return $this->session->get('auth') ? :false;
+        return $this->isAuthorizedVisitor();
     }
-     /**
-     * Checking user is have permission admin
+
+    /**
+     * Check whether the user is authorized.
      *
-     * @return boolean
+     * @return bool
      */
+    public function isAuthorizedVisitor()
+    {
+        return $this->session->has('auth');
+    }
+
+     /**
+      * Checking user is have permission admin
+      *
+      * @return boolean
+      */
     public function isTrustModeration()
     {
-        $identity = $this->session->get('auth');
-        if ($identity['admin'] == 'Y') {
-            return true;
-        }
-        if ($identity['moderator'] == 'Y') {
-            return true;
-        }
-        return false;
+        return $this->isAdmin() || $this->isModerator();
     }
 
     /**
