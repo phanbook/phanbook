@@ -36,7 +36,6 @@ class Auth extends Component
      */
     public function check(array $credentials)
     {
-
         // Check if the user exist
         $user = Users::findByEmailOrUsername($credentials['email']);
         if (!$user) {
@@ -202,10 +201,12 @@ class Auth extends Component
     }
 
     /**
-     * Checks if the user is banned/inactive/suspended
+     * Checks if the user is NOT banned/inactive/suspended
      *
      * @deprecated
      * @todo Use Users service/model instead. Do not check entity in session/cookie-related class
+     * @see \Phanbook\Models\Services\Service\User::isActiveMember()
+     *
      * @param  \Phanbook\Models\Users $user
      * @return bool
      */
