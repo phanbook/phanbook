@@ -21,11 +21,12 @@ use Phalcon\Mvc\Dispatcher;
 use Phanbook\Models\Comment;
 use Phanbook\Models\PostsReply;
 use Phanbook\Controllers\Controller;
+use Phanbook\Models\Services\Service;
 use Phanbook\Frontend\Forms\CommentForm;
 use Phanbook\Models\ActivityNotifications;
 
 /**
- * Class ControllerBase
+ * \Phanbook\Frontend\Controllers\ControllerBase
  *
  * @property \Phanbook\Auth\Auth $auth
  * @property \Phalcon\Config $config
@@ -35,7 +36,6 @@ use Phanbook\Models\ActivityNotifications;
  */
 class ControllerBase extends Controller
 {
-
     /**
      * @var int
      */
@@ -54,8 +54,6 @@ class ControllerBase extends Controller
             $this->auth->loginWithRememberMe();
         }
     }
-
-
 
     public function initialize()
     {
@@ -155,8 +153,9 @@ class ControllerBase extends Controller
         $this->db->commit();
 
         if ($this->request->isAjax()) {
-            $vote = (new Vote)->getVotes($objectId, $object);
-            return (['data' => $vote['positive'] - $vote['negative']]);
+            $voteService = new Service\Vote();
+            $votes = $voteService->getVotes($objectId, $object);
+            return ['data' => $votes['positive'] - $votes['negative']];
         }
         echo 0;
         return 0;

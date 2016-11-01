@@ -143,15 +143,18 @@ class PostsController extends ControllerBase
         if ($page > 1) {
             $itemBuilder->offset($offset);
         }
+
         $this->view->setVars(
             [
                 'tab'         => $tab,
                 'type'        => Posts::POST_ALL,
                 'posts'       => $itemBuilder->getQuery()->execute($params),
                 'totalPages'  => $totalPages,
-                'currentPage' => $page
+                'currentPage' => $page,
+                'vote_service'=> new Service\Vote(),
             ]
         );
+
         return $this->view->pick('post');
     }
 
@@ -335,6 +338,7 @@ class PostsController extends ControllerBase
     {
         $postService = new Service\Post();
         $userService = new Service\User();
+        $voteService = new Service\Vote();
 
         $post = $postService->findFirstById($id);
 
@@ -362,12 +366,13 @@ class PostsController extends ControllerBase
             [
                 'post'        => $post,
                 'form'        => new ReplyForm(),
-                'votes'       => $post->getVotes($id, Vote::OBJECT_POSTS),
+                'votes'       => $voteService->getVotes($id, Vote::OBJECT_POSTS),
                 'postsReply'  => $post->getPostsWithVotes($id),
                 'commentForm' => new CommentForm(),
                 'userPosts'   => $post->user,
                 'type'        => Posts::POST_QUESTIONS,
-                'postRelated' => Posts::postRelated($post)
+                'postRelated' => Posts::postRelated($post),
+                'vote_service'=> $voteService,
             ]
         );
 
