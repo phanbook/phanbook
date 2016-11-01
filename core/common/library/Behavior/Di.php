@@ -66,7 +66,7 @@ trait Di
      *
      * @return DiInterface
      */
-    protected function getDI()
+    public function getDI()
     {
         return $this->di;
     }
@@ -77,7 +77,7 @@ trait Di
      * @param DiInterface $di
      * @return $this
      */
-    protected function setDI(DiInterface $di)
+    public function setDI(DiInterface $di)
     {
         $this->di = $di;
 
