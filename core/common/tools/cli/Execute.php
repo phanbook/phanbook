@@ -64,7 +64,7 @@ class Execute
         // Start process
         $proc = proc_open($cmd, $descriptor, $pipes);
         if (!is_resource($proc)) {
-            $result =  255;
+            $return = 255;
         } else {
             if ($stdin) {
                 if (is_resource($stdin)) {
@@ -86,7 +86,7 @@ class Execute
         unlink($outFile);
         unlink($errFile);
 
-        $command = new \Cli\Command;
+        $command = new Command;
         $command->command = $cmd;
         $command->file = $file;
         $command->line = $line;

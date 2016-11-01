@@ -20,6 +20,7 @@ use Phalcon\Validation\Validator\Uniqueness as UniquenessValidator;
  * \Phanbook\Models\Users
  *
  * @method static Users|false findFirstById(int $id)
+ * @method static Users|false findFirstByUsername(string $name)
  *
  * @package Phanbook\Models
  */
@@ -1033,6 +1034,10 @@ class Users extends ModelBase
     */
     public function beforeCreate()
     {
+        if (empty($this->birthdate)) {
+            $this->birthdate = null;
+        }
+
         $this->karma       += Karma::INITIAL_KARMA;
         $this->votePoint   += Karma::INITIAL_KARMA;
         $this->vote         = 0;
@@ -1041,6 +1046,7 @@ class Users extends ModelBase
         $this->modifiedAt   = time();
         $this->createdAt    = time();
     }
+
     public function afterValidation()
     {
         if ($this->votePoint >= 50) {
@@ -1048,6 +1054,7 @@ class Users extends ModelBase
             $this->votePoint = 0;
         }
     }
+
     public function afterCreate()
     {
         if ($this->id > 0) {
@@ -1057,13 +1064,19 @@ class Users extends ModelBase
             $activity->save();
         }
     }
+
     /**
      * Implement hook beforeUpdate of Model Phalcon
      */
     public function beforeUpdate()
     {
+        if (empty($this->birthdate)) {
+            $this->birthdate = null;
+        }
+
         $this->modifiedAt = time();
     }
+
     public function initialize()
     {
         parent::initialize();
@@ -1106,6 +1119,7 @@ class Users extends ModelBase
             ]
         );
     }
+
     /**
      * @param $karma
      */
@@ -1123,6 +1137,7 @@ class Users extends ModelBase
         $this->karma -= $karma;
         $this->votePoint -= $karma;
     }
+
     /**
      * Get information username
      *
@@ -1135,6 +1150,7 @@ class Users extends ModelBase
         }
         return $this->username;
     }
+
     /**
      * Get information full name
      *
@@ -1149,6 +1165,7 @@ class Users extends ModelBase
         }
         return $this->username;
     }
+
     /**
      * Get information editor user
      *
@@ -1167,6 +1184,7 @@ class Users extends ModelBase
 
         return false;
     }
+
     /**
      * @return string
      */

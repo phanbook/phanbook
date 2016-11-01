@@ -2,7 +2,7 @@
 {% block title %} {{ this.config.application.name ~ t('Login')}}{% endblock %}
 {% block content %}
     <div class="login-box-body">
-        <p class="login-box-msg">Sign in to start your session</p>
+        <p class="login-box-msg">{{ t('Sign in to start your session') }}</p>
 
         {{form('oauth/login', 'id' : 'login-form')}}
 
@@ -20,7 +20,7 @@
                 <div class="col-xs-8">
                   <div class="checkbox icheck">
                     <label>
-                      {{ form.render('remember')}} Remember Me
+                      {{ form.render('remember')}} {{ t('Remember Me') }}
                     </label>
                   </div>
                 </div>
@@ -33,15 +33,20 @@
         </form>
 
         <div class="social-auth-links text-center">
-            <p>- OR -</p>
-            <a href="/oauth/login/github" class="github-button btn btn-block btn-social btn-flat"><i class="fa fa-github"></i>Sign in using Github</a>
+            <p>- {{ t('OR') }} -</p>
+            <a href="/oauth/login/github" class="github-button btn btn-block btn-social btn-flat">
+                <i class="fa fa-github"></i>{{ t('Sign in using GitHub') }}
+            </a>
 
             <a href="/oauth/login/facebook" class="btn btn-block btn-social btn-facebook btn-flat">
-            <i class="fa fa-facebook"></i> Sign in using Facebook</a>
+                <i class="fa fa-facebook"></i>{{ t('Sign in using Facebook') }}
+            </a>
 
-            <a href="/oauth/login/google" class="google-button btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i>Sign in using Google+</a>
+            <a href="/oauth/login/google" class="google-button btn btn-block btn-social btn-google btn-flat">
+                <i class="fa fa-google-plus"></i>{{ t('Sign in using Google+') }}
+            </a>
         </div>
-        <a href="#">I forgot my password</a><br>
-        <a href="/oauth/register/signup" class="text-center">Register a new membership</a>
+        <a href="#">{{ t('I forgot my password') }}</a><br>
+        <a href="/oauth/register/signup" class="text-center">{{ t('Register a new membership') }}</a>
     </div>
 {% endblock %}

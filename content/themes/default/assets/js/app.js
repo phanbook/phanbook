@@ -1,7 +1,7 @@
 $(document).ready(function () {
     // Placeholder for search form
     var search = document.getElementById('search-top');
-    if (search.elements.length) {
+    if (search && search.elements.length) {
         var input = search.elements.q;
         if (input != undefined) {
             var hint = input.getAttribute('data-hint');
@@ -22,7 +22,7 @@ $(document).ready(function () {
 
     // Placeholder for promo page
     var question = document.getElementById('question-promo');
-    if (question.elements.length) {
+    if (question && question.elements.length) {
         var textArea = question.elements.q;
         if (textArea != undefined) {
             var hintArea = textArea.getAttribute('data-hint');

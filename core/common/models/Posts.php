@@ -12,16 +12,21 @@
  */
 namespace Phanbook\Models;
 
-use Phalcon\Mvc\Model\Behavior\SoftDelete;
 use Phanbook\Tools\ZFunction;
 use Phanbook\Search\Indexer;
+use Phalcon\Mvc\Model\Resultset\Simple;
+use Phalcon\Mvc\Model\Behavior\SoftDelete;
 
 /**
  * \Phanbook\Models\Posts
  *
- * @property \Phanbook\Models\Users $user
+ * @property Users $user
+ * @property Simple $postview
+ *
  * @method static Posts|false findFirstById(int $id)
  * @method static int countByUsersId(int $id)
+ * @method Simple getPostview(array $parameters = null)
+ * @method Users getUser(array $parameters = null)
  *
  * @package Phanbook\Models
  */
@@ -640,24 +645,19 @@ class Posts extends ModelBase
     public function initialize()
     {
         parent::initialize();
+
         $this->useDynamicUpdate(true);
-        $this->belongsTo('id', __NAMESPACE__ . '\PostsHistory', 'postsId', ['alias' => 'postHistory']);
-        $this->belongsTo('usersId', __NAMESPACE__ . '\Users', 'id', ['alias' => 'user', 'reusable' => true]);
-        $this->hasMany('id', __NAMESPACE__ . '\Comment', 'objectId', ['alias' => 'comment']);
-        $this->hasMany('id', __NAMESPACE__ . '\PostsViews', 'postsId', ['alias' => 'postview']);
-        $this->hasMany('id', __NAMESPACE__ . '\PostsReply', 'postsId', ['alias' => 'replies']);
-        $this->hasMany('id', __NAMESPACE__ . '\PostsSubscribers', 'postsId', ['alias' => 'postSubscriber']);
 
+        $this->belongsTo('id', PostsHistory::class, 'postsId', ['alias' => 'postHistory']);
+        $this->belongsTo('usersId', Users::class, 'id', ['alias' => 'user', 'reusable' => true]);
 
-        $this->hasManyToMany(
-            'id',
-            __NAMESPACE__ . '\PostsTags',
-            'postsId',
-            'tagsId',
-            __NAMESPACE__ . '\Tags',
-            'id',
-            ['alias' => 'tag']
-        );
+        $this->hasMany('id', Comment::class, 'objectId', ['alias' => 'comment']);
+        $this->hasMany('id', PostsViews::class, 'postsId', ['alias' => 'postview']);
+        $this->hasMany('id', PostsReply::class, 'postsId', ['alias' => 'replies']);
+        $this->hasMany('id', PostsSubscribers::class, 'postsId', ['alias' => 'postSubscriber']);
+
+        $this->hasManyToMany('id', PostsTags::class, 'postsId', 'tagsId', Tags::class, 'id', ['alias' => 'tag']);
+
         //SoftDelete api Phalcon
         $this->addBehavior(
             new SoftDelete(

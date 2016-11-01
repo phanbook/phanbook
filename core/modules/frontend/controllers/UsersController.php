@@ -22,7 +22,9 @@ use Phanbook\Frontend\Forms\UserSettingForm;
 use Phanbook\Frontend\Forms\ChangePasswordForm;
 
 /**
- * Class UsersController
+ * \Phanbook\Frontend\Controllers\UsersController
+ *
+ * @package Phanbook\Frontend\Controllers
  */
 class UsersController extends ControllerBase
 {
@@ -118,7 +120,6 @@ class UsersController extends ControllerBase
     /**
      * Not use for now
      * @param  [type] $user [description]
-     * @return [type]       [description]
      */
     public function contributionAction($user = null)
     {
@@ -163,46 +164,72 @@ class UsersController extends ControllerBase
     }
 
     /**
-     * @return \Phalcon\Http\Response|\Phalcon\Http\ResponseInterface
+     * View and edit user profile.
      */
     public function profileAction()
     {
-        $object = Users::findFirstById($this->auth->getAuth()['id']);
-
-        if (!$object) {
-            $this->flashSession->error(t('Hack attempt!!!'));
-
-            return $this->response->redirect($this->router->getControllerName() . '/profile');
+        if (!$this->auth->isLogin()) {
+            $this->response->setStatusCode(403);
+            $this->response->redirect('/oauth/login');
+            return;
         }
+
+        if (!$object = Users::findFirstById($this->auth->getUserId())) {
+            $this->flashSession->error(t('Attempt to access non-existent user.'));
+            $this->response->setStatusCode(404);
+            $this->response->redirect('/users/profile');
+            return;
+        }
+
         $form = new UserForm($object);
-        $form->bind($_POST, $object);
 
         if ($this->request->isPost()) {
+            // Validate the form and assign the values from the user input
+            $form->bind($this->request->getPost(), $object);
+
             if (!$form->isValid()) {
+                $messages = [];
+                $this->response->setStatusCode(400);
                 foreach ($form->getMessages() as $message) {
-                    $this->flashSession->error($message->getMessage());
+                    $messages[] = (string) $message->getMessage();
                 }
+                $this->flashSession->error(implode('<br>', $messages));
             } else {
+                // @todo Process missed fields
                 $object->setFirstname($this->request->getPost('firstname', 'striptags'));
                 $object->setLastname($this->request->getPost('lastname', 'striptags'));
-                $object->setGender($this->request->getPost('gender'));
-                $object->setDigest($this->request->getPost('digest'));
+                $object->setEmail($this->request->getPost('email', 'email'));
+                $object->setUsername($this->request->getPost('username', 'striptags'));
+                $object->setBirthdate($this->request->getPost('birthDate'));
+                $object->setBio($this->request->getPost('bio', 'trim'));
+                $object->setTwitter($this->request->getPost('twitter'));
+                $object->setGithub($this->request->getPost('github'));
 
                 if (!$object->save()) {
+                    $messages = [];
+                    $this->response->setStatusCode(400);
                     foreach ($object->getMessages() as $message) {
-                        $this->flashSession->error($message->getMessage());
+                        $messages[] = (string) $message->getMessage();
                     }
-                } else {
-                    $this->flashSession->success(t('Data was successfully saved'));
-                    $this->refreshAuthSession($object->toArray());
-                    return $this->response->redirect($this->router->getControllerName() . '/profile');
+                    $this->flashSession->error(implode('<br>', $messages));
+                    return;
                 }
+
+                $this->response->setStatusCode(200);
+                $this->flashSession->success(t('Profile successfully updated.'));
+                $this->refreshAuthSession($object->toArray());
             }
         }
-        $this->tag->setTitle(t('Edit profile'));
-        $this->view->form   = $form;
-        $this->view->object = $object;
+
+        $this->tag->setTitle(t('Edit Profile'));
+
+        $this->view->setVars([
+            'form'   => $form,
+            'object' => $object,
+            'email'  => $this->auth->getEmail(),
+        ]);
     }
+
     private function refreshAuthSession($array)
     {
         $auth = $this->auth->getAuth();

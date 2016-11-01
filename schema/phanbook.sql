@@ -1803,7 +1803,7 @@ CREATE TABLE IF NOT EXISTS `rememberTokens` (
   `id` int(11) unsigned NOT NULL,
   `usersId` int(11) unsigned NOT NULL,
   `token` varchar(32) NOT NULL,
-  `userAgent` varchar(120) NOT NULL,
+  `userAgent` varchar(250) NOT NULL,
   `createdAt` int(10) unsigned NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=98 DEFAULT CHARSET=utf8;
 
@@ -1969,7 +1969,7 @@ CREATE TABLE IF NOT EXISTS `successLogins` (
   `id` int(15) NOT NULL,
   `usersId` int(15) NOT NULL,
   `ipAddress` varchar(100) NOT NULL,
-  `userAgent` varchar(200) NOT NULL
+  `userAgent` varchar(250) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=3897 DEFAULT CHARSET=utf8;
 
 --
@@ -6005,7 +6005,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `karma` int(11) DEFAULT NULL,
   `vote` int(10) unsigned DEFAULT NULL,
   `votePoint` int(11) DEFAULT NULL,
-  `gender` int(1) NOT NULL DEFAULT '9' COMMENT 'unknow-9, male-1,2-female',
+  `gender` int(1) NOT NULL DEFAULT '9' COMMENT '9-unknown,1-male,2-femaleq',
   `birthdate` date DEFAULT NULL,
   `passwd` varchar(60) NOT NULL,
   `registerHash` varchar(60) DEFAULT NULL,
@@ -6472,7 +6472,7 @@ ALTER TABLE `translations`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `accesToken` (`tokenGithub`),
+  ADD KEY `accessToken` (`tokenGithub`),
   ADD KEY `email` (`email`),
   ADD KEY `karma` (`karma`),
   ADD KEY `notifications` (`notifications`);

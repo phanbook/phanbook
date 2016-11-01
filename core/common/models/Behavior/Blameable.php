@@ -12,125 +12,159 @@
  */
 namespace Phanbook\Models\Behavior;
 
-use Phalcon\Mvc\Model\Behavior;
-use Phalcon\Mvc\Model\BehaviorInterface;
-use Phalcon\Mvc\ModelInterface;
-use Phalcon\Security\Random;
-use Phalcon\Logger\Adapter\File as Logger;
-
 use Phanbook\Models\Audit;
-use Phanbook\Models\ModelBase;
+use Phalcon\Security\Random;
+use Phalcon\Mvc\ModelInterface;
+use Phalcon\Mvc\Model\Behavior;
 use Phanbook\Models\AuditDetail;
+use Phalcon\Mvc\Model\BehaviorInterface;
+use Phanbook\Common\Library\Behavior\Di as DiBehavior;
 
 /**
- * Phanbook\Model\Behavior\Blameable
+ * \Phanbook\Models\Behavior\Blameable
+ *
+ * @package Phanbook\Models\Behavior
  */
 class Blameable extends Behavior implements BehaviorInterface
 {
+    use DiBehavior {
+        DiBehavior::__construct as protected injectDi;
+    }
+
+    /**
+     * Blameable constructor.
+     *
+     * @param array $options
+     */
+    public function __construct(array $options = null)
+    {
+        parent::__construct($options);
+
+        $this->injectDi();
+    }
+
     /**
      * {@inheritdoc}
      *
-     * @param string                      $eventType
-     * @param \Phalcon\Mvc\ModelInterface $model
+     * @param string         $eventType
+     * @param ModelInterface $model
+     * @return bool
      */
     public function notify($eventType, ModelInterface $model)
     {
-        //Fires 'logAfterUpdate' if the event is 'afterCreate'
+        // Fires 'logAfterUpdate' if the event is 'afterCreate'
         if ($eventType == 'afterCreate') {
             return $this->auditAfterCreate($model);
         }
 
-        //Fires 'logAfterUpdate' if the event is 'afterUpdate'
+        // Fires 'logAfterUpdate' if the event is 'afterUpdate'
         if ($eventType == 'afterUpdate') {
             return $this->auditAfterUpdate($model);
         }
+
+        return true;
     }
 
     /**
      * Creates an Audit instance based on the current environment
      *
-     * @param  string                      $type
-     * @param  \Phalcon\Mvc\ModelInterface $model
-     * @return Audit
+     * @param  string         $type Creating 'C' or updating 'U'
+     * @param  ModelInterface $model
+     * @return Audit|null
      */
     public function createAudit($type, ModelInterface $model)
     {
-        //Skip if it is cli
-        if ($model->getDI()->has('isCli')) {
-            return;
+        // Skip on console mode
+        if (PHP_SAPI == 'cli') {
+            return null;
         }
-        //Get the session service
-        $auth    = $model->getDI()->getAuth();
-        if (!empty($auth->getUserId())) {
-            //Get the request service
-            $request = $model->getDI()->getRequest();
-            $random  = new Random();
-            $audit   = new Audit();
 
-            $audit->setId($random->uuid());
-            $audit->setUserId($auth->getUserId());
-            //The model who performed the action
-            $audit->setModelname(get_class($model));
-
-            //The client IP address
-            $audit->setIpaddress(ip2long($request->getClientAddress()));
-
-            //Action is an update
-            $audit->setType($type);
-
-            //Current time
-            $audit->setCreatedAt(date('Y-m-d H:i:s'));
-            return $audit;
+        // Get the session service
+        if ($this->getDI()->has('auth')) {
+            return null;
         }
+
+        /** @var \Phanbook\Auth\Auth $auth */
+        $auth = $this->getDI()->getShared('auth');
+
+        if ($auth->isLogin()) {
+            return null;
+        }
+
+        /** @var \Phalcon\Http\Request $request */
+        $request = $this->getDI()->getShared('request');
+
+        $random = new Random();
+        $audit  = new Audit();
+
+        $audit->setId($random->uuid());
+        $audit->setUserId($auth->getUserId());
+        $audit->setModelName(get_class($model));
+        $audit->setIpaddress(ip2long($request->getClientAddress()));
+        $audit->setType($type);
+        $audit->setCreatedAt(date('Y-m-d H:i:s'));
+
+        return $audit;
     }
 
     /**
-     * Audits an DELETE operation
+     * Audits an CREATE operation
      *
      * @param  \Phalcon\Mvc\ModelInterface $model
      * @return boolean
      */
     public function auditAfterCreate(ModelInterface $model)
     {
-        //Create a new audit
-        $audit = $this->createAudit('C', $model);
-        if (is_object($audit)) {
-            $metaData = $model->getModelsMetaData();
-            $fields   = $metaData->getAttributes($model);
-            $details  = [];
-            $random = new Random();
-            //Ignore audit log posts when it create
-            if ($model->getSource() != 'posts') {
-                foreach ($fields as $field) {
-                    $auditDetail = new AuditDetail();
-                    $auditDetail->setId($random->uuid());
-                    $auditDetail->setFieldName($field);
-                    $auditDetail->setOldValue(null);
-                    $newValue = $model->readAttribute($field) ? : 'empty';
-                    $auditDetail->setNewValue($newValue);
+        // Create a new audit
+        if (!$audit = $this->createAudit('C', $model)) {
+            return false;
+        }
 
-                    $details[] = $auditDetail;
-                }
-                $audit->details = $details;
-                if (!$audit->save()) {
-                    ModelBase::saveLogger($audit->getMessages());
+        $metaData = $model->getModelsMetaData();
+        $fields   = $metaData->getAttributes($model);
+        $details  = [];
+        $random = new Random();
+        // Ignore audit log posts when it create
+        if ($model->getSource() != 'posts') {
+            foreach ($fields as $field) {
+                $auditDetail = new AuditDetail();
+                $auditDetail->setId($random->uuid());
+                $auditDetail->setFieldName($field);
+                $auditDetail->setOldValue(null);
+                $newValue = $model->readAttribute($field) ?: 'empty';
+                $auditDetail->setNewValue($newValue);
+
+                $details[] = $auditDetail;
+            }
+            $audit->details = $details;
+            // @todo: Move this to a common place
+            if (!$audit->save()) {
+                if ($this->getDI()->has('logger')) {
+                    $messages = [];
+                    foreach ($audit->getMessages() as $message) {
+                        $messages[] = (string) $message;
+                    }
+                    $this->getDI()->getShared('logger')->error(implode('; ', $messages));
+                    return false;
                 }
             }
         }
+
+        return true;
     }
 
     /**
      * Audits an UPDATE operation
      *
-     * @param  \Phalcon\Mvc\ModelInterface $model
-     * @return boolean
+     * @param  ModelInterface $model
+     * @return bool
      */
     public function auditAfterUpdate(ModelInterface $model)
     {
         $changedFields = $model->getChangedFields();
 
-        if (count($changedFields) == 0) {
-            return null;
+        if (!count($changedFields)) {
+            return false;
         }
 
         //Create a new audit
@@ -151,9 +185,19 @@ class Blameable extends Behavior implements BehaviorInterface
                 $details[] = $auditDetail;
             }
             $audit->details = $details;
+            // @todo: Move this to a common place
             if (!$audit->save()) {
-                ModelBase::saveLogger($audit->getMessages());
+                if ($this->getDI()->has('logger')) {
+                    $messages = [];
+                    foreach ($audit->getMessages() as $message) {
+                        $messages[] = (string) $message;
+                    }
+                    $this->getDI()->getShared('logger')->error(implode('; ', $messages));
+                    return false;
+                }
             }
         }
+
+        return true;
     }
 }

@@ -38,7 +38,7 @@ class PostReply extends \FunctionalTester
 
         $attributes = array_merge($default, $attributes);
 
-        return $I->haveRecord(Users::class, $attributes);;
+        return $I->haveRecord(Users::class, $attributes);
     }
 
     /**

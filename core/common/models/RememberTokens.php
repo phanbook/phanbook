@@ -92,6 +92,10 @@ class RememberTokens extends ModelBase
      */
     public function setUserAgent($userAgent)
     {
+        if (strlen($userAgent) > 250) {
+            $userAgent = substr($userAgent, 0, 250);
+        }
+
         $this->userAgent = $userAgent;
 
         return $this;
