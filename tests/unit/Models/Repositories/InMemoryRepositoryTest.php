@@ -5,10 +5,10 @@ namespace App\Test\Unit\Models\Repositories;
 use Faker\Factory as Faker;
 use App\Test\Module\UnitTest;
 use Phanbook\Models\Users as UserEntity;
-use Phanbook\Models\Repositories\Repository;
+use Phanbook\Models\Repositories\InMemoryRepository;
 use Phanbook\Models\Repositories\AccessorObjectIdentifier;
 
-class RepositoryTest extends UnitTest
+class InMemoryRepositoryTest extends UnitTest
 {
     /** @var  \Faker\Generator */
     protected $faker;
@@ -160,8 +160,11 @@ class RepositoryTest extends UnitTest
         $this->assertEquals([], $repository->getAll());
     }
 
+    /**
+     * @return InMemoryRepository
+     */
     private function createRepository()
     {
-        return new Repository(new AccessorObjectIdentifier('getId'));
+        return $this->getMockForAbstractClass(InMemoryRepository::class, [new AccessorObjectIdentifier('getId')]);
     }
 }

@@ -15,13 +15,13 @@ namespace Phanbook\Models\Repositories;
 use Phalcon\Mvc\ModelInterface;
 
 /**
- * \Phanbook\Models\Repositories\Repository
+ * \Phanbook\Models\Repositories\InMemoryRepository
  *
  * The collection-oriented Entity repository.
  *
  * @package Phanbook\Models\Repositories
  */
-final class Repository implements RepositoryInterface
+abstract class InMemoryRepository implements RepositoryInterface
 {
     /**
      * The identity accessor.
