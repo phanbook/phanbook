@@ -3,10 +3,10 @@
 namespace App\Test\Unit\Models\Repositories;
 
 use App\Test\Module\UnitTest;
-use Phalcon\Mvc\ModelInterface;
 use Phanbook\Models\Repositories\ObjectIdentifier;
+use Phanbook\Models\Repositories\RuntimeException;
 use Phanbook\Models\Repositories\AccessorObjectIdentifier;
-use Phanbook\Models\Repositories\Exceptions\RuntimeException;
+use App\Test\Fixtures\Models\Repositories\AccessorIdentifiedObject;
 
 class AccessorObjectIdentifierTest extends UnitTest
 {
@@ -46,9 +46,4 @@ class AccessorObjectIdentifierTest extends UnitTest
         $obj = $this->getMock(AccessorIdentifiedObject::class);
         $this->accessor->getIdentity($obj);
     }
-}
-
-interface AccessorIdentifiedObject extends ModelInterface
-{
-    public function getId();
 }

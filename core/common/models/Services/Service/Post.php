@@ -13,12 +13,11 @@
 namespace Phanbook\Models\Services\Service;
 
 use Phanbook\Models\Karma;
-use Phanbook\Models\Posts as Entity;
+use Phanbook\Models\Users;
+use Phanbook\Models\Posts;
+use Phanbook\Models\PostsViews;
+use Phalcon\Mvc\Model\Exception;
 use Phanbook\Models\Services\Service;
-use Phanbook\Models\Users as UsersEntity;
-use Phanbook\Models\Repositories\Repository;
-use Phanbook\Models\PostsViews as PostsViewsEntity;
-use Phanbook\Models\Repositories\Exceptions\EntityNotFoundException;
 
 /**
  * \Phanbook\Models\Services\Service\Post
@@ -31,72 +30,70 @@ class Post extends Service
      * Finds Post by ID.
      *
      * @param  int $id The Posts ID.
-     * @return Entity|null
+     * @return Posts|null
      */
-    public function findById($id)
+    public function findFirstById($id)
     {
-        return Repository::getPost()->findById($id);
+        return Posts::findFirstById($id) ?: null;
     }
 
     /**
      * Get Post by ID.
      *
      * @param  int $id The Posts ID.
-     * @return Entity
+     * @return Posts
      *
-     * @throws EntityNotFoundException
+     * @throws Exception
      */
-    public function getById($id)
+    public function getFirstById($id)
     {
-        return Repository::getPost()->get($id);
+        if (!$post = $this->findFirstById($id)) {
+            throw new Exception(
+                sprintf('No Posts found for ID %d', $id)
+            );
+        }
+
+        return $post;
     }
 
     /**
      * Checks whether the Post is published.
      *
-     * @param  int $id The Posts ID.
+     * @param  Posts $post
      * @return bool
      */
-    public function isPublished($id)
+    public function isPublished(Posts $post)
     {
-        $post = $this->findById($id);
-
-        if (!$post) {
-            return false;
-        }
-
-        return $post->getStatus() == Entity::PUBLISH_STATUS && !$post->getDeleted();
+        return $post->getStatus() == Posts::PUBLISH_STATUS && !$post->getDeleted();
     }
 
     /**
      * Checks whether the Post has views by ip address.
      *
-     * @param int    $id        The Posts ID.
-     * @param string $ipAddress The ip address [Optional].
+     * @param Posts  $post
+     * @param string $ipAddress
      *
      * @return int
      */
-    public function hasViewsByIpAddress($id, $ipAddress = null)
+    public function hasViewsByIpAddress(Posts $post, $ipAddress = null)
     {
         if (!$ipAddress && $this->getDI()->has('request')) {
             $ipAddress = $this->getDI()->getShared('request')->getClientAddress();
         }
 
-        return $this->countViewsByIpAddress($id, $this->resolveClientAddress($ipAddress)) > 0;
+        return $this->countViewsByIpAddress($post, $this->resolveClientAddress($ipAddress)) > 0;
     }
 
     /**
      * Count views by ip address.
      *
-     * @param int    $id        The Posts ID.
-     * @param string $ipAddress The ip address.
+     * @param Posts  $post
+     * @param string $ipAddress
      *
      * @return int
      */
-    public function countViewsByIpAddress($id, $ipAddress)
+    public function countViewsByIpAddress($post, $ipAddress)
     {
-        $post = $this->getById($id);
-
         if (!$ipAddress) {
             return 0;
         }
@@ -107,29 +104,25 @@ class Post extends Service
     /**
      * Increase number of views.
      *
-     * @param  int    $id        The Posts ID.
-     * @param  int    $visitorId The Visitor ID [Optional].
-     * @param  string $ipAddress The ip address [Optional].
+     * @param  Posts  $post
+     * @param  int    $visitorId
+     * @param  string $ipAddress
      * @return $this
      */
-    public function increaseNumberViews($id, $visitorId = null, $ipAddress = null)
+    public function increaseNumberViews($post, $visitorId = null, $ipAddress = null)
     {
         $visitorId = $this->resolveVisitorId($visitorId);
 
-        if (!$visitorId || $this->hasViewsByIpAddress($id, $visitorId)) {
+        if (!$visitorId || $this->hasViewsByIpAddress($post, $visitorId)) {
             return $this;
         }
 
-        $post = $this->getById($id);
-
-        $view = new PostsViewsEntity([
+        $view = new PostsViews([
             'postsId'   => $post->getId(),
             'ipaddress' => $this->resolveClientAddress($ipAddress),
         ]);
 
-        if ($view->save()) {
-            Repository::getPostViews()->saveEntity($view);
-        } else {
+        if (!$view->save()) {
             foreach ($post->getMessages() as $message) {
                 $this->logError($message);
             }
@@ -137,11 +130,9 @@ class Post extends Service
 
         $post->setNumberViews($post->getNumberViews() + 1);
 
-        $this->increaseAuthorKarmaByVisit($id, $visitorId);
+        $this->increaseAuthorKarmaByVisit($post, $visitorId);
 
         if ($post->save()) {
-            Repository::getPost()->saveEntity($post);
-        } else {
             foreach ($post->getMessages() as $message) {
                 $this->logError($message);
             }
@@ -153,19 +144,17 @@ class Post extends Service
     /**
      * Increase author karma.
      *
-     * @param  int    $id        The Posts ID.
-     * @param  int    $visitorId The Visitor ID [Optional].
+     * @param  Posts  $post
+     * @param  int    $visitorId
      * @return $this
      */
-    public function increaseAuthorKarmaByVisit($id, $visitorId = null)
+    public function increaseAuthorKarmaByVisit($post, $visitorId = null)
     {
-        if ($this->isAuthorVisitor($id, $visitorId)) {
+        if ($this->isAuthorVisitor($post, $visitorId)) {
             return $this;
         }
 
-        $post = $this->getById($id);
-
-        if ($post->user->getStatus() != UsersEntity::STATUS_ACTIVE) {
+        if ($post->user->getStatus() != Users::STATUS_ACTIVE) {
             return $this;
         }
 
@@ -177,15 +166,13 @@ class Post extends Service
     /**
      * Checks whether the current visitor is the author of the Post.
      *
-     * @param int    $id        The Posts ID.
-     * @param int    $visitorId The Visitor ID [Optional].
+     * @param Posts $post
+     * @param int   $visitorId
      *
      * @return bool
      */
-    public function isAuthorVisitor($id, $visitorId = null)
+    public function isAuthorVisitor($post, $visitorId = null)
     {
-        $post = $this->getById($id);
-
         $visitorId = $this->resolveVisitorId($visitorId);
 
         return $visitorId && $post->getUsersId() == $visitorId;

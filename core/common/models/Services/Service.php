@@ -13,29 +13,19 @@
 namespace Phanbook\Models\Services;
 
 use Phalcon\DiInterface;
+use Phalcon\Di\InjectionAwareInterface;
 use Phanbook\Common\Library\Behavior\Di as DiBehavior;
-use Phanbook\Models\Services\Service\ServiceInterface;
-use Phanbook\Models\Services\Exceptions\InvalidServiceException;
 
 /**
  * \Phanbook\Models\Services\Service
  *
- * @method static Service\Post getPost()
- * @method static Service\PostViews getPostViews()
- * @method static Service\User getUser()
- *
  * @package Phanbook\Models\Services
  */
-abstract class Service implements ServiceInterface
+abstract class Service implements InjectionAwareInterface
 {
     use DiBehavior {
         DiBehavior::__construct as protected injectDi;
     }
-
-    /**
-     * @var ServiceInterface[]
-     */
-    private static $services = [];
 
     /**
      * Service constructor.
@@ -47,56 +37,7 @@ abstract class Service implements ServiceInterface
         $this->injectDi($di);
     }
 
-    /**
-     * Get concrete Entity service.
-     *
-     * @param  string $name The service class name.
-     * @return ServiceInterface
-     *
-     * @throws InvalidServiceException
-     */
-    public static function getService($name)
-    {
-        $className = "\\Phanbook\\Models\\Services\\Service\\{$name}";
-
-        if (!empty(self::$services[$className])) {
-            return self::$services[$className];
-        }
-
-        if (!class_exists($className)) {
-            throw new InvalidServiceException(
-                "Service class '{$className}' doesn't exists."
-            );
-        }
-
-        $service = new $className();
-
-        if (!$service instanceof ServiceInterface) {
-            throw new InvalidServiceException(
-                "Service {$className} must implement " . ServiceInterface::class . '.'
-            );
-        }
-
-        self::$services[$className] = $service;
-
-        return $service;
-    }
-
-    /**
-     * Handle dynamic static method calls into the Service::getService method.
-     *
-     * @param  string $method
-     * @param  array  $parameters
-     * @return ServiceInterface
-     *
-     * @throws InvalidServiceException
-     */
-    public static function __callStatic($method, $parameters)
-    {
-        return self::getService(substr($method, 3));
-    }
-
-    protected function resolveClientAddress($ipAddress = null)
+    protected function resolveClientAddress($ipAddress)
     {
         if (!$ipAddress && $this->getDI()->has('request')) {
             $ipAddress = $this->getDI()->getShared('request')->getClientAddress();

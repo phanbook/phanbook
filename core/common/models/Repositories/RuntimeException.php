@@ -11,13 +11,13 @@
  * @author  Phanbook <hello@phanbook.com>
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
-namespace Phanbook\Models\Repositories\Exceptions;
+namespace Phanbook\Models\Repositories;
 
 /**
- * \Phanbook\Models\Repositories\Exceptions\InvalidRepositoryException
+ * \Phanbook\Models\Repositories\RuntimeException
  *
- * @package Phanbook\Models\Repositories\Exceptions
+ * @package Phanbook\Models\Repositories
  */
-class InvalidRepositoryException extends \InvalidArgumentException
+class RuntimeException extends \RuntimeException
 {
 }
