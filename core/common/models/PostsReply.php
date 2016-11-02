@@ -12,27 +12,19 @@
  */
 namespace Phanbook\Models;
 
-use Phalcon\Mvc\Model\Behavior\Timestampable;
 use Phalcon\Mvc\Model\Behavior\SoftDelete;
-
-use Phanbook\Models\User;
+use Phalcon\Mvc\Model\Behavior\Timestampable;
 
 /**
- * Class PostsReplies
+ * \Phanbook\Models\PostsReplies
  *
- * @property Phanbook\Models\Posts        post
- * @property Phanbook\Models\Users        user
+ * @property Posts $post
+ * @property Users $user
  *
- * @method static PostsReplies findFirstById
- * @method static PostsReplies findFirst($parameters = null)
- * @method static PostsReplies[] find($parameters = null)
+ * @method static PostsReply|false findFirstById(int $id)
  */
 class PostsReply extends ModelBase
 {
-
-    /**
- * Maybe to add const like posts, but for now we don't need it
-*/
     /**
      *
      * @var integer
@@ -84,6 +76,35 @@ class PostsReply extends ModelBase
      * @var string
      */
     protected $accepted;
+
+    public function initialize()
+    {
+        $this->belongsTo('postsId', Posts::class, 'id', ['alias' => 'post', 'reusable' => true]);
+        $this->belongsTo('usersId', Users::class, 'id', ['alias' => 'user', 'reusable' => true]);
+
+        $this->addBehavior(
+            new Timestampable(
+                [
+                    'beforeCreate' => [
+                        'field' => 'createdAt'
+                    ],
+                    'beforeUpdate' => [
+                        'field' => 'modifiedAt'
+                    ]
+                ]
+            )
+        );
+
+        // SoftDelete api Phalcon
+        $this->addBehavior(
+            new SoftDelete(
+                [
+                    'field' => 'deleted',
+                    'value' => time()
+                ]
+            )
+        );
+    }
 
     /**
      * Method to set the value of field id
@@ -290,17 +311,21 @@ class PostsReply extends ModelBase
     }
 
     /**
-     * @return Postsreply[]
+     * @param array $parameters
+
+     * @return \Phalcon\Mvc\Model\ResultsetInterface|PostsReply[]
      */
-    public static function find($parameters = array())
+    public static function find($parameters = [])
     {
         return parent::find($parameters);
     }
 
     /**
-     * @return Postsreply
+     * @param array $parameters
+     *
+     * @return PostsReply
      */
-    public static function findFirst($parameters = array())
+    public static function findFirst($parameters = [])
     {
         return parent::findFirst($parameters);
     }
@@ -317,32 +342,7 @@ class PostsReply extends ModelBase
     {
         return true;
     }
-    public function initialize()
-    {
-        $this->belongsTo('postsId', __NAMESPACE__ . '\Posts', 'id', ['alias' => 'post', 'reusable' => true]);
-        $this->belongsTo('usersId', __NAMESPACE__ . '\Users', 'id', ['alias' => 'user', 'reusable' => true]);
-        $this->addBehavior(
-            new Timestampable(
-                [
-                'beforeCreate' => [
-                    'field' => 'createdAt'
-                ],
-                'beforeUpdate' => [
-                    'field' => 'modifiedAt'
-                ]
-                ]
-            )
-        );
-        //SoftDelete api Phalcon
-        $this->addBehavior(
-            new SoftDelete(
-                [
-                'field' => 'deleted',
-                'value' => time()
-                ]
-            )
-        );
-    }
+
     /**
      * Implement hook beforeUpdate of Model Phalcon
      */
