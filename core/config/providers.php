@@ -18,6 +18,7 @@ return [
     Providers\FlashSessionServiceProvider::class,
     Providers\DatabaseServiceProvider::class,
     Providers\CookiesServiceProvider::class,
+    Providers\CryptServiceProvider::class,
 
     // Third Party Providers
     // ...
