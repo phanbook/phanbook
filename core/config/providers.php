@@ -20,6 +20,7 @@ return [
     Providers\CookiesServiceProvider::class,
     Providers\CryptServiceProvider::class,
     Providers\SecurityServiceProvider::class,
+    Providers\ModelsCacheServiceProvider::class,
 
     // Third Party Providers
     // ...
