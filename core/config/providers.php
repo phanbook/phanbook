@@ -13,6 +13,7 @@ return [
     Providers\AuthServiceProvider::class,
     Providers\ViewCacheServiceProvider::class,
     Providers\VoltTemplateEngineServiceProvider::class,
+    Providers\ViewServiceProvider::class,
 
     // Third Party Providers
     // ...
