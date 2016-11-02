@@ -64,7 +64,8 @@ class Application
         $this->di->setShared('bootstrap', $this);
         Di::setDefault($this->di);
 
-        $providers = require ROOT_DIR . '/core/config/providers.php';
+        /** @noinspection PhpIncludeInspection */
+        $providers = require config_path('providers.php');;
         if (is_array($providers)) {
             $this->initializeServices($providers);
         }

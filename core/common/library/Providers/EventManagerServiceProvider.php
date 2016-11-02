@@ -28,7 +28,7 @@ class EventManagerServiceProvider extends AbstractServiceProvider
     protected $serviceName = 'eventsManager';
 
     /**
-     * Register application service.
+     * {@inheritdoc}
      *
      * @return void
      */
