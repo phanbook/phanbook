@@ -19,6 +19,7 @@ return [
     Providers\DatabaseServiceProvider::class,
     Providers\CookiesServiceProvider::class,
     Providers\CryptServiceProvider::class,
+    Providers\SecurityServiceProvider::class,
 
     // Third Party Providers
     // ...
