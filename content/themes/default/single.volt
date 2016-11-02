@@ -4,7 +4,7 @@
     {% if post is defined %}
     <div class="row">
             <div class="col-md-9">
-                {{ partial('partials/question', ['single' : true])}}
+                {{ partial('partials/question', ['single' : true, 'vote_service': vote_service])}}
 
                 <div class="share-tags page-content">
                     <div class="question-tags"><i class="fa fa-tags"></i>

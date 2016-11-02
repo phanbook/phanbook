@@ -73,28 +73,6 @@ class ModelBase extends Model
     {
     }
 
-    /**
-     * @param int $objectId
-     * @param string $object
-     *
-     * @return mixed
-     */
-    public function getVotes($objectId, $object)
-    {
-        $sql = [
-            'SELECT COALESCE(SUM(positive),0) AS positive, ',
-            'COALESCE(SUM(negative),0) AS negative ',
-            'FROM ' . Vote::class,
-            ' WHERE objectId = :objectId: AND object = :object:',
-        ];
-
-        return $this
-            ->getModelsManager()
-            ->executeQuery(implode('', $sql), ['objectId' => $objectId, 'object' => $object])
-            ->getFirst()
-            ->toArray();
-    }
-
     public function getPostsWithVotes($postId = false)
     {
         $sql = 'SELECT p.*, pr.usersId as editorId, u.email,

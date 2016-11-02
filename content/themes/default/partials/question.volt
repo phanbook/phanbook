@@ -1,6 +1,6 @@
 <article class="question question-type-normal{% if single is defined %} single-question{%endif%}">
     {% set postLink = post.getType() ~ '/' ~ post.getId() ~ '/' ~ post.getSlug() %}
-    {% set vote = post.getVotes(post.getId(), 'posts'), score = vote['positive'] - vote['negative']%}
+    {% set vote = vote_service.getVotes(post.getId(), 'posts'), score = vote['positive'] - vote['negative']%}
     <h2>
          {{ link_to(postLink, post.title) }}
     </h2>
