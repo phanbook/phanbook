@@ -9,6 +9,7 @@ return [
     Providers\UrlResolverServiceProvider::class,
     Providers\SessionServiceProvider::class,
     Providers\CollectionManagerServiceProvider::class,
+    Providers\ModelsManagerServiceProvider::class,
 
     // Third Party Providers
     // ...
