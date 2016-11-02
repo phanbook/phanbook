@@ -49,8 +49,9 @@ class ConfigServiceProvider extends AbstractServiceProvider
                 }
 
                 if (!$config instanceof Config) {
-                    throw new RuntimeException(
-                        sprintf('The Application config must be an instance of %s.', Config::class)
+                    throw trigger_error(
+                        sprintf('The Application config must be an instance of %s.', Config::class),
+                        E_USER_ERROR
                     );
                 }
 
