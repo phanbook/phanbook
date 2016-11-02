@@ -16,6 +16,7 @@ return [
     Providers\ViewServiceProvider::class,
     Providers\PhpTemplateEngineServiceProvider::class,
     Providers\FlashSessionServiceProvider::class,
+    Providers\DatabaseServiceProvider::class,
 
     // Third Party Providers
     // ...
