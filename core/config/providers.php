@@ -7,6 +7,7 @@ return [
     Providers\EventManagerServiceProvider::class,
     Providers\ConfigServiceProvider::class,
     Providers\UrlResolverServiceProvider::class,
+    Providers\SessionServiceProvider::class,
 
     // Third Party Providers
     // ...

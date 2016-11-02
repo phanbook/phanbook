@@ -65,7 +65,7 @@ class Application
         Di::setDefault($this->di);
 
         /** @noinspection PhpIncludeInspection */
-        $providers = require config_path('providers.php');;
+        $providers = require config_path('providers.php');
         if (is_array($providers)) {
             $this->initializeServices($providers);
         }
