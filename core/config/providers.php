@@ -15,6 +15,7 @@ return [
     Providers\VoltTemplateEngineServiceProvider::class,
     Providers\ViewServiceProvider::class,
     Providers\PhpTemplateEngineServiceProvider::class,
+    Providers\FlashSessionServiceProvider::class,
 
     // Third Party Providers
     // ...
