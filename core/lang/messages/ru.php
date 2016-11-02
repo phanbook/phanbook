@@ -60,6 +60,7 @@ $messages = [
     // N
     'No Answers' => 'Без ответа',
     // O
+    'Only authorized users can vote' => 'Только авторизованные пользователи могут голосовать',
     'OR' => 'ИЛИ',
     // P
     'Password' => 'Пароль',

@@ -11,6 +11,7 @@
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
 
+/** @var \Phalcon\Mvc\Router $router */
 $router->setDefaults([
     'module'     => 'frontend',
     'controller' => 'posts',
@@ -72,7 +73,8 @@ $router->add('/posts/new', [
     'controller' => 'posts',
     'action' => 'new'
 ]);
-$router->add('/posts/vote', [
+
+$router->addPost('/posts/vote', [
     'controller' => 'posts',
     'action' => 'vote'
 ]);

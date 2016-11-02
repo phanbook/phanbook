@@ -80,29 +80,33 @@ class ControllerBase extends Controller
     public function voteAction()
     {
         $this->view->disable();
-        if (!$this->request->isPost()) {
-            return $this->response->redirect($this->router->getControllerName());
-        }
+
+        $postService = new Service\Post();
+        $userService = new Service\User();
 
         $way = 'positive';
         if ($this->request->getPost('way') == 'negative') {
             $way = 'negative';
         }
-        $objectId = $this->request->getPost('objectId');
-        $object   = $this->request->getPost('object');
-        $user     = Users::findFirstById($this->auth->getAuth()['id']);
+
+        $objectId = $this->request->getPost('objectId', 'int');
+        $object   = $this->request->getPost('object', 'alphanum');
+
         $this->setJsonResponse();
 
-        if (!$user) {
+        if (!$this->auth->isAuthorizedVisitor() || $user = $userService->findFirstById($this->auth->getUserId())) {
             $this->jsonMessages['messages'][] = [
                 'type'    => 'error',
-                'content' =>  'You need to login first'
+                'content' => t('Only authorized users can vote')
             ];
+
             return $this->jsonMessages;
         }
+
         $this->db->begin();
+
         if ($object == Vote::OBJECT_POSTS) {
-            if (!$post = Posts::findFirstById($objectId)) {
+            if (!$post = $postService->findFirstById($objectId)) {
                 $this->jsonMessages['messages'][] = [
                     'type'    => 'error',
                     'content' => 'Post does not exist'
@@ -111,11 +115,12 @@ class ControllerBase extends Controller
             }
             $this->setPointPost($way, $user, $post);
 
-            //Adding notification when you have receive vote on the post, and not for now for post replies
+            // Adding notification when you have receive vote on the post, and not for now for post replies
             if ($user->getId() != $post->getUsersId()) {
                 $this->setActivityNotifications($user, $post);
             }
         }
+
         if ($object == Vote::OBJECT_POSTS_REPLIES) {
             if (!$postReply = PostsReply::findFirstById($objectId)) {
                 $this->jsonMessages['messages'][] = [
@@ -128,7 +133,9 @@ class ControllerBase extends Controller
             // Set karma Voting someone else's post (positive or negative) on posts reply
             $this->setPointReply($way, $user, $postReply);
         }
+
         $vote = Vote::vote($objectId, $object, $way);
+
         if (!$vote) {
             $this->db->rollback();
             $this->jsonMessages['messages'][] = [
@@ -137,6 +144,7 @@ class ControllerBase extends Controller
             ];
             return $this->jsonMessages;
         }
+
         if ($user->getVote() <= 0) {
             $this->jsonMessages['messages'][] = [
                 'type'    => 'error',
@@ -144,12 +152,14 @@ class ControllerBase extends Controller
             ];
             return $this->jsonMessages;
         }
+
         //checking the user have already voted this post yet
         if (is_array($vote)) {
             $this->db->rollback();
             $this->jsonMessages['messages'][] = $vote;
             return $this->jsonMessages;
         }
+
         $this->db->commit();
 
         if ($this->request->isAjax()) {
@@ -157,6 +167,7 @@ class ControllerBase extends Controller
             $votes = $voteService->getVotes($objectId, $object);
             return ['data' => $votes['positive'] - $votes['negative']];
         }
+
         echo 0;
         return 0;
     }
