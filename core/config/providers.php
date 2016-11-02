@@ -10,6 +10,7 @@ return [
     Providers\SessionServiceProvider::class,
     Providers\CollectionManagerServiceProvider::class,
     Providers\ModelsManagerServiceProvider::class,
+    Providers\AuthServiceProvider::class,
 
     // Third Party Providers
     // ...
