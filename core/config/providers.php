@@ -14,6 +14,7 @@ return [
     Providers\ViewCacheServiceProvider::class,
     Providers\VoltTemplateEngineServiceProvider::class,
     Providers\ViewServiceProvider::class,
+    Providers\PhpTemplateEngineServiceProvider::class,
 
     // Third Party Providers
     // ...
