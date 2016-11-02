@@ -95,7 +95,6 @@ class PostsReply extends ModelBase
             )
         );
 
-        // SoftDelete api Phalcon
         $this->addBehavior(
             new SoftDelete(
                 [
