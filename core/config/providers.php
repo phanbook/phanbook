@@ -8,6 +8,7 @@ return [
     Providers\ConfigServiceProvider::class,
     Providers\UrlResolverServiceProvider::class,
     Providers\SessionServiceProvider::class,
+    Providers\CollectionManagerServiceProvider::class,
 
     // Third Party Providers
     // ...
