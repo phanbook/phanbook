@@ -12,6 +12,7 @@ return [
     Providers\ModelsManagerServiceProvider::class,
     Providers\AuthServiceProvider::class,
     Providers\ViewCacheServiceProvider::class,
+    Providers\VoltTemplateEngineServiceProvider::class,
 
     // Third Party Providers
     // ...
