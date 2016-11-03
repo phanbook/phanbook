@@ -36,7 +36,7 @@ abstract class AbstractServiceProvider extends Component implements ServiceProvi
      *
      * @param DiInterface $di The Dependency Injector.
      */
-    public function __construct(DiInterface $di)
+    final public function __construct(DiInterface $di)
     {
         if (!$this->serviceName) {
             throw new LogicException(
@@ -45,6 +45,7 @@ abstract class AbstractServiceProvider extends Component implements ServiceProvi
         }
 
         $this->setDI($di);
+
         $this->configure();
     }
 

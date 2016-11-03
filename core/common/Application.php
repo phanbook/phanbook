@@ -96,6 +96,16 @@ class Application
     }
 
     /**
+     * Get registered service providers.
+     *
+     * @return ServiceProviderInterface[]
+     */
+    public function getServiceProviders()
+    {
+        return $this->serviceProviders;
+    }
+
+    /**
      * Get Application output.
      *
      * @return ResponseInterface|string
@@ -132,7 +142,6 @@ class Application
      */
     protected function initializeService(ServiceProviderInterface $serviceProvider)
     {
-        $serviceProvider->configure();
         $serviceProvider->register();
         $serviceProvider->boot();
 
