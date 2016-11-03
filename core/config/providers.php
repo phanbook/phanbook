@@ -28,6 +28,7 @@ return [
     Providers\MvcDispatcherServiceProvider::class,
     Providers\TranslationServiceProvider::class,
     Providers\QueueServiceProvider::class,
+    Providers\ThemeServiceProvider::class,
 
     // Third Party Providers
     // ...
