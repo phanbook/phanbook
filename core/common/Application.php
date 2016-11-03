@@ -95,6 +95,16 @@ class Application
     }
 
     /**
+     * Get Application mode.
+     *
+     * @return string
+     */
+    public function getMode()
+    {
+        return $this->mode;
+    }
+
+    /**
      * Get registered service providers.
      *
      * @return ServiceProviderInterface[]
