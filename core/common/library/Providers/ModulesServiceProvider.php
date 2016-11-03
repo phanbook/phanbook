@@ -79,6 +79,16 @@ class ModulesServiceProvider extends AbstractServiceProvider
      */
     public function register()
     {
+        $modules = $this->modules;
+
+        $this->di->setShared(
+            $this->serviceName,
+            function () use ($modules) {
+                return function () use ($modules) {
+                    return $modules;
+                };
+            }
+        );
     }
 
     /**
