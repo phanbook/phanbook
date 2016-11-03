@@ -29,7 +29,7 @@ class ViewServiceProvider extends AbstractServiceProvider
     protected $serviceName = 'view';
 
     protected $engines = [
-        '.volt' => 'voltEngine',
+        '.volt' => 'volt',
         '.php'  => 'phpEngine',
     ];
 

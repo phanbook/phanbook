@@ -28,7 +28,7 @@ class VoltTemplateEngineServiceProvider extends AbstractServiceProvider
      * The Service name.
      * @var string
      */
-    protected $serviceName = 'voltEngine';
+    protected $serviceName = 'volt';
 
     /**
      * {@inheritdoc}
