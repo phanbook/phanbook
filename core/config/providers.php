@@ -29,6 +29,7 @@ return [
     Providers\TranslationServiceProvider::class,
     Providers\QueueServiceProvider::class,
     Providers\ThemeServiceProvider::class,
+    Providers\PhanbookServiceProvider::class,
 
     // Third Party Providers
     // ...
