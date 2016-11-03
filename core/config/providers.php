@@ -36,6 +36,7 @@ return [
     Providers\RequestServiceProvider::class,
     Providers\ResponseServiceProvider::class,
     Providers\ModulesServiceProvider::class,
+    Providers\RoutingServiceProvider::class,
 
     // Third Party Providers
     // ...
