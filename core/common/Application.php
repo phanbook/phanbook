@@ -82,6 +82,10 @@ class Application
      */
     public function run()
     {
+        if (APPLICATION_ENV == ENV_TESTING) {
+            return $this->app;
+        }
+
         return $this->getOutput();
     }
 
@@ -108,12 +112,12 @@ class Application
     /**
      * Get Application output.
      *
-     * @return ResponseInterface|string
+     * @return ResponseInterface|void
      */
     protected function getOutput()
     {
         if ($this->app instanceof MvcApplication) {
-            return $this->app->handle()->getContent();
+            echo $this->app->handle()->getContent();
         }
 
         return $this->app->handle();
