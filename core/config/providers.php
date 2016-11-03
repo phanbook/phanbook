@@ -31,6 +31,7 @@ return [
     Providers\ThemeServiceProvider::class,
     Providers\PhanbookServiceProvider::class,
     Providers\EscaperServiceProvider::class,
+    Providers\RequestServiceProvider::class,
     Providers\ResponseServiceProvider::class,
     Providers\ModulesServiceProvider::class,
 
