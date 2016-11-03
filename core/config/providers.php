@@ -22,6 +22,7 @@ return [
     Providers\SecurityServiceProvider::class,
     Providers\ModelsCacheServiceProvider::class,
     Providers\NotificationsServiceProvider::class,
+    Providers\LoggerServiceProvider::class,
 
     // Third Party Providers
     // ...
