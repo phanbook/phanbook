@@ -16,7 +16,6 @@ use Phalcon\Di;
 use Phalcon\DiInterface;
 use InvalidArgumentException;
 use Phalcon\Http\ResponseInterface;
-use Phalcon\Cli\Console as CliApplication;
 use Phalcon\Mvc\Application as MvcApplication;
 use Phalcon\Application as AbstractApplication;
 use Phanbook\Common\Library\Providers\ServiceProviderInterface;
@@ -88,7 +87,7 @@ class Application
     /**
      * Get current Application instance.
      *
-     * @return AbstractApplication|CliApplication|MvcApplication
+     * @return AbstractApplication|Console|MvcApplication
      */
     public function getApplication()
     {
@@ -154,7 +153,7 @@ class Application
      * Create internal Application to handle requests.
      *
      * @param  string $mode The Application mode.
-     * @return CliApplication|MvcApplication
+     * @return Console|MvcApplication
      *
      * @throws InvalidArgumentException
      */
@@ -166,7 +165,7 @@ class Application
             case 'normal':
                 return new MvcApplication();
             case 'cli':
-                return new CliApplication();
+                return new Console($this->di);
             case 'api':
                 throw new InvalidArgumentException(
                     'Not implemented yet.'

@@ -12,7 +12,8 @@
  */
 namespace Phanbook\Common\Library\Providers;
 
-use Phalcon\Mvc\Dispatcher;
+use Phalcon\Mvc\Dispatcher as MvcDi;
+use Phalcon\Cli\Dispatcher as CliDi;
 
 /**
  * \Phanbook\Common\Library\Providers\MvcDispatcherServiceProvider
@@ -38,7 +39,7 @@ class MvcDispatcherServiceProvider extends AbstractServiceProvider
             $this->serviceName,
             function () {
                 /** @var \Phalcon\DiInterface $this */
-                $dispatcher = new Dispatcher;
+                $dispatcher = PHP_SAPI == 'cli'  ? new CliDi() : new MvcDi();
                 $dispatcher->setEventsManager($this->getShared('eventsManager'));
 
                 return $dispatcher;

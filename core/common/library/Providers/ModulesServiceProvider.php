@@ -13,6 +13,7 @@
 namespace Phanbook\Common\Library\Providers;
 
 use RecursiveDirectoryIterator;
+use Phanbook\Cli\Module as Cli;
 use Phanbook\Oauth\Module as oAuth;
 use Phanbook\Backend\Module as Backend;
 use Phanbook\Frontend\Module as Frontend;
@@ -43,15 +44,16 @@ class ModulesServiceProvider extends AbstractServiceProvider
 
         foreach ($directory as $item) {
             $name = $item->getFilename();
-
-            if ($item->isDir() && $name != '.' && $name != '..') {
-                $path = $item->getPathname();
-                $this->modules[$name] = [
-                    'className' => 'Phanbook\\' . ucfirst($name) . '\\Module',
-                    'path'      => $path .  '/Module.php',
-                    'router'    => $path . '/config/routing.php'
-                ];
+            if (!$item->isDir() || $name[0] == '.') {
+                continue;
             }
+
+            $path = $item->getPathname();
+            $this->modules[$name] = [
+                'className' => 'Phanbook\\' . ucfirst($name) . '\\Module',
+                'path'      => $path .  '/Module.php',
+                'router'    => $path . '/config/routing.php'
+            ];
         }
 
         $core = [
@@ -66,6 +68,10 @@ class ModulesServiceProvider extends AbstractServiceProvider
             'backend' => [
                 'className' => Backend::class,
                 'path'      => modules_path('backend/Module.php')
+            ],
+            'cli' => [
+                'className' => Cli::class,
+                'path'      => modules_path('cli/Module.php')
             ]
         ];
 

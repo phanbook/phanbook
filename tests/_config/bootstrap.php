@@ -17,7 +17,7 @@ use Phanbook\Common\Application;
 require __DIR__.'/../../bootstrap/autoloader.php';
 
 // Create the Application
-$app = new Application('normal');
+$app = new Application();
 
 // Run the Application
 return $app->getApplication();

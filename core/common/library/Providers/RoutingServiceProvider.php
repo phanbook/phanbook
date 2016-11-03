@@ -12,6 +12,8 @@
  */
 namespace Phanbook\Common\Library\Providers;
 
+use Phalcon\Cli\Router;
+
 /**
  * \Phanbook\Common\Library\Providers\RoutingServiceProvider
  *
@@ -35,6 +37,10 @@ class RoutingServiceProvider extends AbstractServiceProvider
         $this->di->setShared(
             $this->serviceName,
             function () {
+                if (PHP_SAPI == 'cli') {
+                    return new Router();
+                }
+
                 /** @noinspection PhpIncludeInspection */
                 return require_once config_path('routing.php');
             }

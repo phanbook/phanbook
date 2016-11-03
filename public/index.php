@@ -11,11 +11,13 @@
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
 
+use Phanbook\Common\Application;
+
 // Register the auto loader
 require __DIR__.'/../bootstrap/autoloader.php';
 
 // Create the Application
-$app = require_once __DIR__.'/../bootstrap/application.php';
+$app = new Application();
 
 // Run the Application
 $app->run();
