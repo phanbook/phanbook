@@ -122,7 +122,10 @@ class Application
      */
     protected function initializeService(ServiceProviderInterface $serviceProvider)
     {
+        $serviceProvider->configure();
         $serviceProvider->register();
+        $serviceProvider->boot();
+
         $this->serviceProviders[$serviceProvider->getName()] = $serviceProvider;
 
         return $this;

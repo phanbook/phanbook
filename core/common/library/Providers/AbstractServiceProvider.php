@@ -12,11 +12,14 @@
  */
 namespace Phanbook\Common\Library\Providers;
 
+use LogicException;
 use Phalcon\DiInterface;
 use Phalcon\Mvc\User\Component;
 
 /**
  * \Phanbook\Common\Library\Providers\AbstractServiceProvider
+ *
+ * Base class for all providers.
  *
  * @package Phanbook\Common\Library\Providers
  */
@@ -35,16 +38,41 @@ abstract class AbstractServiceProvider extends Component implements ServiceProvi
      */
     public function __construct(DiInterface $di)
     {
+        if (!$this->serviceName) {
+            throw new LogicException(
+                sprintf('The service provider defined in "%s" cannot have an empty name.', get_class($this))
+            );
+        }
+
         $this->setDI($di);
+        $this->configure();
     }
 
     /**
-     * Gets the Service name.
+     * {@inheritdoc}
      *
      * @return string
      */
     public function getName()
     {
         return $this->serviceName;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return void
+     */
+    public function boot()
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return void
+     */
+    public function configure()
+    {
     }
 }
