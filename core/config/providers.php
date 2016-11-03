@@ -26,6 +26,7 @@ return [
     Providers\MarkdownServiceProvider::class,
     Providers\MailServiceProvider::class,
     Providers\MvcDispatcherServiceProvider::class,
+    Providers\TranslationServiceProvider::class,
 
     // Third Party Providers
     // ...
