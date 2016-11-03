@@ -25,6 +25,7 @@ return [
     Providers\LoggerServiceProvider::class,
     Providers\MarkdownServiceProvider::class,
     Providers\MailServiceProvider::class,
+    Providers\MvcDispatcherServiceProvider::class,
 
     // Third Party Providers
     // ...
