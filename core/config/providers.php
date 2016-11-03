@@ -21,6 +21,7 @@ return [
     Providers\CryptServiceProvider::class,
     Providers\SecurityServiceProvider::class,
     Providers\ModelsCacheServiceProvider::class,
+    Providers\ModelsMetadataServiceProvider::class,
     Providers\NotificationsServiceProvider::class,
     Providers\LoggerServiceProvider::class,
     Providers\MarkdownServiceProvider::class,
