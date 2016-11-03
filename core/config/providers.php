@@ -23,6 +23,7 @@ return [
     Providers\ModelsCacheServiceProvider::class,
     Providers\NotificationsServiceProvider::class,
     Providers\LoggerServiceProvider::class,
+    Providers\MarkdownServiceProvider::class,
 
     // Third Party Providers
     // ...
