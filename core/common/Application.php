@@ -60,6 +60,7 @@ class Application
     public function __construct($mode = 'normal')
     {
         $this->di = new Di();
+        $this->app = $this->createInternalApplication($mode);
 
         $this->di->setShared('bootstrap', $this);
         Di::setDefault($this->di);
@@ -70,7 +71,6 @@ class Application
             $this->initializeServices($providers);
         }
 
-        $this->app = $this->createInternalApplication($mode);
         $this->app->setEventsManager($this->di->getShared('eventsManager'));
         $this->app->setDI($this->di);
     }
@@ -83,6 +83,16 @@ class Application
     public function run()
     {
         return $this->getOutput();
+    }
+
+    /**
+     * Get current Application instance.
+     *
+     * @return AbstractApplication|CliApplication|MvcApplication
+     */
+    public function getApplication()
+    {
+        return $this->app;
     }
 
     /**

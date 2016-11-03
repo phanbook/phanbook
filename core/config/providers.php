@@ -30,6 +30,7 @@ return [
     Providers\QueueServiceProvider::class,
     Providers\ThemeServiceProvider::class,
     Providers\PhanbookServiceProvider::class,
+    Providers\ModulesServiceProvider::class,
 
     // Third Party Providers
     // ...
