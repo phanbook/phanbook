@@ -24,6 +24,7 @@ return [
     Providers\NotificationsServiceProvider::class,
     Providers\LoggerServiceProvider::class,
     Providers\MarkdownServiceProvider::class,
+    Providers\MailServiceProvider::class,
 
     // Third Party Providers
     // ...
