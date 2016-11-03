@@ -22,6 +22,7 @@ matrix:
 
 services:
   - mysql
+  - memcached
 
 git:
   depth: 1
