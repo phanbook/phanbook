@@ -82,10 +82,6 @@ class Application
      */
     public function run()
     {
-        if (APPLICATION_ENV == ENV_TESTING) {
-            return $this->app;
-        }
-
         return $this->getOutput();
     }
 

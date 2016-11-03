@@ -10,27 +10,14 @@
  * @since   1.0.0
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
-use Phalcon\Mvc\Application;
 
-require ROOT_DIR . '/core/config/services.php';
+use Phanbook\Common\Application;
 
-/**
- * Handle the request
- */
-$application = new Application();
+// Register the auto loader
+require __DIR__.'/../../bootstrap/autoloader.php';
 
-/**
- * Assign the DI
- */
-$application->setDI($di);
+// Create the Application
+$app = new Application('normal');
 
-$modules = require ROOT_DIR . '/core/config/modules.php';
-
-require ROOT_DIR . '/core/config/routing.php';
-
-/**
- * Include modules
- */
-$application->registerModules($modules);
-
-return $application;
+// Run the Application
+return $app->getApplication();
