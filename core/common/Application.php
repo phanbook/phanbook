@@ -173,7 +173,7 @@ class Application
 
         switch ($mode) {
             case 'normal':
-                return new MvcApplication();
+                return new MvcApplication($this->di);
             case 'cli':
                 return new Console($this->di);
             case 'api':
