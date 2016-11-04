@@ -12,10 +12,8 @@
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
 
-return new \Phalcon\Config(
-   [
-       'application' => [
-           'baseUri' => '/',
-       ]
-   ]
-);
+return new \Phalcon\Config([
+    'application' => [
+        'baseUri' => '/',
+    ]
+]);
