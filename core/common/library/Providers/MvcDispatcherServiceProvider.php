@@ -39,7 +39,6 @@ class MvcDispatcherServiceProvider extends AbstractServiceProvider
             $this->serviceName,
             function () {
                 /** @var \Phalcon\DiInterface $this */
-                /** @var \Phanbook\Common\Application $bootstrap */
                 $bootstrap = $this->getShared('bootstrap');
                 $dispatcher = $bootstrap->getMode() == 'cli'  ? new CliDi() : new MvcDi();
 
