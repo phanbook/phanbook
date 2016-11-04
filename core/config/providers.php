@@ -20,6 +20,7 @@ return [
     Providers\CookiesServiceProvider::class,
     Providers\CryptServiceProvider::class,
     Providers\TagServiceProvider::class,
+    Providers\FilterServiceProvider::class,
     Providers\SecurityServiceProvider::class,
     Providers\ModelsCacheServiceProvider::class,
     Providers\ModelsMetadataServiceProvider::class,
