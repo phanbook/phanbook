@@ -10,7 +10,7 @@
  * @since   1.0.0
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
-namespace Phanbook\Frontend\Plugins\Mvc\Dispatcher;
+namespace Phanbook\Plugins\Mvc\Dispatcher;
 
 use Phalcon\Di;
 use Phalcon\Dispatcher;
@@ -20,9 +20,9 @@ use Phalcon\Mvc\User\Plugin;
 use Phalcon\Mvc\Dispatcher\Exception as DispatchException;
 
 /**
- * \Phanbook\Frontend\Plugins\Mvc\Dispatcher\ErrorHandler
+ * \Phanbook\Plugins\Mvc\Dispatcher\ErrorHandler
  *
- * @package Phanbook\Frontend\Plugins\Mvc\Dispatcher
+ * @package Phanbook\Plugins\Mvc\Dispatcher
  */
 class ErrorHandler extends Plugin
 {
@@ -72,13 +72,13 @@ class ErrorHandler extends Plugin
                     break;
             }
 
-            $this->di->getShared('logger')->error($exception->getMessage());
+            $this->di->getShared('logger')->error($dispatcher->getModuleName() . ': ' . $exception->getMessage());
 
-            return false;
+            $event->stop();
         }
 
         if (APPLICATION_ENV !== ENV_PRODUCTION && $exception instanceof \Exception) {
-            $this->di->getShared('logger')->error($exception->getMessage());
+            $this->di->getShared('logger')->error($dispatcher->getModuleName() . ': ' . $exception->getMessage());
 
             throw $exception;
         }
