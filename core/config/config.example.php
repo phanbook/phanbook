@@ -43,12 +43,7 @@ return new \Phalcon\Config(
             /**
              * Change URL cdn if you want it
              */
-            'development'    => [
-                'staticBaseUri' => '/',
-            ],
-            'production'  => [
-                'staticBaseUri' => '/',
-            ],
+            'staticBaseUri'       => '/',
             /**
              * For developers: Phanbook debugging mode.
              *
