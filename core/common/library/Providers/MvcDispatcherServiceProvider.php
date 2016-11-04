@@ -42,6 +42,7 @@ class MvcDispatcherServiceProvider extends AbstractServiceProvider
                 $bootstrap = $this->getShared('bootstrap');
                 $dispatcher = $bootstrap->getMode() == 'cli'  ? new CliDi() : new MvcDi();
 
+                $dispatcher->setDI($this);
                 $dispatcher->setEventsManager($this->getShared('eventsManager'));
 
                 return $dispatcher;

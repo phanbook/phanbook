@@ -15,7 +15,6 @@ namespace Phanbook\Common\Library\Providers;
 use Phalcon\Mvc\View;
 use Phanbook\Plugins\Mvc\View\ErrorHandler;
 
-
 /**
  * \Phanbook\Common\Library\Providers\ViewServiceProvider
  *

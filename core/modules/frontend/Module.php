@@ -102,6 +102,7 @@ class Module implements ModuleDefinitionInterface
                 $dispatcher = new Dispatcher();
                 $dispatcher->setDefaultNamespace('Phanbook\Frontend\Controllers');
                 $dispatcher->setEventsManager($eventsManager);
+                $dispatcher->setDI($this);
 
                 return $dispatcher;
             }
