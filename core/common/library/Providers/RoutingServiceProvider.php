@@ -45,7 +45,7 @@ class RoutingServiceProvider extends AbstractServiceProvider
                 }
 
                 /** @noinspection PhpIncludeInspection */
-                return require_once config_path('routing.php');
+                return require config_path('routing.php');
             }
         );
     }
