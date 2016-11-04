@@ -312,7 +312,7 @@ class Auth extends Component
      */
     public function isAdmin()
     {
-        if ($this->isAuthorizedVisitor()) {
+        if (!$this->isAuthorizedVisitor()) {
             return false;
         }
 
@@ -323,7 +323,7 @@ class Auth extends Component
 
     public function isModerator()
     {
-        if ($this->isAuthorizedVisitor()) {
+        if (!$this->isAuthorizedVisitor()) {
             return false;
         }
 
