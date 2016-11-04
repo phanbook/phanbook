@@ -10,6 +10,7 @@
  * @since   1.0.0
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
+
 return [
     'Pacific/Wake'                   => '(GMT-12:00) International Date Line West',
     'Pacific/Apia'                   => '(GMT-11:00) Midway Island/Samoa',

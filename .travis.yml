@@ -79,7 +79,7 @@ script:
   - vendor/bin/codecept run unit
   - vendor/bin/codecept run cli
   - vendor/bin/codecept run functional
-  - vendor/bin/codecept run acceptance
+  - vendor/bin/codecept run acceptance -vvv
 
 notifications:
   email:

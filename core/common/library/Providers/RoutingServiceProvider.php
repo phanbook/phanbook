@@ -38,7 +38,6 @@ class RoutingServiceProvider extends AbstractServiceProvider
             $this->serviceName,
             function () {
                 /** @var \Phalcon\DiInterface $this */
-                /** @var \Phanbook\Common\Application $bootstrap */
                 $bootstrap = $this->getShared('bootstrap');
                 if ($bootstrap->getMode() == 'cli') {
                     return new Router();
