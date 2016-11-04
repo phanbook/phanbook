@@ -48,11 +48,10 @@ class ModulesServiceProvider extends AbstractServiceProvider
                 continue;
             }
 
-            $path = $item->getPathname();
             $this->modules[$name] = [
                 'className' => 'Phanbook\\' . ucfirst($name) . '\\Module',
-                'path'      => $path .  '/Module.php',
-                'router'    => $path . '/config/routing.php'
+                'path'      => modules_path("{$name}/Module.php"),
+                'router'    => modules_path("{$name}/config/routing.php"),
             ];
         }
 
@@ -75,7 +74,7 @@ class ModulesServiceProvider extends AbstractServiceProvider
             ]
         ];
 
-        $this->modules = array_merge($this->modules, $core);
+        $this->modules = array_merge($core, $this->modules);
     }
 
     /**
@@ -90,9 +89,7 @@ class ModulesServiceProvider extends AbstractServiceProvider
         $this->di->setShared(
             $this->serviceName,
             function () use ($modules) {
-                return function () use ($modules) {
-                    return $modules;
-                };
+                return $modules;
             }
         );
     }
@@ -107,6 +104,9 @@ class ModulesServiceProvider extends AbstractServiceProvider
         /** @var \Phanbook\Common\Application $bootstrap */
         $bootstrap = $this->getDI()->getShared('bootstrap');
 
-        $bootstrap->getApplication()->registerModules($this->modules);
+        /** @var \Phalcon\Mvc\Application $app */
+        $app = $bootstrap->getApplication();
+        $app->registerModules($this->modules);
+        $app->setDefaultModule('frontend');
     }
 }
