@@ -22,7 +22,7 @@ use Phalcon\Mvc\Dispatcher\Exception as DispatchException;
 /**
  * \Phanbook\Frontend\Plugins\Mvc\Dispatcher\ErrorHandler
  *
- * @package Phanbook\Common\Library\Mvc\Dispatcher
+ * @package Phanbook\Frontend\Plugins\Mvc\Dispatcher
  */
 class ErrorHandler extends Plugin
 {
@@ -77,7 +77,7 @@ class ErrorHandler extends Plugin
             return false;
         }
 
-        if (ENV_PRODUCTION !== APPLICATION_ENV && $exception instanceof \Exception) {
+        if (APPLICATION_ENV !== ENV_PRODUCTION && $exception instanceof \Exception) {
             $this->di->getShared('logger')->error($exception->getMessage());
 
             throw $exception;
