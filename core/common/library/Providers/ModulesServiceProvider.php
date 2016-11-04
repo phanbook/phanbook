@@ -107,6 +107,5 @@ class ModulesServiceProvider extends AbstractServiceProvider
         /** @var \Phalcon\Mvc\Application $app */
         $app = $bootstrap->getApplication();
         $app->registerModules($this->modules);
-        $app->setDefaultModule('frontend');
     }
 }
