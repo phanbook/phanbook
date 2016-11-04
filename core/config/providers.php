@@ -1,4 +1,15 @@
 <?php
+/**
+ * Phanbook : Delightfully simple forum software
+ *
+ * Licensed under The GNU License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @link    http://phanbook.com Phanbook Project
+ * @since   1.0.0
+ * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
+ */
 
 use Phanbook\Common\Library\Providers;
 
@@ -20,6 +31,7 @@ return [
     Providers\CookiesServiceProvider::class,
     Providers\CryptServiceProvider::class,
     Providers\TagServiceProvider::class,
+    Providers\FilterServiceProvider::class,
     Providers\SecurityServiceProvider::class,
     Providers\ModelsCacheServiceProvider::class,
     Providers\ModelsMetadataServiceProvider::class,
@@ -36,6 +48,7 @@ return [
     Providers\RequestServiceProvider::class,
     Providers\ResponseServiceProvider::class,
     Providers\ModulesServiceProvider::class,
+    Providers\RoutingServiceProvider::class,
 
     // Third Party Providers
     // ...

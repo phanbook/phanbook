@@ -51,7 +51,7 @@ class UrlResolverServiceProvider extends AbstractServiceProvider
                     $url->setStaticBaseUri('/');
                 }
 
-                if (isset($config->application->staticBaseUri)) {
+                if (isset($config->application->baseUri)) {
                     $url->setBaseUri($config->application->baseUri);
                 } else {
                     $url->setBaseUri('/');

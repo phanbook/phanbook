@@ -13,6 +13,7 @@
 namespace Phanbook\Common\Library\Providers;
 
 use RecursiveDirectoryIterator;
+use Phanbook\Cli\Module as Cli;
 use Phanbook\Oauth\Module as oAuth;
 use Phanbook\Backend\Module as Backend;
 use Phanbook\Frontend\Module as Frontend;
@@ -43,15 +44,15 @@ class ModulesServiceProvider extends AbstractServiceProvider
 
         foreach ($directory as $item) {
             $name = $item->getFilename();
-
-            if ($item->isDir() && $name != '.' && $name != '..') {
-                $path = $item->getPathname();
-                $this->modules[$name] = [
-                    'className' => 'Phanbook\\' . ucfirst($name) . '\\Module',
-                    'path'      => $path .  '/Module.php',
-                    'router'    => $path . '/config/routing.php'
-                ];
+            if (!$item->isDir() || $name[0] == '.') {
+                continue;
             }
+
+            $this->modules[$name] = [
+                'className' => 'Phanbook\\' . ucfirst($name) . '\\Module',
+                'path'      => modules_path("{$name}/Module.php"),
+                'router'    => modules_path("{$name}/config/routing.php"),
+            ];
         }
 
         $core = [
@@ -66,10 +67,14 @@ class ModulesServiceProvider extends AbstractServiceProvider
             'backend' => [
                 'className' => Backend::class,
                 'path'      => modules_path('backend/Module.php')
+            ],
+            'cli' => [
+                'className' => Cli::class,
+                'path'      => modules_path('cli/Module.php')
             ]
         ];
 
-        $this->modules = array_merge($this->modules, $core);
+        $this->modules = array_merge($core, $this->modules);
     }
 
     /**
@@ -84,9 +89,7 @@ class ModulesServiceProvider extends AbstractServiceProvider
         $this->di->setShared(
             $this->serviceName,
             function () use ($modules) {
-                return function () use ($modules) {
-                    return $modules;
-                };
+                return $modules;
             }
         );
     }
@@ -101,6 +104,8 @@ class ModulesServiceProvider extends AbstractServiceProvider
         /** @var \Phanbook\Common\Application $bootstrap */
         $bootstrap = $this->getDI()->getShared('bootstrap');
 
-        $bootstrap->getApplication()->registerModules($this->modules);
+        /** @var \Phalcon\Mvc\Application $app */
+        $app = $bootstrap->getApplication();
+        $app->registerModules($this->modules);
     }
 }

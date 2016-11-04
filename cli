@@ -21,7 +21,7 @@
  * @example cli Example index --debug --single --no-record
  */
 
-use Phanbook\Common\Console;
+use Phanbook\Common\Application;
 use Phanbook\Tools\Cli\PhpError;
 
 // Register The Auto Loader
@@ -33,7 +33,8 @@ date_default_timezone_set('UTC');
 register_shutdown_function([PhpError::class, 'runtimeShutdown']);
 
 try {
-    $app = new Console();
+    $app = (new Application('cli'))->getApplication();
+
     // Record any php warnings/errors
     set_error_handler([PhpError::class, 'errorHandler']);
 

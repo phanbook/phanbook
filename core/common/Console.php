@@ -12,18 +12,9 @@
  */
 namespace Phanbook\Common;
 
-use Phalcon\Mvc\View;
-use Phalcon\Cli\Router;
-use Phanbook\Auth\Auth;
-use Phanbook\Mail\Mail;
 use Phalcon\DiInterface;
 use Phalcon\Events\Manager;
-use Phalcon\Queue\Beanstalk;
 use Phanbook\Tools\Cli\Output;
-use Phanbook\Queue\DummyServer;
-use Phalcon\Db\Adapter\Pdo\Mysql;
-use Phalcon\Mvc\View\Engine\Volt;
-use Phanbook\Markdown\ParsedownExtra;
 use Phalcon\Cli\Console as CLIConsole;
 use Phalcon\Di\FactoryDefault\Cli as CliDi;
 use Phanbook\Common\Exceptions\Cli\BadCliCallException;
@@ -41,8 +32,6 @@ class Console extends CLIConsole
      * @var DiInterface
      */
     private $di;
-
-    private $config;
 
     /**
      * @var string filename that will store the pid
@@ -116,184 +105,9 @@ class Console extends CLIConsole
     public function __construct(DiInterface $di = null)
     {
         $this->di = $di ?: new CliDi();
-        $loaders = [
-            'config',
-            'db',
-            'router',
-            'markdown',
-            'mail',
-            'view',
-            'queue',
-            'auth',
-            'session',
-            'isCli'
-        ];
-
-        // Register services
-        foreach ($loaders as $service) {
-            $this->$service();
-        }
-
-        // Register the app itself as a service
-        $this->di->set('app', $this);
 
         // Set the dependency Injector
         parent::__construct($this->di);
-    }
-
-    protected function isCli()
-    {
-        $this->di->set(
-            'isCli',
-            function () {
-                return true;
-            }
-        );
-    }
-
-    protected function auth()
-    {
-        $this->di->set(
-            'auth',
-            function () {
-                return new Auth;
-            }
-        );
-    }
-
-    protected function session()
-    {
-        $config = $this->config;
-        $this->di->set(
-            'session',
-            function () use ($config) {
-                $sessionAdapter = $config->application->session->adapter;
-                $session = new $sessionAdapter($config->application->session->options->toArray());
-                $session->start();
-
-                return $session;
-            },
-            true
-        );
-    }
-
-    /**
-     * Set the Application config.
-     */
-    protected function config()
-    {
-        $config = Config::factory();
-
-        $this->di->set('config', $config);
-        $this->config = $config;
-    }
-
-    /**
-     * Set the database service.
-     *
-     * @version 1.0
-     */
-    protected function db()
-    {
-        $config = $this->config;
-        $this->di->set(
-            'db',
-            function () use ($config) {
-                return new Mysql(
-                    [
-                        "host" => $config->database->mysql->host,
-                        "username" => $config->database->mysql->username,
-                        "password" => $config->database->mysql->password,
-                        "dbname" => $config->database->mysql->dbname,
-                        "options" => [
-                            \PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES ' . $config->database->mysql->charset,
-                        ],
-                    ]
-                );
-            }
-        );
-    }
-
-    /**
-     * Set the static router service.
-     */
-    protected function router()
-    {
-        $this->di->set(
-            'router',
-            function () {
-                $router = new Router();
-
-                return $router;
-            }
-        );
-    }
-
-    protected function markdown()
-    {
-        $this->di->set(
-            'markdown',
-            function () {
-                return new ParsedownExtra();
-            }
-        );
-    }
-
-    protected function mail()
-    {
-        $this->di->set(
-            'mail',
-            function () {
-                return new Mail();
-            }
-        );
-    }
-
-    protected function view()
-    {
-        $config = $this->config;
-        $this->di->set(
-            'view',
-            function () use ($config) {
-                $view = new View();
-                $view->setViewsDir($config->application->view->viewsDir);
-                $view->disableLevel([View::LEVEL_MAIN_LAYOUT => true, View::LEVEL_LAYOUT => true]);
-                $view->registerEngines(
-                    [
-                        '.volt' => function () use ($view, $config) {
-                            $volt = new Volt($view);
-                            $volt->setOptions(
-                                [
-                                    'compiledPath' => $config->application->view->compiledPath,
-                                    'compiledSeparator' => $config->application->view->compiledSeparator,
-                                    'compiledExtension' => $config->application->view->compiledExtension,
-                                    'compileAlways' => $config->application->debug,
-                                ]
-                            );
-                            return $volt;
-                        }
-                    ]
-                );
-                return $view;
-            }
-        );
-    }
-
-    protected function queue()
-    {
-        $config = $this->config;
-        $this->di->set(
-            'queue',
-            function () use ($config) {
-                if (isset($config->beanstalk->disabled) && $config->beanstalk->disabled) {
-                    return new DummyServer();
-                }
-                if (!isset($config->beanstalk->host)) {
-                    throw new \Exception('Beanstalk is not configured');
-                }
-                return new Beanstalk(['host' => $config->beanstalk->host]);
-            }
-        );
     }
 
     /**

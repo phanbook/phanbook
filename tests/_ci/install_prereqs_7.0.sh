@@ -28,4 +28,5 @@ install_extension() {
     enable_extension $1
 }
 
+enable_extension memcached
 install_extension imagick

@@ -12,21 +12,20 @@
  */
 namespace Phanbook\Common\Library\Providers;
 
-use Phalcon\Mvc\Dispatcher as MvcDi;
-use Phalcon\Cli\Dispatcher as CliDi;
+use Phalcon\Cli\Router;
 
 /**
- * \Phanbook\Common\Library\Providers\MvcDispatcherServiceProvider
+ * \Phanbook\Common\Library\Providers\RoutingServiceProvider
  *
  * @package Phanbook\Common\Library\Providers
  */
-class MvcDispatcherServiceProvider extends AbstractServiceProvider
+class RoutingServiceProvider extends AbstractServiceProvider
 {
     /**
      * The Service name.
      * @var string
      */
-    protected $serviceName = 'dispatcher';
+    protected $serviceName = 'router';
 
     /**
      * {@inheritdoc}
@@ -40,12 +39,12 @@ class MvcDispatcherServiceProvider extends AbstractServiceProvider
             function () {
                 /** @var \Phalcon\DiInterface $this */
                 $bootstrap = $this->getShared('bootstrap');
-                $dispatcher = $bootstrap->getMode() == 'cli'  ? new CliDi() : new MvcDi();
+                if ($bootstrap->getMode() == 'cli') {
+                    return new Router();
+                }
 
-                $dispatcher->setDI($this);
-                $dispatcher->setEventsManager($this->getShared('eventsManager'));
-
-                return $dispatcher;
+                /** @noinspection PhpIncludeInspection */
+                return require config_path('routing.php');
             }
         );
     }

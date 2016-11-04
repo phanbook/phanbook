@@ -14,105 +14,133 @@
 namespace Phanbook\Frontend;
 
 use Phalcon\Loader;
+use Phalcon\Mvc\Url;
+use Phalcon\Mvc\View;
 use Phalcon\DiInterface;
 use Phalcon\Mvc\Dispatcher;
-use Phalcon\Mvc\View;
-use Phalcon\Mvc\Url;
 use Phalcon\Mvc\ModuleDefinitionInterface;
-use Phalcon\Mvc\View\Engine\Volt;
-use Phalcon\Events\Manager as EventsManager;
+use Phanbook\Plugins\Mvc\View\ErrorHandler as ViewErrorHandler;
+use Phanbook\Plugins\Mvc\Dispatcher\ErrorHandler as DispatcherErrorHandler;
 
+/**
+ * \Phanbook\Frontend\Module
+ *
+ * @package Phanbook\Frontend
+ */
 class Module implements ModuleDefinitionInterface
 {
-    public function registerAutoloaders(DiInterface $dependencyInjector = null)
+    /**
+     * Registers an autoloader related to the module.
+     *
+     * @param DiInterface $di
+     */
+    public function registerAutoloaders(DiInterface $di = null)
     {
         $loader = new Loader();
 
-        $loader->registerNamespaces([
+        $namespaces = [
             'Phanbook\Frontend\Controllers' => __DIR__ . '/controllers/',
-            'Phanbook\Frontend\Forms'       => __DIR__ . '/forms/'
-        ]);
+            'Phanbook\Frontend\Forms'       => __DIR__ . '/forms/',
+            'Phanbook\Plugins'              => app_path('core/common/plugins/'),
+        ];
+
+        $loader->registerNamespaces($namespaces);
 
         $loader->register();
     }
 
     /**
-     * Register the services here to make them general
-     * or register in the ModuleDefinition to make them module-specific
+     * Registers services related to the module.
+     *
+     * @param DiInterface $di
      */
     public function registerServices(DiInterface $di)
     {
+        // Read configuration
+        $moduleConfig = require __DIR__ . '/config/config.php';
 
-        //Read configuration
-        $config = include __DIR__ . "/config/config.php";
+        // Tune Up the URL Component
+        $di->setShared(
+            'url',
+            function () use ($moduleConfig) {
+                /** @var DiInterface $this */
+                $config = $this->getShared('config');
+                $environment = APPLICATION_ENV;
 
-        $configGlobal = $di->getConfig();
+                $url = new Url();
 
-        $di->set('url', function () use ($config, $configGlobal) {
-            $url = new Url();
-            if (APPLICATION_ENV == 'production') {
-                $url->setStaticBaseUri($configGlobal->application->production->staticBaseUri);
-            } else {
-                $url->setStaticBaseUri($configGlobal->application->development->staticBaseUri);
+                if (isset($config->application->staticBaseUri)) {
+                    $url->setStaticBaseUri($config->application->staticBaseUri);
+                } elseif (isset($config->application->{$environment}->staticBaseUri)) {
+                    $url->setStaticBaseUri($config->application->{$environment}->staticBaseUri);
+                } else {
+                    $url->setStaticBaseUri('/');
+                }
+
+                if (isset($moduleConfig->application->baseUri)) {
+                    $url->setBaseUri($moduleConfig->application->baseUri);
+                } elseif (isset($config->application->baseUri)) {
+                    $url->setBaseUri($config->application->baseUri);
+                } else {
+                    $url->setBaseUri('/');
+                }
+
+                return $url;
             }
-            $url->setBaseUri($config->application->baseUri);
+        );
 
-            return $url;
-        });
-
-        //Registering a dispatcher
-        $di->set(
+        // Setting up the MVC Dispatcher
+        $di->setShared(
             'dispatcher',
             function () {
-                $eventsManager = $this->getEventsManager();
-                $eventsManager->attach("dispatch", function ($event, $dispatcher, $exception) {
-                    //controller or action doesn't exist
-                    if ($event->getType() == 'beforeException') {
-                        $message  = $exception->getMessage();
-                        $response = $this->getResponse();
-                        switch ($exception->getCode()) {
-                            case Dispatcher::EXCEPTION_HANDLER_NOT_FOUND:
-                                $response->redirect();
-                                return false;
-                            case Dispatcher::EXCEPTION_ACTION_NOT_FOUND:
-                                $response->redirect('action-not-found?msg=' . $message);
-                                return false;
+                /** @var DiInterface $this */
+                $eventsManager = $this->getShared('eventsManager');
 
-                            case Dispatcher::EXCEPTION_CYCLIC_ROUTING:
-                                $response->redirect('cyclic-routing?msg=' . $message);
-                                return false;
-                        }
-                    }
-                });
+                // Listen the required events
+                $eventsManager->attach('dispatch:beforeException', new DispatcherErrorHandler($this));
+
                 $dispatcher = new Dispatcher();
-                $dispatcher->setDefaultNamespace("Phanbook\Frontend\Controllers");
+                $dispatcher->setDefaultNamespace('Phanbook\Frontend\Controllers');
                 $dispatcher->setEventsManager($eventsManager);
+                $dispatcher->setDI($this);
+
                 return $dispatcher;
             }
         );
-        /**
-         * Setting up the view component
-         */
-        $di->set(
-            'view',
-            function () use ($di) {
-                $config = $di->get('config');
-                $view = new View();
-                $view->setViewsDir(themes_path($config->theme));
-                $view->disableLevel([View::LEVEL_MAIN_LAYOUT => true, View::LEVEL_LAYOUT => true]);
-                $view->registerEngines(['.volt' => 'volt']);
 
-                // Create an event manager
-                $eventsManager = $this->getEventsManager();
-                $eventsManager->attach(
-                    'view',
-                    function ($event, $view) {
-                        if ($event->getType() == 'notFoundView') {
-                            throw new \Exception('View not found!!! (' . $view->getActiveRenderPath() . ')');
-                        }
-                    }
+        // Setting up the View Component
+        $di->setShared(
+            'view',
+            function () {
+                /** @var DiInterface $this */
+                $config = $this->getShared('config');
+
+                $view = new View();
+
+                $view->setDI($this);
+                $view->setViewsDir(
+                    [
+                        __DIR__ . '/views/',
+                        themes_path($config->theme)
+                    ]
                 );
-                // Bind the eventsManager to the view component
+
+                $view->registerEngines(
+                    [
+                        '.volt' => $this->getShared('volt', [$view, $this])
+                    ]
+                );
+
+                $view->disableLevel(
+                    [
+                        View::LEVEL_MAIN_LAYOUT => true,
+                        View::LEVEL_LAYOUT      => true
+                    ]
+                );
+
+                $eventsManager = $this->getShared('eventsManager');
+                $eventsManager->attach('view:notFoundView', new ViewErrorHandler($this));
+
                 $view->setEventsManager($eventsManager);
 
                 return $view;

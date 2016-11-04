@@ -13,7 +13,7 @@
 namespace Phanbook\Common\Library\Providers;
 
 use Phalcon\Mvc\View;
-use Phalcon\Mvc\View\Exception;
+use Phanbook\Plugins\Mvc\View\ErrorHandler;
 
 /**
  * \Phanbook\Common\Library\Providers\ViewServiceProvider
@@ -60,21 +60,7 @@ class ViewServiceProvider extends AbstractServiceProvider
                 $view->disableLevel([View::LEVEL_MAIN_LAYOUT => true, View::LEVEL_LAYOUT => true]);
 
                 $eventsManager = $this->getShared('eventsManager');
-
-                $eventsManager->attach(
-                    'view',
-                    function ($event, $view) {
-                        if (is_array($paths = $view->getActiveRenderPath())) {
-                            $paths = [$paths];
-                        }
-
-                        if ($event->getType() == 'notFoundView') {
-                            throw new Exception(
-                                sprintf('View not found. Active render paths: [%s]', implode(', ', $paths))
-                            );
-                        }
-                    }
-                );
+                $eventsManager->attach('view:notFoundView', new ErrorHandler($this));
 
                 $view->setEventsManager($eventsManager);
 

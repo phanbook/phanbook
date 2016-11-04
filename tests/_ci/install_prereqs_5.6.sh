@@ -28,5 +28,6 @@ install_extension() {
     enable_extension $1
 }
 
+enable_extension memcached
 # Already installed for Travis PHP 5.6
 # install_extension imagick

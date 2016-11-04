@@ -16,13 +16,15 @@ use Phalcon\Tag;
 use Phanbook\Models\Tags;
 use Phanbook\Models\Users;
 use Phanbook\Models\Posts;
+use Faker\Factory as Faker;
 use Phanbook\Models\PostsTags;
 use Phanbook\Models\PostsReply;
-use Faker\Factory as Faker;
+use Phanbook\Common\Application;
 use Phalcon\Logger\Adapter\Stream;
 
 require dirname(dirname(dirname(__FILE__))) . '/bootstrap/autoloader.php';
-require ROOT_DIR . '/core/config/services.php';
+
+new Application('cli');
 
 $faker = Faker::create();
 $log   = new Stream('php://stdout');

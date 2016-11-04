@@ -1,27 +1,18 @@
 <?php
+/**
+ * Phanbook : Delightfully simple forum software
+ *
+ * Licensed under The GNU License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @link    http://phanbook.com Phanbook Project
+ * @since   1.0.0
+ * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
+ */
 
 use Phalcon\Session\Adapter\Files;
 
-/**
- * The base configuration for Phanbook
- *
- * The config.php creation script uses this file during the
- * installation. You don't have to use the web site, you can
- * copy this file to "config.php" and fill in the values.
- *
- * This file contains the following configurations:
- *
- * * MySQL settings
- * * Secret keys
- * * Application
- * * Languages
- * * Token google,github,facebook
- * * Mail
- *
- * @link https://github.com/phanbook/docs/config.md
- *
- * @package Phanbook
- */
 return new \Phalcon\Config(
     [
         /**

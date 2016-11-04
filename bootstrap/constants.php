@@ -15,12 +15,12 @@
 /**
  * @const DS The DIRECTORY_SEPARATOR shortcut.
  */
-define('DS', DIRECTORY_SEPARATOR);
+defined('DS') || define('DS', DIRECTORY_SEPARATOR);
 
 /**
  * @const ROOT_DIR The path to the Phanbook project root
  */
-define('ROOT_DIR', dirname(dirname(__FILE__)));
+defined('ROOT_DIR') || define('ROOT_DIR', dirname(dirname(__FILE__)));
 
 /**
  * @const ENV_PRODUCTION Application production stage.
@@ -45,13 +45,13 @@ defined('ENV_TESTING') || define('ENV_TESTING', 'testing');
 /**
  * @const APPLICATION_ENV Current application stage.
  */
-define('APPLICATION_ENV', getenv('APPLICATION_ENV') ?: ENV_LOCAL);
+defined('APPLICATION_ENV') || define('APPLICATION_ENV', getenv('APPLICATION_ENV') ?: ENV_LOCAL);
 
 /**
  * @const COMPATIBLE_VERSION The compatible Phalcon version.
  */
-define('COMPATIBLE_VERSION', 3000040);
+defined('COMPATIBLE_VERSION') || define('COMPATIBLE_VERSION', 3000040);
 
-define("MAX_WIDTH_THUMB", 200);
-
-define("MAX_HEIGHT_THUMB", 200);
+// @todo Move to the config
+defined('MAX_WIDTH_THUMB') || define('MAX_WIDTH_THUMB', 200);
+defined('MAX_HEIGHT_THUMB') || define('MAX_HEIGHT_THUMB', 200);
