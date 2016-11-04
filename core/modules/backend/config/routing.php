@@ -10,6 +10,7 @@
  * @since   1.0.0
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
+
 $router->add('/backend/:controller', [
     'module' => 'backend',
     'controller' => 1,
