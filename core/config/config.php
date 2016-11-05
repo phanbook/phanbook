@@ -78,6 +78,13 @@ return [
          */
         'debug'               => env('APP_DEBUG'),
 
+        /**
+         * Set the password hashing factor
+         *
+         * @link https://docs.phalconphp.com/en/latest/reference/security.html#setting-up-the-component
+         */
+        'hashingFactor' => env('SECURITY_HASHING_FACTOR'),
+
         'timezone'       => env('APP_TIMEZONE'),
 
         /**
