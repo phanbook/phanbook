@@ -62,7 +62,7 @@ before_script:
   - echo 'CREATE DATABASE phanbook CHARSET=utf8 COLLATE=utf8_unicode_ci' | mysql -u root
   - cat schema/phanbook.sql | mysql -uroot phanbook
   - cp ./tests/.env.travis .env
-  - php ./tests/_config/random-entries.php >/dev/null 2>&1
+  - php ./tests/_config/random-entries.php
   - php -S 127.0.0.1:8000 -t public/ .htrouter.php >/dev/null 2>&1 &
   - ulimit -c unlimited -S || true
 
@@ -78,6 +78,7 @@ notifications:
       - serghei@phalconphp.com
     on_success: change
     on_failure: always
+  slack: phanbook:"${SLAK_TOKEN}"
 
 addons:
   apt:
