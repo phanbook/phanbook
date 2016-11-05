@@ -20,15 +20,15 @@ return new \Phalcon\Config([
         'layoutsDir'     => 'layouts',
         'baseUri'        => '/backend/',
         'logger'         => [
-            'enabled' => true,
-            'path'    => 'log/',
-            'format'  => '[%date %][%type %] %message % ',
+            'enabled' => env('LOGGER_ENABLED'),
+            'path'    => content_path('logs/'),
+            'format'  => env('LOGGER_FORMAT'),
         ],
         'cache'          => [
-            'lifetime' => '86400',
-            'prefix'   => 'cache_',
-            'adapter'  => 'File',
-            'cacheDir' => 'cache/html/',
+            'lifetime' => env('CACHE_LIFETIME'),
+            'prefix'   => env('CACHE_PREFIX'),
+            'adapter'  => env('CACHE_DRIVER'),
+            'cacheDir' => content_path('cache/html/'),
         ]
     ]
 ]);

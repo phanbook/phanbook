@@ -42,25 +42,15 @@ class ConfigServiceProvider extends AbstractServiceProvider
             $this->serviceName,
             function () use ($merge) {
                 /** @noinspection PhpIncludeInspection */
-                $config = require config_path('config.php');
+                $config = include config_path('config.php');
 
-                if (is_array($config)) {
-                    $config = new Config($config);
+                if (!$config || !is_array($config)) {
+                    trigger_error('Could not detect config file', E_USER_ERROR);
                 }
 
-                if (!$config instanceof Config) {
-                    throw trigger_error(
-                        sprintf('The Application config must be an instance of %s.', Config::class),
-                        E_USER_ERROR
-                    );
-                }
+                $config = new Config($config);
 
-                $merge($config, config_path('config.global.php'));
                 $merge($config, content_path('options/options.php'));
-
-                if (APPLICATION_ENV !== ENV_PRODUCTION) {
-                    $merge($config, config_path('config.' . APPLICATION_ENV . '.php'));
-                }
 
                 return $config;
             }
