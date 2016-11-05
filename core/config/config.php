@@ -121,6 +121,14 @@ return [
             'cacheDir' => content_path('cache/html/'),
         ],
 
+        'viewCache' => [
+            'lifetime' => env('VIEW_CACHE_LIFETIME'),
+            'prefix'   => env('VIEW_CACHE_PREFIX'),
+            'adapter'  => env('VIEW_CACHE_DRIVER'),
+            'cacheDir' => content_path('cache/html/'),
+            'force'    => env('VIEW_CACHE_FORCE'),
+        ],
+
         /**
          * You can see from
          *
