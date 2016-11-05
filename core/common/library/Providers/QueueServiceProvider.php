@@ -41,7 +41,7 @@ class QueueServiceProvider extends AbstractServiceProvider
                 /** @var \Phalcon\DiInterface $this */
                 $config = $this->getShared('config');
 
-                if (!isset($config->beanstalk->enabled) || $config->beanstalk->enabled) {
+                if (!isset($config->beanstalk->enabled) || !$config->beanstalk->enabled) {
                     return new DummyServer();
                 }
 
