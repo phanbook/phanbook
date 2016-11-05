@@ -32,19 +32,23 @@ extensions:
 settings:
     lint: false
 
+# Get params from .env file
+params:
+    - .env
+
 # Global modules configuration.
 modules:
     config:
         Db:
-            dsn: 'mysql:host=localhost;dbname=phanbook'
-            user: 'root'
-            password: ''
+            dsn: %DB_DSN%
+            user: %DB_USERNAME%
+            password: %DB_PASSWORD%
             dump: tests/_data/dump.sql
         Phalcon:
             bootstrap: 'tests/_config/bootstrap.php'
             cleanup: false
         PhpBrowser:
-            url: 'http://localhost:8000'
+            url: %APP_URL%
             curl:
                 CURLOPT_RETURNTRANSFER: true
 

@@ -8,7 +8,9 @@
         "discussion",
         "phanbook",
         "question",
-        "answer"
+        "answer",
+        "phalcon",
+        "blog"
     ],
     "homepage": "http://phanbook.com/",
     "license": "GPL-2.0",
@@ -24,22 +26,27 @@
         }
     ],
     "require": {
-        "php": ">=5.5  <8.0",
+        "php": ">=5.6.4  <8.0",
         "swiftmailer/swiftmailer": "@stable",
         "league/oauth2-client": "^0.10",
         "league/fractal": "^0.9",
         "elasticsearch/elasticsearch": "^1.4",
         "google/apiclient": "^1.0",
         "league/flysystem": "^1.1@dev",
-        "erusev/parsedown": "^1.6"
-
+        "erusev/parsedown": "^1.6",
+        "vlucas/phpdotenv": "^2.4",
+        "ext-dom": "*",
+        "ext-PDO": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "ext-xml": "*",
+        "ext-libxml": "*",
+        "ext-curl": "*"
     },
     "require-dev": {
-        "phpdocumentor/reflection-docblock": "^2.0.4",
-        "phpunit/phpunit": "4.8.*",
         "fzaninotto/faker": "^1.6",
         "squizlabs/php_codesniffer": "^2.7",
-        "codeception/codeception": "^2.2",
+        "codeception/codeception": "2.2.x-dev",
         "phalcon/zephir": "dev-master"
     },
     "support": {
@@ -48,7 +55,7 @@
         "forum": "http://meta.phanbook.com/"
     },
     "suggest": {
-        "ext-yaml": "Best way to work with YAML"
+        "ext-yaml": "*"
     },
     "autoload-dev": {
         "psr-4": {
@@ -57,5 +64,13 @@
             "App\\Test\\Module\\": "tests/_support/Module/",
             "App\\Test\\Step\\": "tests/_support/Step/"
         }
+    },
+    "scripts": {
+        "post-root-package-install": [
+            "php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ]
+    },
+    "config": {
+        "preferred-install": "dist"
     }
 }

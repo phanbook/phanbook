@@ -21,7 +21,7 @@ use Phalcon\Session\Adapter\Files;
  */
 class SessionServiceProvider extends AbstractServiceProvider
 {
-    const UNIQUE_ID = 'PHANBOOK_SESSION';
+    const UNIQUE_ID = 'phanbook_';
 
     /**
      * The Service name.

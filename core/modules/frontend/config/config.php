@@ -14,6 +14,6 @@
 
 return new \Phalcon\Config([
     'application' => [
-        'baseUri' => '/',
+        'baseUri' => env('APP_BASE_URI'),
     ]
 ]);

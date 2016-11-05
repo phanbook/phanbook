@@ -1,12 +1,3 @@
-# Set environment variables (Optional)
-#
-# Common environment type:
-# ------------------------
-# SetEnv APPLICATION_ENV production
-# SetEnv APPLICATION_ENV staging
-# SetEnv APPLICATION_ENV testing
-SetEnv APPLICATION_ENV local
-
 DirectoryIndex index.php index.html
 
 # Character encodings

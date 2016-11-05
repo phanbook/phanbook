@@ -29,7 +29,7 @@ class AccessorObjectIdentifierTest extends UnitTest
     /** @test */
     public function shouldReturnTheRightCallback()
     {
-        $obj = $this->getMock(AccessorIdentifiedObject::class);
+        $obj = $this->createMock(AccessorIdentifiedObject::class);
         $obj->method('getId')->willReturn(4321);
 
         $id = $this->accessor->getIdentity($obj);
@@ -43,7 +43,7 @@ class AccessorObjectIdentifierTest extends UnitTest
 
         $this->accessor = new AccessorObjectIdentifier('getOtherId');
 
-        $obj = $this->getMock(AccessorIdentifiedObject::class);
+        $obj = $this->createMock(AccessorIdentifiedObject::class);
         $this->accessor->getIdentity($obj);
     }
 }

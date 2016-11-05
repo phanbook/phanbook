@@ -39,14 +39,11 @@ class UrlResolverServiceProvider extends AbstractServiceProvider
             function () {
                 /** @var \Phalcon\DiInterface $this */
                 $config = $this->getShared('config');
-                $environment = APPLICATION_ENV;
 
                 $url = new Url();
 
                 if (isset($config->application->staticBaseUri)) {
                     $url->setStaticBaseUri($config->application->staticBaseUri);
-                } elseif (isset($config->application->{$environment}->staticBaseUri)) {
-                    $url->setStaticBaseUri($config->application->{$environment}->staticBaseUri);
                 } else {
                     $url->setStaticBaseUri('/');
                 }
