@@ -4,20 +4,15 @@ sudo: required
 dist: trusty
 
 php:
-  - 5.5
   - 5.6
 
 matrix:
-  allow_failures:
-    - php: 7.1
   include:
     - php: 7.0
       env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="v3.0.0"
     - php: 7.0
-      env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="3.0.x"
-    - php: 7.1
-      env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="v3.0.0"
-    - php: 7.1
+      env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="v3.0.1"
+    - php: 7.0
       env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="3.0.x"
 
 services:
@@ -47,6 +42,7 @@ env:
   matrix:
     - PHALCON_VERSION="3.0.x"
     - PHALCON_VERSION="v3.0.0"
+    - PHALCON_VERSION="v3.0.1"
 
 before_install:
   - export PHP_MAJOR="$(echo $TRAVIS_PHP_VERSION | cut -d '.' -f 1,2)"
@@ -55,8 +51,6 @@ before_install:
   - travis_retry composer install --prefer-dist --no-interaction
   - ( bash tests/_ci/install_zephir.sh )
   - bash tests/_ci/install_prereqs_$PHP_MAJOR.sh
-  # Fix https://github.com/Codeception/Codeception/pull/3664
-  - travis_retry composer require "codeception/codeception:>=2.2.x-dev#6db18e683d5400c70ba3738079781ca891dd2308"
 
 install:
   - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b ${PHALCON_VERSION}
@@ -67,8 +61,7 @@ install:
 before_script:
   - echo 'CREATE DATABASE phanbook CHARSET=utf8 COLLATE=utf8_unicode_ci' | mysql -u root
   - cat schema/phanbook.sql | mysql -uroot phanbook
-  - cp ./core/config/config.example.php ./core/config/config.php
-  - cp ./tests/_ci/config.travis.php ./core/config/config.testing.php
+  - cp ./tests/.env.travis .env
   - php ./tests/_config/random-entries.php >/dev/null 2>&1
   - php -S 127.0.0.1:8000 -t public/ .htrouter.php >/dev/null 2>&1 &
   - ulimit -c unlimited -S || true
@@ -80,8 +73,11 @@ script:
 
 notifications:
   email:
-    - hello@phanbook.com
-  slack: phanbook:"${SLAK_TOKEN}"
+    recipients:
+      - hello@phanbook.com
+      - serghei@phalconphp.com
+    on_success: change
+    on_failure: always
 
 addons:
   apt:
