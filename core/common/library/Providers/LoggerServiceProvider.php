@@ -12,7 +12,9 @@
  */
 namespace Phanbook\Common\Library\Providers;
 
+use Phalcon\Logger;
 use Phalcon\Logger\Adapter\File;
+use Phalcon\Logger\Formatter\Line;
 
 /**
  * \Phanbook\Common\Library\Providers\LoggerServiceProvider
@@ -21,11 +23,28 @@ use Phalcon\Logger\Adapter\File;
  */
 class LoggerServiceProvider extends AbstractServiceProvider
 {
+    const DEFAULT_LEVEL = 'debug';
+    const DEFAULT_FORMAT = '[%date%][%type%] %message%';
+
     /**
      * The Service name.
      * @var string
      */
     protected $serviceName = 'logger';
+
+    protected $logLevels = [
+        'emergency' => Logger::EMERGENCY,
+        'emergence' => Logger::EMERGENCE,
+        'critical'  => Logger::CRITICAL,
+        'alert'     => Logger::ALERT,
+        'error'     => Logger::ERROR,
+        'warning'   => Logger::WARNING,
+        'notice'    => Logger::NOTICE,
+        'info'      => Logger::INFO,
+        'debug'     => Logger::DEBUG,
+        'custom'    => Logger::CUSTOM,
+        'special'   => Logger::SPECIAL,
+    ];
 
     /**
      * {@inheritdoc}
@@ -34,10 +53,38 @@ class LoggerServiceProvider extends AbstractServiceProvider
      */
     public function register()
     {
+        $logLevels = $this->logLevels;
+
         $this->di->setShared(
             $this->serviceName,
-            function () {
-                return new File(logs_path(date('Y-m-d') . '.log'), ['mode' => 'a+']);
+            function () use ($logLevels) {
+                /** @var \Phalcon\DiInterface $this */
+                $config = $this->getShared('config')->application->logger;
+
+                if (!isset($config->level)) {
+                    $level = self::DEFAULT_LEVEL;
+                } else {
+                    $level = strtolower($config->level);
+                }
+
+                if (!isset($logLevels[$level])) {
+                    $level = Logger::DEBUG;
+                } else {
+                    $level = $logLevels[$level];
+                }
+
+                if (!isset($config->format)) {
+                    $format = self::DEFAULT_FORMAT;
+                } else {
+                    $format = $config->format;
+                }
+
+                $logger = new File(logs_path(date('Y-m-d') . '.log'));
+
+                $logger->setFormatter(new Line($format));
+                $logger->setLogLevel($level);
+
+                return $logger;
             }
         );
     }

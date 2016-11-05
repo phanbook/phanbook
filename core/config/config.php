@@ -120,9 +120,9 @@ return [
          * @link https://docs.phalconphp.com/en/latest/reference/logging.html
          */
         'logger'  => [
-            'enabled' => env('LOGGER_ENABLED'),
-            'path'    => content_path('logs/'),
-            'format'  => env('LOGGER_FORMAT'),
+            'path'   => content_path('logs/'),
+            'format' => env('LOGGER_FORMAT'),
+            'level'  => env('LOGGER_LEVEL'),
         ],
     ],
 
