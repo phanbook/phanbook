@@ -1,8 +1,17 @@
+# Set environment variables (Optional)
+#
+# Common environment type:
+# ------------------------
+# SetEnv APPLICATION_ENV production
+# SetEnv APPLICATION_ENV staging
+# SetEnv APPLICATION_ENV testing
+SetEnv APPLICATION_ENV local
+
+# Use UTF-8 encoding for anything served text/plain or text/html
 AddDefaultCharset UTF-8
 
-Options +FollowSymLinks -MultiViews -Indexes
-
-DirectoryIndex index.php index.html
+# Force UTF-8 for a number of file formats
+AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
 
 AddType application/x-font-ttf         ttc ttf
 AddType application/x-font-otf         otf
@@ -10,17 +19,53 @@ AddType application/font-woff          woff
 AddType application/font-woff2         woff2
 AddType application/vnd.ms-fontobject  eot
 
-<FilesMatch ".(eot|ttf|otf|woff|woff2)">
-    Header set Access-Control-Allow-Origin "*"
-</FilesMatch>
+# Protect hidden files from being viewed
+<Files .*>
+    Order Deny,Allow
+    Deny From All
+</Files>
 
+# If your web host doesn't allow the FollowSymlinks option, you may need to
+# comment it out and use `Options +SymLinksIfOwnerMatch`, but be aware of the
+# performance impact: http://goo.gl/Mluzd
+Options +FollowSymLinks -MultiViews -Indexes
+
+DirectoryIndex index.php index.html
+
+<IfModule mod_headers.c>
+    # Because X-UA-Compatible isn't sent to non-IE (to save header bytes),
+    # We need to inform proxies that content changes based on UA
+    Header append Vary User-Agent
+
+    # Better website experience for IE users
+    <IfModule mod_setenvif.c>
+        BrowserMatch MSIE ie
+        Header set X-UA-Compatible "IE=Edge,chrome=1" env=ie
+
+        <FilesMatch "\.(appcache|crx|css|eot|gif|htc|ico|jpe?g|js|m4a|m4v|manifest|mp4|oex|oga|ogg|ogv|otf|pdf|png|safariextz|svg|svgz|ttf|vcf|webm|webp|woff|xml|xpi)$">
+            Header unset X-UA-Compatible
+        </FilesMatch>
+    </IfModule>
+
+    # Webfont access
+    <FilesMatch "\.(eot|font.css|otf|ttc|ttf|woff|woff2)$">
+        Header set Access-Control-Allow-Origin "*"
+    </FilesMatch>
+</IfModule>
+
+# Start rewrite engine
 <IfModule mod_rewrite.c>
+    # Turn on URL rewriting
     RewriteEngine On
+
+    # Installation directory
     RewriteBase /
 
+    # Setting up theme and core assets
     RewriteRule ^(core/assets)($|/) - [NC,L]
     RewriteRule ^(content/themes)($|/) - [NC,L]
 
+    # Setting up module assets
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_URI} !^core/modules
     RewriteRule ^(.+)/assets/(.+)$ core/modules/$1/assets/$2 [L,NC]
@@ -28,6 +73,7 @@ AddType application/vnd.ms-fontobject  eot
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^(.+)/(css|fonts|images|js)/(.+)$ content/themes/$1/assets/$2/$3 [L,NC]
 
+    # Rewrite all other URLs to public/index.php
     RewriteRule ^$ public/ [L]
 
     RewriteCond %{REQUEST_URI} !^(.+)/assets
