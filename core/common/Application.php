@@ -13,6 +13,7 @@
 namespace Phanbook\Common;
 
 use Phalcon\Di;
+use Dotenv\Dotenv;
 use Phalcon\DiInterface;
 use InvalidArgumentException;
 use Phalcon\Http\ResponseInterface;
@@ -58,10 +59,15 @@ class Application
      */
     public function __construct($mode = 'normal')
     {
+        $dotenv = new Dotenv(realpath(ROOT_DIR));
+        $dotenv->load();
+
         $this->di = new Di();
         $this->app = $this->createInternalApplication($mode);
 
+        $this->di->setShared('dotenv', $dotenv);
         $this->di->setShared('bootstrap', $this);
+
         Di::setDefault($this->di);
 
         /** @noinspection PhpIncludeInspection */
