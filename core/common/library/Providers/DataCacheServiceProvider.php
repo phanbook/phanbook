@@ -44,15 +44,12 @@ class DataCacheServiceProvider extends AbstractServiceProvider
                 /** @var \Phalcon\DiInterface $this */
                 $config = $this->getShared('config')->application;
 
-                if ($config->debug) {
-                    if (!isset($config->dataCache->force) || !$config->dataCache->force) {
-                        return new BackendMemory(new FrontendNone());
-                    }
+                if ($config->debug && (!isset($config->dataCache->force) || !$config->dataCache->force)) {
+                    return new BackendMemory(new FrontendNone());
                 }
 
                 $frontendAdapter = FrontendNone::class;
-                if (isset($config->frontend) && class_exists('\Phalcon\Cache\Frontend\\' . $config->frontend)
-                ) {
+                if (isset($config->frontend) && class_exists('\Phalcon\Cache\Frontend\\' . $config->frontend)) {
                     $frontendAdapter = '\Phalcon\Cache\Frontend\\' . $config->frontend;
                 }
 
@@ -62,8 +59,7 @@ class DataCacheServiceProvider extends AbstractServiceProvider
                 }
 
                 $backendAdapter = BackendFile::class;
-                if (isset($config->backend) && class_exists('\Phalcon\Cache\Backend\\' . $config->backend)
-                ) {
+                if (isset($config->backend) && class_exists('\Phalcon\Cache\Backend\\' . $config->backend)) {
                     $backendAdapter = '\Phalcon\Cache\Backend\\' . $config->backend;
                 }
 

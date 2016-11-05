@@ -66,10 +66,8 @@ class ModelsCacheServiceProvider extends AbstractServiceProvider
                 /** @var \Phalcon\DiInterface $this */
                 $config = $this->getShared('config')->application;
 
-                if ($config->debug) {
-                    if (!isset($config->modelsCache->force) || !$config->modelsCache->force) {
-                        return new BackendMemory(new FrontendNone());
-                    }
+                if ($config->debug && (!isset($config->modelsCache->force) || !$config->modelsCache->force)) {
+                    return new BackendMemory(new FrontendNone());
                 }
 
                 $lifeTime = ModelsCacheServiceProvider::DEFAULT_CACHE_TTL;
