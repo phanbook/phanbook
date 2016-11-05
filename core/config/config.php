@@ -210,8 +210,9 @@ return [
     ],
 
     'beanstalk'     => [
-        'disabled' => env('BEANSTALK_ENABLED'),
-        'host'     => env('BEANSTALK_HOST'),
+        'enabled' => env('BEANSTALK_ENABLED'),
+        'host'    => env('BEANSTALK_HOST'),
+        'port'    => env('BEANSTALK_PORT'),
     ],
 
     /**
