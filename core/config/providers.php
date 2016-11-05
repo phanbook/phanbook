@@ -22,6 +22,7 @@ return [
     Providers\CollectionManagerServiceProvider::class,
     Providers\ModelsManagerServiceProvider::class,
     Providers\AuthServiceProvider::class,
+    Providers\DataCacheServiceProvider::class,
     Providers\ViewCacheServiceProvider::class,
     Providers\VoltTemplateEngineServiceProvider::class,
     Providers\ViewServiceProvider::class,

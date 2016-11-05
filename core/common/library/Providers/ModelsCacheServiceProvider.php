@@ -15,6 +15,8 @@ namespace Phanbook\Common\Library\Providers;
 use Memcached;
 use Phalcon\Cache\Frontend\Data;
 use Phalcon\Cache\Backend\Libmemcached;
+use Phalcon\Cache\Frontend\None as FrontendNone;
+use Phalcon\Cache\Backend\Memory as BackendMemory;
 
 /**
  * \Phanbook\Common\Library\Providers\ModelsCacheServiceProvider
@@ -28,6 +30,7 @@ class ModelsCacheServiceProvider extends AbstractServiceProvider
     const DEFAULT_PORT = 11211;
     const DEFAULT_WEIGHT = 1;
     const DEFAULT_OPT_HASH = Memcached::HASH_MD5;
+    const DEFAULT_PREFIX = 'phanbook_';
 
     /**
      * The Service name.
@@ -61,19 +64,29 @@ class ModelsCacheServiceProvider extends AbstractServiceProvider
             $this->serviceName,
             function () use ($defaultConfig) {
                 /** @var \Phalcon\DiInterface $this */
-                $config = $this->getShared('config');
+                $config = $this->getShared('config')->application;
+
+                if ($config->debug && (!isset($config->modelsCache->force) || !$config->modelsCache->force)) {
+                    return new BackendMemory(new FrontendNone());
+                }
 
                 $lifeTime = ModelsCacheServiceProvider::DEFAULT_CACHE_TTL;
-                if (isset($config->cache) && isset($config->cache->modelsCache)) {
-                    $lifeTime = (int) $config->cache->modelsCache;
+                if (isset($config->modelsCache->lifeTime)) {
+                    $lifeTime = (int) $config->modelsCache->lifeTime;
                 }
 
-                $memcacheConfig = $defaultConfig;
-                if (isset($config->cache) && isset($config->cache->data)) {
-                    $memcacheConfig = $config->cache->data->toArray();
+                $prefix = ModelsCacheServiceProvider::DEFAULT_PREFIX;
+                if (isset($config->modelsCache->prefix)) {
+                    $prefix = $config->modelsCache->prefix;
                 }
 
-                return new Libmemcached(new Data(['lifetime' => $lifeTime]), $memcacheConfig);
+                $memcachedConfig = $config->modelsCache->toArray();
+                unset($memcachedConfig['lifeTime'], $memcachedConfig['force'], $memcachedConfig['prefix']);
+
+                $memcachedConfig = array_merge($defaultConfig['servers'][0], $memcachedConfig);
+                $memcachedConfig['prefix'] = $prefix;
+
+                return new Libmemcached(new Data(['lifetime' => $lifeTime]), $memcachedConfig);
             }
         );
     }

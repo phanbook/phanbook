@@ -41,26 +41,22 @@ class ViewCacheServiceProvider extends AbstractServiceProvider
             $this->serviceName,
             function () {
                 /** @var \Phalcon\DiInterface $this */
-                $config = $this->getShared('config');
+                $config = $this->getShared('config')->application;
 
-                if ($config->application->debug) {
+                if ($config->debug && (!isset($config->viewCache->force) || !$config->viewCache->force)) {
                     return new Backend\Memory(new Frontend\None());
                 }
 
-                // Cache data for one day by default
-                if (!isset($config->cache->lifetime)) {
-                    $lifetime = ViewCacheServiceProvider::DEFAULT_CACHE_TTL;
-                } else {
-                    $lifetime = $config->cache->lifetime;
+                $lifetime = ViewCacheServiceProvider::DEFAULT_CACHE_TTL;
+                if (isset($config->viewCache->lifetime)) {
+                    $lifetime = (int) $config->viewCache->lifetime;
                 }
 
-                $frontCache = new Frontend\Output(['lifetime' => (int) $lifetime]);
-
                 return new Backend\File(
-                    $frontCache,
+                    new Frontend\Output(['lifetime' => (int) $lifetime]),
                     [
-                        'cacheDir' => $config->cache->cacheDir,
-                        'prefix'   => $config->cache->prefix
+                        'cacheDir' => $config->viewCache->cacheDir,
+                        'prefix'   => $config->viewCache->prefix
                     ]
                 );
             }
