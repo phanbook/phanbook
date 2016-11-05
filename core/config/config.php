@@ -106,7 +106,7 @@ return [
             'options' => [
                 'lifetime' => env('SESSION_LIFETIME'),
                 'uniqueId' => env('SESSION_UNIQUE_ID'),
-            ]
+            ],
         ],
 
         /**
@@ -114,11 +114,13 @@ return [
          *
          * @link https://docs.phalconphp.com/en/latest/reference/cache.html
          */
-        'cache' => [
-            'lifetime' => env('CACHE_LIFETIME'),
-            'prefix'   => env('CACHE_PREFIX'),
-            'adapter'  => env('CACHE_DRIVER'),
-            'cacheDir' => content_path('cache/html/'),
+        'modelsCache' => [
+            'lifetime' => env('MODELS_CACHE_LIFETIME'),
+            'prefix'   => env('MODELS_CACHE_PREFIX'),
+            'host'     => env('MEMCACHED_HOST'),
+            'port'     => env('MEMCACHED_PORT'),
+            'weight'   => env('MEMCACHED_HOST'),
+            'force'    => env('MODELS_CACHE_FORCE'),
         ],
 
         'viewCache' => [
