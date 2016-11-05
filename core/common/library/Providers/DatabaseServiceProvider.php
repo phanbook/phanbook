@@ -13,8 +13,7 @@
 namespace Phanbook\Common\Library\Providers;
 
 use PDO;
-use Phalcon\Logger;
-use Phalcon\Logger\Adapter\File;
+use Phanbook\Plugins\Db\Listener;
 use Phalcon\Db\Adapter\Pdo\Mysql;
 
 /**
@@ -30,8 +29,6 @@ class DatabaseServiceProvider extends AbstractServiceProvider
      */
     protected $serviceName = 'db';
 
-    protected $logFile = 'db.log';
-
     /**
      * {@inheritdoc}
      *
@@ -39,11 +36,9 @@ class DatabaseServiceProvider extends AbstractServiceProvider
      */
     public function register()
     {
-        $logFile = $this->logFile;
-
         $this->di->setShared(
             $this->serviceName,
-            function () use ($logFile) {
+            function () {
                 /** @var \Phalcon\DiInterface $this */
                 $config = $this->getShared('config');
 
@@ -60,23 +55,7 @@ class DatabaseServiceProvider extends AbstractServiceProvider
                 );
 
                 $eventsManager = $this->getShared('eventsManager');
-
-                if ($config->application->debug) {
-                    $logger = new File(logs_path($logFile));
-                    // Listen all the database events
-                    $eventsManager->attach(
-                        'db',
-                        function ($event, $connection) use ($logger) {
-                            if ($event->getType() == 'beforeQuery') {
-                                if ($variables = $connection->getSQLVariables()) {
-                                    $variables = ' [' . implode(',', $variables) . ']';
-                                }
-
-                                $logger->log($connection->getSQLStatement() . $variables, Logger::DEBUG);
-                            }
-                        }
-                    );
-                }
+                $eventsManager->attach('db', new Listener($this));
 
                 $connection->setEventsManager($eventsManager);
 
