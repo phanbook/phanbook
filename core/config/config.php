@@ -130,6 +130,19 @@ return [
         ],
 
         /**
+         * Improving Performance with Cache
+         *
+         * @link https://docs.phalconphp.com/en/latest/reference/cache.html
+         */
+        'dataCache' => [
+            'frontend' => env('DATA_CACHE_FRONTEND'),
+            'backend'  => env('DATA_CACHE_DRIVER'),
+            'lifetime' => env('DATA_CACHE_LIFETIME'),
+            'cacheDir' => content_path('cache/data/'),
+            'force'    => env('DATA_VIEW_CACHE_FORCE'),
+        ],
+
+        /**
          * You can see from
          *
          * @link https://docs.phalconphp.com/en/latest/reference/logging.html
