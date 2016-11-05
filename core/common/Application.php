@@ -19,6 +19,7 @@ use InvalidArgumentException;
 use Phalcon\Http\ResponseInterface;
 use Phalcon\Mvc\Application as MvcApplication;
 use Phalcon\Application as AbstractApplication;
+use Phanbook\Common\Library\Providers\ModulesServiceProvider;
 use Phanbook\Common\Library\Providers\ServiceProviderInterface;
 
 /**
@@ -68,6 +69,7 @@ class Application
         $this->di->setShared('dotenv', $dotenv);
         $this->di->setShared('bootstrap', $this);
 
+        $this->initializeService(new ModulesServiceProvider($this->di));
         Di::setDefault($this->di);
 
         /** @noinspection PhpIncludeInspection */

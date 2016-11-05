@@ -73,7 +73,9 @@ class ErrorHandler extends Plugin
             }
 
             $this->di->getShared('logger')->error($dispatcher->getModuleName() . ': ' . $exception->getMessage());
+        }
 
+        if ($event->isCancelable()) {
             $event->stop();
         }
 
@@ -83,6 +85,6 @@ class ErrorHandler extends Plugin
             throw $exception;
         }
 
-        return $event->isStopped();
+        return false;
     }
 }

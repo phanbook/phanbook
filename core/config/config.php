@@ -15,7 +15,7 @@ return [
     /**
      * The database credentials
      */
-    'database'    => [
+    'database' => [
         env('DB_CONNECTION') => [
             'host'     => env('DB_HOST'),
             'username' => env('DB_USERNAME'),
@@ -32,21 +32,21 @@ return [
         /**
          * The site name, you should change it to your name website
          */
-        'name'                => 'Phanbook',
+        'name' => 'Phanbook',
 
         /**
          * In a few words, explain what this site is about.
          */
-        'tagline'             => 'A Q&A, Discussion PHP platform',
-        'publicUrl'           => env('APP_URL'),
+        'tagline'   => 'A Q&A, Discussion PHP platform',
+        'publicUrl' => env('APP_URL'),
 
         /**
          * Please don't change it
          */
-        'httpStatusCode'      => 200, // 503
-        'modelsDir'           => app_path('core/models/'),
-        'baseUri'             => env('APP_BASE_URI'),
-        'view'                => [
+        'httpStatusCode' => 200, // 503
+        'modelsDir'      => app_path('core/models/'),
+        'baseUri'        => env('APP_BASE_URI'),
+        'view' => [
             'viewsDir'          => app_path('views/'),
             'compiledPath'      => content_path('cache/volt/'),
             'compiledSeparator' => '_',
@@ -55,8 +55,8 @@ return [
                 'limit' => 10,
             ],
         ],
-        'dataDir'             => app_path('core/data/'),
-        'repo'                => 'https://github.com/phanbook',
+        'dataDir' => app_path('core/data/'),
+        'repo'    => env('APP_REPO', 'https://github.com/phanbook'),
 
         /**
          * The length password hash send to you when you forget password
@@ -67,7 +67,7 @@ return [
         /**
          * Change URL cdn if you want it
          */
-        'staticBaseUri'       => env('APP_STATIC_URL'),
+        'staticBaseUri' => env('APP_STATIC_URL'),
 
         /**
          * For developers: Phanbook debugging mode.
@@ -76,16 +76,23 @@ return [
          * It is strongly recommended that plugin and theme developers use
          * in their development environments.
          */
-        'debug'               => env('APP_DEBUG'),
+        'debug' => env('APP_DEBUG'),
 
-        'timezone'       => env('APP_TIMEZONE'),
+        /**
+         * Set the password hashing factor
+         *
+         * @link https://docs.phalconphp.com/en/latest/reference/security.html#setting-up-the-component
+         */
+        'hashingFactor' => env('SECURITY_HASHING_FACTOR'),
+
+        'timezone' => env('APP_TIMEZONE'),
 
         /**
          * Authentication Unique Keys and Salts. Change these to different unique key!
          *
          * @link https://docs.phalconphp.com/en/latest/api/Phalcon_Security.html
          */
-        'cryptSalt'      => env('APP_SALT'),
+        'cryptSalt' => env('APP_SALT'),
 
         /**
          * Time life cookie default is 8 day, you can change anything day
@@ -107,7 +114,7 @@ return [
          *
          * @link https://docs.phalconphp.com/en/latest/reference/cache.html
          */
-        'cache'   => [
+        'cache' => [
             'lifetime' => env('CACHE_LIFETIME'),
             'prefix'   => env('CACHE_PREFIX'),
             'adapter'  => env('CACHE_DRIVER'),
@@ -119,14 +126,14 @@ return [
          *
          * @link https://docs.phalconphp.com/en/latest/reference/logging.html
          */
-        'logger'  => [
-            'enabled' => env('LOGGER_ENABLED'),
-            'path'    => content_path('logs/'),
-            'format'  => env('LOGGER_FORMAT'),
+        'logger' => [
+            'path'   => content_path('logs/'),
+            'format' => env('LOGGER_FORMAT'),
+            'level'  => env('LOGGER_LEVEL'),
         ],
     ],
 
-    'models'         => [
+    'models' => [
         'metadata' => [
             'adapter' => env('METADATA_DRIVER'),
         ]
@@ -137,10 +144,10 @@ return [
      *
      * @link http://github.com/phanbook/docs/mail.md
      */
-    'mail'           => [
-        'templatesDir'     => 'mail/',
-        'fromName'         => env('MAIL_FROM_NAME'),
-        'fromEmail'        => env('MAIL_FROM_ADDRESS'),
+    'mail' => [
+        'templatesDir' => 'mail/',
+        'fromName'     => env('MAIL_FROM_NAME'),
+        'fromEmail'    => env('MAIL_FROM_ADDRESS'),
         env('MAIL_DRIVER') => [
             'server'   => env('MAIL_HOST'),
             'port'     => env('MAIL_PORT'),
@@ -154,7 +161,7 @@ return [
      *
      * @link https://github.com/settings/applications/new
      */
-    'github'         => [
+    'github' => [
         'clientId'     => env('GITHUB_CLIENT_ID'),
         'clientSecret' => env('GITHUB_SECRET'),
         'redirectUri'  => env('GITHUB_REDIRECT_URI'),
@@ -166,7 +173,7 @@ return [
      *
      * @link https://developers.facebook.com/
      */
-    'facebook'       => [
+    'facebook' => [
         'clientId'     => env('FACEBOOK_CLIENT_ID'),
         'clientSecret' => env('FACEBOOK_SECRET'),
         'redirectUri'  => env('FACEBOOK_REDIRECT_URI')
@@ -177,7 +184,7 @@ return [
      *
      * @link http://github.com/phanbook/docs/lanuage.md
      */
-    'language'       => [
+    'language' => [
         'code'    => env('LANG_CODE'),
         'gettext' => env('LANG_USE_GETTEXT'),
     ],
@@ -187,13 +194,13 @@ return [
      *
      * @link http://github.com/phanbook/docs/theme.md
      */
-    'theme'          => 'default',
+    'theme' => 'default',
 
     /**
-     * Set editor you want to use, for example 'markdown' default is ckeditor
+     * Set editor you want to use
      *
      */
-    'editor'         => 'ckeditor',
+    'editor' => 'ckeditor',
 
     /**
      * The parameter you get form
@@ -209,9 +216,10 @@ return [
         'redirectUri'  => env('ANALYTIC_REDIRECT_URI'),
     ],
 
-    'beanstalk'     => [
-        'disabled' => env('BEANSTALK_ENABLED'),
-        'host'     => env('BEANSTALK_HOST'),
+    'beanstalk' => [
+        'enabled' => env('BEANSTALK_ENABLED'),
+        'host'    => env('BEANSTALK_HOST'),
+        'port'    => env('BEANSTALK_PORT'),
     ],
 
     /**

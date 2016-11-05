@@ -63,6 +63,10 @@ class ErrorHandler extends Plugin
 
         $this->di->getShared('logger')->error($message);
 
+        if ($event->isCancelable()) {
+            $event->stop();
+        }
+
         throw new Exception($message);
     }
 }
