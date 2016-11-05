@@ -19,7 +19,6 @@ use Phalcon\Events\Event;
 use Phalcon\Mvc\User\Plugin;
 use Phalcon\Db\Adapter\Pdo;
 use Phalcon\Logger\Adapter\File;
-use Phalcon\Db\Adapter\Pdo\Mysql;
 
 /**
  * \Phanbook\Plugins\Db\Listener
@@ -69,6 +68,15 @@ class Listener extends Plugin
         $this->logger->setFormatter($mainLogger->getFormatter());
     }
 
+    /**
+     * Database queries listener.
+     *
+     * You can disable queries logging by changing log level.
+     *
+     * @param  Event $event
+     * @param  Pdo   $connection
+     * @return bool
+     */
     public function beforeQuery(Event $event, Pdo $connection)
     {
         $string    = $connection->getSQLStatement();
@@ -76,5 +84,7 @@ class Listener extends Plugin
         $context   = $variables ?: [];
 
         $this->logger->log(Logger::DEBUG, $string . ' [' . implode(', ', $context) . ']');
+
+        return true;
     }
 }
