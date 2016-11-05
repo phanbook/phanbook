@@ -11,8 +11,6 @@
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
 
-putenv('APPLICATION_ENV=testing');
-
 ini_set('memory_limit', '-1');
 
 require dirname(dirname(__FILE__)) . '/bootstrap/autoloader.php';
