@@ -12,9 +12,9 @@
  */
 namespace Phanbook\Models\Services\Service;
 
-use Phalcon\Mvc\Model\Exception;
 use Phanbook\Models\Services\Service;
 use Phanbook\Models\Vote as VoteEntity;
+use Phanbook\Models\Services\Exceptions\EntityNotFoundException;
 
 /**
  * \Phanbook\Models\Services\Service\Vote
@@ -40,14 +40,12 @@ class Vote extends Service
      * @param  int $id The Posts ID.
      * @return VoteEntity
      *
-     * @throws Exception
+     * @throws EntityNotFoundException
      */
     public function getFirstById($id)
     {
         if (!$post = $this->findFirstById($id)) {
-            throw new Exception(
-                sprintf('No Votes found for ID %d', $id)
-            );
+            throw new EntityNotFoundException($id);
         }
 
         return $post;
