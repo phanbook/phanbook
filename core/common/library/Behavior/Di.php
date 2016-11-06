@@ -118,14 +118,6 @@ trait Di
      */
     public function __call($func, $argv)
     {
-        $dependency = lcfirst(substr($func, 3));
-
-        if ($this->getDI()->has($dependency)) {
-            return $this->getDI()->getShared($dependency, $argv);
-        }
-
-        throw new \BadMethodCallException(
-            sprintf('Call to undefined method %s', get_class($this) . '::' . $func)
-        );
+        return call_user_func_array([$this->getDI(), $func], $argv);
     }
 }
