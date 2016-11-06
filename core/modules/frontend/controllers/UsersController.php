@@ -36,6 +36,7 @@ class UsersController extends ControllerBase
     public function initialize()
     {
         parent::initialize();
+
         $this->view->pick('user');
     }
 

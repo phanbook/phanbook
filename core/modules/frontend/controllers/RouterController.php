@@ -24,6 +24,7 @@ class RouterController extends ControllerBase
     public function initialize()
     {
         parent::initialize();
+
         $this->view->pick('page');
     }
 
