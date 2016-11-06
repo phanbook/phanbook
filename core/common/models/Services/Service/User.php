@@ -69,7 +69,7 @@ class User extends Service
     }
 
     /**
-     * Get User by ID.
+     * Get User by email address.
      *
      * @param  string $email The email address.
      * @return Users
