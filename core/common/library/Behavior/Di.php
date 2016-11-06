@@ -14,6 +14,7 @@ namespace Phanbook\Common\Library\Behavior;
 
 use Phalcon\Di as PhD;
 use Phalcon\DiInterface;
+use Phalcon\Logger\AdapterInterface as Logger;
 
 /**
  * \Phanbook\Common\Library\Behavior\Di
@@ -41,6 +42,7 @@ use Phalcon\DiInterface;
  * }
  * </code>
  *
+ * @method Logger getLogger(mixed $params = null)
  * @package Phanbook\Common\Library\Behavior
  */
 trait Di
@@ -82,5 +84,40 @@ trait Di
         $this->di = $di;
 
         return $this;
+    }
+
+    /**
+     * Trying to obtain the dependence from the Dependency Injection Container.
+     *
+     * <code>
+     * use Phanbook\Common\Library\Behavior\Di;
+     *
+     * class A {
+     *     // Some logic
+     * }
+     *
+     * class B extends A {
+     *     use Di {
+     *         Di::__construct as protected injectDI;
+     *     }
+     *
+     *     public function __construct()
+     *     {
+     *         $this->injectDI();
+     *     }
+     * }
+     *
+     * $a = new A();
+     * $a->getLogger('db.log');
+     * </code>
+     *
+     * @param string $func
+     * @param mixed $argv
+     *
+     * @return mixed
+     */
+    public function __call($func, $argv)
+    {
+        return call_user_func_array([$this->getDI(), $func], $argv);
     }
 }

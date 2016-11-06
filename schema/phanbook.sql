@@ -6422,6 +6422,9 @@ ALTER TABLE `rememberTokens`
 ALTER TABLE `settings`
   ADD PRIMARY KEY (`id`);
 
+ALTER TABLE `settings`
+  ADD KEY `idx_setting_name` (`name`);
+
 --
 -- Indexes for table `shortUrls`
 --

@@ -94,7 +94,7 @@ class User extends Service
 
         if (!$visitor->save()) {
             foreach ($visitor->getMessages() as $message) {
-                $this->logError($message);
+                $this->getLogger()->error($message);
             }
 
             return false;
