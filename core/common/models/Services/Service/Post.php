@@ -16,8 +16,8 @@ use Phanbook\Models\Karma;
 use Phanbook\Models\Users;
 use Phanbook\Models\Posts;
 use Phanbook\Models\PostsViews;
-use Phalcon\Mvc\Model\Exception;
 use Phanbook\Models\Services\Service;
+use Phanbook\Models\Services\Exceptions\EntityNotFoundException;
 
 /**
  * \Phanbook\Models\Services\Service\Post
@@ -43,14 +43,12 @@ class Post extends Service
      * @param  int $id The Posts ID.
      * @return Posts
      *
-     * @throws Exception
+     * @throws EntityNotFoundException
      */
     public function getFirstById($id)
     {
         if (!$post = $this->findFirstById($id)) {
-            throw new Exception(
-                sprintf('No Posts found for ID %d', $id)
-            );
+            throw new EntityNotFoundException($id);
         }
 
         return $post;

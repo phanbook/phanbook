@@ -14,8 +14,8 @@ namespace Phanbook\Models\Services\Service;
 
 use Phanbook\Models\Karma;
 use Phanbook\Models\Users;
-use Phalcon\Mvc\Model\Exception;
 use Phanbook\Models\Services\Service;
+use Phanbook\Models\Services\Exceptions\EntityNotFoundException;
 
 /**
  * \Phanbook\Models\Services\Service\User
@@ -41,12 +41,12 @@ class User extends Service
      * @param  int $id The User ID.
      * @return Users
      *
-     * @throws Exception
+     * @throws EntityNotFoundException
      */
-    public function getById($id)
+    public function getFirstById($id)
     {
         if (!$user = $this->findFirstById($id)) {
-            throw new Exception(sprintf('No Users found for ID %d', $id));
+            throw new EntityNotFoundException($id);
         }
 
         return $user;
