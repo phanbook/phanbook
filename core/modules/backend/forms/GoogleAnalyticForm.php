@@ -18,14 +18,18 @@ use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Element\Hidden;
 use Phalcon\Forms\Element\Select;
 use Phalcon\Forms\Element\Submit;
+use Phanbook\Models\Services\Service;
 use Phalcon\Validation\Validator\Identical;
 
 class GoogleAnalyticForm extends Form
 {
     public function initialize($para, $analytic)
     {
-        $trackingID = Settings::getAnalyticTrackingID();
-        $accountID = Settings::getAnalyticAccountID();
+        $settingsService = new Service\Settings();
+
+        $trackingID = $settingsService->findAnalyticTrackingID();
+        $accountID  = $settingsService->findAnalyticAccountID();
+
         // CSRF
         $csrf = new Hidden('csrf');
         $csrf->addValidator(
@@ -105,7 +109,7 @@ class GoogleAnalyticForm extends Form
         $selectView->setDefault($trackingID . "_._" . $accountID);
         $this->add($selectView);
 
-        $data = Settings::getListTopActivity();
+        $data = $settingsService->getListTopActivity();
         $listTopActivity = [];
         $listDefaultActivity = [];
         foreach ($data as $activity) {
