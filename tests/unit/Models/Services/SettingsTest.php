@@ -66,8 +66,7 @@ class SettingsTest extends UnitTest
         $this->assertNull($settingsService->findFirstByName($name));
     }
 
-    /** @test */
-    public function shouldAlwaysGetListOfTopActivityAsObject()
+    public function shouldGetListOfTopActivity()
     {
         $settingsService = new Settings();
         $activities = $settingsService->getListTopActivity();
@@ -81,20 +80,15 @@ class SettingsTest extends UnitTest
             $this->assertTrue(property_exists($activity, 'name'));
             $this->assertTrue(property_exists($activity, 'default'));
         }
+    }
 
-        $names = [
-            'googleAnalyticAccessToken',
-            'googleAnalyticRefreshToken',
-            'googleAnalyticProfileId',
-            'googleAnalyticAccountId',
-            'googleAnalyticTrackingId',
-            'googleAnalyticTopActivities',
-        ];
+    /** @test */
+    public function shouldAlwaysGetListOfTopActivityAsArrayOfObjects()
+    {
+        $settingsService = new Settings();
 
-        foreach ($names as $name) {
-            $this->tester->getApplication()->db->delete('settings', "`name` = '$name'");
-            $this->tester->dontSeeInDatabase('settings', ['name' => $name]);
-        }
+        $this->tester->getApplication()->db->delete('settings', "`name` = 'googleAnalyticTopActivities'");
+        $this->tester->dontSeeInDatabase('settings', ['name' => 'googleAnalyticTopActivities']);
 
         $this->assertTrue(is_array($settingsService->getListTopActivity()));
     }
