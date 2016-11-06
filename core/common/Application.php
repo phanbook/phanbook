@@ -14,8 +14,10 @@ namespace Phanbook\Common;
 
 use Phalcon\Di;
 use Dotenv\Dotenv;
+use Phalcon\Di\Service;
 use Phalcon\DiInterface;
 use InvalidArgumentException;
+use Phalcon\Di\ServiceInterface;
 use Phalcon\Http\ResponseInterface;
 use Phalcon\Mvc\Application as MvcApplication;
 use Phalcon\Application as AbstractApplication;
@@ -40,6 +42,12 @@ class Application
      * @var ServiceProviderInterface[]
      */
     protected $serviceProviders = [];
+
+    /**
+     * The Application Services.
+     * @var ServiceInterface[]
+     */
+    protected $services = [];
 
     /**
      * The Phalcon Application.
@@ -69,17 +77,23 @@ class Application
         $this->di->setShared('dotenv', $dotenv);
         $this->di->setShared('bootstrap', $this);
 
-        $this->initializeService(new ModulesServiceProvider($this->di));
+        $this->initializeServiceProvider(new ModulesServiceProvider($this->di));
         Di::setDefault($this->di);
 
         /** @noinspection PhpIncludeInspection */
         $providers = require config_path('providers.php');
         if (is_array($providers)) {
-            $this->initializeServices($providers);
+            $this->initializeServiceProviders($providers);
         }
 
         $this->app->setEventsManager($this->di->getShared('eventsManager'));
         $this->app->setDI($this->di);
+
+        /** @noinspection PhpIncludeInspection */
+        $services = require config_path('services.php');
+        if (is_array($services)) {
+            $this->initializeServices($services);
+        }
     }
 
     /**
@@ -123,6 +137,16 @@ class Application
     }
 
     /**
+     * Get registered services.
+     *
+     * @return ServiceInterface[]
+     */
+    public function getServices()
+    {
+        return $this->services;
+    }
+
+    /**
      * Get Application output.
      *
      * @return ResponseInterface|void
@@ -142,10 +166,38 @@ class Application
      * @param  string[] $providers
      * @return $this
      */
-    protected function initializeServices(array $providers)
+    protected function initializeServiceProviders(array $providers)
     {
         foreach ($providers as $name => $class) {
-            $this->initializeService(new $class($this->di));
+            $this->initializeServiceProvider(new $class($this->di));
+        }
+
+        return $this;
+    }
+
+    /**
+     * Register services in the Dependency Injector Container.
+     *
+     * This allows to inject dependencies by using abstract classes.
+     *
+     * <code>
+     * $services = [
+     *     '\My\Awesome\Logger\Interface' => '\My\Concrete\Logger'
+     * ];
+     *
+     * $application->initializeModelServices($services);
+     * </code>
+     *
+     * @param  string[] $services
+     * @return $this
+     */
+    protected function initializeServices(array $services)
+    {
+        foreach ($services as $abstract => $concrete) {
+            $service = new Service($abstract, $concrete, true);
+            $this->di->setRaw($abstract, $service);
+
+            $this->services[$abstract] = $service;
         }
 
         return $this;
@@ -157,7 +209,7 @@ class Application
      * @param  ServiceProviderInterface $serviceProvider
      * @return $this
      */
-    protected function initializeService(ServiceProviderInterface $serviceProvider)
+    protected function initializeServiceProvider(ServiceProviderInterface $serviceProvider)
     {
         $serviceProvider->register();
         $serviceProvider->boot();
