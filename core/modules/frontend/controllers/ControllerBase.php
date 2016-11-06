@@ -41,6 +41,20 @@ class ControllerBase extends Controller
      */
     public $perPage = 30;
 
+    /**
+     * @var Service\Post
+     */
+    protected $postService;
+
+    /**
+     * @var Service\User
+     */
+    protected $userService;
+
+    /**
+     * @var Service\Vote
+     */
+    protected $voteService;
 
     /**
      * @param Dispatcher $dispatcher
@@ -76,6 +90,13 @@ class ControllerBase extends Controller
         }
     }
 
+    public function inject(Service\Post $postService, Service\User $userService, Service\Vote $voteService)
+    {
+        $this->postService = $postService;
+        $this->userService = $userService;
+        $this->voteService = $voteService;
+    }
+
     /**
      * Method for voting a task
      *
@@ -84,9 +105,6 @@ class ControllerBase extends Controller
     public function voteAction()
     {
         $this->view->disable();
-
-        $postService = new Service\Post();
-        $userService = new Service\User();
 
         $way = 'positive';
         if ($this->request->getPost('way') == 'negative') {
@@ -98,7 +116,9 @@ class ControllerBase extends Controller
 
         $this->setJsonResponse();
 
-        if (!$this->auth->isAuthorizedVisitor() || $user = $userService->findFirstById($this->auth->getUserId())) {
+        if (!$this->auth->isAuthorizedVisitor() ||
+            $user = $this->userService->findFirstById($this->auth->getUserId())
+        ) {
             $this->jsonMessages['messages'][] = [
                 'type'    => 'error',
                 'content' => t('Only authorized users can vote')
@@ -110,7 +130,7 @@ class ControllerBase extends Controller
         $this->db->begin();
 
         if ($object == Vote::OBJECT_POSTS) {
-            if (!$post = $postService->findFirstById($objectId)) {
+            if (!$post = $this->postService->findFirstById($objectId)) {
                 $this->jsonMessages['messages'][] = [
                     'type'    => 'error',
                     'content' => 'Post does not exist'
@@ -167,8 +187,7 @@ class ControllerBase extends Controller
         $this->db->commit();
 
         if ($this->request->isAjax()) {
-            $voteService = new Service\Vote();
-            $votes = $voteService->getVotes($objectId, $object);
+            $votes = $this->voteService->getVotes($objectId, $object);
             return ['data' => $votes['positive'] - $votes['negative']];
         }
 
