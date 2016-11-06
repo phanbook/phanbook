@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "131898df6287becb90b1d0fb614c83b0",
-    "content-hash": "3d3eac88ef1bfda8222683484b1c134e",
+    "hash": "a5f126d319b17e842fecbf790c91fd4f",
+    "content-hash": "c0bd18ec551fc5bc4f5a2dca0bb37607",
     "packages": [
         {
             "name": "elasticsearch/elasticsearch",
@@ -1353,6 +1353,55 @@
                 "extension"
             ],
             "time": "2016-10-23 12:01:25"
+        },
+        {
+            "name": "phalcongelist/dd",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phalcongelist/dd.git",
+                "reference": "16e0572c62e8924294d0e0ca677d5cfb34e34d75"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phalcongelist/dd/zipball/16e0572c62e8924294d0e0ca677d5cfb34e34d75",
+                "reference": "16e0572c62e8924294d0e0ca677d5cfb34e34d75",
+                "shasum": ""
+            },
+            "require": {
+                "ext-phalcon": ">=3.0",
+                "php": ">= 5.4  <8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/helper.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Serghei Iakovlev",
+                    "email": "serghei@phalconphp.com",
+                    "role": "developer"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/phalcongelist/dd/graphs/contributors"
+                }
+            ],
+            "description": "This package will add the `dd` helper to your Phalcon application.",
+            "homepage": "https://github.com/phalcongelist/dd",
+            "keywords": [
+                "dd",
+                "dump",
+                "phalcon",
+                "utils"
+            ],
+            "time": "2016-11-06 21:09:57"
         },
         {
             "name": "phpdocumentor/reflection-common",
