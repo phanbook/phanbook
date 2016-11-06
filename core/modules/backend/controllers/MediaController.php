@@ -28,6 +28,8 @@ class MediaController extends ControllerBase
 
     public function onConstruct()
     {
+        parent::onConstruct();
+
         $this->mediaModel = new Media();
     }
 

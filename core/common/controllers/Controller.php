@@ -14,14 +14,14 @@
 namespace Phanbook\Controllers;
 
 use Phalcon\Mvc\Dispatcher;
-use Phalcon\Db\Adapter\Pdo;
 use Phanbook\Models\ModelBase;
+use Phanbook\Common\InjectionInvoker;
 use Phalcon\Mvc\Controller as ControllerPhalcon;
 use Phalcon\Paginator\Adapter\NativeArray as PaginatorNativeArray;
 use Phalcon\Paginator\Adapter\QueryBuilder as PaginatorQueryBuilder;
 
 /**
- * Class Controller
+ * \Phanbook\Controllers\Controller
  *
  * @package Phanbook\Controllers
  */
@@ -76,6 +76,25 @@ class Controller extends ControllerPhalcon
      */
     protected $statusCode = 200;
 
+    public function onConstruct()
+    {
+        if (!method_exists($this, 'inject')) {
+            return;
+        }
+
+        $invoker = new InjectionInvoker($this->getDI());
+        $invoker->invoke($this);
+    }
+
+    public function beforeExecuteRoute(Dispatcher $dispatcher)
+    {
+        return true;
+    }
+
+    public function initialize()
+    {
+        return true;
+    }
 
     /**
      * Check if we need to throw a json response. For ajax calls.
@@ -99,8 +118,6 @@ class Controller extends ControllerPhalcon
         return $this;
     }
 
-
-
     /**
      * After execute route event
      *
@@ -120,8 +137,6 @@ class Controller extends ControllerPhalcon
         }
     }
 
-
-
     /**
      * Set a flash message with messages from objects
      *
@@ -137,7 +152,6 @@ class Controller extends ControllerPhalcon
             $this->flashSession->error(t('No object found. No errors.'));
         }
     }
-
 
     public function toggleAction($id)
     {
@@ -246,8 +260,6 @@ class Controller extends ControllerPhalcon
         return $this->delete($id);
     }
 
-
-
     /**
      * Attempt to determine the real file type of a file.
      *
@@ -268,7 +280,6 @@ class Controller extends ControllerPhalcon
 
         return in_array($extension, $allowedTypes);
     }
-
 
     /**
      * Create a QueryBuilder paginator, show 15 rows by page starting from $page
@@ -308,6 +319,7 @@ class Controller extends ControllerPhalcon
             ]
         );
     }
+
     /**
      * Create a paginator default use adapter PaginatorQueryBuilder,
      * show 30 rows by page starting from $page
@@ -359,6 +371,7 @@ class Controller extends ControllerPhalcon
         }
         return $this->response->redirect($this->request->getHTTPReferer(), true);
     }
+
     public function getPathController()
     {
         return $this->router->getControllerName();

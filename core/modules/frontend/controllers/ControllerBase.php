@@ -49,6 +49,8 @@ class ControllerBase extends Controller
      */
     public function beforeExecuteRoute(Dispatcher $dispatcher)
     {
+        parent::beforeExecuteRoute($dispatcher);
+
         // @TODO: something
         if ($this->auth->hasRememberMe() && !$this->request->isPost()) {
             $this->auth->loginWithRememberMe();
@@ -57,6 +59,8 @@ class ControllerBase extends Controller
 
     public function initialize()
     {
+        parent::initialize();
+
         $this->view->setVars(
             [
                 'tab'           => $this->currentOrder,
