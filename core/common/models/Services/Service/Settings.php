@@ -12,7 +12,6 @@
  */
 namespace Phanbook\Models\Services\Service;
 
-use Phalcon\DiInterface;
 use Phalcon\Mvc\Model\Exception;
 use Phanbook\Models\Services\Service;
 use Phanbook\Models\Settings as Entity;
@@ -24,43 +23,6 @@ use Phanbook\Models\Settings as Entity;
  */
 class Settings extends Service
 {
-    /**
-     * Settings constructor.
-     *
-     * @param DiInterface|null $di
-     */
-    public function __construct(DiInterface $di = null)
-    {
-        parent::__construct($di);
-
-        $array = [
-            'googleAnalyticAccessToken',
-            'googleAnalyticRefreshToken',
-            'googleAnalyticProfileId',
-            'googleAnalyticAccountId',
-            'googleAnalyticTrackingId',
-            'googleAnalyticTopActivities',
-        ];
-
-        foreach ($array as $value) {
-            try {
-                $this->getFirstByName($value);
-            } catch (Exception $e) {
-                $view = $this->getDI()->getShared('view');
-                $this->getDI()->getShared('logger')->error($e->getMessage());
-
-                $view->partial(
-                    'errors/model',
-                    [
-                        'name'       => $value ,
-                        'menuStruct' => $this->getDI()->getShared('menuStruct'),
-                        'model'      => Entity::class
-                    ]
-                );
-            }
-        }
-    }
-
     /**
      * Finds Settings by name.
      *
@@ -223,25 +185,58 @@ class Settings extends Service
     /**
      * Sets Google Analytics top activities to the database.
      *
-     * @param  array $arrayTop
+     * @param  array $topActivity
      * @return bool
      */
-    public function setListTopActivity(array $arrayTop)
+    public function setListTopActivity(array $topActivity)
     {
         $listTopActivity = $this->getListTopActivity();
 
         for ($i = 0; $i < count($listTopActivity); $i++) {
             $listTopActivity[$i]->default = 0;
-            foreach ($arrayTop as $key => $element) {
+            foreach ($topActivity as $key => $element) {
                 if ($listTopActivity[$i]->code == $element) {
                     $listTopActivity[$i]->default = 1;
                 }
             }
         }
 
-        $listTopActivity = json_encode($listTopActivity);
+        $listTopActivity = json_encode($listTopActivity, JSON_NUMERIC_CHECK);
 
         return $this->saveSitting('googleAnalyticTopActivities', $listTopActivity);
+    }
+
+    /**
+     * Validate Google Analytics settings
+     */
+    public function validateGoogleSettings()
+    {
+        $array = [
+            'googleAnalyticAccessToken',
+            'googleAnalyticRefreshToken',
+            'googleAnalyticProfileId',
+            'googleAnalyticAccountId',
+            'googleAnalyticTrackingId',
+            'googleAnalyticTopActivities',
+        ];
+
+        foreach ($array as $value) {
+            try {
+                $this->getFirstByName($value);
+            } catch (Exception $e) {
+                $view = $this->getDI()->getShared('view');
+                $this->getLogger()->error($e->getMessage());
+
+                $view->partial(
+                    'errors/model',
+                    [
+                        'name'       => $value ,
+                        'menuStruct' => $this->getDI()->getShared('menuStruct'),
+                        'model'      => Entity::class
+                    ]
+                );
+            }
+        }
     }
 
     /**
@@ -256,8 +251,14 @@ class Settings extends Service
     {
         if ($entity = $this->findFirstByName($name)) {
             $entity->setValue($value);
+            if ($result = $entity->save()) {
+                $messages = $entity->getMessages();
+                $this->getLogger()->error(
+                    sprintf('%s:%s %s', __FILE__, __LINE__, implode('; ', $messages))
+                );
+            }
 
-            return $entity->save();
+            return $result;
         }
 
         return false;
@@ -287,10 +288,10 @@ class Settings extends Service
      */
     public function clearGoogleAuth()
     {
-        $this->setAccessToken(null);
-        $this->setRefreshToken(null);
-        $this->setAnalyticAccountID(null);
-        $this->setAnalyticProfileID(null);
-        $this->setAnalyticTrackingID(null);
+        $this->setAccessToken('');
+        $this->setRefreshToken('');
+        $this->setAnalyticAccountID('');
+        $this->setAnalyticProfileID('');
+        $this->setAnalyticTrackingID('');
     }
 }

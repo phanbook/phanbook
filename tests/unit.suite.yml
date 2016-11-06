@@ -8,3 +8,4 @@ modules:
         - Filesystem
         - Asserts
         - Phalcon
+        - Db
