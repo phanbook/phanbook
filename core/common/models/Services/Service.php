@@ -54,13 +54,4 @@ abstract class Service implements InjectionAwareInterface
 
         return $visitorId;
     }
-
-    protected function logError($message)
-    {
-        if (!$this->getDI()->has('logger')) {
-            return;
-        }
-
-        $this->getDI()->getShared('logger')->error((string) $message);
-    }
 }
