@@ -13,6 +13,7 @@
 namespace Phanbook\Factory;
 
 use Phanbook\Models\Settings;
+use Phanbook\Models\Services\Service;
 
 /**
  * This class'll declare product (analytic dimension) for TopDashboardFactory
@@ -75,6 +76,19 @@ class TopDashboard implements TopDashboardInterface
      */
     public $analyticPrevValue;
 
+    /**
+     * @var Service\Settings
+     */
+    protected $settingsService;
+
+    /**
+     * TopDashboard constructor.
+     */
+    public function __construct()
+    {
+        $this->settingsService = new Service\Settings();
+    }
+
     public function initialize()
     {
     }
@@ -93,7 +107,8 @@ class TopDashboard implements TopDashboardInterface
     public function setDimension($dimension)
     {
         $this->dimension = $dimension;
-        $topActivities = Settings::getListTopActivity();
+        $topActivities = $this->settingsService->getListTopActivity();
+
         foreach ($topActivities as $activity) {
             if ($activity->code == $this->dimension) {
                 $this->setTitle($activity->name);

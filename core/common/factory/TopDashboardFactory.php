@@ -13,20 +13,25 @@
 namespace Phanbook\Factory;
 
 /**
- * This class'll determining which product (analytic dimension) will produce
+ * \Phanbook\Factory\TopDashboardFactory
+ *
+ * This class'll determining which product (analytic dimension) will produce.
+ *
+ * @package Phanbook\Factory
  */
 class TopDashboardFactory extends FactoryMethod
 {
     /**
-     *
-     * @var Phanbook\Google\Analytic object
+     * @var \Phanbook\Google\Analytic object
      */
     private $analyticClient;
+
     public function setAnalytic($analyticClient)
     {
         $this->analyticClient = $analyticClient;
         $this->analyticClient->setUseBatch(true);
     }
+
     protected function createObject($dimension)
     {
         switch ($dimension) {
@@ -50,18 +55,22 @@ class TopDashboardFactory extends FactoryMethod
                 break;
         }
     }
+
     public function create($dimension)
     {
         $obj = $this->createObject($dimension);
         $obj->setAnalytic($this->analyticClient);
         $obj->setDimension($dimension);
         $obj->create();
+
         return $obj;
     }
+
     public function executeBatch()
     {
         $result = $this->analyticClient->batchExecute();
         $this->analyticClient->setUseBatch(false);
+
         return $result;
     }
 }
