@@ -12,9 +12,9 @@
  */
 namespace Phanbook\Models\Services\Service;
 
-use Phalcon\Mvc\Model\Exception;
 use Phanbook\Models\Services\Service;
 use Phanbook\Models\Settings as Entity;
+use Phanbook\Models\Services\Exceptions\EntityNotFoundException;
 
 /**
  * \Phanbook\Models\Services\Service\Settings
@@ -40,14 +40,12 @@ class Settings extends Service
      * @param  string $name The setting name.
      * @return Entity
      *
-     * @throws Exception
+     * @throws EntityNotFoundException
      */
     public function getFirstByName($name)
     {
         if (!$entity = $this->findFirstByName($name)) {
-            throw new Exception(
-                sprintf('No setting found for name %s', $name)
-            );
+            throw new EntityNotFoundException($name, 'name');
         }
 
         return $entity;
@@ -223,18 +221,19 @@ class Settings extends Service
         foreach ($array as $value) {
             try {
                 $this->getFirstByName($value);
-            } catch (Exception $e) {
-                $view = $this->getDI()->getShared('view');
+            } catch (EntityNotFoundException $e) {
                 $this->getLogger()->error($e->getMessage());
-
-                $view->partial(
-                    'errors/model',
-                    [
-                        'name'       => $value ,
-                        'menuStruct' => $this->getDI()->getShared('menuStruct'),
-                        'model'      => Entity::class
-                    ]
-                );
+                if ($this->getDI()->has('menuStruct')) {
+                    $view = $this->getDI()->getShared('view');
+                    $view->partial(
+                        'errors/model',
+                        [
+                            'name'       => $value ,
+                            'menuStruct' => $this->getDI()->getShared('menuStruct'),
+                            'model'      => Entity::class
+                        ]
+                    );
+                }
             }
         }
     }
@@ -282,7 +281,7 @@ class Settings extends Service
     }
 
     /**
-     * Clear Google Auth.
+     * Clear Google Analytics Auth.
      *
      * @return void
      */

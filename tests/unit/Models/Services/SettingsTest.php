@@ -3,9 +3,9 @@
 namespace App\Test\Unit\Models\Services;
 
 use App\Test\Module\UnitTest;
-use Phalcon\Mvc\Model\Exception;
 use Phanbook\Models\Settings as Entity;
 use Phanbook\Models\Services\Service\Settings;
+use Phanbook\Models\Services\Exceptions\EntityNotFoundException;
 
 class SettingsTest extends UnitTest
 {
@@ -46,7 +46,8 @@ class SettingsTest extends UnitTest
 
         $this->tester->dontSeeInDatabase('settings', ['name' => $name]);
         $this->tester->expectException(
-            new Exception(sprintf('No setting found for name %s', $name)), function () use ($settingsService, $name) {
+            new EntityNotFoundException($name, 'name'),
+            function () use ($settingsService, $name) {
                 $settingsService->getFirstByName($name);
             }
         );
@@ -140,7 +141,6 @@ class SettingsTest extends UnitTest
         $this->assertTrue($settingsService->setAccessToken(json_encode($expected)));
         $this->tester->seeInDatabase('settings', ['name' => 'googleAnalyticAccessToken', 'value' => json_encode($expected)]);
     }
-
 
     /** @test */
     public function shouldFindGoogleAnalyticsRefreshToken()
