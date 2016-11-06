@@ -151,7 +151,7 @@ class PostsController extends ControllerBase
                 'posts'       => $itemBuilder->getQuery()->execute($params),
                 'totalPages'  => $totalPages,
                 'currentPage' => $page,
-                'vote_service'=> new Service\Vote(),
+                'vote_service'=> $this->voteService,
             ]
         );
 
@@ -336,13 +336,9 @@ class PostsController extends ControllerBase
      */
     public function viewAction($id, $slug)
     {
-        $postService = new Service\Post();
-        $userService = new Service\User();
-        $voteService = new Service\Vote();
+        $post = $this->postService->findFirstById($id);
 
-        $post = $postService->findFirstById($id);
-
-        if (!$post || !$postService->isPublished($post)) {
+        if (!$post || !$this->postService->isPublished($post)) {
             $this->response->setStatusCode(404);
             $this->flashSession->error(t("Sorry! We can't seem to find the page you're looking for."));
 
@@ -353,12 +349,12 @@ class PostsController extends ControllerBase
             return;
         }
 
-        if ($this->auth->isAuthorizedVisitor() && !$postService->hasViewsByIpAddress($post)) {
-            $postService->increaseNumberViews($post, $this->auth->getUserId());
-            $visitor = $userService->findFirstById($this->auth->getUserId());
+        if ($this->auth->isAuthorizedVisitor() && !$this->postService->hasViewsByIpAddress($post)) {
+            $this->postService->increaseNumberViews($post, $this->auth->getUserId());
+            $visitor = $this->userService->findFirstById($this->auth->getUserId());
 
-            if ($visitor && !$postService->isAuthorVisitor($post, $visitor->getId())) {
-                $userService->increaseVisitorKarmaForViewingPost($visitor);
+            if ($visitor && !$this->postService->isAuthorVisitor($post, $visitor->getId())) {
+                $this->userService->increaseVisitorKarmaForViewingPost($visitor);
             }
         }
 
@@ -366,13 +362,13 @@ class PostsController extends ControllerBase
             [
                 'post'        => $post,
                 'form'        => new ReplyForm(),
-                'votes'       => $voteService->getVotes($id, Vote::OBJECT_POSTS),
+                'votes'       => $this->voteService->getVotes($id, Vote::OBJECT_POSTS),
                 'postsReply'  => $post->getPostsWithVotes($id),
                 'commentForm' => new CommentForm(),
                 'userPosts'   => $post->user,
                 'type'        => Posts::POST_QUESTIONS,
                 'postRelated' => Posts::postRelated($post),
-                'vote_service'=> $voteService,
+                'vote_service'=> $this->voteService,
             ]
         );
 

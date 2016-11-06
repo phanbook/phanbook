@@ -27,6 +27,16 @@ use Phanbook\Backend\Forms\SettingReadingForm;
  */
 class SettingsController extends ControllerBase
 {
+    /**
+     * @var Service\Settings
+     */
+    protected $settingsService;
+
+    public function inject(Service\Settings $settingsService)
+    {
+        $this->settingsService = $settingsService;
+    }
+
     public function indexAction()
     {
         $this->tag->setTitle(t('Site Settings'));
@@ -196,7 +206,6 @@ class SettingsController extends ControllerBase
      */
     public function analyticAction()
     {
-        $settingsService = new Service\Settings();
         $analytic = new Analytic();
         $this->view->isLogged = false;
 
@@ -215,8 +224,8 @@ class SettingsController extends ControllerBase
         $this->assets->addCss('assets/css/bootstrap-multiselect.css');
         $this->assets->addJs('assets/js/bootstrap-multiselect.js');
 
-        $trackingID = $settingsService->findAnalyticTrackingID();
-        $accountID = $settingsService->findAnalyticAccountID();
+        $trackingID = $this->settingsService->findAnalyticTrackingID();
+        $accountID = $this->settingsService->findAnalyticAccountID();
 
         $this->view->isConfigured = false;
         if ($accountID) {
@@ -269,12 +278,10 @@ class SettingsController extends ControllerBase
      */
     public function cleanAuthAction()
     {
-        $settingsService = new Service\Settings();
-
         $this->view->disable();
         $analytic = new Analytic();
         $analytic->clearAuth();
-        $settingsService->clearGoogleAuth();
+        $this->settingsService->clearGoogleAuth();
         $this->flashSession->error(t('Clear Authorization Success!'));
         return $this->currentRedirect();
     }
@@ -283,20 +290,19 @@ class SettingsController extends ControllerBase
      */
     public function analyticSettingAction()
     {
-        $settingsService = new Service\Settings();
-
         $this->view->disable();
+
         if ($this->request->getPost('save')) {
             $obj = explode("_._", $this->request->getPost('selectView'));
             $trackingID = $obj[0];
             $accountID = $obj[1];
-            if ($settingsService->setAnalyticTrackingID($trackingID)) {
-                if ($settingsService->setAnalyticAccountID($accountID)) {
+            if ($this->settingsService->setAnalyticTrackingID($trackingID)) {
+                if ($this->settingsService->setAnalyticAccountID($accountID)) {
                     $analytic = new Analytic();
                     $profile = $analytic->getViewInfo($accountID, $trackingID);
                     if ($profile['state']) {
                         if ($this->phanbook->saveConfig(['googleAnalytic' => $profile['profile']['trackingID']])) {
-                            if ($settingsService->setAnalyticProfileID($profile['profile']['profileID'])) {
+                            if ($this->settingsService->setAnalyticProfileID($profile['profile']['profileID'])) {
                                 $this->flashSession->success(t('Save Analytic setting success!'));
                             }
                         } else {
@@ -317,12 +323,11 @@ class SettingsController extends ControllerBase
      */
     public function moduleDisplayAction()
     {
-        $settingsService = new Service\Settings();
-
         $this->view->disable();
+
         if ($this->request->getPost('save')) {
             $listActivity = $this->request->getPost('topActivity');
-            if ($settingsService->setListTopActivity($listActivity)) {
+            if ($this->settingsService->setListTopActivity($listActivity)) {
                 $this->flashSession->success(t('Save Analytic module(s) position success!'));
             } else {
                 $this->flashSession->error(t('An error occurred, We can\'t save this change!'));

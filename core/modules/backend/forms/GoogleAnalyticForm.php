@@ -13,7 +13,6 @@
 namespace Phanbook\Backend\Forms;
 
 use Phalcon\Forms\Form;
-use Phanbook\Models\Settings;
 use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Element\Hidden;
 use Phalcon\Forms\Element\Select;
