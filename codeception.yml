@@ -44,9 +44,12 @@ modules:
             user: %DB_USERNAME%
             password: %DB_PASSWORD%
             dump: tests/_data/dump.sql
+            populate: false
+            cleanup: false
         Phalcon:
             bootstrap: 'tests/_config/bootstrap.php'
             cleanup: false
+            savepoints: false
         PhpBrowser:
             url: %APP_URL%
             curl:
