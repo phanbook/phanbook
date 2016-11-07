@@ -10,4 +10,6 @@ modules:
         - Helper\Acceptance
         - Db
         - Filesystem
+        - Phalcon:
+            part: services
         - PhpBrowser
