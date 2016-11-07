@@ -2,6 +2,7 @@
 
 namespace App\Test\Unit\Models\Services;
 
+use Faker\Factory as Faker;
 use App\Test\Module\UnitTest;
 use Phanbook\Models\Users as Entity;
 use Phanbook\Models\Services\Service\User;
@@ -9,6 +10,18 @@ use Phanbook\Models\Services\Exceptions\EntityNotFoundException;
 
 class UserTest extends UnitTest
 {
+    /**
+     * @var \Faker\Generator
+     */
+    protected $faker;
+
+    protected function _before()
+    {
+        parent::_before();
+
+        $this->faker = Faker::create();
+    }
+
     /** @test */
     public function shouldFindUserByEmail()
     {
@@ -21,6 +34,7 @@ class UserTest extends UnitTest
             'email'     => $this->faker->email,
             'bio'       => $this->faker->paragraph,
             'birthdate' => $this->faker->date(),
+            'passwd'    => $this->faker->password,
         ];
 
         $this->tester->haveInDatabase('users', $data);
@@ -39,6 +53,7 @@ class UserTest extends UnitTest
             'email'     => $this->faker->email,
             'bio'       => $this->faker->paragraph,
             'birthdate' => $this->faker->date(),
+            'passwd'    => $this->faker->password,
         ];
 
         $id = $this->tester->haveInDatabase('users', $data);
@@ -57,6 +72,7 @@ class UserTest extends UnitTest
             'email'     => $this->faker->email,
             'bio'       => $this->faker->paragraph,
             'birthdate' => $this->faker->date(),
+            'passwd'    => $this->faker->password,
         ];
 
         $this->tester->haveInDatabase('users', $data);
@@ -75,6 +91,7 @@ class UserTest extends UnitTest
             'email'     => $this->faker->email,
             'bio'       => $this->faker->paragraph,
             'birthdate' => $this->faker->date(),
+            'passwd'    => $this->faker->password,
         ];
 
         $id = $this->tester->haveInDatabase('users', $data);
