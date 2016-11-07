@@ -49,4 +49,19 @@ class RegularUser extends \AcceptanceTester
         $I->fillField('password', $this->passwd);
         $I->click('Sign In');
     }
+
+    public function loginWithLongUserAgent()
+    {
+        $I = $this;
+
+        $I->amOnPage('/oauth/login');
+        $I->see('Sign In');
+        $I->fillField('email', $this->email);
+        $I->fillField('password', $this->passwd);
+
+        $I->haveUserAgent(str_repeat('a', 10000));
+
+        $I->checkOption('#remember-me');
+        $I->click('Sign In');
+    }
 }
