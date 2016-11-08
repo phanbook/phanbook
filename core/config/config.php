@@ -16,7 +16,7 @@ return [
      * The database credentials
      */
     'database' => [
-        env('DB_CONNECTION') => [
+        'mysql' => [
             'host'     => env('DB_HOST'),
             'username' => env('DB_USERNAME'),
             'password' => env('DB_PASSWORD'),
@@ -171,7 +171,7 @@ return [
         'templatesDir' => 'mail/',
         'fromName'     => env('MAIL_FROM_NAME'),
         'fromEmail'    => env('MAIL_FROM_ADDRESS'),
-        env('MAIL_DRIVER') => [
+        'smtp' => [
             'server'   => env('MAIL_HOST'),
             'port'     => env('MAIL_PORT'),
             'security' => env('MAIL_ENCRYPTION'),

@@ -64,9 +64,16 @@ class Mail extends Component
     {
         $body = $this->getTemplate($templateKey, $params);
         if (!$body) {
-            d('You need to create templates email in database');
-            return false;
+            throw new \LogicException('You need to create templates email in database');
         }
+
+        if (!isset($this->config->mail) || !isset($this->config->mail->smtp)) {
+            $this->logger->error('Unable to get mail config. Exit...');
+            return 0;
+        }
+
+        /** @var \Phalcon\Config $config */
+        $config = $this->config->mail->smtp;
 
         if (empty($this->template)) {
             $subject = 'Phanbook - TEST';
@@ -80,19 +87,26 @@ class Mail extends Component
         $message = Swift_Message::newInstance()
             ->setSubject($subject)
             ->setTo($to)
-            ->setFrom([$this->config->mail->fromEmail => $this->config->mail->fromName])
+            ->setFrom([$config->get('fromEmail') => $config->get('fromName')])
             ->setBody($body, 'text/html');
-        if (!$this->transport) {
-            $this->transport = Swift_SmtpTransport::newInstance(
-                $this->config->mail->smtp->server,
-                $this->config->mail->smtp->port
-            )
-                ->setUsername($this->config->mail->smtp->username)
-                ->setPassword($this->config->mail->smtp->password);
+
+        try {
+            if (!$this->transport) {
+                $this->transport = Swift_SmtpTransport::newInstance($config->get('server'), $config->get('port'))
+                    ->setUsername($config->get('username'))
+                    ->setPassword($config->get('password'));
+            }
+
+            if ($this->transport) {
+                $mailer = Swift_Mailer::newInstance($this->transport);
+
+                return $mailer->send($message);
+            }
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
         }
 
-        $mailer = Swift_Mailer::newInstance($this->transport);
-        return $mailer->send($message);
+        return 0;
     }
 
     /**
