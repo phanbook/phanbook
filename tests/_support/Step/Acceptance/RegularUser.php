@@ -39,6 +39,29 @@ class RegularUser extends \AcceptanceTester
         ]);
     }
 
+    public function registerUser()
+    {
+        $I = $this;
+
+        $I->amOnPage('/oauth/register/signup');
+
+        $data = [
+            'firstname' =>  $this->faker->name,
+            'lastname' =>  $this->faker->name,
+            'email' => $this->faker->email,
+            'username' => $this->faker->userName,
+        ];
+
+        $I->fillField('firstname', $data['firstname']);
+        $I->fillField('lastname', $data['lastname']);
+        $I->fillField('email', $data['email']);
+        $I->fillField('username', $data['username']);
+
+        $I->click('Register');
+
+        return $data;
+    }
+
     public function loginUser()
     {
         $I = $this;
