@@ -91,7 +91,7 @@ class UsersController extends ControllerBase
         $params = array($user->getId());
         //get all reply
         $parametersNumberReply = [
-            'group' => 'postsId',
+            'group' => 'id, postsId',
             'usersId = ?0',
             'bind' => [$user->getId()],
         ];
@@ -114,7 +114,8 @@ class UsersController extends ControllerBase
                 'totalReply'        => PostsReply::find($parametersNumberReply)->count(),
                 'tab'               => $tab,
                 'totalPages'        => $totalPages,
-                'currentPage'       => $page
+                'currentPage'       => $page,
+                'vote_service'      => $this->voteService,
             ]
         );
     }
