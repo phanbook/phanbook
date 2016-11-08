@@ -18,6 +18,9 @@ use Phalcon\Image\Adapter\Gd;
 
 class Media extends ModelBase
 {
+    const MAX_WIDTH_THUMB = 200;
+    const MAX_HEIGHT_THUMB = 200;
+
     /**
      *
      * @var integer
@@ -321,11 +324,9 @@ class Media extends ModelBase
      */
     public function generateThumb($localPath, $serverPath)
     {
-        $maxWidth = MAX_WIDTH_THUMB;
-        $maxHeight = MAX_HEIGHT_THUMB;
         $thumbServerPath = dirname($serverPath) . DS . "thumb_" . DS . basename($serverPath);
         $thumbLocalPath = $localPath. "_thumb";
-        $resizeStatus = $this->resizeImage($localPath, $thumbLocalPath, $maxWidth, $maxHeight);
+        $resizeStatus = $this->resizeImage($localPath, $thumbLocalPath, self::MAX_WIDTH_THUMB, self::MAX_HEIGHT_THUMB);
         if ($resizeStatus) {
             $uploadStatus = $this->fileSystem->uploadFile($thumbLocalPath, $thumbServerPath);
             if ($uploadStatus) {
