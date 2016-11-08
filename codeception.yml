@@ -23,7 +23,8 @@ coverage:
     enabled: true
     whitelist:
       include:
-        - apps/*
+        - core/common/*
+        - core/modules/*
 extensions:
     enabled:
         - Codeception\Extension\RunFailed # default extension
