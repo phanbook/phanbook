@@ -86,6 +86,39 @@ class User extends Service
     }
 
     /**
+     * Finds User by username.
+     *
+     * @param  string $name The username.
+     * @return Users|null
+     */
+    public function findFirstByUsername($name)
+    {
+        $user = Users::query()
+                     ->where('username = :name:', ['name' => $name])
+                     ->limit(1)
+                     ->execute();
+
+        return $user->valid() ? $user->getFirst() : null;
+    }
+
+    /**
+     * Get User by username.
+     *
+     * @param  string $name The username.
+     * @return Users
+     *
+     * @throws EntityNotFoundException
+     */
+    public function getFirstByUsername($name)
+    {
+        if (!$user = $this->findFirstByUsername($name)) {
+            throw new EntityNotFoundException($name, 'username');
+        }
+
+        return $user;
+    }
+
+    /**
      * Checks whether the User is moderator.
      *
      * @param  Users $user
