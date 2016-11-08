@@ -94,9 +94,9 @@ class User extends Service
     public function findFirstByUsername($name)
     {
         $user = Users::query()
-                     ->where('username = :name:', ['name' => $name])
-                     ->limit(1)
-                     ->execute();
+            ->where('username = :name:', ['name' => $name])
+            ->limit(1)
+            ->execute();
 
         return $user->valid() ? $user->getFirst() : null;
     }
