@@ -51,7 +51,3 @@ defined('APPLICATION_ENV') || define('APPLICATION_ENV', getenv('APPLICATION_ENV'
  * @const COMPATIBLE_VERSION The compatible Phalcon version.
  */
 defined('COMPATIBLE_VERSION') || define('COMPATIBLE_VERSION', 3000040);
-
-// @todo Move to the config
-defined('MAX_WIDTH_THUMB') || define('MAX_WIDTH_THUMB', 200);
-defined('MAX_HEIGHT_THUMB') || define('MAX_HEIGHT_THUMB', 200);
