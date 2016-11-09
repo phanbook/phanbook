@@ -49,6 +49,7 @@ before_install:
   - phpenv config-rm xdebug.ini || true
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
   - travis_retry composer install --prefer-dist --no-interaction --ignore-platform-reqs
+  - travis_retry composer require --dev "phalcon/zephir:dev-master" --ignore-platform-reqs
   - ( bash tests/_ci/install_zephir.sh )
   - bash tests/_ci/install_prereqs_$PHP_MAJOR.sh
 

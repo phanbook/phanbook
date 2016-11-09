@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a5f126d319b17e842fecbf790c91fd4f",
-    "content-hash": "c0bd18ec551fc5bc4f5a2dca0bb37607",
+    "hash": "41d58da4ffa9b6f93b886a31f427bb6d",
+    "content-hash": "006a74a7db7b52e21534a2ee433e6405",
     "packages": [
         {
             "name": "elasticsearch/elasticsearch",
@@ -242,16 +242,16 @@
         },
         {
             "name": "league/flysystem",
-            "version": "dev-master",
+            "version": "1.0.32",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "17d3c6a16bdc9cda328a90fc433593d0575c08a8"
+                "reference": "1b5c4a0031697f46e779a9d1b309c2e1b24daeab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/17d3c6a16bdc9cda328a90fc433593d0575c08a8",
-                "reference": "17d3c6a16bdc9cda328a90fc433593d0575c08a8",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/1b5c4a0031697f46e779a9d1b309c2e1b24daeab",
+                "reference": "1b5c4a0031697f46e779a9d1b309c2e1b24daeab",
                 "shasum": ""
             },
             "require": {
@@ -321,7 +321,7 @@
                 "sftp",
                 "storage"
             ],
-            "time": "2016-11-02 08:24:08"
+            "time": "2016-10-19 20:38:46"
         },
         {
             "name": "league/fractal",
@@ -844,12 +844,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "62cb9ab87b663aa46995fc1d555b8b02db882f12"
+                "reference": "71ae752f4d896409c7dfc36caf019465cf35fbbc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/62cb9ab87b663aa46995fc1d555b8b02db882f12",
-                "reference": "62cb9ab87b663aa46995fc1d555b8b02db882f12",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/71ae752f4d896409c7dfc36caf019465cf35fbbc",
+                "reference": "71ae752f4d896409c7dfc36caf019465cf35fbbc",
                 "shasum": ""
             },
             "require": {
@@ -927,7 +927,7 @@
                 "functional testing",
                 "unit testing"
             ],
-            "time": "2016-11-04 12:59:59"
+            "time": "2016-11-09 15:09:03"
         },
         {
             "name": "doctrine/instantiator",
@@ -1292,80 +1292,17 @@
             "time": "2016-10-31 17:19:45"
         },
         {
-            "name": "phalcon/zephir",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phalcon/zephir.git",
-                "reference": "e58a876fd4d4634386817ef0c4679e6cac3d8cb5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/zephir/zipball/e58a876fd4d4634386817ef0c4679e6cac3d8cb5",
-                "reference": "e58a876fd4d4634386817ef0c4679e6cac3d8cb5",
-                "shasum": ""
-            },
-            "require": {
-                "ext-ctype": "*",
-                "ext-hash": "*",
-                "ext-json": "*",
-                "ext-xml": "*",
-                "php": ">=5.4"
-            },
-            "require-dev": {
-                "ext-gmp": "*",
-                "ext-pdo": "*",
-                "ext-pdo_sqlite": "*",
-                "phpunit/phpunit": "3.7.*",
-                "squizlabs/php_codesniffer": "~2.6"
-            },
-            "bin": [
-                "bin/zephir"
-            ],
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Zephir\\": "Library"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Zephir Team",
-                    "homepage": "http://zephir-lang.com/"
-                },
-                {
-                    "name": "Contributors",
-                    "homepage": "https://github.com/phalcon/zephir/graphs/contributors"
-                }
-            ],
-            "description": "Zephir is a compiled high level language aimed to the creation of C-extensions for PHP",
-            "homepage": "http://zephir-lang.com/",
-            "keywords": [
-                "extension"
-            ],
-            "time": "2016-10-23 12:01:25"
-        },
-        {
             "name": "phalcongelist/dd",
-            "version": "v1.0.1",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcongelist/dd.git",
-                "reference": "16e0572c62e8924294d0e0ca677d5cfb34e34d75"
+                "reference": "dc0d83655c7694fec2d9805c2378919f3c2d45ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcongelist/dd/zipball/16e0572c62e8924294d0e0ca677d5cfb34e34d75",
-                "reference": "16e0572c62e8924294d0e0ca677d5cfb34e34d75",
+                "url": "https://api.github.com/repos/phalcongelist/dd/zipball/dc0d83655c7694fec2d9805c2378919f3c2d45ec",
+                "reference": "dc0d83655c7694fec2d9805c2378919f3c2d45ec",
                 "shasum": ""
             },
             "require": {
@@ -1401,7 +1338,7 @@
                 "phalcon",
                 "utils"
             ],
-            "time": "2016-11-06 21:09:57"
+            "time": "2016-11-08 21:35:45"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -3132,10 +3069,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "swiftmailer/swiftmailer": 0,
-        "league/flysystem": 20,
-        "codeception/codeception": 20,
-        "phalcon/zephir": 20
+        "codeception/codeception": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
