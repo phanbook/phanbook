@@ -87,6 +87,7 @@ $messages = [
     'Sign in using Google+' => 'Войти с помощью Google+',
     'site design' => 'дизайн сайта',
     'solved' => 'решён',
+    'Something was wrong. Please try later,' => 'Что-то пошло не так. Пожалуйста, попробуйте позже.',
     "Sorry! We can't seem to find the page you're looking for." => 'Нам очень жаль, но мы не можем найти страницу, которую вы ищете.',
     'Stats' => 'Статистика',
     'Subscribe' => 'Подписаться',

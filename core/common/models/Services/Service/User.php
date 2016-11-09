@@ -160,7 +160,7 @@ class User extends Service
 
         if (!$visitor->save()) {
             foreach ($visitor->getMessages() as $message) {
-                $this->getLogger()->error($message);
+                $this->getLogger()->error((string) $message);
             }
 
             return false;
@@ -175,19 +175,20 @@ class User extends Service
      * @param Users  $user
      * @param string $value
      *
-     * @return array
+     * @return bool
      */
     public function updateDigestSettings(Users $user, $value)
     {
-        $messages = [];
         $user->setDigest($value);
 
         if (!$user->save()) {
             foreach ($user->getMessages() as $message) {
-                $messages[] = (string) $message;
+                $this->getLogger()->error((string) $message);
             }
+
+            return false;
         }
 
-        return $messages;
+        return true;
     }
 }

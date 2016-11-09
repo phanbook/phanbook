@@ -342,9 +342,8 @@ class UsersController extends ControllerBase
                 $this->flashSession->error(implode('<br>', $messages));
             } else {
                 $value = $this->request->getPost('digest', 'yes_no');
-                $messages = $this->userService->updateDigestSettings($user, $value);
-                if (!empty($messages)) {
-                    $this->flashSession->error(implode('<br>', $messages));
+                if (!$this->userService->updateDigestSettings($user, $value)) {
+                    $this->flashSession->error(t('Something was wrong. Please try later'));
                 } else {
                     $this->flashSession->success(t('Settings successfully updated.'));
                     $this->refreshAuthSession($user->toArray());
