@@ -79,6 +79,7 @@ $messages = [
     // S
     'Search here...' => 'Поиск...',
     'Settings' => 'Настройки',
+    'Settings successfully updated.' => 'Настройки успешно обновлены.',
     'Sign In' => 'Войти',
     'Sign in to start your session' => 'Войдите, чтобы начать сеанс',
     'Sign in using Facebook' => 'Войти с помощью Facebook',
