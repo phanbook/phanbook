@@ -126,7 +126,7 @@ class Post extends Service
 
         $this->increaseAuthorKarmaForVisit($post, $visitorId);
 
-        if ($post->save()) {
+        if (!$post->save()) {
             foreach ($post->getMessages() as $message) {
                 $this->getLogger()->error($message);
             }
