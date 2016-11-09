@@ -47,7 +47,6 @@
         "fzaninotto/faker": "^1.6",
         "squizlabs/php_codesniffer": "^2.7",
         "codeception/codeception": "2.2.x-dev",
-        "phalcon/zephir": "dev-master",
         "phalcongelist/dd": "^1"
     },
     "support": {
