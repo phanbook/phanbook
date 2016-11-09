@@ -13,6 +13,7 @@
 namespace Phanbook\Common\Library\Providers;
 
 use Phalcon\Filter;
+use Phanbook\Common\Library\Filters\YesNoFilter;
 
 /**
  * \Phanbook\Common\Library\Providers\FilterServiceProvider
@@ -34,6 +35,11 @@ class FilterServiceProvider extends AbstractServiceProvider
      */
     public function register()
     {
-        $this->di->setShared($this->serviceName, Filter::class);
+        $this->di->setShared($this->serviceName, function () {
+            $filter = new Filter();
+            $filter->add('yes_no', new YesNoFilter());
+
+            return $filter;
+        });
     }
 }
