@@ -168,4 +168,26 @@ class User extends Service
 
         return true;
     }
+
+    /**
+     * Update User's digest settings.
+     *
+     * @param Users  $user
+     * @param string $value
+     *
+     * @return array
+     */
+    public function updateDigestSettings(Users $user, $value)
+    {
+        $messages = [];
+        $user->setDigest($value);
+
+        if (!$user->save()) {
+            foreach ($user->getMessages() as $message) {
+                $messages[] = (string) $message;
+            }
+        }
+
+        return $messages;
+    }
 }
