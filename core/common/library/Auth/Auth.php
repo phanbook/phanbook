@@ -12,11 +12,11 @@
  */
 namespace Phanbook\Auth;
 
-use Phalcon\Mvc\User\Component;
 use Phanbook\Models\Users;
-use Phanbook\Models\RememberTokens;
-use Phanbook\Models\SuccessLogins;
+use Phalcon\Mvc\User\Component;
 use Phanbook\Models\FailedLogins;
+use Phanbook\Models\SuccessLogins;
+use Phanbook\Models\RememberTokens;
 
 /**
  * \Phanbook\Auth\Auth
@@ -80,7 +80,6 @@ class Auth extends Component
         if (!$successLogin->save()) {
             $messages = $successLogin->getMessages();
             error_log('saveSuccessLogin false ' . __LINE__. ' and ' . __CLASS__ . $messages[0]);
-            return false;
         }
     }
 
@@ -158,8 +157,6 @@ class Auth extends Component
 
     /**
      * Logs on using the information in the cookies, it will call in beforeExecuteRoute
-     *
-     * @return \Phalcon\Http\Response
      */
     public function loginWithRememberMe()
     {
@@ -379,62 +376,6 @@ class Auth extends Component
 
 
         $this->session->remove('auth');
-    }
-
-    /**
-     * Authorize the user by his/her id
-     *
-     * @param int $id
-     * @return Users|bool
-     */
-    public function authUserById($id)
-    {
-        $user = Users::findFirstById($id);
-        if (!$user) {
-            error_log('The user does not exist');
-            return false;
-        }
-        return $user;
-    }
-
-    /**
-     * Get the entity related to user in the active identity
-     *
-     * @return \Phanbook\Models\Users
-     */
-    public function getUser()
-    {
-        $identity = $this->session->get('auth');
-        if (!isset($identity['id'])) {
-            return false;
-        }
-
-        $user = Users::findFirstById($identity['id']);
-        if (!$user) {
-            error_log('The user does not exist' . __CLASS__ . ' and '. __LINE__);
-            return false;
-        }
-        return $user;
-    }
-    /**
-     * Check condition to allow comment or vote
-     *
-     * @return mixed
-     */
-    public function getVote()
-    {
-        $identity = $this->session->get('auth');
-        if (!isset($identity['id'])) {
-            return false;
-        }
-
-        $user = Users::findFirstById($identity['id']);
-        if (!$user) {
-            error_log('The user does not exist' . __CLASS__ . ' and '. __LINE__);
-            return false;
-        }
-
-        return $user->getVote();
     }
 
     /**
