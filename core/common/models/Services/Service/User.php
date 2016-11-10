@@ -160,7 +160,30 @@ class User extends Service
 
         if (!$visitor->save()) {
             foreach ($visitor->getMessages() as $message) {
-                $this->getLogger()->error($message);
+                $this->getLogger()->error((string) $message);
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Update User's digest settings.
+     *
+     * @param Users  $user
+     * @param string $value
+     *
+     * @return bool
+     */
+    public function updateDigestSettings(Users $user, $value)
+    {
+        $user->setDigest($value);
+
+        if (!$user->save()) {
+            foreach ($user->getMessages() as $message) {
+                $this->getLogger()->error((string) $message);
             }
 
             return false;

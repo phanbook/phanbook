@@ -9,10 +9,10 @@ use Step\Functional\UserProfile as ProfileTester;
 $I = new ProfileTester($scenario);
 $I->wantToTest('edit user profile');
 
-$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+$email = uniqid() . '@' . uniqid() . '.com';
 
 $id = $I->regularUser();
 $I->amOnProfile();
-$I->fillEmail('serghei@phalconphp.com');
+$I->fillEmail($email);
 $I->clickUpdate();
-$I->seeInDatabase('users', ['id' => $id, 'email' => 'serghei@phalconphp.com']);
+$I->seeInDatabase('users', ['id' => $id, 'email' => $email]);

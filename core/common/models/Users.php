@@ -327,7 +327,8 @@ class Users extends ModelBase
     }
 
     /**
-     * @param string $uuidFacebook
+     * @param  string $uuidFacebook
+     * @return $this
      */
     public function setUuidFacebook($uuidFacebook)
     {
@@ -337,7 +338,8 @@ class Users extends ModelBase
     }
 
     /**
-     * @param string $uuidGithub
+     * @param  string $uuidGithub
+     * @return $this
      */
     public function setUuidGithub($uuidGithub)
     {
@@ -347,7 +349,8 @@ class Users extends ModelBase
     }
 
     /**
-     * @param string $uuidGoogle
+     * @param  string $uuidGoogle
+     * @return $this
      */
     public function setUuidGoogle($uuidGoogle)
     {
@@ -613,11 +616,13 @@ class Users extends ModelBase
 
         return $this;
     }
+
     public function setTwitter($twitter)
     {
         $this->twitter = $twitter;
         return $this;
     }
+
     public function setGithub($github)
     {
         $this->github = $github;
@@ -741,6 +746,7 @@ class Users extends ModelBase
     {
         return $this->uuidGoogle;
     }
+
     /**
      * Returns the value of field createdAt
      *
@@ -920,14 +926,17 @@ class Users extends ModelBase
     {
         return $this->theme;
     }
+
     public function getBio()
     {
         return $this->bio;
     }
+
     public function getTwitter()
     {
         return $this->twitter;
     }
+
     public function getGithub()
     {
         return $this->github;
@@ -1034,7 +1043,7 @@ class Users extends ModelBase
     */
     public function beforeCreate()
     {
-        if (empty($this->birthdate)) {
+        if (empty($this->birthdate) || $this->birthdate == '0000-00-00') {
             $this->birthdate = null;
         }
 
@@ -1070,7 +1079,7 @@ class Users extends ModelBase
      */
     public function beforeUpdate()
     {
-        if (empty($this->birthdate)) {
+        if (empty($this->birthdate) || $this->birthdate == '0000-00-00') {
             $this->birthdate = null;
         }
 
