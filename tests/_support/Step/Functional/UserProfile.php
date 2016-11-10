@@ -27,6 +27,7 @@ class UserProfile extends \FunctionalTester
             'email'     => $this->faker->email,
             'bio'       => $this->faker->paragraph,
             'birthdate' => $this->faker->date(),
+            'status'    => Users::STATUS_ACTIVE,
         ];
 
         $I  = $this;
@@ -49,18 +50,35 @@ class UserProfile extends \FunctionalTester
     public function amOnProfile()
     {
         $I = $this;
+
         $I->amOnPage($this->url);
+    }
+
+    public function amOnSettings()
+    {
+        $I = $this;
+
+        $I->amOnPage('/users/setting');
     }
 
     public function fillEmail($email)
     {
         $I = $this;
+
         $I->fillField('email', $email);
     }
 
     public function clickUpdate()
     {
         $I = $this;
+
         $I->click('Update');
+    }
+
+    public function clickSave()
+    {
+        $I = $this;
+
+        $I->click('Save');
     }
 }
