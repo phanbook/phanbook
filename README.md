@@ -39,33 +39,7 @@ We want Phanbook to be the most powerful Q&A software out there, and we have a h
 
 ## Installation
 
-**Phanbook is currently in development and will be ready to use later this year.** ([Roadmap](http://phanbook.com/roadmap/)) If you want to give the development version a spin or are interested in contributing, for now you can install Phanbook's Vagrant image. An easier installation process will become a priority once Phanbook is more stable.
-
-1. Install [Vagrant](https://www.vagrantup.com) and [VirtualBox](https://www.virtualbox.org).
-2. Clone this repository and set up the Vagrant box:
-
-  ```sh
-  git clone --depth=1 https://github.com/phanbook/phanbook.git
-  cd phanbook && chmod +x phanbook && ./phanbook up
-  ```
-
-3. Add an entry to your /etc/hosts file:
-
-  ```192.168.33.34 phanbook.dev```
-
-4. Visit phanbook.dev or 192.168.33.34 in a browser. To get full information how to setup that can see [here](https://github.com/phanbook/docs/blob/master/install.md)
-
-## Docker
-To play Phanbook with Docker you just do follow a command below:
-
-```
-./phanbook docker #it will use default password is phanbook
-```
-Visit 127.0.0.1 in a browser. If you use Windows see more [here](https://github.com/phanbook/docs/blob/master/install.md)
-
-## Default we have setup a user with:
-- Username: admin
-- Password: phanbook
+To see how to run Phanbook you can take look at [here](https://github.com/phanbook/docs/blob/master/install.md)
 
 ## Security
 
