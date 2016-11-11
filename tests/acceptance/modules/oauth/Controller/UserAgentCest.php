@@ -12,7 +12,7 @@ class UserAgentCest
     {
         $I->wantTo('login with long user agent');
 
-        $I->haveUserInDb();
+        $I->haveRegularUserInDb();
         $I->loginUser();
         $I->seeResponseCodeIs(200);
         $I->see('Welcome back');
