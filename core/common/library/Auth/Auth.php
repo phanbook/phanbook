@@ -18,7 +18,7 @@ use Phanbook\Models\FailedLogins;
 use Phanbook\Models\SuccessLogins;
 use Phanbook\Models\RememberTokens;
 use Phanbook\Models\Services\Service;
-use Phanbook\Models\Repositories\EntityNotFoundException;
+use Phanbook\Models\Services\Exceptions\EntityNotFoundException;
 
 /**
  * \Phanbook\Auth\Auth
@@ -346,17 +346,6 @@ class Auth extends Component
         $identity = $this->session->get('auth');
 
         return $identity['moderator'] == 'Y';
-    }
-
-    /**
-     * See Auth::isAuthorizedVisitor
-     *
-     * @deprecated
-     * @return bool
-     */
-    public function isLogin()
-    {
-        return $this->isAuthorizedVisitor();
     }
 
     /**

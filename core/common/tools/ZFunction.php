@@ -189,32 +189,4 @@ class ZFunction extends Injectable
 
         return '/content/themes/' . $theme . '/assets/' . $path;
     }
-    /**
-     *
-     * @return boolean
-     */
-    public static function isAdmin()
-    {
-        return (new Auth)->isAdmin();
-    }
-    /**
-     *
-     * @return boolean
-     */
-    public static function isModerator()
-    {
-        return (new Auth)->isModerator();
-    }
-    /**
-     *
-     * @return boolean
-     */
-    public static function isTrustModeration()
-    {
-        return (new Auth)->isTrustModeration();
-    }
-    public static function isLogin()
-    {
-        return (new Auth)->isLogin();
-    }
 }

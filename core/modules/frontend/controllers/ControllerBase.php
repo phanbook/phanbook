@@ -209,7 +209,7 @@ class ControllerBase extends Controller
         if (!$this->request->isPost()) {
             return $this->response->redirect($this->router->getControllerName());
         }
-        $user = Users::findFirstById($this->auth->getAuth()['id']);
+        $user = Users::findFirstById($this->auth->getUserId());
 
         if (!$user) {
             $this->flashSession->error(t('You need to login first'));

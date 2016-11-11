@@ -12,8 +12,12 @@
  */
 namespace Phanbook\Tools;
 
-/**
+/***
+ * \Phanbook\Tools\VoltFunctions
+ *
  * PHP Functions in Volt
+ *
+ * @package Phanbook\Tools
  */
 class VoltFunctions
 {
@@ -30,6 +34,16 @@ class VoltFunctions
         if (function_exists($name)) {
             return $name . '(' . $arguments . ')';
         }
+
+        switch ($name) {
+            case 'is_authorized':
+                return '$this->auth->isAuthorizedVisitor()';
+            case 'is_moderator':
+                return '$this->auth->isModerator()';
+            case 'is_admin':
+                return '$this->auth->isAdmin()';
+        }
+
         $property = $name;
         $class = '\Phanbook\Tools\ZFunction';
 
@@ -52,24 +66,24 @@ class VoltFunctions
     /**
      * Compile some filters
      *
-     * @param string $name      filter name
-     * @param mixed  $arguments filter args
+     * @param string $name      The filter name
+     * @param mixed  $arguments The filter args
      *
-     * @return string compiled filter
+     * @return string|null
      */
     public function compileFilter($name, $arguments)
     {
-        if ($name == 'isset') {
-            return '(isset(' . $arguments . ') ? ' . $arguments . ' : null)';
+        switch ($name) {
+            case 'isset':
+                return '(isset(' . $arguments . ') ? ' . $arguments . ' : false)';
+            case 'long2ip':
+                return 'long2ip(' . $arguments . ')';
+            case 'truncate':
+                return '\Phanbook\Tools\ZFunction::truncate(' . $arguments . ')';
+            case 'strlen':
+                return '\Phanbook\Tools\ZFunction::strlen(' . $arguments . ')';
         }
-        if ($name == 'long2ip') {
-            return 'long2ip(' . $arguments . ')';
-        }
-        if ($name == 'truncate') {
-            return '\Phanbook\Tools\ZFunction::truncate(' . $arguments . ')';
-        }
-        if ($name == 'strlen') {
-            return '\Phanbook\Tools\ZFunction::strlen(' . $arguments . ')';
-        }
+
+        return null;
     }
 }

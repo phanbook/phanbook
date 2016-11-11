@@ -129,9 +129,8 @@ class SettingsController extends ControllerBase
     public function changeLogo($name)
     {
         $this->view->disable();
-        $user = $this->auth->getAuth();
 
-        if (!$user) {
+        if (!$this->auth->isAuthorizedVisitor()) {
             $this->flashSession->error(t('Hack attempt!!!'));
             return $this->response->redirect($this->router->getControllerName());
         }
