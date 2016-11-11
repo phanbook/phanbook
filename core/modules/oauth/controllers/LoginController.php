@@ -147,7 +147,7 @@ class LoginController extends ControllerBase
 
         $this->cookies->set('HTTPBACK', serialize($url));
 
-        if ($this->auth->getAuth()) {
+        if ($this->auth->isAuthorizedVisitor()) {
             $this->view->disable();
 
             return $this->response->redirect();
@@ -176,7 +176,8 @@ class LoginController extends ControllerBase
             }
             return $this->currentRedirect();
         }
-        $this->view->form  = $form;
+
+        $this->view->setVar('form', $form);
     }
 
     /**

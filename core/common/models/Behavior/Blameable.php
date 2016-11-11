@@ -87,7 +87,7 @@ class Blameable extends Behavior implements BehaviorInterface
         /** @var \Phanbook\Auth\Auth $auth */
         $auth = $this->getDI()->getShared('auth');
 
-        if ($auth->isLogin()) {
+        if ($auth->isAuthorizedVisitor()) {
             return null;
         }
 

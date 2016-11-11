@@ -1,4 +1,4 @@
-{% if isLogin() %}
+{% if is_authorized() %}
 <div class="setting-panel" style="display:none">
         <section class="container">
             <div class="row">
@@ -39,7 +39,7 @@
         <nav class="header-top-nav">
             <ul>
                 <li><a href="#"><i class="fa fa-headphones"></i>{{ t('Support') }}</a></li>
-                {% if isLogin() %}
+                {% if is_authorized() %}
                     <li>
                         <a href="/oauth/logout" id="setting-panel">
                             <i class="fa fa-plus"></i>{{ t('Settings') }}
@@ -82,7 +82,7 @@
             -%}
 
             {%- for value, key in menu -%}
-                {%- if (key == 'my' or key == 'answers') and not isLogin() -%}
+                {%- if (key == 'my' or key == 'answers') and not is_authorized() -%}
                     {% continue %}
                 {%- endif -%}
 

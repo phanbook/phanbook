@@ -281,11 +281,12 @@ class PostsController extends ControllerBase
      */
     public function deleteAction($id)
     {
-        $auth = $this->auth->getAuth();
-        if (!$auth) {
+        if (!$this->auth->isAuthorizedVisitor()) {
             $this->flashSession->error('You must be logged first');
             return $this->indexRedirect();
         }
+
+        $auth = $this->auth->getAuth();
         $parameters = [
             "id = ?0 AND (usersId = ?1 OR 'Y' = ?2 OR 'Y' = ?3)",
             "bind" => [$id, $auth['id'], $auth['moderator'], $auth['admin']]
