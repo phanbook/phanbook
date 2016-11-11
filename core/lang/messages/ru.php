@@ -96,6 +96,7 @@ $messages = [
     // T
     'Tags' => 'Метки',
     'The password is required' => 'Пароль обязателен для заполнения',
+    'The user is inactive' => 'Аккаунт не активирован',
     'The Username or E-Mail is required' => 'Логин или Email обязательны для заполнения',
     'To RSS Feed' => 'На RSS рассылку',
     'Twitter' => 'Twitter',
@@ -114,6 +115,7 @@ $messages = [
     'Welcome!' => 'Добро пожаловать!',
     'Who We Are' => 'Кто мы',
     'With the Phanbook you can building easy it!' => 'Используя Phanbook, вы можете легко создать свой StackOverflow!',
+    'Wrong email/password combination' => 'Неправильная комбинация логин/пароль',
     // X
     // Y
     "You're probably heard of StackOverflow before, the biggest Question and Answer website." => 'Вы, наверное, слышали о сайте StackOverflow, главном сайте вопросов и ответов.',

@@ -119,6 +119,40 @@ class User extends Service
     }
 
     /**
+     * Finds User by email or username.
+     *
+     * @param  string $name The username.
+     * @return Users|null
+     */
+    public function findFirstByEmailOrUsername($name)
+    {
+        $user = Users::query()
+            ->where('email = :email:', ['email' => $name])
+            ->orWhere('username = :name:', ['name' => $name])
+            ->limit(1)
+            ->execute();
+
+        return $user->valid() ? $user->getFirst() : null;
+    }
+
+    /**
+     * Get User by email or username.
+     *
+     * @param  string $name The username.
+     * @return Users
+     *
+     * @throws EntityNotFoundException
+     */
+    public function getFirstByEmailOrUsername($name)
+    {
+        if (!$user = $this->findFirstByEmailOrUsername($name)) {
+            throw new EntityNotFoundException($name, 'email or username');
+        }
+
+        return $user;
+    }
+
+    /**
      * Checks whether the User is moderator.
      *
      * @param  Users $user

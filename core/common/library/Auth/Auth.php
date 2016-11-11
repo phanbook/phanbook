@@ -17,6 +17,8 @@ use Phalcon\Mvc\User\Component;
 use Phanbook\Models\FailedLogins;
 use Phanbook\Models\SuccessLogins;
 use Phanbook\Models\RememberTokens;
+use Phanbook\Models\Services\Service;
+use Phanbook\Models\Repositories\EntityNotFoundException;
 
 /**
  * \Phanbook\Auth\Auth
@@ -29,6 +31,32 @@ use Phanbook\Models\RememberTokens;
 class Auth extends Component
 {
     /**
+     * @var Service\User
+     */
+    protected $userService;
+
+    /**
+     * @var int
+     */
+    protected $cookieLifetime;
+
+    /**
+     * Auth constructor.
+     *
+     * @param null $cookieLifetime
+     */
+    public function __construct($cookieLifetime = null)
+    {
+        $this->userService = $this->di->getShared(Service\User::class);
+
+        if ($cookieLifetime === null) {
+            $cookieLifetime = $this->config->get('application')->cookieLifetime;
+        }
+
+        $this->cookieLifetime = $cookieLifetime;
+    }
+
+    /**
      * Checks the user credentials
      *
      * @param  array $credentials
@@ -36,34 +64,40 @@ class Auth extends Component
      */
     public function check(array $credentials)
     {
-        // Check if the user exist
-        $user = Users::findByEmailOrUsername($credentials['email']);
-        if (!$user) {
+        try {
+            // Check if the user exist
+            $user = $this->userService->getFirstByEmailOrUsername($credentials['email']);
+
+            // Check the password
+            if (!$this->security->checkHash($credentials['password'], $user->getPasswd())) {
+                $this->registerUserThrottling($user->getId());
+                $this->flashSession->error(t('Wrong email/password combination'));
+                return false;
+            }
+
+            // Check if the user was flagged
+            if (!$this->userService->isActiveMember($user)) {
+                $this->flashSession->error(t('The user is inactive'));
+                return false;
+            }
+
+            // Register the successful login
+            $this->saveSuccessLogin($user);
+
+            // Check if the remember me was selected
+            if (isset($credentials['remember'])) {
+                $this->setRememberEnvironment($user);
+            }
+
+            $this->setSession($user);
+
+            return true;
+        } catch (EntityNotFoundException $e) {
             $this->registerUserThrottling(0);
-            $this->flashSession->error(t('Wrong email/password combination!'));
-            return false;
+            $this->flashSession->error(t('Wrong email/password combination'));
         }
 
-        // Check the password
-        if (!$this->security->checkHash($credentials['password'], $user->getPasswd())) {
-            //$this->registerUserThrottling($user->id);
-            $this->flashSession->error(t('Wrong email/password combination!'));
-            return false;
-        }
-
-        // Check if the user was flagged
-        $this->checkUserFlags($user);
-
-        // Register the successful login
-        $this->saveSuccessLogin($user);
-
-        // Check if the remember me was selected
-        if (isset($credentials['remember'])) {
-            $this->setRememberEnvironment($user);
-        }
-
-        $this->setSession($user);
-        return true;
+        return false;
     }
 
     /**
@@ -139,7 +173,7 @@ class Auth extends Component
         $remember->setUserAgent($userAgent);
 
         if ($remember->save()) {
-            $expire = time() + $this->config->application->cookieLifetime;
+            $expire = time() + $this->cookieLifetime;
             $this->cookies->set('RMU', $user->getId(), $expire);
             $this->cookies->set('RMT', $token, $expire);
         }
@@ -178,14 +212,14 @@ class Auth extends Component
                 );
                 if ($remember) {
                     // Check if the cookie has not expired
-                    if ((time() - $this->config->application->cookieLifetime) < $remember->getCreatedAt()) {
+                    if ((time() - $this->cookieLifetime) < $remember->getCreatedAt()) {
                         // Register identity
                         $this->setSession($user);
                         // Register the successful login
                         $this->saveSuccessLogin($user);
                         // Check if the user was flagged
-                        if (!$this->checkUserFlags($user)) {
-                            $this->flashSession->error('banned');
+                        if (!$this->userService->isActiveMember($user)) {
+                            $this->flashSession->error('The user is inactive');
                             $this->remove();
                         }
                     } else {
@@ -195,21 +229,6 @@ class Auth extends Component
                 }
             }
         }
-    }
-
-    /**
-     * Checks if the user is NOT banned/inactive/suspended
-     *
-     * @deprecated
-     * @todo Use Users service/model instead. Do not check entity in session/cookie-related class
-     * @see \Phanbook\Models\Services\Service\User::isActiveMember()
-     *
-     * @param  \Phanbook\Models\Users $user
-     * @return bool
-     */
-    public function checkUserFlags(Users $user)
-    {
-        return $user->getStatus() == Users::STATUS_ACTIVE;
     }
 
     /**

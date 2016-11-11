@@ -3,13 +3,17 @@
 namespace Step\Acceptance;
 
 use Codeception\Scenario;
+use Phanbook\Models\Users;
 use Faker\Factory as Faker;
 
 class RegularUser extends \AcceptanceTester
 {
-    protected $faker;
+    protected $username;
+    protected $firstname;
+    protected $lastname;
     protected $passwd;
     protected $email;
+    protected $faker;
 
     public function __construct(Scenario $scenario)
     {
@@ -18,25 +22,19 @@ class RegularUser extends \AcceptanceTester
         $this->faker = Faker::create();
     }
 
+    public function haveRegularUserInDb()
+    {
+        $data = $this->createUser();
+        $data['status'] = Users::STATUS_ACTIVE;
+
+        $this->haveInDatabase('users', $data);
+    }
+
     public function haveUserInDb()
     {
-        $I = $this;
+        $data = $this->createUser();
 
-        $this->passwd = $this->faker->password;
-        $this->email = $this->faker->email;
-
-        /** @var \Phalcon\Security $security */
-        $security = $this->grabServiceFromContainer('security');
-
-        $I->haveInDatabase('users', [
-            'username'  => $this->faker->userName,
-            'firstname' => $this->faker->name,
-            'lastname'  => $this->faker->name,
-            'email'     => $this->email,
-            'bio'       => $this->faker->paragraph,
-            'birthdate' => $this->faker->date(),
-            'passwd'    => $security->hash($this->passwd),
-        ]);
+        $this->haveInDatabase('users', $data);
     }
 
     public function registerUser()
@@ -47,9 +45,9 @@ class RegularUser extends \AcceptanceTester
 
         $data = [
             'firstname' =>  $this->faker->name,
-            'lastname' =>  $this->faker->name,
-            'email' => $this->faker->email,
-            'username' => $this->faker->userName,
+            'lastname'  =>  $this->faker->name,
+            'email'     => $this->faker->email,
+            'username'  => $this->faker->userName,
         ];
 
         $I->fillField('firstname', $data['firstname']);
@@ -86,5 +84,27 @@ class RegularUser extends \AcceptanceTester
 
         $I->checkOption('#remember-me');
         $I->click('Sign In');
+    }
+
+    protected function createUser()
+    {
+        /** @var \Phalcon\Security $security */
+        $security = $this->grabServiceFromContainer('security');
+
+        $this->username  = $this->faker->userName;
+        $this->firstname = $this->faker->name;
+        $this->lastname  = $this->faker->name;
+        $this->passwd    = $this->faker->password;
+        $this->email     = $this->faker->email;
+
+        return [
+            'username'  => $this->username,
+            'firstname' => $this->firstname,
+            'lastname'  => $this->lastname,
+            'email'     => $this->email,
+            'bio'       => $this->faker->paragraph,
+            'birthdate' => $this->faker->date(),
+            'passwd'    => $security->hash($this->passwd),
+        ];
     }
 }
