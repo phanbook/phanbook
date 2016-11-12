@@ -14,6 +14,7 @@ namespace Phanbook\Oauth\Controllers;
 
 use Phalcon\Mvc\Model;
 use Phanbook\Models\Users;
+use Phalcon\Mvc\Dispatcher;
 use Phanbook\Oauth\Forms\LoginForm;
 use Phanbook\Github\Auth as GithubAuth;
 use Phanbook\Google\Auth as GoogleAuth;
@@ -27,6 +28,24 @@ use Phanbook\Auth\Exception as AuthException;
  */
 class LoginController extends ControllerBase
 {
+    /**
+     * @param Dispatcher $dispatcher
+     *
+     * @return bool
+     */
+    public function beforeExecuteRoute(Dispatcher $dispatcher)
+    {
+        if ($this->auth->hasRememberMe() && !$this->request->isPost()) {
+            $this->auth->loginWithRememberMe();
+        }
+
+        if ($this->auth->isAuthorizedVisitor() && !$this->request->isPost()) {
+            $this->currentRedirect();
+        }
+
+        return true;
+    }
+
     /**
      * @return array|\Phalcon\Http\Response|\Phalcon\Http\ResponseInterface
      */
@@ -155,11 +174,7 @@ class LoginController extends ControllerBase
         $form = new LoginForm;
 
         try {
-            if (!$this->request->isPost()) {
-                if ($this->auth->hasRememberMe()) {
-                    return $this->auth->loginWithRememberMe();
-                }
-            } else {
+            if ($this->request->isPost()) {
                 if (!$form->isValid($this->request->getPost())) {
                     $messages = [];
                     foreach ($form->getMessages() as $message) {

@@ -69,7 +69,7 @@ class UserLogins extends AbstractEvent
     {
         $successLoginService = $this->getDI()->getShared(Service\SuccessLogin::class);
 
-        $address = ip2long($data['address']);
+        $address = ip2long($data['ipAddress']);
 
         try {
             $successLoginService->createOrFail([

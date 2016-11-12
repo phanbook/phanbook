@@ -13,9 +13,9 @@
  */
 namespace Phanbook\Oauth\Controllers;
 
-use Phalcon\Mvc\Controller;
 use Phanbook\Models\Users;
 use Phanbook\Models\Karma;
+use Phalcon\Mvc\Controller;
 
 /**
  * \Phanbook\Oauth\Controllers\ControllerBase
