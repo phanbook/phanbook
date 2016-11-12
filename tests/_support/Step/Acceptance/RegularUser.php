@@ -44,8 +44,8 @@ class RegularUser extends \AcceptanceTester
         $I->amOnPage('/oauth/register/signup');
 
         $data = [
-            'firstname' =>  $this->faker->name,
-            'lastname'  =>  $this->faker->name,
+            'firstname' => $this->faker->name,
+            'lastname'  => $this->faker->name,
             'email'     => $this->faker->email,
             'username'  => $this->faker->userName,
         ];

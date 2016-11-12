@@ -10,14 +10,17 @@ class AuthControllerCest
 
         $I->haveRegularUserInDb();
         $I->loginUser();
+        $I->seeResponseCodeIs(200);
         $I->see('Welcome back');
     }
 
     public function loginAsInactiveUser(RegularUser $I)
     {
         $I->wantTo('login as inactive regular user and see inactive text');
+
         $I->haveUserInDb();
         $I->loginUser();
+        $I->seeResponseCodeIs(422);
         $I->see('The user is inactive');
     }
 }
