@@ -37,8 +37,11 @@ class EventManagerServiceProvider extends AbstractServiceProvider
         $this->di->setShared(
             $this->serviceName,
             function () {
+                /** @var \Phalcon\DiInterface $this */
                 $em = new Manager();
                 $em->enablePriorities(true);
+
+                $this->setEventsManager($em);
 
                 return $em;
             }

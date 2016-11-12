@@ -17,9 +17,6 @@ use Phalcon\Loader;
 // Load constants
 require 'constants.php';
 
-// Register The Composer Auto Loader
-require ROOT_DIR . '/vendor/autoload.php';
-
 (new Loader)
     ->registerNamespaces([
         'Phanbook' => ROOT_DIR . '/core/common/library/',
@@ -41,3 +38,6 @@ require ROOT_DIR . '/vendor/autoload.php';
         ROOT_DIR . '/bootstrap/helpers.php',
     ])
     ->register();
+
+// Register The Composer Auto Loader
+require ROOT_DIR . '/vendor/autoload.php';

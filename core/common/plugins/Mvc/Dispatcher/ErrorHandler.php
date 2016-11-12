@@ -73,16 +73,14 @@ class ErrorHandler extends Plugin
             }
 
             $this->di->getShared('logger')->error($dispatcher->getModuleName() . ': ' . $exception->getMessage());
+        } elseif (APPLICATION_ENV !== ENV_PRODUCTION && $exception instanceof \Exception) {
+            $this->di->getShared('logger')->error($dispatcher->getModuleName() . ': ' . $exception->getMessage());
+
+            throw $exception;
         }
 
         if ($event->isCancelable()) {
             $event->stop();
-        }
-
-        if (APPLICATION_ENV !== ENV_PRODUCTION && $exception instanceof \Exception) {
-            $this->di->getShared('logger')->error($dispatcher->getModuleName() . ': ' . $exception->getMessage());
-
-            throw $exception;
         }
 
         return false;

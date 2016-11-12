@@ -20,4 +20,4 @@ require __DIR__.'/../bootstrap/autoloader.php';
 $app = new Application();
 
 // Run the Application
-$app->run();
+echo $app->run();
