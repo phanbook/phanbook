@@ -14,7 +14,6 @@ namespace Phanbook\Auth;
 
 use Phanbook\Models\Users;
 use Phalcon\Mvc\User\Component;
-use Phanbook\Models\SuccessLogins;
 use Phanbook\Models\RememberTokens;
 use Phanbook\Models\Services\Service;
 use Phanbook\Models\Services\Exceptions\EntityNotFoundException;
@@ -66,10 +65,15 @@ class Auth extends Component
         try {
             // Check if the user exist
             $user = $this->userService->getFirstByEmailOrUsername($credentials['email']);
+            $userData = [
+                'userId'    => $user->getId(),
+                'userAgent' => $this->request->getUserAgent(),
+                'ipAddress' => $this->request->getClientAddress(true),
+            ];
 
             // Check the password
             if (!$this->security->checkHash($credentials['password'], $user->getPasswd())) {
-                $this->getEventsManager()->fire('user:failedLogin', $this, $user->getId());
+                $this->getEventsManager()->fire('user:failedLogin', $this, $userData);
                 throw new Exception('Wrong email/password combination');
             }
 
@@ -78,8 +82,7 @@ class Auth extends Component
                 throw new Exception('The user is inactive');
             }
 
-            // Register the successful login
-            $this->saveSuccessLogin($user);
+            $this->getEventsManager()->fire('user:successLogin', $this, $userData);
 
             // Check if the remember me was selected
             if (isset($credentials['remember'])) {
@@ -88,25 +91,9 @@ class Auth extends Component
 
             $this->setSession($user);
         } catch (EntityNotFoundException $e) {
-            $this->getEventsManager()->fire('user:failedLogin', $this);
+            $userData = ['ipAddress' => $this->request->getClientAddress(true)];
+            $this->getEventsManager()->fire('user:failedLogin', $this, $userData);
             throw new Exception('Wrong email/password combination');
-        }
-    }
-
-    /**
-     * Creates the remember me environment settings the related cookies and generating tokens
-     *
-     * @param \Phanbook\Models\Users $user
-     */
-    public function saveSuccessLogin(Users $user)
-    {
-        $successLogin = new SuccessLogins();
-        $successLogin->setUsersId($user->getId());
-        $successLogin->setIpaddress($this->request->getClientAddress());
-        $successLogin->setUserAgent($this->request->getUserAgent());
-        if (!$successLogin->save()) {
-            $messages = $successLogin->getMessages();
-            error_log('saveSuccessLogin false ' . __LINE__. ' and ' . __CLASS__ . $messages[0]);
         }
     }
 
@@ -144,45 +131,71 @@ class Auth extends Component
     }
 
     /**
+     * Check if the session has a remember token
+     *
+     * @return boolean
+     */
+    public function hasRememberToken()
+    {
+        return $this->cookies->has('RMT');
+    }
+
+    /**
      * Logs on using the information in the cookies, it will call in beforeExecuteRoute
      */
     public function loginWithRememberMe()
     {
+        if (!$this->hasRememberMe() || !$this->hasRememberToken() || $this->isAuthorizedVisitor()) {
+            return;
+        }
+
+        $cToken = $this->cookies->get('RMT')->getValue();
         $userId = $this->cookies->get('RMU')->getValue();
-        $cookieToken = $this->cookies->get('RMT')->getValue();
 
-        $user = Users::findFirstById($userId);
-        if ($user) {
-            $userAgent = $this->request->getUserAgent();
-            $token = md5($user->getEmail() . $user->getPasswd() . $userAgent);
+        try {
+            $user = $this->userService->getFirstById($userId);
 
-            if ($cookieToken == $token) {
-                $remember = RememberTokens::findFirst(
-                    [
-                    'usersId = ?0 AND token = ?1',
-                    'bind' => [ $user->getId(), $token ],
-                    'order' => 'createdAt DESC' //it mean only remember token
-                    ]
-                );
-                if ($remember) {
-                    // Check if the cookie has not expired
-                    if ((time() - $this->cookieLifetime) < $remember->getCreatedAt()) {
-                        // Register identity
-                        $this->setSession($user);
-                        // Register the successful login
-                        $this->saveSuccessLogin($user);
-                        // Check if the user was flagged
-                        if (!$this->userService->isActiveMember($user)) {
-                            $this->flashSession->error('The user is inactive');
-                            $this->remove();
-                        }
-                    } else {
-                        $this->cookies->get('RMU')->delete();
-                        $this->cookies->get('RMT')->delete();
-                    }
+            // Check if the user was flagged
+            if (!$this->userService->isActiveMember($user)) {
+                $this->remove();
+
+                return;
+            }
+        } catch (EntityNotFoundException $e) {
+            $this->remove();
+
+            return;
+        }
+
+        $userAgent = $this->request->getUserAgent();
+        $uToken    = md5($user->getEmail() . $user->getPasswd() . $userAgent);
+        $userData  = [
+            'userId'    => $user->getId(),
+            'userAgent' => $userAgent,
+            'ipAddress' => $this->request->getClientAddress(true),
+        ];
+
+        if (strcmp($cToken, $uToken) === 0) {
+            $remember = RememberTokens::findFirst([
+                'condition' => 'usersId = ?0 AND token = ?1',
+                'bind' => [$user->getId(), $uToken],
+                'order' => 'createdAt DESC' // it mean only remember token
+            ]);
+
+            if ($remember) {
+                // Check if the cookie has not expired
+                if ((time() - $this->cookieLifetime) < $remember->getCreatedAt()) {
+                    // Register identity
+                    $this->setSession($user);
+                    $this->getEventsManager()->fire('user:successLogin', $this, $userData);
+
+                    return;
                 }
             }
         }
+
+        $this->cookies->get('RMU')->delete();
+        $this->cookies->get('RMT')->delete();
     }
 
     /**
@@ -330,12 +343,10 @@ class Auth extends Component
         if ($this->cookies->has('RMU')) {
             $this->cookies->get('RMU')->delete();
         }
+
         if ($this->cookies->has('RMT')) {
             $this->cookies->get('RMT')->delete();
         }
-        $this->cookies->get('RMT')->delete();
-        $this->cookies->get('RMU')->delete();
-
 
         $this->session->remove('auth');
     }
