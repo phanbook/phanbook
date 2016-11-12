@@ -12,23 +12,27 @@
  */
 namespace Phanbook\Models;
 
+/**
+ * \Phanbook\Models\FailedLogins
+ *
+ * @package Phanbook\Models
+ */
 class FailedLogins extends ModelBase
 {
-
     /**
-     *
+     * The Entity ID
      * @var integer
      */
     protected $id;
 
     /**
-     *
+     * The User ID
      * @var integer
      */
     protected $usersId;
 
     /**
-     *
+     * The used IP address.
      * @var string
      */
     protected $ipAddress;
@@ -38,6 +42,24 @@ class FailedLogins extends ModelBase
      * @var integer
      */
     protected $attempted;
+
+    /**
+     * Initialize FailedLogins model.
+     */
+    public function initialize()
+    {
+        $this->belongsTo('usersId', Users::class, 'id', ['alias' => 'user', 'reusable' => true]);
+    }
+
+    /**
+     * Returns table name mapped in the model.
+     *
+     * @return string
+     */
+    public function getSource()
+    {
+        return 'failedLogins';
+    }
 
     /**
      * Method to set the value of field id
@@ -131,23 +153,11 @@ class FailedLogins extends ModelBase
         return $this->attempted;
     }
 
-
-
-    /**
-     * Returns table name mapped in the model.
-     *
-     * @return string
-     */
-    public function getSource()
-    {
-        return 'failedLogins';
-    }
-
     /**
      * Allows to query a set of records that match the specified conditions
      *
      * @param  mixed $parameters
-     * @return FailedLogins[]
+     * @return \Phalcon\Mvc\Model\ResultsetInterface|FailedLogins[]
      */
     public static function find($parameters = null)
     {
@@ -163,16 +173,5 @@ class FailedLogins extends ModelBase
     public static function findFirst($parameters = null)
     {
         return parent::findFirst($parameters);
-    }
-    public function initialize()
-    {
-        $this->belongsTo(
-            'usersId',
-            __NAMESPACE__ .'\Users',
-            'id',
-            array(
-            'alias' => 'user'
-            )
-        );
     }
 }
