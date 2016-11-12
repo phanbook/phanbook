@@ -12,7 +12,6 @@
  */
 namespace Phanbook\Common\Library\Events;
 
-use Phanbook\Auth\Auth;
 use Phalcon\Events\Event;
 use Phanbook\Models\Services\Service;
 use Phanbook\Models\Services\Exceptions\EntityException;
@@ -27,17 +26,18 @@ class UserLogins extends AbstractEvent
     const FROM_TIME_FETCH = 21600;
 
     /**
-     * @param Event $event
-     * @param Auth  $auth
-     * @param mixed $userId
+     * @param Event  $event
+     * @param object $source
+     * @param array  $data
      *
      * @return bool
      */
-    public function failedLogin(Event $event, Auth $auth, $userId = null)
+    public function failedLogin(Event $event, $source, array $data)
     {
         $failedLoginService = $this->getDI()->getShared(Service\FailedLogin::class);
 
-        $address = ip2long($this->getRequest()->getClientAddress());
+        $address = ip2long($data['ipAddress']);
+        $userId  = empty($data['userId']) ? null : $data['userId'];
         $time    = time();
 
         try {
@@ -54,6 +54,34 @@ class UserLogins extends AbstractEvent
         $this->throttling($attempts);
 
         return false;
+    }
+
+    /**
+     * Register the successful login.
+     *
+     * @param Event  $event
+     * @param object $source
+     * @param array  $data
+     *
+     * @return bool
+     */
+    public function successLogin(Event $event, $source, array $data)
+    {
+        $successLoginService = $this->getDI()->getShared(Service\SuccessLogin::class);
+
+        $address = ip2long($data['address']);
+
+        try {
+            $successLoginService->createOrFail([
+                'usersId'    => $data['userId'],
+                'ipAddress'  => $address,
+                'usersAgent' => $data['userAgent'],
+            ]);
+        } catch (EntityException $e) {
+            $this->getLogger()->error($e->getMessage());
+        }
+
+        return true;
     }
 
     /**
