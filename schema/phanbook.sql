@@ -148,10 +148,12 @@ DROP TABLE IF EXISTS `failedLogins`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `failedLogins` (
-  `id` int(15) NOT NULL DEFAULT '0',
-  `usersId` int(15) NOT NULL,
-  `ipAddress` varchar(100) NOT NULL,
-  `attempted` int(200) NOT NULL
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `usersId` INT UNSIGNED DEFAULT NULL,
+    `ipAddress` INT UNSIGNED NOT NULL,
+    `attempted` INT UNSIGNED NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `failedLoginsAttempts` (`ipAddress`, `attempted`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
