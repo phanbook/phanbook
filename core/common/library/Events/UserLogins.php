@@ -35,7 +35,6 @@ class UserLogins extends AbstractEvent
      */
     public function failedLogin(Event $event, Auth $auth, $userId = null)
     {
-        /** @var Service\FailedLogin $failedLoginService */
         $failedLoginService = $this->getDI()->getShared(Service\FailedLogin::class);
 
         $address = ip2long($this->getRequest()->getClientAddress());
@@ -46,7 +45,6 @@ class UserLogins extends AbstractEvent
                 'usersId'   => $userId,
                 'ipAddress' => $address,
                 'attempted' => $time,
-
             ]);
         } catch (EntityException $e) {
             $this->getLogger()->error($e->getMessage());

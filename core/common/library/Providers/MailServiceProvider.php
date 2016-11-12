@@ -38,7 +38,7 @@ class MailServiceProvider extends AbstractServiceProvider
     public function register()
     {
         $this->di->setShared(
-            $this->serviceName,
+            'smtpTransport',
             function () {
                 /**
                  * @var \Phalcon\DiInterface $this
@@ -46,19 +46,29 @@ class MailServiceProvider extends AbstractServiceProvider
                  */
                 $config = $this->getShared('config');
 
-                if (!$config->offsetExists('mail') || !$config->get('mail') instanceof Config) {
+                if (!$config->offsetExists('mail') || !$config->get('mail')->smtp instanceof Config) {
                     trigger_error('Unable to get mail config.', E_USER_ERROR);
                 }
 
+                $config = $config->get('mail')->smtp;
+
+                $transport = Swift_SmtpTransport::newInstance($config->get('server'), $config->get('port'));
+
+                $transport->setUsername($config->get('username'));
+                $transport->setPassword($config->get('password'));
+
+                return $transport;
+            }
+        );
+
+        $this->di->setShared(
+            $this->serviceName,
+            function () {
+                /** @var \Phalcon\DiInterface $this */
+                $smtpTransport = $this->getShared('smtpTransport');
+
                 $mail = new Mail($this);
-                $config = $config->get('mail');
-
-                $transport = Swift_SmtpTransport::newInstance($config->get('smtp')->server, $config->get('smtp')->port);
-
-                $transport->setUsername($config->get('smtp')->get('username'));
-                $transport->setPassword($config->get('smtp')->get('password'));
-
-                $mailer = new Swift_Mailer($transport);
+                $mailer = new Swift_Mailer($smtpTransport);
 
                 $mail->setDI($this);
                 $mail->setEventsManager($this->getShared('eventsManager'));
