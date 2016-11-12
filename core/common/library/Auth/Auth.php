@@ -14,7 +14,6 @@ namespace Phanbook\Auth;
 
 use Phanbook\Models\Users;
 use Phalcon\Mvc\User\Component;
-use Phanbook\Models\FailedLogins;
 use Phanbook\Models\SuccessLogins;
 use Phanbook\Models\RememberTokens;
 use Phanbook\Models\Services\Service;
@@ -60,7 +59,7 @@ class Auth extends Component
      * Checks the user credentials
      *
      * @param  array $credentials
-     * @return boolean
+     * @throws Exception
      */
     public function check(array $credentials)
     {
@@ -70,15 +69,13 @@ class Auth extends Component
 
             // Check the password
             if (!$this->security->checkHash($credentials['password'], $user->getPasswd())) {
-                $this->registerUserThrottling($user->getId());
-                $this->flashSession->error(t('Wrong email/password combination'));
-                return false;
+                $this->getEventsManager()->fire('user:failedLogin', $this, $user->getId());
+                throw new Exception('Wrong email/password combination');
             }
 
             // Check if the user was flagged
             if (!$this->userService->isActiveMember($user)) {
-                $this->flashSession->error(t('The user is inactive'));
-                return false;
+                throw new Exception('The user is inactive');
             }
 
             // Register the successful login
@@ -90,14 +87,10 @@ class Auth extends Component
             }
 
             $this->setSession($user);
-
-            return true;
         } catch (EntityNotFoundException $e) {
-            $this->registerUserThrottling(0);
-            $this->flashSession->error(t('Wrong email/password combination'));
+            $this->getEventsManager()->fire('user:failedLogin', $this);
+            throw new Exception('Wrong email/password combination');
         }
-
-        return false;
     }
 
     /**
@@ -114,45 +107,6 @@ class Auth extends Component
         if (!$successLogin->save()) {
             $messages = $successLogin->getMessages();
             error_log('saveSuccessLogin false ' . __LINE__. ' and ' . __CLASS__ . $messages[0]);
-        }
-    }
-
-    /**
-     * Implements login throttling
-     * Reduces the effectiveness of brute force attacks
-     *
-     * @param int $userId
-     */
-    public function registerUserThrottling($userId)
-    {
-        $failedLogin = new FailedLogins();
-        $failedLogin->setUsersId($userId);
-        $failedLogin->setIpaddress($this->request->getClientAddress());
-        $failedLogin->setAttempted(time());
-        $failedLogin->save();
-
-        $attempts = FailedLogins::count(
-            array(
-            'ipAddress = ?0 AND attempted >= ?1',
-            'bind' => array(
-                $this->request->getClientAddress(),
-                time() - 3600 * 6
-            )
-            )
-        );
-
-        switch ($attempts) {
-            case 1:
-            case 2:
-                // no delay
-                break;
-            case 3:
-            case 4:
-                sleep(2);
-                break;
-            default:
-                sleep(4);
-                break;
         }
     }
 

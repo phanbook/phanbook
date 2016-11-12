@@ -37,7 +37,11 @@ class AuthServiceProvider extends AbstractServiceProvider
         $this->di->setShared(
             $this->serviceName,
             function () {
-                return new Auth();
+                $auth = new Auth();
+                $auth->setDI($this);
+                $auth->setEventsManager($this->getShared('eventsManager'));
+
+                return $auth;
             }
         );
     }

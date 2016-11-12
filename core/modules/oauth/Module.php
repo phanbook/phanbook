@@ -19,6 +19,7 @@ use Phalcon\Mvc\View;
 use Phalcon\DiInterface;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\ModuleDefinitionInterface;
+use Phanbook\Common\Library\Events\UserLogins;
 use Phanbook\Plugins\Mvc\View\ErrorHandler as ViewErrorHandler;
 use Phanbook\Plugins\Mvc\Dispatcher\ErrorHandler as DispatcherErrorHandler;
 
@@ -36,6 +37,7 @@ class Module implements ModuleDefinitionInterface
         $namespaces = [
             'Phanbook\Oauth\Controllers' => __DIR__ . '/controllers/',
             'Phanbook\Oauth\Forms'       => __DIR__ . '/forms/',
+            'Phanbook\Common\Library'    => app_path('core/common/library/'),
             'Phanbook\Plugins'           => app_path('core/common/plugins/'),
         ];
 
@@ -52,7 +54,10 @@ class Module implements ModuleDefinitionInterface
     public function registerServices(DiInterface $di)
     {
         // Read configuration
-        $moduleConfig = require __DIR__ . '/config/config.php';
+        $moduleConfig = require_once __DIR__ . '/config/config.php';
+
+        $eventsManager = $di->getShared('eventsManager');
+        $eventsManager->attach('user', new UserLogins($di));
 
         // Tune Up the URL Component
         $di->setShared(
