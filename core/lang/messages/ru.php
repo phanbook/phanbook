@@ -50,7 +50,7 @@ $messages = [
     // K
     // L
     'Last Name' => 'Фамилия',
-    'Login Area' => 'Вход',
+    'Log In' => 'Вход',
     'logo' => 'логотип',
     'Logout' => 'Выход',
     // M
@@ -85,6 +85,7 @@ $messages = [
     'Sign in using Facebook' => 'Войти с помощью Facebook',
     'Sign in using GitHub' => 'Войти с помощью GitHub',
     'Sign in using Google+' => 'Войти с помощью Google+',
+    'Sign Up' => 'Регистрация',
     'site design' => 'дизайн сайта',
     'solved' => 'решён',
     'Something was wrong. Please try later,' => 'Что-то пошло не так. Пожалуйста, попробуйте позже.',
@@ -119,6 +120,7 @@ $messages = [
     // X
     // Y
     "You're probably heard of StackOverflow before, the biggest Question and Answer website." => 'Вы, наверное, слышали о сайте StackOverflow, главном сайте вопросов и ответов.',
+    'Your account was successfully created. An email was sent to your address in order to continue the process.' => 'Аккаунт успешно создан. Вам было отправлено письмо с инструкциями для продолжения регистрации.',
     // Z
 ];
 

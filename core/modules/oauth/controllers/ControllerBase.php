@@ -22,6 +22,7 @@ use Phanbook\Models\Karma;
  *
  * @property \Phanbook\Auth\Auth $auth
  * @property \Phalcon\Config $config
+ * @property \Phanbook\Mail\Mail $mail
  *
  * @package Phanbook\Oauth\Controllers
  */
@@ -101,15 +102,15 @@ class ControllerBase extends Controller
         return $this->currentRedirect();
     }
 
-    public function currentRedirect()
+    protected function currentRedirect()
     {
         if ($this->cookies->has('HTTPBACK')) {
-            $url   = $this->cookies->get('HTTPBACK');
-            $clone = clone $url;
-            $url->delete();
+            $url = $this->cookies->get('HTTPBACK')->getValue();
+            $this->cookies->delete('HTTPBACK');
 
-            return $this->response->redirect(unserialize($clone->getValue()));
+            return $this->response->redirect(unserialize($url));
         }
+
         return $this->response->redirect($this->request->getHTTPReferer(), true);
     }
 

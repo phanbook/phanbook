@@ -85,10 +85,10 @@ class RegisterController extends ControllerBase
         if (empty($registerHash)) {
             $this->flashSession->error('Hack attempt!!!');
 
-            return $this->response->redirect('/');
+            return $this->response->redirect();
         }
 
-        if ($this->auth->getAuth()) {
+        if ($this->auth->isAuthorizedVisitor()) {
             $this->view->disable();
 
             return $this->response->redirect();
@@ -142,7 +142,7 @@ class RegisterController extends ControllerBase
      */
     public function signupAction()
     {
-        if ($this->auth->getAuth()) {
+        if ($this->auth->isAuthorizedVisitor()) {
             return $this->response->redirect();
         }
 
@@ -150,9 +150,9 @@ class RegisterController extends ControllerBase
 
         if ($this->request->isPost()) {
             $object = new Users();
-            $form->bind($_POST, $object);
+            $form->bind($this->request->getPost(), $object);
 
-            if (!$form->isValid($_POST)) {
+            if (!$form->isValid($this->request->getPost())) {
                 foreach ($form->getMessages() as $message) {
                     $this->flashSession->error($message);
                 }
@@ -172,26 +172,26 @@ class RegisterController extends ControllerBase
                 return $this->currentRedirect();
             }
 
+            $scheme = $this->request->isSecure() ? 'https://' : 'http://';
             $params = [
-                'link'      => ($this->request->isSecure()
-                        ? 'https://' : 'http://') . $this->request->getHttpHost()
-                    . '/oauth/register?registerhash=' . $registerHash
+                'link' => $scheme . $this->request->getHttpHost() . '/oauth/register?registerhash=' . $registerHash
             ];
+
             if (!$this->mail->send($object->getEmail(), 'registration', $params)) {
-                error_log('Email not sent' . $object->getEmail());
                 $this->flashSession->error(t('Error sending registration email.'));
             } else {
                 $this->flashSession->success(
                     t(
-                        'Your account was successfully created.
-                        An email was sent to your address in order to continue the process.'
+                        'Your account was successfully created. ' .
+                        'An email was sent to your address in order to continue the process.'
                     )
                 );
             }
 
             return $this->response->redirect();
         }
-        $this->view->form = $form;
+
+        $this->view->setVar('form', $form);
     }
 
         /**

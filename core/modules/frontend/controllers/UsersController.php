@@ -259,7 +259,7 @@ class UsersController extends ControllerBase
     public function changepasswordAction()
     {
         $form = new ChangePasswordForm();
-        $object = Users::findFirstById($this->auth->getAuth()['id']);
+        $object = Users::findFirstById($this->auth->getUserId());
 
         $this->view->form = $form;
 

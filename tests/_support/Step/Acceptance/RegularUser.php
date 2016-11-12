@@ -35,6 +35,8 @@ class RegularUser extends \AcceptanceTester
         $data = $this->createUser();
 
         $this->haveInDatabase('users', $data);
+
+        return $data;
     }
 
     public function registerUser()
@@ -44,8 +46,8 @@ class RegularUser extends \AcceptanceTester
         $I->amOnPage('/oauth/register/signup');
 
         $data = [
-            'firstname' =>  $this->faker->name,
-            'lastname'  =>  $this->faker->name,
+            'firstname' => $this->faker->name,
+            'lastname'  => $this->faker->name,
             'email'     => $this->faker->email,
             'username'  => $this->faker->userName,
         ];
@@ -84,6 +86,11 @@ class RegularUser extends \AcceptanceTester
 
         $I->checkOption('#remember-me');
         $I->click('Sign In');
+    }
+
+    public function password()
+    {
+        return $this->passwd;
     }
 
     protected function createUser()

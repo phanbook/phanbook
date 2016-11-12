@@ -41,7 +41,7 @@
                 <li><a href="#"><i class="fa fa-headphones"></i>{{ t('Support') }}</a></li>
                 {% if is_authorized() %}
                     <li>
-                        <a href="/oauth/logout" id="setting-panel">
+                        <a href="#" id="setting-panel">
                             <i class="fa fa-plus"></i>{{ t('Settings') }}
                         </a>
                     </li>
@@ -55,7 +55,8 @@
                     </li>
                 {% else %}
                     <li><a href="contact_us.html"><i class="fa fa-envelope"></i>{{ t('Contact') }}</a></li>
-                    <li><a href="/oauth/login"><i class="fa fa-user"></i>{{ t('Login Area') }}</a></li>
+                    <li><a href="/oauth/register/signup"><i class="fa fa-user"></i>{{ t('Sign Up') }}</a></li>
+                    <li><a href="/oauth/login"><i class="fa fa-user"></i>{{ t('Log In') }}</a></li>
                 {% endif %}
             </ul>
         </nav>

@@ -12,7 +12,11 @@
  */
 namespace Phanbook\Common\Library\Providers;
 
+use Swift_Mailer;
+use Phalcon\Config;
 use Phanbook\Mail\Mail;
+use Swift_SmtpTransport;
+use Swift_NullTransport;
 
 /**
  * \Phanbook\Common\Library\Providers\MailServiceProvider
@@ -35,10 +39,46 @@ class MailServiceProvider extends AbstractServiceProvider
     public function register()
     {
         $this->di->setShared(
+            'smtpTransport',
+            function () {
+                /**
+                 * @var \Phalcon\DiInterface $this
+                 * @var \Phalcon\Config $config
+                 */
+                $config = $this->getShared('config');
+
+                if (APPLICATION_ENV === ENV_TESTING) {
+                    return Swift_NullTransport::newInstance();
+                }
+
+                if (!$config->offsetExists('mail') || !$config->get('mail')->smtp instanceof Config) {
+                    trigger_error('Unable to get mail config.', E_USER_ERROR);
+                }
+
+                $config = $config->get('mail')->smtp;
+
+                $transport = Swift_SmtpTransport::newInstance($config->get('server'), $config->get('port'));
+
+                $transport->setUsername($config->get('username'));
+                $transport->setPassword($config->get('password'));
+
+                return $transport;
+            }
+        );
+
+        $this->di->setShared(
             $this->serviceName,
             function () {
-                $mail = new Mail();
+                /** @var \Phalcon\DiInterface $this */
+                $smtpTransport = $this->getShared('smtpTransport');
+
+                $mail = new Mail($this);
+                $mailer = new Swift_Mailer($smtpTransport);
+
                 $mail->setDI($this);
+                $mail->setEventsManager($this->getShared('eventsManager'));
+
+                $mail->setMailer($mailer);
 
                 return $mail;
             }

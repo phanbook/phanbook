@@ -74,6 +74,8 @@ class PostView extends \FunctionalTester
 
     public function haveClientIp()
     {
-        return $this->faker->ipv4;
+        $_SERVER['REMOTE_ADDR'] = $this->faker->ipv4;
+
+        return $_SERVER['REMOTE_ADDR'];
     }
 }
