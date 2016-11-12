@@ -16,11 +16,9 @@ $ipAddress = $I->haveClientIp();
 
 $I->dontSeeInDatabase('postsViews', ['postsId' => $postId, 'ipaddress' => $ipAddress]);
 
-$_SERVER['REMOTE_ADDR'] = $ipAddress;
-
 $I->amOnPage("/blog/{$postId}/slug");
 
-$newAuthorKarma = $I::DEFAULT_KARMA + Karma::INITIAL_KARMA + Karma::VISIT_ON_MY_POST;
+$newAuthorKarma  = $I::DEFAULT_KARMA + Karma::INITIAL_KARMA + Karma::VISIT_ON_MY_POST;
 $newVisitorKarma = $I::DEFAULT_KARMA + Karma::INITIAL_KARMA + Karma::VISIT_POST;
 
 $I->seeInDatabase('users', ['id' => $authorId, 'karma' => $newAuthorKarma]);
