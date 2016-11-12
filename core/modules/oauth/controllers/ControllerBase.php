@@ -22,6 +22,7 @@ use Phanbook\Models\Karma;
  *
  * @property \Phanbook\Auth\Auth $auth
  * @property \Phalcon\Config $config
+ * @property \Phanbook\Mail\Mail $mail
  *
  * @package Phanbook\Oauth\Controllers
  */

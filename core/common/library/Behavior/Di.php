@@ -66,6 +66,7 @@ use Phalcon\DiInterface;
  * @property \Phalcon\Session\Bag|\Phalcon\Session\BagInterface $persistent
  * @property \Phalcon\Mvc\View|\Phalcon\Mvc\ViewInterface $view
  *
+ * @method \Phalcon\Config getConfig(mixed $params = null)
  * @method \Phalcon\Logger|\Phalcon\Logger\AdapterInterface getLogger(mixed $params = null)
  * @method \Phalcon\Http\Request|\Phalcon\Http\RequestInterface getRequest(mixed $params = null)
  *

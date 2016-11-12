@@ -45,7 +45,7 @@ class UserLogins extends AbstractEvent
             $failedLoginService->createOrFail([
                 'usersId'   => $userId,
                 'ipAddress' => $address,
-                'attempted' => time(),
+                'attempted' => $time,
 
             ]);
         } catch (EntityException $e) {

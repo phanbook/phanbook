@@ -119,6 +119,7 @@ $messages = [
     // X
     // Y
     "You're probably heard of StackOverflow before, the biggest Question and Answer website." => 'Вы, наверное, слышали о сайте StackOverflow, главном сайте вопросов и ответов.',
+    'Your account was successfully created. An email was sent to your address in order to continue the process.' => 'Аккаунт успешно создан. Вам было отправлено письмо с инструкциями для продолжения регистрации.',
     // Z
 ];
 
