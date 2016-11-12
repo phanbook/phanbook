@@ -26,7 +26,7 @@ class AuthControllerCest
 
     public function loginWithIncorrectEmail(RegularUser $I)
     {
-        $I->wantTo('login as with invalid email and detect login throttling');
+        $I->wantTo('login with invalid email and detect login throttling');
 
         $I->haveUserInDb();
 
@@ -48,7 +48,7 @@ class AuthControllerCest
 
     public function loginWithIncorrectPassword(RegularUser $I)
     {
-        $I->wantTo('login as with invalid password and detect login throttling');
+        $I->wantTo('login with invalid password and detect login throttling');
 
         $user = $I->haveUserInDb();
 

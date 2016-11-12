@@ -50,7 +50,7 @@ $messages = [
     // K
     // L
     'Last Name' => 'Фамилия',
-    'Login Area' => 'Вход',
+    'Log In' => 'Вход',
     'logo' => 'логотип',
     'Logout' => 'Выход',
     // M
@@ -85,6 +85,7 @@ $messages = [
     'Sign in using Facebook' => 'Войти с помощью Facebook',
     'Sign in using GitHub' => 'Войти с помощью GitHub',
     'Sign in using Google+' => 'Войти с помощью Google+',
+    'Sign Up' => 'Регистрация',
     'site design' => 'дизайн сайта',
     'solved' => 'решён',
     'Something was wrong. Please try later,' => 'Что-то пошло не так. Пожалуйста, попробуйте позже.',

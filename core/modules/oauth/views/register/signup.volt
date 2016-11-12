@@ -1,5 +1,5 @@
 {% extends 'layouts/layout.volt' %}
-{% block title %} Sign Up{% endblock %}
+{% block title %}Sign Up{% endblock %}
 {% block content %}
     <div class="login-box-body">
         <p class="login-box-msg">Sign in to start your session</p>
