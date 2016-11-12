@@ -52,14 +52,15 @@ class RepliesController extends ControllerBase
             ];
             return $this->jsonMessages;
         }
-        $user = Users::findFirstById($this->auth->getAuth()['id']);
-        if (!$user) {
+
+        if (!$this->auth->isAuthorizedVisitor()) {
             $this->jsonMessages['messages'][] = [
                 'type'    => 'error',
                 'content' => t('You must log in first to accepted answer')
             ];
             return $this->jsonMessages;
         }
+
         if ($postReply->getAccepted() == 'Y') {
             $this->jsonMessages['messages'][] = [
                 'type'    => 'error',
@@ -75,6 +76,7 @@ class RepliesController extends ControllerBase
             ];
             return $this->jsonMessages;
         }
+
         if ($postReply->post->getAcceptedAnswer() == 'Y') {
             $this->jsonMessages['messages'][] = [
                 'type'    => 'error',
@@ -82,13 +84,17 @@ class RepliesController extends ControllerBase
             ];
             return $this->jsonMessages;
         }
+
+        $user = Users::findFirstById($this->auth->getUserId());
+
         if ($postReply->post->getUsersId() != $user->getId() && $user->getModerator() != 'Y') {
             $this->jsonMessages['messages'][] = [
                 'type'    => 'error',
                 'content' => t('You can\'t accept this answer as correct')
             ];
         }
-        /*@todo later*/
+
+        /* @todo later */
         $postQuestionByUser = $postReply->post->getUsersId();
         $postReplyByUser = $postReply->getUsersId();
         $kConst = Karma::SOMEONE_ELSE_ACCEPT_YOUR_REPLY;
@@ -142,11 +148,12 @@ class RepliesController extends ControllerBase
     public function answerAction()
     {
         $this->view->disable();
-        $auth = $this->auth->getAuth();
-        if (!$auth) {
+
+        if (!$this->auth->isAuthorizedVisitor()) {
             $this->flashSession->error(t('You must be logged in first to post answer'));
             return $this->currentRedirect();
         }
+
         if ($this->request->isPost()) {
             $postId = $this->request->getPost('id');
             $content = $this->request->getPost('content', 'trim');
@@ -155,7 +162,7 @@ class RepliesController extends ControllerBase
                 return $this->currentRedirect();
             }
             $post = Posts::findFirstById($postId);
-            $user = Users::findFirstById($auth['id']);
+            $user = Users::findFirstById($this->auth->getUserId());
             if (!$post) {
                 $this->flashSession->error(t('Hack attempt!'));
                 return $this->currentRedirect();
@@ -173,7 +180,7 @@ class RepliesController extends ControllerBase
             $object = new PostsReply();
             $object->setPostsId($postId);
             $object->setContent($content);
-            $object->setUsersId($auth['id']);
+            $object->setUsersId($this->auth->getUserId());
             if (!$object->save()) {
                 foreach ($object->getMessages() as $message) {
                     $this->flashSession->error($message);
@@ -191,11 +198,12 @@ class RepliesController extends ControllerBase
      */
     public function deleteAction($id)
     {
-        $auth = $this->auth->getAuth();
-        if (!$auth) {
+        if (!$this->auth->isAuthorizedVisitor()) {
             $this->flashSession->error('You must be logged first');
             return $this->indexRedirect();
         }
+
+        $auth = $this->auth->getAuth();
         $parameters = [
             "id = ?0 AND (usersId = ?1 OR 'Y' = ?2 OR 'Y' = ?3)",
             "bind" => [$id, $auth['id'], $auth['moderator'], $auth['admin']]
@@ -214,27 +222,31 @@ class RepliesController extends ControllerBase
 
     public function editAnswerAction($id)
     {
-        $auth = $this->auth->getAuth();
-        $postReply = PostsReply::findFirstById($id);
-        if (!$auth) {
+        if (!$this->auth->isAuthorizedVisitor()) {
             $this->flashSession->error(t('You must be logged in first to post answer'));
             return $this->currentRedirect();
         }
-        if (!$this->auth->isTrustModeration() && $auth['id'] != $postReply->getUsersId()) {
+
+        $postReply = PostsReply::findFirstById($id);
+
+        if (!$this->auth->isTrustModeration() && $this->auth->getUserId() != $postReply->getUsersId()) {
             $this->flashSession->error(t('You don\'t have permission'));
             return $this->currentRedirect();
         }
+
+
         if (!$postReply) {
             $this->flashSession->error(t('The posts replies not exist!'));
             return $this->currentRedirect();
         }
+
         if ($this->request->isPost()) {
             //save history  postreplies table, it just for admin or moderator
-            if ($this->auth->isTrustModeration() && $auth['id'] != $postReply->getUsersId()) {
+            if ($this->auth->isTrustModeration() && $this->auth->getUserId() != $postReply->getUsersId()) {
                 $postReplyHistory = new PostsReplyHistory;
                 $postReplyHistory->setContent($this->request->getPost('content'));
                 $postReplyHistory->setPostsReplyId($id);
-                $postReplyHistory->setUsersId($auth['id']);
+                $postReplyHistory->setUsersId($this->auth->getUserId());
                 if (!$postReplyHistory->save()) {
                     $this->saveLogger($postReplyHistory->getMessages());
                 }

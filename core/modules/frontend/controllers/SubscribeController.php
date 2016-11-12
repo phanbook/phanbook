@@ -47,19 +47,18 @@ class SubscribeController extends ControllerBase
         }
 
         /**
-        * Sometime We need to get object User login, so I do check user like below
-        * By the way, you can checking session
-        *
-        * {code} Users::findFirstById($this->auth->getAuth()['id'] {/code}
-        */
-        $userId = $this->auth->getAuth()['id'];
-        if (!$userId) {
+         * The test for user authorization
+         */
+        if (!$this->auth->isAuthorizedVisitor()) {
             $this->jsonMessages['messages'][] = [
                 'type'    => 'error',
                 'content' => 'You must log in first to subscribe post'
             ];
+
             return $this->jsonMessages;
         }
+
+        $userId = $this->auth->getUserId();
         $subscription = PostsSubscribers::findFirst(
             [
             'postsId = ?0 AND usersId = ?1',

@@ -85,10 +85,10 @@ class RegisterController extends ControllerBase
         if (empty($registerHash)) {
             $this->flashSession->error('Hack attempt!!!');
 
-            return $this->response->redirect('/');
+            return $this->response->redirect();
         }
 
-        if ($this->auth->getAuth()) {
+        if ($this->auth->isAuthorizedVisitor()) {
             $this->view->disable();
 
             return $this->response->redirect();
@@ -142,7 +142,7 @@ class RegisterController extends ControllerBase
      */
     public function signupAction()
     {
-        if ($this->auth->getAuth()) {
+        if ($this->auth->isAuthorizedVisitor()) {
             return $this->response->redirect();
         }
 

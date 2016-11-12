@@ -163,9 +163,8 @@ class PostsController extends ControllerBase
      */
     public function editAction($id)
     {
-        $auth = $this->auth->getAuth();
         $object = Posts::findFirstById($id);
-        if (!$auth) {
+        if (!$this->auth->isAuthorizedVisitor()) {
             $this->flashSession->error('You must be logged first');
             return $this->indexRedirect();
         }
@@ -173,7 +172,7 @@ class PostsController extends ControllerBase
             $this->flashSession->error(t("Post doesn't exist."));
             return $this->indexRedirect();
         }
-        if (!$this->auth->isTrustModeration() && $auth['id'] != $object->getUsersId()) {
+        if (!$this->auth->isTrustModeration() && $this->auth->getUserId() != $object->getUsersId()) {
             $this->flashSession->error(t("You don't have permission"));
             return $this->currentRedirect();
         }
@@ -206,10 +205,9 @@ class PostsController extends ControllerBase
         }
 
         $id   = $this->request->getPost('id');
-        $auth = $this->auth->getAuth();
         $tags = $this->request->getPost('tags', 'string', null);
 
-        if (!$auth) {
+        if (!$this->auth->isAuthorizedVisitor()) {
             $this->flashSession->error('You must be logged first');
 
             return $this->currentRedirect();
@@ -220,11 +218,11 @@ class PostsController extends ControllerBase
             $object->setSlug(Slug::generate($this->request->getPost('title')));
             // @Todo continue When moderator or admin edit post
             // Just to save history when user is TrustModerator and the user not owner the post
-            if ($this->auth->isTrustModeration() && $auth['id'] != $object->getUsersId()) {
+            if ($this->auth->isTrustModeration() && $this->auth->getUserId() != $object->getUsersId()) {
                 $object->setEditedAt(time());
                 $postHistory = new PostsHistory();
                 $postHistory->setPostsId($id);
-                $postHistory->setUsersId($auth['id']);
+                $postHistory->setUsersId($this->auth->getUserId());
                 $postHistory->setContent($this->request->getPost('content'));
                 if (!$postHistory->save()) {
                     $this->saveLogger($postHistory->getMessages());
@@ -234,9 +232,9 @@ class PostsController extends ControllerBase
             $object = new Posts();
             $object->setType(Posts::POST_QUESTIONS);
             $object->setSlug(Slug::generate($this->request->getPost('title')));
-            $object->setUsersId($auth['id']);
+            $object->setUsersId($this->auth->getUserId());
 
-            $user = Users::findFirstById($auth['id']);
+            $user = Users::findFirstById($this->auth->getUserId());
             $user->increaseKarma(Karma::ADD_NEW_POST);
             if (!$user->save()) {
                 $this->saveLogger($user->getMessages());
@@ -308,7 +306,7 @@ class PostsController extends ControllerBase
      */
     public function newAction()
     {
-        $usersId   = $this->auth->getAuth()['id'];
+        $usersId   = $this->auth->getUserId();
         if (!$usersId) {
             $this->flashSession->error('You must be logged first');
             return $this->indexRedirect();

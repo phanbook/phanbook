@@ -33,7 +33,7 @@ class LoginController extends ControllerBase
     public function githubAction()
     {
         $this->view->disable();
-        if (!$this->auth->getAuth()) {
+        if (!$this->auth->isAuthorizedVisitor()) {
             $config= $this->config->github;
             $auth = new GithubAuth($config);
             return $auth->authorize();
@@ -48,7 +48,7 @@ class LoginController extends ControllerBase
     public function googleAction()
     {
         $this->view->disable();
-        if (!$this->auth->getAuth()) {
+        if (!$this->auth->isAuthorizedVisitor()) {
             $auth = new GoogleAuth($this->config->google);
             return $auth->authorize();
         }
@@ -62,7 +62,7 @@ class LoginController extends ControllerBase
     public function facebookAction()
     {
         $this->view->disable();
-        if (!$this->auth->getAuth()) {
+        if (!$this->auth->isAuthorizedVisitor()) {
             $auth = new FacebookAuth($this->config->facebook);
             return $auth->authorize();
         }
