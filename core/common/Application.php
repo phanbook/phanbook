@@ -149,15 +149,17 @@ class Application
     /**
      * Get Application output.
      *
-     * @return ResponseInterface|void
+     * @return ResponseInterface|string
      */
     protected function getOutput()
     {
-        if ($this->app instanceof MvcApplication) {
-            echo $this->app->handle()->getContent();
-        }
+        $response = $this->app->handle();
 
-        return $this->app->handle();
+        if ($this->app instanceof MvcApplication) {
+            return $response->getContent();
+        } else {
+            return $response;
+        }
     }
 
     /**
