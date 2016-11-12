@@ -42,8 +42,8 @@ class EntityException extends Exception implements ServiceExceptionInterface
         $this->entity = $entity;
 
         $messages = [];
-        foreach ($entity->getMessages() as $message) {
-            $messages[] = (string) $message;
+        foreach ($entity->getMessages() as $entityMessage) {
+            $messages[] = (string) $entityMessage;
         }
 
         $message .= implode(' ', $messages);

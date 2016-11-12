@@ -59,7 +59,7 @@ class FailedLogin extends Service
                 'attempted' => $fromAttemptedTime,
             ],
             'bindTypes' => [
-                'address'   => Column::BIND_PARAM_STR,
+                'address'   => Column::BIND_PARAM_INT,
                 'attempted' => Column::BIND_PARAM_INT,
             ],
         ]);

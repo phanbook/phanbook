@@ -33,7 +33,7 @@ class FailedLogins extends ModelBase
 
     /**
      * The used IP address.
-     * @var string
+     * @var integer
      */
     protected $ipAddress;
 
@@ -90,7 +90,7 @@ class FailedLogins extends ModelBase
     /**
      * Method to set the value of field ipAddress
      *
-     * @param  string $ipAddress
+     * @param  integer $ipAddress
      * @return $this
      */
     public function setIpaddress($ipAddress)
@@ -136,7 +136,7 @@ class FailedLogins extends ModelBase
     /**
      * Returns the value of field ipAddress
      *
-     * @return string
+     * @return integer
      */
     public function getIpaddress()
     {
