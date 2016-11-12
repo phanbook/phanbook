@@ -47,7 +47,7 @@ class UserLogins extends AbstractEvent
                 'attempted' => $time,
             ]);
         } catch (EntityException $e) {
-            $this->getLogger()->error($e->getMessage());
+            $this->getLogger()->error($event->getType() . ':' . $e->getMessage());
         }
 
         $attempts = $failedLoginService->countAttempts($address, $time - self::FROM_TIME_FETCH);
@@ -78,7 +78,7 @@ class UserLogins extends AbstractEvent
                 'usersAgent' => $data['userAgent'],
             ]);
         } catch (EntityException $e) {
-            $this->getLogger()->error($e->getMessage());
+            $this->getLogger()->error($event->getType() . ':' . $e->getMessage());
         }
 
         return true;

@@ -55,20 +55,23 @@ class Auth extends Component
     }
 
     /**
-     * Checks the user credentials
+     * Performs an authentication attempt.
      *
      * @param  array $credentials
      * @throws Exception
      */
     public function check(array $credentials)
     {
+        $clientIp  = $this->request->getClientAddress(true);
+        $userAgent = $this->request->getUserAgent();
+
         try {
             // Check if the user exist
             $user = $this->userService->getFirstByEmailOrUsername($credentials['email']);
             $userData = [
                 'userId'    => $user->getId(),
-                'userAgent' => $this->request->getUserAgent(),
-                'ipAddress' => $this->request->getClientAddress(true),
+                'userAgent' => $userAgent,
+                'ipAddress' => $clientIp,
             ];
 
             // Check the password
@@ -91,8 +94,7 @@ class Auth extends Component
 
             $this->setSession($user);
         } catch (EntityNotFoundException $e) {
-            $userData = ['ipAddress' => $this->request->getClientAddress(true)];
-            $this->getEventsManager()->fire('user:failedLogin', $this, $userData);
+            $this->getEventsManager()->fire('user:failedLogin', $this, ['ipAddress' => $clientIp]);
             throw new Exception('Wrong email/password combination');
         }
     }
@@ -146,6 +148,7 @@ class Auth extends Component
     public function loginWithRememberMe()
     {
         if (!$this->hasRememberMe() || !$this->hasRememberToken() || $this->isAuthorizedVisitor()) {
+            // Do nothing
             return;
         }
 
