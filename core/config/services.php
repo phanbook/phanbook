@@ -13,11 +13,12 @@
 
 return [
     // Model Services
-    Phanbook\Models\Services\Service\Post::class        => Phanbook\Models\Services\Service\Post::class,
-    Phanbook\Models\Services\Service\Settings::class    => Phanbook\Models\Services\Service\Settings::class,
-    Phanbook\Models\Services\Service\User::class        => Phanbook\Models\Services\Service\User::class,
-    Phanbook\Models\Services\Service\Vote::class        => Phanbook\Models\Services\Service\Vote::class,
-    Phanbook\Models\Services\Service\FailedLogin::class => Phanbook\Models\Services\Service\FailedLogin::class,
+    Phanbook\Models\Services\Service\Post::class         => Phanbook\Models\Services\Service\Post::class,
+    Phanbook\Models\Services\Service\Settings::class     => Phanbook\Models\Services\Service\Settings::class,
+    Phanbook\Models\Services\Service\User::class         => Phanbook\Models\Services\Service\User::class,
+    Phanbook\Models\Services\Service\Vote::class         => Phanbook\Models\Services\Service\Vote::class,
+    Phanbook\Models\Services\Service\FailedLogin::class  => Phanbook\Models\Services\Service\FailedLogin::class,
+    Phanbook\Models\Services\Service\SuccessLogin::class => Phanbook\Models\Services\Service\SuccessLogin::class,
 
     // Other Services
 ];
