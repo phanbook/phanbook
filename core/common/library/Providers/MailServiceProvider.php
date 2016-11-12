@@ -16,6 +16,7 @@ use Swift_Mailer;
 use Phalcon\Config;
 use Phanbook\Mail\Mail;
 use Swift_SmtpTransport;
+use Swift_NullTransport;
 
 /**
  * \Phanbook\Common\Library\Providers\MailServiceProvider
@@ -45,6 +46,10 @@ class MailServiceProvider extends AbstractServiceProvider
                  * @var \Phalcon\Config $config
                  */
                 $config = $this->getShared('config');
+
+                if (APPLICATION_ENV === ENV_TESTING) {
+                    return Swift_NullTransport::newInstance();
+                }
 
                 if (!$config->offsetExists('mail') || !$config->get('mail')->smtp instanceof Config) {
                     trigger_error('Unable to get mail config.', E_USER_ERROR);
