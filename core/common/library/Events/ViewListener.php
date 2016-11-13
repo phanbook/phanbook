@@ -10,37 +10,19 @@
  * @since   1.0.0
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
-namespace Phanbook\Plugins\Mvc\View;
+namespace Phanbook\Common\Library\Events;
 
-use Phalcon\Di;
-use Phalcon\DiInterface;
 use Phalcon\Events\Event;
-use Phalcon\Mvc\User\Plugin;
 use Phalcon\Mvc\ViewInterface;
 use Phalcon\Mvc\View\Exception;
 
 /**
- * \Phanbook\Plugins\Mvc\View\ErrorHandler
+ * \Phanbook\Common\Library\Events\ViewListener
  *
  * @package Phanbook\Plugins\Mvc\View
  */
-class ErrorHandler extends Plugin
+class ViewListener extends AbstractEvent
 {
-    /**
-     * @var DiInterface
-     */
-    protected $di;
-
-    /**
-     * ErrorHandler constructor.
-     *
-     * @param DiInterface|null $di
-     */
-    public function __construct(DiInterface $di = null)
-    {
-        $this->di = $di ?: Di::getDefault();
-    }
-
     /**
      * Notify about not found views.
      *
@@ -61,7 +43,7 @@ class ErrorHandler extends Plugin
             ($viewEnginePath ? join(', ', $viewEnginePath) : gettype($viewEnginePath))
         );
 
-        $this->di->getShared('logger')->error($message);
+        $this->logger->error($message);
 
         if ($event->isCancelable()) {
             $event->stop();

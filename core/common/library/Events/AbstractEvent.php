@@ -13,18 +13,19 @@
 namespace Phanbook\Common\Library\Events;
 
 use Phalcon\DiInterface;
-use Phanbook\Common\Library\Behavior\Di as DiBehavior;
+use Phalcon\Di\Injectable;
+use Phanbook\Common\InjectableTrait;
 
 /**
  * \Phanbook\Common\Library\Events\AbstractEvent
  *
+ * @property \Phalcon\Logger\AdapterInterface $logger
+ *
  * @package Phanbook\Common\Library\Events
  */
-abstract class AbstractEvent
+abstract class AbstractEvent extends Injectable
 {
-    use DiBehavior {
-        DiBehavior::__construct as protected injectDi;
-    }
+    use InjectableTrait;
 
     /**
      * AbstractEvent constructor.
@@ -33,6 +34,10 @@ abstract class AbstractEvent
      */
     public function __construct(DiInterface $di = null)
     {
-        $this->injectDi($di);
+        if ($di) {
+            $this->setDI($di);
+        }
+
+        $this->injectDependencies();
     }
 }
