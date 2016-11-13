@@ -20,9 +20,14 @@ use Phalcon\DiInterface;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\ModuleDefinitionInterface;
 use Phanbook\Common\Library\Events\UserLogins;
-use Phanbook\Plugins\Mvc\View\ErrorHandler as ViewErrorHandler;
-use Phanbook\Plugins\Mvc\Dispatcher\ErrorHandler as DispatcherErrorHandler;
+use Phanbook\Common\Library\Events\ViewListener;
+use Phanbook\Common\Library\Events\DispatcherListener;
 
+/**
+ * \Phanbook\Oauth\Module
+ *
+ * @package Phanbook\Oauth
+ */
 class Module implements ModuleDefinitionInterface
 {
     /**
@@ -37,8 +42,6 @@ class Module implements ModuleDefinitionInterface
         $namespaces = [
             'Phanbook\Oauth\Controllers' => __DIR__ . '/controllers/',
             'Phanbook\Oauth\Forms'       => __DIR__ . '/forms/',
-            'Phanbook\Common\Library'    => app_path('core/common/library/'),
-            'Phanbook\Plugins'           => app_path('core/common/plugins/'),
         ];
 
         $loader->registerNamespaces($namespaces, true);
@@ -97,7 +100,7 @@ class Module implements ModuleDefinitionInterface
                 $eventsManager = $this->getShared('eventsManager');
 
                 // Listen the required events
-                $eventsManager->attach('dispatch:beforeException', new DispatcherErrorHandler($this));
+                $eventsManager->attach('dispatch:beforeException', new DispatcherListener($this));
 
                 $dispatcher = new Dispatcher();
                 $dispatcher->setDefaultNamespace('Phanbook\Oauth\Controllers');
@@ -132,7 +135,7 @@ class Module implements ModuleDefinitionInterface
                 );
 
                 $eventsManager = $this->getShared('eventsManager');
-                $eventsManager->attach('view:notFoundView', new ViewErrorHandler($this));
+                $eventsManager->attach('view:notFoundView', new ViewListener($this));
 
                 $view->setEventsManager($eventsManager);
 

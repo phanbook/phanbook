@@ -13,7 +13,7 @@
 namespace Phanbook\Common\Library\Providers;
 
 use Phalcon\Mvc\View;
-use Phanbook\Plugins\Mvc\View\ErrorHandler;
+use Phanbook\Common\Library\Events\ViewListener;
 
 /**
  * \Phanbook\Common\Library\Providers\ViewServiceProvider
@@ -60,7 +60,7 @@ class ViewServiceProvider extends AbstractServiceProvider
                 $view->disableLevel([View::LEVEL_MAIN_LAYOUT => true, View::LEVEL_LAYOUT => true]);
 
                 $eventsManager = $this->getShared('eventsManager');
-                $eventsManager->attach('view:notFoundView', new ErrorHandler($this));
+                $eventsManager->attach('view:notFoundView', new ViewListener($this));
 
                 $view->setEventsManager($eventsManager);
 

@@ -10,37 +10,19 @@
  * @since   1.0.0
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
-namespace Phanbook\Plugins\Mvc\Dispatcher;
+namespace Phanbook\Common\Library\Events;
 
-use Phalcon\Di;
 use Phalcon\Dispatcher;
-use Phalcon\DiInterface;
 use Phalcon\Events\Event;
-use Phalcon\Mvc\User\Plugin;
-use Phalcon\Mvc\Dispatcher\Exception as DispatchException;
+use Phalcon\Mvc\Dispatcher\Exception;
 
 /**
- * \Phanbook\Plugins\Mvc\Dispatcher\ErrorHandler
+ * \Phanbook\Common\Library\Events\DispatcherListener
  *
  * @package Phanbook\Plugins\Mvc\Dispatcher
  */
-class ErrorHandler extends Plugin
+class DispatcherListener extends AbstractEvent
 {
-    /**
-     * @var DiInterface
-     */
-    protected $di;
-
-    /**
-     * ErrorHandler constructor.
-     *
-     * @param DiInterface|null $di
-     */
-    public function __construct(DiInterface $di = null)
-    {
-        $this->di = $di ?: Di::getDefault();
-    }
-
     /**
      * Before exception is happening.
      *
@@ -53,28 +35,27 @@ class ErrorHandler extends Plugin
      */
     public function beforeException(Event $event, Dispatcher $dispatcher, $exception)
     {
-        if ($exception instanceof DispatchException) {
+        if ($exception instanceof Exception) {
             $message  = $exception->getMessage();
-            $response = $this->getDI()->getShared('response');
 
             switch ($exception->getCode()) {
                 case Dispatcher::EXCEPTION_INVALID_HANDLER:
                 case Dispatcher::EXCEPTION_HANDLER_NOT_FOUND:
-                    $response->redirect();
+                    $this->response->redirect();
                     break;
 
                 case Dispatcher::EXCEPTION_ACTION_NOT_FOUND:
-                    $response->redirect('action-not-found?msg=' . $message);
+                    $this->response->redirect('action-not-found?msg=' . $message);
                     break;
 
                 case Dispatcher::EXCEPTION_CYCLIC_ROUTING:
-                    $response->redirect('cyclic-routing?msg=' . $message);
+                    $this->response->redirect('cyclic-routing?msg=' . $message);
                     break;
             }
 
-            $this->di->getShared('logger')->error($dispatcher->getModuleName() . ': ' . $exception->getMessage());
+            $this->logger->error($dispatcher->getModuleName() . ': ' . $exception->getMessage());
         } elseif (APPLICATION_ENV !== ENV_PRODUCTION && $exception instanceof \Exception) {
-            $this->di->getShared('logger')->error($dispatcher->getModuleName() . ': ' . $exception->getMessage());
+            $this->logger->error($dispatcher->getModuleName() . ': ' . $exception->getMessage());
 
             throw $exception;
         }
