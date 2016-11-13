@@ -12,34 +12,24 @@
  */
 namespace Phanbook\Common;
 
+use Phalcon\Di;
 use ReflectionMethod;
-use Phalcon\DiInterface;
-use Phanbook\Common\Library\Behavior\Di as DiBehavior;
+use Phalcon\Di\Injectable;
 
 /**
- * \Phanbook\Common\InjectionInvoker
+ * \Phanbook\Common\InjectableTrait
  *
  * @package Phanbook\Common
  */
-class InjectionInvoker
+trait InjectableTrait
 {
-    use DiBehavior {
-        DiBehavior::__construct as protected injectDi;
-    }
-
-    /**
-     * InjectionInvoker constructor.
-     *
-     * @param DiInterface|null $di
-     */
-    public function __construct(DiInterface $di = null)
+    protected function injectDependencies()
     {
-        $this->injectDi($di);
-    }
+        if (!method_exists($this, 'inject')) {
+            return;
+        }
 
-    public function invoke($object)
-    {
-        $reflectionMethod = new ReflectionMethod($object, 'inject');
+        $reflectionMethod = new ReflectionMethod($this, 'inject');
         $methodParams = $reflectionMethod->getParameters();
 
         $params = [];
@@ -48,21 +38,27 @@ class InjectionInvoker
             return;
         }
 
+        if ($this instanceof Injectable) {
+            $di = $this->getDI();
+        } else {
+            $di = Di::getDefault();
+        }
+
         foreach ($methodParams as $key => $methodParam) {
             if ($methodParam->getClass()) {
                 $className = $methodParam->getClass()->getName();
-                if ($this->getDI()->has($className)) {
-                    $params[$key] = $this->getDI()->getShared($className);
+                if ($di->has($className)) {
+                    $params[$key] = $di->getShared($className);
                 } elseif (class_exists($className)) {
                     $params[$key] = new $className();
                 }
-            } elseif ($this->getDI()->has($methodParam->getName())) {
-                $params[$key] = $this->getDI()->getShared($methodParam->getName());
+            } elseif ($di->has($methodParam->getName())) {
+                $params[$key] = $di->getShared($methodParam->getName());
             } else {
                 $params[$key] = null;
             }
         }
 
-        call_user_func_array([$object, 'inject'], $params);
+        call_user_func_array([$this, 'inject'], $params);
     }
 }

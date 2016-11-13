@@ -15,8 +15,6 @@ namespace Phanbook\Controllers;
 
 use Phalcon\Mvc\Dispatcher;
 use Phanbook\Models\ModelBase;
-use Phanbook\Common\InjectionInvoker;
-use Phalcon\Mvc\Controller as ControllerPhalcon;
 use Phalcon\Paginator\Adapter\NativeArray as PaginatorNativeArray;
 use Phalcon\Paginator\Adapter\QueryBuilder as PaginatorQueryBuilder;
 
@@ -25,7 +23,7 @@ use Phalcon\Paginator\Adapter\QueryBuilder as PaginatorQueryBuilder;
  *
  * @package Phanbook\Controllers
  */
-class Controller extends ControllerPhalcon
+class Controller extends AbstractController
 {
     /**
      * @var array
@@ -76,26 +74,6 @@ class Controller extends ControllerPhalcon
      */
     protected $statusCode = 200;
 
-    public function onConstruct()
-    {
-        if (!method_exists($this, 'inject')) {
-            return;
-        }
-
-        $invoker = new InjectionInvoker($this->getDI());
-        $invoker->invoke($this);
-    }
-
-    public function beforeExecuteRoute(Dispatcher $dispatcher)
-    {
-        return true;
-    }
-
-    public function initialize()
-    {
-        return true;
-    }
-
     /**
      * Check if we need to throw a json response. For ajax calls.
      *
@@ -140,6 +118,7 @@ class Controller extends ControllerPhalcon
     /**
      * Set a flash message with messages from objects
      *
+     * @todo Move to the trait
      * @param $object
      */
     public function displayModelErrors($object)
@@ -361,9 +340,10 @@ class Controller extends ControllerPhalcon
     }
 
     /**
+     * @todo Move to the trait
      * @return \Phalcon\Http\Response|\Phalcon\Http\ResponseInterface
      */
-    public function currentRedirect()
+    protected function currentRedirect()
     {
         if ($url = $this->cookies->get('urlCurrent')->getValue()) {
             $this->cookies->delete('urlCurrent');
@@ -609,6 +589,7 @@ class Controller extends ControllerPhalcon
             return $cookieValue;
         }
     }
+
     /**
      * The function sending log for nginx or apache, it will to analytic later
      *
