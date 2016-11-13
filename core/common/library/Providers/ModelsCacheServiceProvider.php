@@ -15,6 +15,7 @@ namespace Phanbook\Common\Library\Providers;
 use Memcached;
 use Phalcon\Cache\Frontend\Data;
 use Phalcon\Cache\Backend\Libmemcached;
+use Phalcon\Cache\Backend\File as FileBackend;
 use Phalcon\Cache\Frontend\None as FrontendNone;
 use Phalcon\Cache\Backend\Memory as BackendMemory;
 
@@ -38,18 +39,34 @@ class ModelsCacheServiceProvider extends AbstractServiceProvider
      */
     protected $serviceName = 'modelsCache';
 
-    protected $defaultConfig = [
-        'servers' => [
-            [
-                'host'   => ModelsCacheServiceProvider::DEFAULT_HOST,
-                'port'   => ModelsCacheServiceProvider::DEFAULT_PORT,
-                'weight' => ModelsCacheServiceProvider::DEFAULT_WEIGHT,
-            ],
-        ],
-        'client' => [
-            Memcached::OPT_HASH => ModelsCacheServiceProvider::DEFAULT_OPT_HASH,
-        ],
-    ];
+    protected $defaultConfig = [];
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return void
+     */
+    public function configure()
+    {
+        if (class_exists('Memcached')) {
+            $this->defaultConfig = [
+                'servers' => [
+                    [
+                        'host'   => ModelsCacheServiceProvider::DEFAULT_HOST,
+                        'port'   => ModelsCacheServiceProvider::DEFAULT_PORT,
+                        'weight' => ModelsCacheServiceProvider::DEFAULT_WEIGHT,
+                    ],
+                ],
+                'client' => [
+                    Memcached::OPT_HASH => ModelsCacheServiceProvider::DEFAULT_OPT_HASH,
+                ],
+            ];
+        } else {
+            $this->defaultConfig = [
+                'cacheDir' => content_path('cache/data/')
+            ];
+        }
+    }
 
     /**
      * {@inheritdoc}
@@ -75,18 +92,24 @@ class ModelsCacheServiceProvider extends AbstractServiceProvider
                     $lifeTime = (int) $config->modelsCache->lifeTime;
                 }
 
-                $prefix = ModelsCacheServiceProvider::DEFAULT_PREFIX;
-                if (isset($config->modelsCache->prefix)) {
-                    $prefix = $config->modelsCache->prefix;
+                $frontend = new Data(['lifetime' => $lifeTime]);
+
+                if (class_exists('Memcached')) {
+                    $prefix = ModelsCacheServiceProvider::DEFAULT_PREFIX;
+                    if (isset($config->modelsCache->prefix)) {
+                        $prefix = $config->modelsCache->prefix;
+                    }
+
+                    $memcachedConfig = $config->modelsCache->toArray();
+                    unset($memcachedConfig['lifeTime'], $memcachedConfig['force'], $memcachedConfig['prefix']);
+
+                    $memcachedConfig = array_merge($defaultConfig['servers'][0], $memcachedConfig);
+                    $memcachedConfig['prefix'] = $prefix;
+
+                    return new Libmemcached($frontend, $memcachedConfig);
                 }
 
-                $memcachedConfig = $config->modelsCache->toArray();
-                unset($memcachedConfig['lifeTime'], $memcachedConfig['force'], $memcachedConfig['prefix']);
-
-                $memcachedConfig = array_merge($defaultConfig['servers'][0], $memcachedConfig);
-                $memcachedConfig['prefix'] = $prefix;
-
-                return new Libmemcached(new Data(['lifetime' => $lifeTime]), $memcachedConfig);
+                return new FileBackend($frontend, $defaultConfig);
             }
         );
     }
