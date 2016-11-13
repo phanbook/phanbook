@@ -14,9 +14,10 @@
 namespace Phanbook\Oauth\Controllers;
 
 use Phanbook\Models\Users;
+use Phalcon\Mvc\Dispatcher;
 use Phanbook\Oauth\Forms\SignupForm;
-use Phanbook\Oauth\Forms\ForgotPasswordForm;
 use Phanbook\Oauth\Forms\ResetPasswordForm;
+use Phanbook\Oauth\Forms\ForgotPasswordForm;
 
 /**
  * Class RegisterController
@@ -25,6 +26,23 @@ use Phanbook\Oauth\Forms\ResetPasswordForm;
  */
 class RegisterController extends ControllerBase
 {
+    /**
+     * @param Dispatcher $dispatcher
+     *
+     * @return bool
+     */
+    public function beforeExecuteRoute(Dispatcher $dispatcher)
+    {
+        if ($this->auth->hasRememberMe() && !$this->request->isPost()) {
+            $this->auth->loginWithRememberMe();
+        }
+
+        if ($this->auth->isAuthorizedVisitor() && !$this->request->isPost()) {
+            $this->currentRedirect();
+        }
+
+        return true;
+    }
 
     /**
      * @return \Phalcon\Http\ResponseInterface

@@ -20,13 +20,13 @@ namespace Phanbook\Models;
 class FailedLogins extends ModelBase
 {
     /**
-     * The Entity ID
+     * The Entity ID.
      * @var integer
      */
     protected $id;
 
     /**
-     * The User ID
+     * The User ID.
      * @var integer
      */
     protected $usersId;
@@ -38,7 +38,7 @@ class FailedLogins extends ModelBase
     protected $ipAddress;
 
     /**
-     *
+     * The attempted date.
      * @var integer
      */
     protected $attempted;
@@ -62,7 +62,7 @@ class FailedLogins extends ModelBase
     }
 
     /**
-     * Method to set the value of field id
+     * Method to set the value of field id.
      *
      * @param  integer $id
      * @return $this
@@ -75,7 +75,7 @@ class FailedLogins extends ModelBase
     }
 
     /**
-     * Method to set the value of field usersId
+     * Method to set the value of field usersId.
      *
      * @param  integer $usersId
      * @return $this
@@ -88,7 +88,7 @@ class FailedLogins extends ModelBase
     }
 
     /**
-     * Method to set the value of field ipAddress
+     * Method to set the value of field ipAddress.
      *
      * @param  integer $ipAddress
      * @return $this
@@ -101,7 +101,7 @@ class FailedLogins extends ModelBase
     }
 
     /**
-     * Method to set the value of field attempted
+     * Method to set the value of field attempted.
      *
      * @param  integer $attempted
      * @return $this
@@ -114,7 +114,7 @@ class FailedLogins extends ModelBase
     }
 
     /**
-     * Returns the value of field id
+     * Returns the value of field id.
      *
      * @return integer
      */
@@ -124,7 +124,7 @@ class FailedLogins extends ModelBase
     }
 
     /**
-     * Returns the value of field usersId
+     * Returns the value of field usersId.
      *
      * @return integer
      */
@@ -134,7 +134,7 @@ class FailedLogins extends ModelBase
     }
 
     /**
-     * Returns the value of field ipAddress
+     * Returns the value of field ipAddress.
      *
      * @return integer
      */
@@ -144,7 +144,7 @@ class FailedLogins extends ModelBase
     }
 
     /**
-     * Returns the value of field attempted
+     * Returns the value of field attempted.
      *
      * @return integer
      */
@@ -154,7 +154,7 @@ class FailedLogins extends ModelBase
     }
 
     /**
-     * Allows to query a set of records that match the specified conditions
+     * Allows to query a set of records that match the specified conditions.
      *
      * @param  mixed $parameters
      * @return \Phalcon\Mvc\Model\ResultsetInterface|FailedLogins[]
@@ -165,7 +165,7 @@ class FailedLogins extends ModelBase
     }
 
     /**
-     * Allows to query the first record that match the specified conditions
+     * Allows to query the first record that match the specified conditions.
      *
      * @param  mixed $parameters
      * @return FailedLogins

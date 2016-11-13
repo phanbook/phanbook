@@ -46,7 +46,11 @@ class EntityException extends Exception implements ServiceExceptionInterface
             $messages[] = (string) $entityMessage;
         }
 
-        $message .= implode(' ', $messages);
+        array_unshift($messages, $message);
+
+        $message = implode('. ', array_map(function ($value) {
+            return rtrim($value, '.');
+        }, $messages));
 
         parent::__construct($message, $code, $previous);
     }

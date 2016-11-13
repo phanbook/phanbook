@@ -65,10 +65,11 @@ class ControllerBase extends Controller
     {
         parent::beforeExecuteRoute($dispatcher);
 
-        // @TODO: something
         if ($this->auth->hasRememberMe() && !$this->request->isPost()) {
             $this->auth->loginWithRememberMe();
         }
+
+        return true;
     }
 
     public function initialize()
