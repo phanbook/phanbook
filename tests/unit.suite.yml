@@ -8,4 +8,4 @@ modules:
         - Filesystem
         - Asserts
         - Phalcon
-        - Db
+        - App\Test\Module\Db

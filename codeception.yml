@@ -40,7 +40,7 @@ params:
 # Global modules configuration.
 modules:
     config:
-        Db:
+        App\Test\Module\Db:
             dsn: %DB_DSN%
             user: %DB_USERNAME%
             password: %DB_PASSWORD%
