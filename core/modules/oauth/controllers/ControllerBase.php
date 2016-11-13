@@ -15,7 +15,7 @@ namespace Phanbook\Oauth\Controllers;
 
 use Phanbook\Models\Users;
 use Phanbook\Models\Karma;
-use Phalcon\Mvc\Controller;
+use Phanbook\Controllers\Controller;
 
 /**
  * \Phanbook\Oauth\Controllers\ControllerBase
@@ -31,22 +31,6 @@ class ControllerBase extends Controller
     public function initialize()
     {
         $this->loadDefaultAssets();
-    }
-
-    /**
-     * Set a flash message with messages from objects
-     *
-     * @param $object
-     */
-    public function displayModelErrors($object)
-    {
-        if (is_object($object) && method_exists($object, 'getMessages')) {
-            foreach ($object->getMessages() as $message) {
-                $this->flashSession->error($message);
-            }
-        } else {
-            $this->flashSession->error(t('No object found. No errors.'));
-        }
     }
 
     /**

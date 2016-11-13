@@ -20,7 +20,6 @@ use Phanbook\Models\Karma;
 use Phanbook\Models\Users;
 use Phanbook\Models\ModelBase;
 use Phanbook\Models\PostsHistory;
-use Phanbook\Models\Services\Service;
 use Phanbook\Frontend\Forms\ReplyForm;
 use Phanbook\Frontend\Forms\CommentForm;
 use Phanbook\Frontend\Forms\QuestionsForm;
