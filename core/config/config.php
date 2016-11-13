@@ -109,20 +109,6 @@ return [
             ],
         ],
 
-        /**
-         * Improving Performance with Cache
-         *
-         * @link https://docs.phalconphp.com/en/latest/reference/cache.html
-         */
-        'modelsCache' => [
-            'lifetime' => env('MODELS_CACHE_LIFETIME'),
-            'prefix'   => env('MODELS_CACHE_PREFIX'),
-            'host'     => env('MEMCACHED_HOST'),
-            'port'     => env('MEMCACHED_PORT'),
-            'weight'   => env('MEMCACHED_HOST'),
-            'force'    => env('MODELS_CACHE_FORCE'),
-        ],
-
         'viewCache' => [
             'lifetime' => env('VIEW_CACHE_LIFETIME'),
             'prefix'   => env('VIEW_CACHE_PREFIX'),
