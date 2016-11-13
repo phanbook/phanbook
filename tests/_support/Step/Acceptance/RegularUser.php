@@ -27,7 +27,10 @@ class RegularUser extends \AcceptanceTester
         $data = $this->createUser();
         $data['status'] = Users::STATUS_ACTIVE;
 
-        $this->haveInDatabase('users', $data);
+        $id = $this->haveInDatabase('users', $data);
+        $data['id'] = $id;
+
+        return $data;
     }
 
     public function haveUserInDb()

@@ -8,11 +8,16 @@ class AuthControllerCest
     {
         $I->wantTo('login as regular user and see welcome text');
 
-        $I->haveRegularUserInDb();
+        $data = $I->haveRegularUserInDb();
+
+        $I->dropFromDatabase('successLogins', ['usersId' => $data['id']]);
+        $I->dontSeeInDatabase('successLogins', ['usersId' => $data['id']]);
+
         $I->loginUser();
         $I->seeResponseCodeIs(200);
-
         $I->see('Welcome back');
+
+        $I->seeInDatabase('successLogins', ['usersId' => $data['id']]);
     }
 
     public function loginAsInactiveUser(RegularUser $I)

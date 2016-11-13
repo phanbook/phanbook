@@ -48,9 +48,9 @@ class TranslationServiceProvider extends AbstractServiceProvider
 
                 if ($language->gettext) {
                     return new Gettext([
-                        'locale' => $code,
-                        'directory' => app_path('core/lang'),
-                        'defaultDomain'=> 'messages',
+                        'locale'        => $code,
+                        'directory'     => app_path('core/lang'),
+                        'defaultDomain' => 'messages',
                     ]);
                 }
 
