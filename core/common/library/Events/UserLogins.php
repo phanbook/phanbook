@@ -37,7 +37,7 @@ class UserLogins extends AbstractEvent
         $failedLoginService = $this->getDI()->getShared(Service\FailedLogin::class);
 
         $address = ip2long($data['ipAddress']);
-        $userId  = empty($data['userId']) ? null : $data['userId'];
+        $userId  = empty($data['usersId']) ? null : $data['usersId'];
         $time    = time();
 
         try {
@@ -47,7 +47,7 @@ class UserLogins extends AbstractEvent
                 'attempted' => $time,
             ]);
         } catch (EntityException $e) {
-            $this->getLogger()->error($event->getType() . ':' . $e->getMessage());
+            $this->getLogger()->error($event->getType() . ': ' . $e->getMessage());
         }
 
         $attempts = $failedLoginService->countAttempts($address, $time - self::FROM_TIME_FETCH);
@@ -70,15 +70,16 @@ class UserLogins extends AbstractEvent
         $successLoginService = $this->getDI()->getShared(Service\SuccessLogin::class);
 
         $address = ip2long($data['ipAddress']);
+        $userAgent = empty($data['userAgent']) ? 'Unknown' : $data['userAgent'];
 
         try {
             $successLoginService->createOrFail([
-                'usersId'    => $data['userId'],
-                'ipAddress'  => $address,
-                'usersAgent' => $data['userAgent'],
+                'usersId'   => $data['usersId'],
+                'ipAddress' => $address,
+                'userAgent' => $userAgent,
             ]);
         } catch (EntityException $e) {
-            $this->getLogger()->error($event->getType() . ':' . $e->getMessage());
+            $this->getLogger()->error($event->getType() . ': ' . $e->getMessage());
         }
 
         return true;

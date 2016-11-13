@@ -69,7 +69,7 @@ class Auth extends Component
             // Check if the user exist
             $user = $this->userService->getFirstByEmailOrUsername($credentials['email']);
             $userData = [
-                'userId'    => $user->getId(),
+                'usersId'   => $user->getId(),
                 'userAgent' => $userAgent,
                 'ipAddress' => $clientIp,
             ];
@@ -173,7 +173,7 @@ class Auth extends Component
         $userAgent = $this->request->getUserAgent();
         $uToken    = md5($user->getEmail() . $user->getPasswd() . $userAgent);
         $userData  = [
-            'userId'    => $user->getId(),
+            'usersId'   => $user->getId(),
             'userAgent' => $userAgent,
             'ipAddress' => $this->request->getClientAddress(true),
         ];
