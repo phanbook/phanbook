@@ -13,6 +13,7 @@
  */
 namespace Phanbook\Cli;
 
+use Phalcon\Loader;
 use Phalcon\DiInterface;
 use Phalcon\Mvc\ModuleDefinitionInterface;
 
@@ -30,6 +31,17 @@ class Module implements ModuleDefinitionInterface
      */
     public function registerAutoloaders(DiInterface $di = null)
     {
+        $loader = new Loader();
+
+        $namespaces = [
+            'Phanbook\Cli\Tasks'   => __DIR__ . '/tasks/',
+            'Phanbook\Cli\Library' => __DIR__ . '/library/',
+            'Phanbook\Seeder'      => __DIR__ . '/seeders/',
+        ];
+
+        $loader->registerNamespaces($namespaces);
+
+        $loader->register();
     }
 
     /**
@@ -39,5 +51,7 @@ class Module implements ModuleDefinitionInterface
      */
     public function registerServices(DiInterface $di)
     {
+        // Setting up the MVC Dispatcher
+        $di->getShared('dispatcher')->setDefaultNamespace('Phanbook\Cli\Tasks');
     }
 }

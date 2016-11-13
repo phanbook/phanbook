@@ -13,7 +13,7 @@
 namespace Phanbook\Cli\Tasks;
 
 use Phalcon\Cli\Task;
-use Phanbook\Tools\Cli\Output;
+use Phanbook\Cli\Library\Output;
 
 /**
  * \Phanbook\Cli\Tasks\TestsTask
