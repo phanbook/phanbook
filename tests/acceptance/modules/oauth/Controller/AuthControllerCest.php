@@ -11,6 +11,7 @@ class AuthControllerCest
         $I->haveRegularUserInDb();
         $I->loginUser();
         $I->seeResponseCodeIs(200);
+
         $I->see('Welcome back');
     }
 
@@ -35,7 +36,7 @@ class AuthControllerCest
         $I->fillField('email', uniqid() . '@' . uniqid());
         $I->fillField('password', $I->password());
 
-        Phalcon\Di::getDefault()->get('db')->query("DELETE FROM failedLogins WHERE ipAddress = 2130706433");
+        $I->dropFromDatabase('failedLogins', ['ipAddress' => 2130706433]);
         $I->dontSeeInDatabase('failedLogins', ['ipAddress' => 2130706433]);
 
         $I->click('Sign In');
@@ -57,7 +58,7 @@ class AuthControllerCest
         $I->fillField('email', $user['email']);
         $I->fillField('password', uniqid());
 
-        Phalcon\Di::getDefault()->get('db')->query("DELETE FROM failedLogins WHERE ipAddress = 2130706433");
+        $I->dropFromDatabase('failedLogins', ['ipAddress' => 2130706433]);
         $I->dontSeeInDatabase('failedLogins', ['ipAddress' => 2130706433]);
 
         $I->click('Sign In');

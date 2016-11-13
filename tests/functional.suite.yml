@@ -9,6 +9,6 @@ class_name: FunctionalTester
 modules:
     enabled:
         - Helper\Functional
-        - Db
+        - App\Test\Module\Db
         - Filesystem
         - Phalcon
