@@ -17,8 +17,7 @@
         <div class="clearfix"></div>
         <div class="question-desc">
             {% if listPost is defined %}
-                {#{ this.markdown.text(truncate(post.content, 200, '...'))}#}
-                {{truncate(post.content, 200, '...')}}
+                {{ teaser(post.content, 200) }}
             {% else %}
                 {{ this.markdown.text(post.content)}}
             {% endif %}
