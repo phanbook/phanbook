@@ -22,26 +22,26 @@ $frontend = new RouterGroup([
 
 $frontend->add('/:controller/:action/:params', [
     'controller' => 1,
-    'action' => 2,
-    'params' => 3,
+    'action'     => 2,
+    'params'     => 3,
 ]);
 
 $frontend->add('/:controller/:int', [
     'controller' => 1,
-    'id' => 2,
+    'id'         => 2,
 ]);
 
 $frontend->add('/:controller/:int/{slug}', [
     'controller' => 1,
-    'id' => 2,
-    'slug' => 3,
-    'action' => 'view'
+    'id'         => 2,
+    'slug'       => 3,
+    'action'     => 'view'
 ]);
 
 $frontend->add('/posts/:int/{slug}', [
-    'id'        => 1,
-    'slug'      => 2,
-    'action'    => 'view'
+    'id'     => 1,
+    'slug'   => 2,
+    'action' => 'view'
 ]);
 
 $frontend->add('/:controller[/]?', [
@@ -50,68 +50,60 @@ $frontend->add('/:controller[/]?', [
 
 $frontend->add('/blog/{id:[0-9]+}/{slug}', [
     'controller' => 'posts',
-    'action' => 'view'
+    'action'     => 'view'
 ]);
 
 $frontend->add('/questions/{id:[0-9]+}/{slug}', [
     'controller' => 'posts',
-    'action' => 'view'
+    'action'     => 'view'
 ]);
 
 $frontend->add('/questions/new', [
     'controller' => 'posts',
-    'action' => 'new'
+    'action'     => 'new'
 ]);
 
 $frontend->add('/questions/edit/{id:[0-9]+}', [
     'controller' => 'posts',
-    'action' => 'edit'
+    'action'     => 'edit'
 ]);
 
 $frontend->add('/questions', [
     'controller' => 'posts',
-    'action' => 'index'
+    'action'     => 'index'
 ]);
 
 $frontend->add('/posts/{type}', [
     'controller' => 'posts',
-    'action' => 'index'
+    'action'     => 'index'
 ]);
 
 $frontend->add('/posts/new', [
     'controller' => 'posts',
-    'action' => 'new'
+    'action'     => 'new'
 ]);
 
 $frontend->addPost('/posts/vote', [
     'controller' => 'posts',
-    'action' => 'vote'
+    'action'     => 'vote'
 ]);
 
-/**
- * @link https://docs.phalconphp.com/en/latest/reference/routing.html#match-callbacks
- */
 $frontend->add('/{router}', [
     'module'     => 'frontend',
     'controller' => 'router',
 ])->beforeMatch(function ($uri, $route) {
-    $uris = ['posts', 'users', 'tags', 'search' , 'questions', 'backend'];
-    if (in_array(ltrim($uri, '/'), $uris)) {
+    $uris = ['posts', 'users', 'tags', 'search', 'questions', 'backend'];
+
+    if ($uri == '/' || in_array(ltrim($uri, '/'), $uris)) {
         return false;
     }
-    if ('/' == $uri) {
-        return false;
-    }
-    if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])
-        && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
-        return false;
-    }
-    return true;
+
+    return ! $this->getRequest()->isAjax();
 });
 
 $frontend->add('/tags/{id:[0-9]+}/{slug}', [
     'controller' => 'tags',
-    'action' => 'postByTag'
+    'action'     => 'postByTag'
 ]);
 
 $frontend->add(

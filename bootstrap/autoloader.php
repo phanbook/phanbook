@@ -29,7 +29,6 @@ require 'constants.php';
         'Phanbook\Validators' => ROOT_DIR . '/core/common/validators/',
         'Phanbook\Controllers' => ROOT_DIR . '/core/common/controllers/',
         'Phanbook\Common\Library' => ROOT_DIR . '/core/common/library/',
-        'Phanbook\Common\Exceptions' => ROOT_DIR . '/core/common/exceptions/'
     ])
     ->registerFiles([
         ROOT_DIR . '/bootstrap/helpers.php',

@@ -21,19 +21,19 @@ $backend = new RouterGroup([
 ]);
 
 $backend->add('/backend/:controller', [
-    'module' => 'backend',
+    'module'     => 'backend',
     'controller' => 1,
 ]);
 $backend->add('/backend/:controller/:int', [
-    'module' => 'backend',
+    'module'     => 'backend',
     'controller' => 1,
-    'id' => 2,
+    'id'         => 2,
 ]);
 $backend->add('/backend/:controller/:action/:params', [
-    'module' => 'backend',
+    'module'     => 'backend',
     'controller' => 1,
-    'action' => 2,
-    'params' => 3,
+    'action'     => 2,
+    'params'     => 3,
 ]);
 
 $backend->add('/backend', [
