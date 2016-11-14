@@ -14,10 +14,8 @@
 namespace Phanbook\Frontend;
 
 use Phalcon\Loader;
-use Phalcon\Mvc\Url;
 use Phalcon\Mvc\View;
 use Phalcon\DiInterface;
-use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\ModuleDefinitionInterface;
 use Phanbook\Common\Library\Events\ViewListener;
 use Phanbook\Common\Library\Events\DispatcherListener;
@@ -59,50 +57,12 @@ class Module implements ModuleDefinitionInterface
         $moduleConfig = require __DIR__ . '/config/config.php';
 
         // Tune Up the URL Component
-        $di->setShared(
-            'url',
-            function () use ($moduleConfig) {
-                /** @var DiInterface $this */
-                $config = $this->getShared('config');
-
-                $url = new Url();
-
-                if (isset($config->application->staticBaseUri)) {
-                    $url->setStaticBaseUri($config->application->staticBaseUri);
-                } else {
-                    $url->setStaticBaseUri('/');
-                }
-
-                if (isset($moduleConfig->application->baseUri)) {
-                    $url->setBaseUri($moduleConfig->application->baseUri);
-                } elseif (isset($config->application->baseUri)) {
-                    $url->setBaseUri($config->application->baseUri);
-                } else {
-                    $url->setBaseUri('/');
-                }
-
-                return $url;
-            }
-        );
+        $url = $di->getShared('url');
+        $url->setBaseUri($moduleConfig->application->baseUri);
 
         // Setting up the MVC Dispatcher
-        $di->setShared(
-            'dispatcher',
-            function () {
-                /** @var DiInterface $this */
-                $eventsManager = $this->getShared('eventsManager');
-
-                // Listen the required events
-                $eventsManager->attach('dispatch:beforeException', new DispatcherListener($this));
-
-                $dispatcher = new Dispatcher();
-                $dispatcher->setDefaultNamespace('Phanbook\Frontend\Controllers');
-                $dispatcher->setEventsManager($eventsManager);
-                $dispatcher->setDI($this);
-
-                return $dispatcher;
-            }
-        );
+        $eventsManager = $di->getShared('eventsManager');
+        $eventsManager->attach('dispatch:beforeException', new DispatcherListener($di));
 
         // Setting up the View Component
         $di->setShared(

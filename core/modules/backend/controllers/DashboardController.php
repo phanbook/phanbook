@@ -33,6 +33,8 @@ class DashboardController extends ControllerBase
 
     public function initialize()
     {
+        parent::initialize();
+
         $this->model = new Dashboard();
         $this->analytic = $this->model->getAnalyticObject();
     }

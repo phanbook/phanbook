@@ -12,7 +12,9 @@
  */
 namespace Phanbook\Common\Library\Providers;
 
-use Phalcon\Cli\Router;
+use Phalcon\Mvc\Router as MvcRouter;
+use Phalcon\Cli\Router as CliRouter;
+use Phalcon\Mvc\Router\GroupInterface;
 
 /**
  * \Phanbook\Common\Library\Providers\RoutingServiceProvider
@@ -39,17 +41,33 @@ class RoutingServiceProvider extends AbstractServiceProvider
             function () {
                 /** @var \Phalcon\DiInterface $this */
                 $bootstrap = $this->getShared('bootstrap');
+
                 if ($bootstrap->getMode() == 'cli') {
-                    $router = new Router();
-
+                    $router = new CliRouter();
                     $router->setDefaultModule('cli');
-                    $router->setDI($this);
+                } else {
+                    $router = new MvcRouter(false);
+                    $router->removeExtraSlashes(true);
 
-                    return $router;
+                    foreach ($this->getShared('modules') as $module) {
+                        if (empty($module->router)) {
+                            continue;
+                        }
+
+                        /** @noinspection PhpIncludeInspection */
+                        $group = require $module->router;
+
+                        if (!$group || !$group instanceof GroupInterface) {
+                            continue;
+                        }
+
+                        $router->mount($group);
+                    }
                 }
 
-                /** @noinspection PhpIncludeInspection */
-                return require config_path('routing.php');
+                $router->setDI($this);
+
+                return $router;
             }
         );
     }
