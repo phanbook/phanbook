@@ -10,10 +10,10 @@
  * @since   1.0.0
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
-namespace Phanbook\Tools;
+namespace Phanbook\Common\Library\Volt;
 
 /***
- * \Phanbook\Tools\VoltFunctions
+ * \Phanbook\Common\Library\Volt\VoltFunctions
  *
  * PHP Functions in Volt
  *
@@ -42,6 +42,8 @@ class VoltFunctions
                 return '$this->auth->isModerator()';
             case 'is_admin':
                 return '$this->auth->isAdmin()';
+            case 'teaser':
+                return Functions\Teaser::class . "::create({$arguments})";
         }
 
         $property = $name;
@@ -61,6 +63,8 @@ class VoltFunctions
                 return $class . '::$' . $property;
             }
         }
+
+        return null;
     }
 
     /**
@@ -78,10 +82,10 @@ class VoltFunctions
                 return '(isset(' . $arguments . ') ? ' . $arguments . ' : false)';
             case 'long2ip':
                 return 'long2ip(' . $arguments . ')';
-            case 'truncate':
-                return '\Phanbook\Tools\ZFunction::truncate(' . $arguments . ')';
+            case 'teaser':
+                return Functions\Teaser::class . '::create(' . $arguments . ')';
             case 'strlen':
-                return '\Phanbook\Tools\ZFunction::strlen(' . $arguments . ')';
+                return "\\Stringy\\create('$arguments')->length()";
         }
 
         return null;

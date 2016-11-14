@@ -13,9 +13,9 @@
 namespace Phanbook\Common\Library\Providers;
 
 use Phalcon\DiInterface;
-use Phanbook\Tools\VoltFunctions;
 use Phalcon\Mvc\View\Engine\Volt;
 use Phalcon\Mvc\ViewBaseInterface;
+use Phanbook\Common\Library\Volt\VoltFunctions;
 
 /**
  * \Phanbook\Common\Library\Providers\VoltTemplateEngineServiceProvider
