@@ -13,7 +13,6 @@
 namespace Phanbook\Tools;
 
 use Phalcon\Di\Injectable;
-use Phanbook\Auth\Auth;
 
 /**
  * PHP Functions in Volt
@@ -76,53 +75,7 @@ class ZFunction extends Injectable
             }
         }
     }
-    /**
-     * truncate method.
-     *
-     * @access public
-     * @static
-     * @param  mixed  $str
-     *
-     * @param  int    $maxLen (default: 35)
-     * @param  bool
-     * @param  string $suffix (default: '...')
-     * @return void
-     */
-    public static function truncate($str, $maxLen = 35, $breakWords = true, $suffix = '...')
-    {
-        $strLength = self::strlen($str);
-        if ($strLength <= $maxLen) {
-            return $str;
-        }
-        if ($breakWords) {
-            while ($maxLen < $strLength && preg_match('/^\pL$/', mb_substr($str, $maxLen, 1))) {
-                $maxLen++;
-            }
-        }
-        return mb_substr($str, 0, $maxLen) . $suffix;
-    }
 
-    /**
-     * strlen method.
-     *
-     * @access public
-     * @static
-     * @param  mixed  $str
-     *
-     * @param  string $encoding (default: 'UTF-8')
-     * @return void
-     */
-    public static function strlen($str, $encoding = 'UTF-8')
-    {
-        if (is_array($str)) {
-            return false;
-        }
-        $str = html_entity_decode($str, ENT_COMPAT, 'UTF-8');
-        if (function_exists('mb_strlen')) {
-            return mb_strlen($str, $encoding);
-        }
-        return strlen($str);
-    }
     /**
      * Create a file in your project
      *
