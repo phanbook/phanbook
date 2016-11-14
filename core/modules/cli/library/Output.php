@@ -1,6 +1,6 @@
 <?php
 
-namespace Phanbook\Tools\Cli;
+namespace Phanbook\Cli\Library;
 
 class Output
 {

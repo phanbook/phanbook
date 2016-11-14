@@ -13,7 +13,7 @@
 namespace Phanbook\Cli\Tasks;
 
 use Phalcon\CLI\Task;
-use Phanbook\Tools\Cli\Output;
+use Phanbook\Cli\Library\Output;
 use Phanbook\Databases\UsersSeeder;
 use Phanbook\Databases\PostsSeeder;
 use Phanbook\Databases\TagsSeeder;

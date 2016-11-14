@@ -13,55 +13,19 @@
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
 
-/**
- * A CLI launcher and a CLI script that launches Phalcon tasks
- *
- * @example cli [task] [action] [param1 [param2 ...]]
- * @example cli Example index
- * @example cli Example index --debug --single --no-record
- */
-
 use Phanbook\Common\Application;
-use Phanbook\Tools\Cli\PhpError;
 
 // Register The Auto Loader
 require __DIR__ . '/bootstrap/autoloader.php';
 
-date_default_timezone_set('UTC');
+// Create the Application
+$app = new Application('cli');
 
-// Capture runtime errors
-register_shutdown_function([PhpError::class, 'runtimeShutdown']);
+$console = $app->getApplication();
+$console->setArgs($argv, $argc);
 
 try {
-    $app = (new Application('cli'))->getApplication();
-
-    // Record any php warnings/errors
-    set_error_handler([PhpError::class, 'errorHandler']);
-
-    // Check if only run single instance
-    if ($key = array_search('--single', $argv)) {
-        $app->setSingleInstance(true);
-        // Ensure pid removes even on fatal error
-        register_shutdown_function([$app, 'removeProcessInstance']);
-    }
-
-    // Check if logging to database
-    if ($key = array_search('--record', $argv)) {
-        $app->setRecording(true);
-    }
-
-    // Check if debug mode
-    if ($key = array_search('--debug', $argv)) {
-        $app->setDebug(true);
-        // @TODO: later
-        // Ensure debug display even on fatal error
-        //register_shutdown_function([new Events\Cli\Debug(FALSE), 'display'], $app);
-    }
-
-    $app->setArgs($argv, $argc);
-
-    // Boom, Run
-    $app->run();
+    $console->run();
 } catch (Exception $e) {
     fwrite(STDERR, $e->getMessage() . PHP_EOL);
     exit(1);

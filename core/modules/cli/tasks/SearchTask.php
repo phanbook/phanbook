@@ -14,7 +14,7 @@ namespace Phanbook\Cli\Tasks;
 
 use Phalcon\CLI\Task;
 use Phanbook\Search\Indexer;
-use Phanbook\Tools\Cli\Output;
+use Phanbook\Cli\Library\Output;
 
 class SearchTask extends Task
 {
