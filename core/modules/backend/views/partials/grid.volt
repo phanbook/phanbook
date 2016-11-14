@@ -107,14 +107,14 @@
                         {% elseif row[method] is defined %}
                             <td>
                                 {% if grid['grid'][method]['tooltip'] is defined %}
-                                    <span data-toggle="tooltip" data-original-title="{{ row[method] | trim | striptags }}" data-placement="bottom">{{ row[method] | trim | striptags | truncate(100) }} </span>
+                                    <span data-toggle="tooltip" data-original-title="{{ row[method] | trim | striptags }}" data-placement="bottom">{{ row[method] | trim | striptags | teaser(100) }} </span>
                                 {% elseif grid['grid'][method]['view'] is defined %}
-                                    {{ link_to(this.view.getControllerName() | lower ~ '/view/' ~ row['id'] | trim, row[method] | trim | striptags | truncate(100), 'title' : row[method] | trim | striptags ) }}
+                                    {{ link_to(this.view.getControllerName() | lower ~ '/view/' ~ row['id'] | trim, row[method] | trim | striptags | teaser(100), 'title' : row[method] | trim | striptags ) }}
                                     {#{% elseif grid['grid'][method]['image'] %}
                                     {{ image('images/u/' ~ row['id'] ~ '-thumb.jpg', 'width' : '45px', 'height' : '45px', 'alt' : 'no picture', 'title': row[method] | trim | striptags ) }}
                                     #}
                                 {% else %}
-                                    {{ row[method] | trim | striptags | truncate(100) }}
+                                    {{ row[method] | trim | striptags | teaser(100) }}
                                 {% endif %}
                             </td>
                         {% else %}

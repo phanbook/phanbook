@@ -35,6 +35,7 @@
         "league/flysystem": "^1.0",
         "erusev/parsedown": "^1.6",
         "vlucas/phpdotenv": "^2.4",
+        "danielstjules/stringy": "^2.3",
         "ext-dom": "*",
         "ext-PDO": "*",
         "ext-json": "*",

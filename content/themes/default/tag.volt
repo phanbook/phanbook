@@ -14,7 +14,7 @@
                                     <h4>
                                     {{ link_to('tags/' ~ modelTag.id ~ '/' ~ modelTag.slug, modelTag.name )}}
                                     </h4>
-                                    <p>{{ truncate(modelTag.description, '50', '...') }}</p>
+                                    <p>{{ teaser(modelTag.description, 50) }}</p>
                                 </div>
                             </div>
                         </li>
