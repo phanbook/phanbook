@@ -11,46 +11,59 @@
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
 
-$router->add('/backend/:controller', [
+use Phalcon\Mvc\Router\Group as RouterGroup;
+
+$frontend = new RouterGroup([
+    'module'     => 'backend',
+    'controller' => 'dashboard',
+    'action'     => 'index',
+    'namespace'  => 'Phanbook\Backend\Controllers',
+]);
+
+$frontend->add('/backend/:controller', [
     'module' => 'backend',
     'controller' => 1,
 ]);
-$router->add('/backend/:controller/:int', [
+$frontend->add('/backend/:controller/:int', [
     'module' => 'backend',
     'controller' => 1,
     'id' => 2,
 ]);
-$router->add('/backend/:controller/:action/:params', [
+$frontend->add('/backend/:controller/:action/:params', [
     'module' => 'backend',
     'controller' => 1,
     'action' => 2,
     'params' => 3,
 ]);
 
-$router->add('/backend', [
+$frontend->add('/backend', [
     'module'     => 'backend',
     'controller' => 'dashboard',
     'action'     => 'index'
 ]);
 
-$router->add('/maintenance', [
+$frontend->add('/maintenance', [
     'module'     => 'backend',
     'controller' => 'errors',
     'action'     => 'show503'
 ]);
-$router->add('/action-not-found', [
-    'module'     => 'backend',
-    'controller' => 'errors',
-    'action'     => 'show404'
-]);
-$router->add('/cyclic-routing', [
+
+$frontend->add('/action-not-found', [
     'module'     => 'backend',
     'controller' => 'errors',
     'action'     => 'show404'
 ]);
 
-$router->add('/error-reporting', [
+$frontend->add('/cyclic-routing', [
+    'module'     => 'backend',
+    'controller' => 'errors',
+    'action'     => 'show404'
+]);
+
+$frontend->add('/error-reporting', [
     'module'     => 'backend',
     'controller' => 'errors',
     'action'     => 'show505'
 ]);
+
+return $frontend;
