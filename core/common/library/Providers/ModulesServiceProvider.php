@@ -12,6 +12,7 @@
  */
 namespace Phanbook\Common\Library\Providers;
 
+use Phalcon\Registry;
 use RecursiveDirectoryIterator;
 use Phanbook\Cli\Module as Cli;
 use Phanbook\Oauth\Module as oAuth;
@@ -89,7 +90,13 @@ class ModulesServiceProvider extends AbstractServiceProvider
         $this->di->setShared(
             $this->serviceName,
             function () use ($modules) {
-                return $modules;
+                $modulesRegistry = new Registry();
+
+                foreach ($modules as $name => $module) {
+                    $modulesRegistry->offsetSet($name, (object) $module);
+                }
+
+                return $modulesRegistry;
             }
         );
     }

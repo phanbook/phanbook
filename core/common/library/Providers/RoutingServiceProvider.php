@@ -50,12 +50,12 @@ class RoutingServiceProvider extends AbstractServiceProvider
                     $router->removeExtraSlashes(true);
 
                     foreach ($this->getShared('modules') as $module) {
-                        if (empty($module['router'])) {
+                        if (empty($module->router)) {
                             continue;
                         }
 
                         /** @noinspection PhpIncludeInspection */
-                        $group = require $module['router'];
+                        $group = require $module->router;
 
                         if (!$group || !$group instanceof GroupInterface) {
                             continue;
