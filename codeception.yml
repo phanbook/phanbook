@@ -41,18 +41,18 @@ params:
 modules:
     config:
         App\Test\Module\Db:
-            dsn: %DB_DSN%
-            user: %DB_USERNAME%
-            password: %DB_PASSWORD%
-            dump: tests/_data/dump.sql
+            dsn: "%DB_DSN%"
+            user: "%DB_USERNAME%"
+            password: "%DB_PASSWORD%"
+            dump: "tests/_data/dump.sql"
             populate: false
             cleanup: false
         Phalcon:
-            bootstrap: 'tests/_config/bootstrap.php'
+            bootstrap: "tests/_config/bootstrap.php"
             cleanup: false
             savepoints: false
         PhpBrowser:
-            url: %APP_URL%
+            url: "%APP_URL%"
             curl:
                 CURLOPT_RETURNTRANSFER: true
 
