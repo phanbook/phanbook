@@ -79,7 +79,8 @@ class LoggerServiceProvider extends AbstractServiceProvider
                     $format = $config->format;
                 }
 
-                $filename = $filename ?: date('Y-m-d') . '.log';
+                $filename = ($filename ?: date('Y-m-d')) . '.log';
+
                 $logger = new File(logs_path($filename));
 
                 $logger->setFormatter(new Line($format));
