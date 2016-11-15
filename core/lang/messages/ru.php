@@ -6,6 +6,8 @@ $messages = [
     'About Us' => 'О нас',
     'About Yourself' => 'Обо мне',
     'account_successfully_created' => 'Аккаунт успешно создан. Вам было отправлено письмо с инструкциями для продолжения регистрации.',
+    'Another user with same email already exists' => 'Пользователь с таким адресом электронной почты уже существует',
+    'Another user with same username already exists' => 'Пользователь с таким логином уже существует',
     'Answers' => 'Ответы',
     'Ask any question and you be sure find your answer...' => 'Задайте любой вопрос и вы обязательно найдете ответ на него...',
     'Ask Now' => 'Задать вопрос',
@@ -60,6 +62,7 @@ $messages = [
     'My Answers' => 'Мои ответы',
     'My Questions' => 'Мои вопросы',
     // N
+    'New member could not be registered.' => 'Не удалось зарегистрировать ного участника.',
     'No Answers' => 'Без ответа',
     // O
     'Only authorized users can vote' => 'Только авторизованные пользователи могут голосовать',
@@ -67,6 +70,7 @@ $messages = [
     // P
     'Password' => 'Пароль',
     'People like it' => 'Людей любят нас',
+    'Please enter a correct email address' => 'Пожалуйста, введите корректный адрес электронной почты',
     'Points' => 'Репутация',
     'Profile Picture' => 'Фотография',
     'Profile successfully updated.' => 'Профиль успешно обновлен.',
@@ -100,6 +104,7 @@ $messages = [
     'Tags' => 'Метки',
     'The password is required' => 'Пароль обязателен для заполнения',
     'The user is inactive' => 'Аккаунт не активирован',
+    'The username is required' => 'Логин пользователя обязателен для заполнения',
     'The Username or E-Mail is required' => 'Логин или Email обязательны для заполнения',
     'To RSS Feed' => 'На RSS рассылку',
     'Twitter' => 'Twitter',

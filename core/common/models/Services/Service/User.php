@@ -194,7 +194,7 @@ class User extends Service
 
         if (!$visitor->save()) {
             foreach ($visitor->getMessages() as $message) {
-                $this->getLogger()->error((string) $message);
+                $this->logger->error((string) $message);
             }
 
             return false;
@@ -217,7 +217,7 @@ class User extends Service
 
         if (!$user->save()) {
             foreach ($user->getMessages() as $message) {
-                $this->getLogger()->error((string) $message);
+                $this->logger->error((string) $message);
             }
 
             return false;
@@ -245,15 +245,11 @@ class User extends Service
             'gender'       => Users::GENDER_UNKNOWN,
         ];
 
-        $entity->setUsername(null);
-
         $entity->assign($defaults);
         if (!$entity->save()) {
-            throw new Exceptions\EntityException($entity, 'New member could not be registered.');
+            throw new Exceptions\EntityException($entity, t('New member could not be registered.'));
         }
 
-        return $this->url->get(
-            ['for' => 'register'], ['registerhash' => $registerHash], null, env('APP_URL') . '/'
-        );
+        return $this->url->get(['for' => 'register'], ['registerhash' => $registerHash], null, env('APP_URL') . '/');
     }
 }

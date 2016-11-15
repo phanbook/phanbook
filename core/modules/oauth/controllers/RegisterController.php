@@ -158,9 +158,6 @@ class RegisterController extends ControllerBase
         $this->view->pick('register/resetpassword');
     }
 
-    /**
-     * @return \Phalcon\Http\ResponseInterface
-     */
     public function signupAction()
     {
         $form = new SignupForm;

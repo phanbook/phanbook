@@ -2,6 +2,7 @@
 
 namespace App\Test\Unit\Models\Services;
 
+use Phanbook\Models\Users;
 use Faker\Factory as Faker;
 use App\Test\Module\UnitTest;
 use Phanbook\Models\Users as Entity;
@@ -249,6 +250,39 @@ class UserTest extends UnitTest
         $user = $userService->getFirstById($id);
 
         $this->assertTrue($expected === $userService->isActiveMember($user));
+    }
+
+    /** @test */
+    public function shouldRegisterNewMember()
+    {
+        $userService = new User();
+
+        $usersEntity = new Users([
+            'email'    => $this->faker->email,
+            'username' => $this->faker->userName,
+        ]);
+
+        $userService->registerNewMemberOrFail($usersEntity);
+        $this->tester->seeInDatabase('users', $usersEntity->toArray());
+    }
+
+    /**
+     * @test
+     * @expectedException \Phanbook\Models\Services\Exceptions\EntityException
+     * @expectedExceptionMessage New member could not be registered. The username is required
+     */
+    public function shouldNotRegisterNewMember()
+    {
+        $userService = new User();
+
+        $usersEntity = new Users([
+            'email'    => $this->faker->email,
+            'username' => $this->faker->userName,
+        ]);
+
+        $usersEntity->setUsername(null);
+
+        $userService->registerNewMemberOrFail($usersEntity);
     }
 
     public function providerStatus()
