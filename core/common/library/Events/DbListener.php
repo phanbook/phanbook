@@ -37,7 +37,7 @@ class DbListener extends AbstractEvent
         $variables = $connection->getSqlVariables();
         $context   = $variables ?: [];
 
-        $logger = $this->getDI()->getLogger(date('Y-m-d') . '-' . 'db.log');
+        $logger = $this->getDI()->getLogger(date('Y-m-d') . '-' . 'db');
         $logger->debug($string . ' [' . implode(', ', $context) . ']');
 
         return true;
