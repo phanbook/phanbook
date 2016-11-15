@@ -1,6 +1,6 @@
 {% if votes is defined %}
 
-<span class="single-question-vote-result vote-result">{{ votes['positive'] - votes['negative'] }}</span>
+<span class="single-question-vote-result vote-result">{{ vote_score(objectId, object) }}</span>
 <ul class="single-question-vote">
     <li>
         <a href="#" class="voter single-question-vote-down" title="Dislike" data-way="negative" data-object-id="{{ objectId }}" data-object="{{ object }}">

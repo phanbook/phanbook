@@ -1,6 +1,5 @@
-<article class="question question-type-normal{% if single is defined %} single-question{%endif%}">
+<article class="question question-type-normal{% if single is defined %} single-question{% endif %}">
     {% set postLink = post.getType() ~ '/' ~ post.getId() ~ '/' ~ post.getSlug() %}
-    {% set vote = vote_service.getVotes(post.getId(), 'posts'), score = vote['positive'] - vote['negative']%}
     <h2>
          {{ link_to(postLink, post.title) }}
     </h2>
@@ -8,7 +7,7 @@
     <a class="question-type-main"><i class="fa fa-question-circle-o"></i>{{ t(post.type | capitalize ) }}</a>
     {% if listPost is defined %}
     <div class="question-author">
-        <a href="/@{{post.user.username}}" class="question-author-img tooltip-n"><span></span>
+        <a href="/@{{ post.user.username }}" class="question-author-img tooltip-n"><span></span>
             {{ image(getUrlAvatar(post.user.email), false) }}
         </a>
     </div>
@@ -19,11 +18,11 @@
             {% if listPost is defined %}
                 {{ teaser(post.content, 200) }}
             {% else %}
-                {{ this.markdown.text(post.content)}}
+                {{ this.markdown.text(post.content) }}
             {% endif %}
         </div>
         <div class="question-details">
-            {% if post.acceptedAnswer == "Y"%}
+            {% if post.acceptedAnswer == "Y" %}
                 <span class="question-answered question-answered-done"> <i class="fa fa-check"></i>{{ t('solved') }}</span>
             {% else %}
                 <span class="question-answered"><i class="fa fa-check"></i>{{ t('in progress') }}</span>
@@ -34,14 +33,14 @@
         </div>
 
         <span class="question-date">
-            <i class="fa fa-time"></i>{{post.getHumanCreatedAt()}}
+            <i class="fa fa-time"></i>{{ post.getHumanCreatedAt() }}
         </span>
         <span class="question-comment">
             <a href="#"><i class="fa fa-comment"></i>{{ post.numberReply }} {{ t('Answers') }}</a>
         </span>
-        <span class="question-view"><i class="fa fa-user"></i>{{post.numberViews}} {{ t('Views') }}</span>
+        <span class="question-view"><i class="fa fa-user"></i>{{ post.numberViews }} {{ t('Views') }}</span>
         {% if single is defined %}
-            {{ partial('partials/vote', ['objectId' : post.id, 'object' : 'posts'])}}
+            {{ partial('partials/vote', ['objectId': post.id, 'object': 'posts']) }}
         {% endif %}
         <div class="clearfix"></div>
     </div>
