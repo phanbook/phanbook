@@ -53,7 +53,7 @@ $oauth->add('/oauth/resetpassword', [
     'action'     => 'resetpassword'
 ]);
 
-$oauth->addPost('/users/register', 'Register::index')
+$oauth->add('/users/register', 'Register::index', ['GET', 'POST'])
     ->setName('register');
 
 $oauth->add('/users/signup', 'Register::signup', ['GET', 'POST'])
