@@ -14,50 +14,46 @@
 use Phalcon\Mvc\Router\Group as RouterGroup;
 
 $oauth = new RouterGroup([
-    'module'     => 'oauth',
-    'namespace'  => 'Phanbook\Oauth\Controllers',
+    'module'    => 'oauth',
+    'namespace' => 'Phanbook\Oauth\Controllers',
 ]);
 
 $oauth->add('/oauth/:controller', [
-    'module' => 'oauth',
     'controller' => 1,
 ]);
 
 $oauth->add('/oauth/:controller/:int', [
-    'module' => 'oauth',
     'controller' => 1,
-    'id' => 2,
+    'id'         => 2,
 ]);
 
 $oauth->add('/oauth/:controller/:action/:params', [
-    'module' => 'oauth',
     'controller' => 1,
-    'action' => 2,
-    'params' => 3,
+    'action'     => 2,
+    'params'     => 3,
 ]);
 
 $oauth->add('/oauth/github/access_token', [
-    'module'     => 'oauth',
     'controller' => 'login',
     'action'     => 'tokenGithub'
 ]);
 
 $oauth->add('/oauth/google/access_token', [
-    'module'     => 'oauth',
     'controller' => 'login',
     'action'     => 'tokenGoogle'
 ]);
 
 $oauth->add('/oauth/facebook/access_token', [
-    'module'     => 'oauth',
     'controller' => 'login',
     'action'     => 'tokenFacebook'
 ]);
 
 $oauth->add('/oauth/resetpassword', [
-    'module'     => 'oauth',
     'controller' => 'register',
     'action'     => 'resetpassword'
 ]);
+
+$oauth->addGet('/users/logout', 'Logout::index')
+    ->setName('logout');
 
 return $oauth;

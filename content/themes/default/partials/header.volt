@@ -25,7 +25,7 @@
                                 <li><a href="/backend/dashboard">{{ t('Dashboard') }}</a></li>
                                 <li><a href="/backend/themes/custom">{{ t('Edit Theme') }}</a></li>
                                 <li><a href="/users/profile">{{ t('Edit Profile') }}</a></li>
-                                <li><a href="/oauth/logout">{{ t('Logout') }}</a></li>
+                                <li>{{ link_to(['for': 'logout'], t('Logout')) }}</li>
                             </ul>
                         </div>
                     </div><!-- End page-content -->
