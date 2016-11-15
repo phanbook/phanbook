@@ -13,8 +13,8 @@
 namespace Phanbook\Common\Library\Providers;
 
 use PDO;
-use Phanbook\Plugins\Db\Listener;
 use Phalcon\Db\Adapter\Pdo\Mysql;
+use Phanbook\Common\Library\Events\DbListener;
 
 /**
  * \Phanbook\Common\Library\Providers\DatabaseServiceProvider
@@ -55,7 +55,7 @@ class DatabaseServiceProvider extends AbstractServiceProvider
                 );
 
                 $eventsManager = $this->getShared('eventsManager');
-                $eventsManager->attach('db', new Listener($this));
+                $eventsManager->attach('db', new DbListener($this));
 
                 $connection->setEventsManager($eventsManager);
 

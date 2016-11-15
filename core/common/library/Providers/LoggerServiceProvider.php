@@ -57,7 +57,7 @@ class LoggerServiceProvider extends AbstractServiceProvider
 
         $this->di->setShared(
             $this->serviceName,
-            function () use ($logLevels) {
+            function ($filename = null) use ($logLevels) {
                 /** @var \Phalcon\DiInterface $this */
                 $config = $this->getShared('config')->application->logger;
 
@@ -79,7 +79,8 @@ class LoggerServiceProvider extends AbstractServiceProvider
                     $format = $config->format;
                 }
 
-                $logger = new File(logs_path(date('Y-m-d') . '.log'));
+                $filename = $filename ?: date('Y-m-d') . '.log';
+                $logger = new File(logs_path($filename));
 
                 $logger->setFormatter(new Line($format));
                 $logger->setLogLevel($level);
