@@ -17,10 +17,10 @@ use Phanbook\Models\Vote;
 use Phanbook\Models\Users;
 use Phanbook\Models\Karma;
 use Phanbook\Models\Posts;
-use Phalcon\Mvc\Dispatcher;
 use Phanbook\Models\Comment;
 use Phanbook\Models\PostsReply;
 use Phanbook\Controllers\Controller;
+use Phalcon\Mvc\DispatcherInterface;
 use Phanbook\Models\Services\Service;
 use Phanbook\Frontend\Forms\CommentForm;
 use Phanbook\Models\ActivityNotifications;
@@ -57,11 +57,12 @@ class ControllerBase extends Controller
     protected $voteService;
 
     /**
-     * @param Dispatcher $dispatcher
+     * Triggered before executing the controller/action method.
      *
+     * @param  DispatcherInterface $dispatcher
      * @return bool
      */
-    public function beforeExecuteRoute(Dispatcher $dispatcher)
+    public function beforeExecuteRoute(DispatcherInterface $dispatcher)
     {
         if ($this->auth->hasRememberMe() && !$this->request->isPost()) {
             $this->auth->loginWithRememberMe();

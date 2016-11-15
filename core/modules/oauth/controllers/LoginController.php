@@ -14,8 +14,8 @@ namespace Phanbook\Oauth\Controllers;
 
 use Phalcon\Mvc\Model;
 use Phanbook\Models\Users;
-use Phalcon\Mvc\Dispatcher;
 use Phanbook\Oauth\Forms\LoginForm;
+use Phalcon\Mvc\DispatcherInterface;
 use Phanbook\Github\Auth as GithubAuth;
 use Phanbook\Google\Auth as GoogleAuth;
 use Phanbook\Facebook\Auth as FacebookAuth;
@@ -29,11 +29,12 @@ use Phanbook\Auth\Exception as AuthException;
 class LoginController extends ControllerBase
 {
     /**
-     * @param Dispatcher $dispatcher
+     * Triggered before executing the controller/action method.
      *
+     * @param  DispatcherInterface $dispatcher
      * @return bool
      */
-    public function beforeExecuteRoute(Dispatcher $dispatcher)
+    public function beforeExecuteRoute(DispatcherInterface $dispatcher)
     {
         if ($this->auth->hasRememberMe() && !$this->request->isPost()) {
             $this->auth->loginWithRememberMe();
