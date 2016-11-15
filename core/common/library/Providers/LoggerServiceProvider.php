@@ -55,7 +55,7 @@ class LoggerServiceProvider extends AbstractServiceProvider
     {
         $logLevels = $this->logLevels;
 
-        $this->di->setShared(
+        $this->di->set(
             $this->serviceName,
             function ($filename = null) use ($logLevels) {
                 /** @var \Phalcon\DiInterface $this */
