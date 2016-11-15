@@ -14,7 +14,6 @@
 namespace Phanbook\Frontend;
 
 use Phalcon\Loader;
-use Phalcon\Mvc\View;
 use Phalcon\DiInterface;
 use Phalcon\Mvc\ModuleDefinitionInterface;
 use Phanbook\Common\Library\Events\ViewListener;
@@ -65,42 +64,9 @@ class Module implements ModuleDefinitionInterface
         $eventsManager->attach('dispatch:beforeException', new DispatcherListener($di));
 
         // Setting up the View Component
-        $di->setShared(
-            'view',
-            function () {
-                /** @var DiInterface $this */
-                $config = $this->getShared('config');
-
-                $view = new View();
-
-                $view->setDI($this);
-                $view->setViewsDir(
-                    [
-                        __DIR__ . '/views/',
-                        themes_path($config->theme)
-                    ]
-                );
-
-                $view->registerEngines(
-                    [
-                        '.volt' => $this->getShared('volt', [$view, $this])
-                    ]
-                );
-
-                $view->disableLevel(
-                    [
-                        View::LEVEL_MAIN_LAYOUT => true,
-                        View::LEVEL_LAYOUT      => true
-                    ]
-                );
-
-                $eventsManager = $this->getShared('eventsManager');
-                $eventsManager->attach('view:notFoundView', new ViewListener($this));
-
-                $view->setEventsManager($eventsManager);
-
-                return $view;
-            }
-        );
+        $eventsManager->attach('view:notFoundView', new ViewListener($di));
+        $theme = $di->getShared('theme');
+        $view = $di->getShared('view');
+        $view->setViewsDir(themes_path($theme->getThemeName()));
     }
 }

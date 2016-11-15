@@ -14,7 +14,6 @@
 namespace Phanbook\Oauth;
 
 use Phalcon\Loader;
-use Phalcon\Mvc\View;
 use Phalcon\DiInterface;
 use Phalcon\Mvc\ModuleDefinitionInterface;
 use Phanbook\Common\Library\Events\UserLogins;
@@ -69,35 +68,8 @@ class Module implements ModuleDefinitionInterface
         $eventsManager->attach('dispatch:beforeException', new DispatcherListener($di));
 
         // Setting up the View Component
-        $di->setShared(
-            'view',
-            function () {
-                /** @var DiInterface $this */
-                $view = new View();
-
-                $view->setDI($this);
-                $view->setViewsDir(__DIR__ . '/views/');
-
-                $view->registerEngines(
-                    [
-                        '.volt' => $this->getShared('volt', [$view, $this])
-                    ]
-                );
-
-                $view->disableLevel(
-                    [
-                        View::LEVEL_MAIN_LAYOUT => true,
-                        View::LEVEL_LAYOUT      => true
-                    ]
-                );
-
-                $eventsManager = $this->getShared('eventsManager');
-                $eventsManager->attach('view:notFoundView', new ViewListener($this));
-
-                $view->setEventsManager($eventsManager);
-
-                return $view;
-            }
-        );
+        $eventsManager->attach('view:notFoundView', new ViewListener($di));
+        $view = $di->getShared('view');
+        $view->setViewsDir($moduleConfig->application->viewsDir);
     }
 }
