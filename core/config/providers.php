@@ -49,6 +49,7 @@ return [
     Providers\RequestServiceProvider::class,
     Providers\ResponseServiceProvider::class,
     Providers\RoutingServiceProvider::class,
+    Providers\FilesystemServiceProvider::class,
 
     // Third Party Providers
     // ...
