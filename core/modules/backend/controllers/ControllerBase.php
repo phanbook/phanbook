@@ -13,7 +13,7 @@
  */
 namespace Phanbook\Backend\Controllers;
 
-use Phalcon\Mvc\Dispatcher;
+use Phalcon\Mvc\DispatcherInterface;
 use Phanbook\Controllers\Controller;
 
 /**
@@ -46,11 +46,12 @@ class ControllerBase extends Controller
     ];
 
     /**
-     * @param Dispatcher $dispatcher
+     * Triggered before executing the controller/action method.
      *
+     * @param  DispatcherInterface $dispatcher
      * @return bool
      */
-    public function beforeExecuteRoute(Dispatcher $dispatcher)
+    public function beforeExecuteRoute(DispatcherInterface $dispatcher)
     {
         if ($this->auth->isAdmin() && $this->isSecuredRoute($dispatcher)) {
             return true;
@@ -94,11 +95,11 @@ class ControllerBase extends Controller
     }
 
     /**
-     * @param Dispatcher $dispatcher
+     * @param DispatcherInterface $dispatcher
      *
      * @return bool
      */
-    private function isSecuredRoute(Dispatcher $dispatcher)
+    private function isSecuredRoute(DispatcherInterface $dispatcher)
     {
         foreach ($this->securedRoutes as $route) {
             if ($route['controller'] == $dispatcher->getControllerName()) {
