@@ -118,7 +118,7 @@ class Post extends Service
 
         if (!$view->save()) {
             foreach ($post->getMessages() as $message) {
-                $this->getLogger()->error($message);
+                $this->logger->error($message);
             }
         }
 
@@ -128,7 +128,7 @@ class Post extends Service
 
         if (!$post->save()) {
             foreach ($post->getMessages() as $message) {
-                $this->getLogger()->error($message);
+                $this->logger->error($message);
             }
 
             return false;

@@ -222,7 +222,7 @@ class Settings extends Service
             try {
                 $this->getFirstByName($value);
             } catch (EntityNotFoundException $e) {
-                $this->getLogger()->error($e->getMessage());
+                $this->logger->error($e->getMessage());
                 if ($this->getDI()->has('menuStruct')) {
                     $view = $this->getDI()->getShared('view');
                     $view->partial(
@@ -252,7 +252,7 @@ class Settings extends Service
             $entity->setValue($value);
             if ($result = $entity->save()) {
                 $messages = $entity->getMessages();
-                $this->getLogger()->error(
+                $this->logger->error(
                     sprintf('%s:%s %s', __FILE__, __LINE__, implode('; ', $messages))
                 );
             }
