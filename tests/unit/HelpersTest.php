@@ -2,7 +2,9 @@
 
 namespace App\Test\Unit;
 
+use Phalcon\DiInterface;
 use App\Test\Module\UnitTest;
+use Phanbook\Common\Application;
 
 class HelpersTest extends UnitTest
 {
@@ -66,5 +68,26 @@ class HelpersTest extends UnitTest
         $this->assertEquals($base . DIRECTORY_SEPARATOR . 'bar/baz.log', logs_path('bar/baz.log'));
         $this->tester->amInPath(app_path());
         $this->tester->seeFileFound('content' . DIRECTORY_SEPARATOR . 'logs');
+    }
+
+    public function testContainerFacade()
+    {
+        $this->assertInstanceOf(DiInterface::class, container());
+        $this->assertInstanceOf(Application::class, container('bootstrap'));
+    }
+
+    public function testValueFacade()
+    {
+        $this->assertNull(value(null));
+        $this->assertFalse(value(false));
+        $this->assertEquals('', value(''));
+        $this->assertEquals('foo', value(function () { return 'foo'; }));
+    }
+
+    public function testEnvFacade()
+    {
+        $this->assertNull(env('non-existent-key-here'));
+        $this->assertTrue(env('non-existent-key-here', true));
+        $this->assertEquals($_ENV['APP_URL'], env('APP_URL'));
     }
 }
