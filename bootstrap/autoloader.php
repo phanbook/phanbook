@@ -25,7 +25,6 @@ require 'constants.php';
         'Phanbook\Common' => ROOT_DIR . '/core/common/',
         'Phanbook\Models' => ROOT_DIR . '/core/common/models/',
         'Phanbook\Factory' => ROOT_DIR . '/core/common/factory',
-        'Phanbook\Plugins' => ROOT_DIR . '/core/common/plugins/',
         'Phanbook\Validators' => ROOT_DIR . '/core/common/validators/',
         'Phanbook\Controllers' => ROOT_DIR . '/core/common/controllers/',
         'Phanbook\Common\Library' => ROOT_DIR . '/core/common/library/',
