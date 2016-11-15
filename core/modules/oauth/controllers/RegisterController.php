@@ -100,56 +100,54 @@ class RegisterController extends ControllerBase
         }
     }
 
-    /**
-     * It will render form after user signup
-     *
-     */
     public function indexAction()
     {
         $registerHash = $this->request->getQuery('registerhash');
 
         if (empty($registerHash)) {
-            $this->flashSession->error('Hack attempt!!!');
+            $this->response->setStatusCode(422);
+            $this->flashSession->error(t("Sorry! We can't seem to find the page you're looking for."));
 
-            return $this->response->redirect();
+            $this->dispatcher->forward([
+                'for'        => 'frontend',
+                'controller' => 'posts',
+                'action'     => 'index',
+            ]);
+
+            return;
         }
 
-        $object = Users::findFirstByRegisterHash($registerHash);
+        if (!$user = $this->userService->findFirstByRegisterHash($registerHash)) {
+            $this->response->setStatusCode(404);
+            $this->flashSession->error(t('Attempt to access non-existent user.'));
 
-        if (!$object) {
-            $this->flashSession->error('Invalid data.');
+            $this->dispatcher->forward([
+                'for'        => 'frontend',
+                'controller' => 'posts',
+                'action'     => 'index',
+            ]);
 
-            return $this->response->redirect();
+            return;
         }
 
         $form = new ResetPasswordForm;
 
         if ($this->request->isPost()) {
-            if (!$form->isValid($_POST)) {
+            if (!$form->isValid($this->request->getPost())) {
                 foreach ($form->getMessages() as $message) {
                     $this->flashSession->error($message);
                 }
             } else {
                 $password = $this->request->getPost('password_new_confirm');
 
-                $object->setPasswd($this->security->hash($password));
-                $object->setRegisterHash(null);
-                $object->setStatus(Users::STATUS_ACTIVE);
-                if (!$object->save()) {
-                    $this->displayModelErrors($object);
-                } else {
+                try {
+                    $this->userService->confirmRegistration($user, $password);
                     $this->flashSession->success(t('Your password was changed successfully.'));
+                    $this->response->redirect();
 
-                    //Assign to session
-                    $this->auth->check(
-                        [
-                            'email' => $object->getEmail(),
-                            'password' => $password,
-                            'remember' => true
-                        ]
-                    );
-
-                    return $this->response->redirect();
+                    return;
+                } catch (EntityException $e) {
+                    $this->flashSession->error($e->getMessage());
                 }
             }
         }
@@ -164,13 +162,15 @@ class RegisterController extends ControllerBase
 
         if ($this->request->isPost()) {
             $object = new Users();
-            $form->bind($this->request->getPost(), $object);
+            $form->bind($this->request->getPost(), $object, ['firstname', 'lastname', 'email', 'username']);
 
-            if (!$form->isValid($this->request->getPost())) {
+            if (!$form->isValid()) {
                 foreach ($form->getMessages() as $message) {
                     $this->flashSession->error($message);
                 }
-                return $this->currentRedirect();
+
+                $this->currentRedirect();
+                return;
             }
 
             try {
@@ -184,12 +184,14 @@ class RegisterController extends ControllerBase
                 }
 
                 $this->flashSession->success($message);
+                $this->response->redirect();
 
-                return $this->response->redirect();
+                return;
             } catch (EntityException $e) {
                 $this->flashSession->error($e->getMessage());
+                $this->currentRedirect();
 
-                return $this->currentRedirect();
+                return;
             }
         }
 

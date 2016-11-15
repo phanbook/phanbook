@@ -64,7 +64,8 @@ $messages = [
     'My Answers' => 'Мои ответы',
     'My Questions' => 'Мои вопросы',
     // N
-    'New member could not be registered.' => 'Не удалось зарегистрировать ного участника.',
+    'New member could not be registered.' => 'Не удалось зарегистрировать нового участника.',
+    "Couldn't to confirm the registration a new membership." => 'Не удалось подвердить регистрацию нвоого участника.',
     'No Answers' => 'Без ответа',
     // O
     'Only authorized users can vote' => 'Только авторизованные пользователи могут голосовать',
