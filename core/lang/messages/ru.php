@@ -22,6 +22,8 @@ $messages = [
     'Change Password' => 'Изменить пароль',
     'Contact' => 'Контакты',
     'Contact Us' => 'Связяться с нами',
+    'Create new password' => 'Создайте новый пароль',
+    'Create your new secure password' => 'Создайте свой новый надежный пароль',
     // D
     'Dashboard' => 'Кабинет',
     // E
