@@ -57,7 +57,10 @@ class ViewServiceProvider extends AbstractServiceProvider
 
                 $view->registerEngines($engines);
                 $view->setViewsDir($config->application->view->viewsDir);
-                $view->disableLevel([View::LEVEL_MAIN_LAYOUT => true, View::LEVEL_LAYOUT => true]);
+                $view->disableLevel([
+                    View::LEVEL_MAIN_LAYOUT => true,
+                    View::LEVEL_LAYOUT      => true,
+                ]);
 
                 $eventsManager = $this->getShared('eventsManager');
                 $eventsManager->attach('view:notFoundView', new ViewListener($this));

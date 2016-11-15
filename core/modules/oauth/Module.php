@@ -14,10 +14,7 @@
 namespace Phanbook\Oauth;
 
 use Phalcon\Loader;
-use Phalcon\Mvc\Url;
-use Phalcon\Mvc\View;
 use Phalcon\DiInterface;
-use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\ModuleDefinitionInterface;
 use Phanbook\Common\Library\Events\UserLogins;
 use Phanbook\Common\Library\Events\ViewListener;
@@ -63,84 +60,16 @@ class Module implements ModuleDefinitionInterface
         $eventsManager->attach('user', new UserLogins($di));
 
         // Tune Up the URL Component
-        $di->setShared(
-            'url',
-            function () use ($moduleConfig) {
-                /** @var DiInterface $this */
-                $config = $this->getShared('config');
-                $environment = APPLICATION_ENV;
-
-                $url = new Url();
-
-                if (isset($config->application->staticBaseUri)) {
-                    $url->setStaticBaseUri($config->application->staticBaseUri);
-                } elseif (isset($config->application->{$environment}->staticBaseUri)) {
-                    $url->setStaticBaseUri($config->application->{$environment}->staticBaseUri);
-                } else {
-                    $url->setStaticBaseUri('/');
-                }
-
-                if (isset($moduleConfig->application->baseUri)) {
-                    $url->setBaseUri($moduleConfig->application->baseUri);
-                } elseif (isset($config->application->baseUri)) {
-                    $url->setBaseUri($config->application->baseUri);
-                } else {
-                    $url->setBaseUri('/');
-                }
-
-                return $url;
-            }
-        );
+        $url = $di->getShared('url');
+        $url->setBaseUri($moduleConfig->application->baseUri);
 
         // Setting up the MVC Dispatcher
-        $di->setShared(
-            'dispatcher',
-            function () {
-                /** @var DiInterface $this */
-                $eventsManager = $this->getShared('eventsManager');
-
-                // Listen the required events
-                $eventsManager->attach('dispatch:beforeException', new DispatcherListener($this));
-
-                $dispatcher = new Dispatcher();
-                $dispatcher->setDefaultNamespace('Phanbook\Oauth\Controllers');
-                $dispatcher->setEventsManager($eventsManager);
-                $dispatcher->setDI($this);
-
-                return $dispatcher;
-            }
-        );
+        $eventsManager = $di->getShared('eventsManager');
+        $eventsManager->attach('dispatch:beforeException', new DispatcherListener($di));
 
         // Setting up the View Component
-        $di->setShared(
-            'view',
-            function () {
-                /** @var DiInterface $this */
-                $view = new View();
-
-                $view->setDI($this);
-                $view->setViewsDir(__DIR__ . '/views/');
-
-                $view->registerEngines(
-                    [
-                        '.volt' => $this->getShared('volt', [$view, $this])
-                    ]
-                );
-
-                $view->disableLevel(
-                    [
-                        View::LEVEL_MAIN_LAYOUT => true,
-                        View::LEVEL_LAYOUT      => true
-                    ]
-                );
-
-                $eventsManager = $this->getShared('eventsManager');
-                $eventsManager->attach('view:notFoundView', new ViewListener($this));
-
-                $view->setEventsManager($eventsManager);
-
-                return $view;
-            }
-        );
+        $eventsManager->attach('view:notFoundView', new ViewListener($di));
+        $view = $di->getShared('view');
+        $view->setViewsDir($moduleConfig->application->viewsDir);
     }
 }
