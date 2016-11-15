@@ -472,7 +472,7 @@ class Controller extends AbstractController
     /**
      * parseGridSubmit function.
      *
-     * @access public
+     * @param  string $class Model class.
      * @return mixed
      */
     protected function renderGrid($class)
