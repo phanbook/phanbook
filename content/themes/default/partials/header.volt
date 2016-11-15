@@ -55,7 +55,7 @@
                     </li>
                 {% else %}
                     <li><a href="contact_us.html"><i class="fa fa-envelope"></i>{{ t('Contact') }}</a></li>
-                    <li><a href="/oauth/register/signup"><i class="fa fa-user"></i>{{ t('Sign Up') }}</a></li>
+                    <li>{{ link_to(['for': 'signup'], '<i class="fa fa-user"></i>' ~ t('Sign Up')) }}</li>
                     <li><a href="/oauth/login"><i class="fa fa-user"></i>{{ t('Log In') }}</a></li>
                 {% endif %}
             </ul>

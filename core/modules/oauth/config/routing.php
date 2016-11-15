@@ -53,6 +53,12 @@ $oauth->add('/oauth/resetpassword', [
     'action'     => 'resetpassword'
 ]);
 
+$oauth->addPost('/users/register', 'Register::index')
+    ->setName('register');
+
+$oauth->add('/users/signup', 'Register::signup', ['GET', 'POST'])
+    ->setName('signup');
+
 $oauth->addGet('/users/logout', 'Logout::index')
     ->setName('logout');
 

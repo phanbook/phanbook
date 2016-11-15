@@ -100,7 +100,6 @@ class RegisterController extends ControllerBase
     {
         $registerHash = $this->request->getQuery('registerhash');
 
-
         if (empty($registerHash)) {
             $this->flashSession->error('Hack attempt!!!');
 
@@ -113,7 +112,7 @@ class RegisterController extends ControllerBase
             return $this->response->redirect();
         }
 
-        $object         = Users::findFirstByRegisterHash($registerHash);
+        $object = Users::findFirstByRegisterHash($registerHash);
 
         if (!$object) {
             $this->flashSession->error('Invalid data.');
@@ -121,8 +120,7 @@ class RegisterController extends ControllerBase
             return $this->response->redirect();
         }
 
-        $form             = new ResetPasswordForm;
-        $this->view->form = $form;
+        $form = new ResetPasswordForm;
 
         if ($this->request->isPost()) {
             if (!$form->isValid($_POST)) {
@@ -153,6 +151,8 @@ class RegisterController extends ControllerBase
                 }
             }
         }
+
+        $this->view->setVar('form', $form);
         $this->view->pick('register/resetpassword');
     }
 
@@ -191,21 +191,19 @@ class RegisterController extends ControllerBase
                 return $this->currentRedirect();
             }
 
-            $scheme = $this->request->isSecure() ? 'https://' : 'http://';
             $params = [
-                'link' => $scheme . $this->request->getHttpHost() . '/oauth/register?registerhash=' . $registerHash
+                'link' => $this->url->get(
+                    ['for' => 'register'], ['registerhash' => $registerHash], null, env('APP_URL') . '/'
+                )
             ];
 
             if (!$this->mail->send($object->getEmail(), 'registration', $params)) {
-                $this->flashSession->error(t('Error sending registration email.'));
+                $message = t('err_send_registration_email');
             } else {
-                $this->flashSession->success(
-                    t(
-                        'Your account was successfully created. ' .
-                        'An email was sent to your address in order to continue the process.'
-                    )
-                );
+                $message = t('account_successfully_created');
             }
+
+            $this->flashSession->success($message);
 
             return $this->response->redirect();
         }
@@ -213,7 +211,7 @@ class RegisterController extends ControllerBase
         $this->view->setVar('form', $form);
     }
 
-        /**
+    /**
      * @return \Phalcon\Http\ResponseInterface
      */
     public function forgotpasswordAction()
@@ -276,6 +274,7 @@ class RegisterController extends ControllerBase
                 }
             }
         }
-        $this->view->form = $form;
+
+        $this->view->setVar('form', $form);
     }
 }
