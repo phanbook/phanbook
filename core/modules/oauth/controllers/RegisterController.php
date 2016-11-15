@@ -16,8 +16,10 @@ namespace Phanbook\Oauth\Controllers;
 use Phanbook\Models\Users;
 use Phalcon\Mvc\DispatcherInterface;
 use Phanbook\Oauth\Forms\SignupForm;
+use Phanbook\Models\Services\Service;
 use Phanbook\Oauth\Forms\ResetPasswordForm;
 use Phanbook\Oauth\Forms\ForgotPasswordForm;
+use Phanbook\Models\Services\Exceptions\EntityException;
 
 /**
  * Class RegisterController
@@ -27,6 +29,16 @@ use Phanbook\Oauth\Forms\ForgotPasswordForm;
 class RegisterController extends ControllerBase
 {
     /**
+     * @var Service\User
+     */
+    protected $userService;
+
+    public function inject(Service\User $userService)
+    {
+        $this->userService = $userService;
+    }
+
+    /**
      * Triggered before executing the controller/action method.
      *
      * @param  DispatcherInterface $dispatcher
@@ -34,12 +46,12 @@ class RegisterController extends ControllerBase
      */
     public function beforeExecuteRoute(DispatcherInterface $dispatcher)
     {
-        if ($this->auth->hasRememberMe() && !$this->request->isPost()) {
+        if ($this->auth->hasRememberMe()) {
             $this->auth->loginWithRememberMe();
         }
 
-        if ($this->auth->isAuthorizedVisitor() && !$this->request->isPost()) {
-            $this->currentRedirect();
+        if ($this->auth->isAuthorizedVisitor()) {
+            $this->response->redirect();
         }
 
         return true;
@@ -50,12 +62,8 @@ class RegisterController extends ControllerBase
      */
     public function resetpasswordAction()
     {
-        if ($this->session->has('auth')) {
-            $this->view->disable();
-
-            return $this->response->redirect();
-        }
         $passwordForgotHash = $this->request->getQuery('forgothash');
+
         if (empty($passwordForgotHash)) {
             $this->flashSession->error('Hack attempt!!!');
 
@@ -102,12 +110,6 @@ class RegisterController extends ControllerBase
 
         if (empty($registerHash)) {
             $this->flashSession->error('Hack attempt!!!');
-
-            return $this->response->redirect();
-        }
-
-        if ($this->auth->isAuthorizedVisitor()) {
-            $this->view->disable();
 
             return $this->response->redirect();
         }
@@ -161,10 +163,6 @@ class RegisterController extends ControllerBase
      */
     public function signupAction()
     {
-        if ($this->auth->isAuthorizedVisitor()) {
-            return $this->response->redirect();
-        }
-
         $form = new SignupForm;
 
         if ($this->request->isPost()) {
@@ -178,34 +176,24 @@ class RegisterController extends ControllerBase
                 return $this->currentRedirect();
             }
 
-            $registerHash = md5(uniqid(rand(), true));
-            $randomPasswd = substr(md5(microtime()), 0, 7);
+            try {
+                $uniqueUrl = $this->userService->registerNewMemberOrFail($object);
+                $params = ['link' => $uniqueUrl];
 
-            $object->setPasswd($this->security->hash($randomPasswd));
-            $object->setRegisterhash($registerHash);
-            $object->setStatus(Users::STATUS_PENDING);
-            $object->setGender(Users::GENDER_UNKNOWN);
+                if (!$this->mail->send($object->getEmail(), 'registration', $params)) {
+                    $message = t('err_send_registration_email');
+                } else {
+                    $message = t('account_successfully_created');
+                }
 
-            if (!$object->save()) {
-                $this->displayModelErrors($object);
+                $this->flashSession->success($message);
+
+                return $this->response->redirect();
+            } catch (EntityException $e) {
+                $this->flashSession->error($e->getMessage());
+
                 return $this->currentRedirect();
             }
-
-            $params = [
-                'link' => $this->url->get(
-                    ['for' => 'register'], ['registerhash' => $registerHash], null, env('APP_URL') . '/'
-                )
-            ];
-
-            if (!$this->mail->send($object->getEmail(), 'registration', $params)) {
-                $message = t('err_send_registration_email');
-            } else {
-                $message = t('account_successfully_created');
-            }
-
-            $this->flashSession->success($message);
-
-            return $this->response->redirect();
         }
 
         $this->view->setVar('form', $form);
@@ -218,11 +206,6 @@ class RegisterController extends ControllerBase
     {
         // Resets any "template before" layouts because we use multiple theme
         $this->view->cleanTemplateBefore();
-        if ($this->session->has('auth')) {
-            $this->view->disable();
-
-            return $this->response->redirect();
-        }
 
         $form = new ForgotPasswordForm;
 
