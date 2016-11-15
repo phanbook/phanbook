@@ -47,7 +47,7 @@ class VoltFunctions
             case 'teaser':
                 return Functions\Teaser::class . "::create({$arguments})";
             case 'vote_score':
-                return 'container(' . Service\Vote::class . ")->getScore({$arguments})";
+                return 'container(' . Service\Vote::class . "::class)->getScore({$arguments})";
         }
 
         $property = $name;
