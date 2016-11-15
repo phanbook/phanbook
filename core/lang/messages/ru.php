@@ -5,6 +5,7 @@ $messages = [
     'A non-profit, open source Q&A site, discussion and blogging platform.' => 'Некоммерческий, открытый проект вопрсосв и ответов, обсуждений и блогинг платформа.',
     'About Us' => 'О нас',
     'About Yourself' => 'Обо мне',
+    'account_successfully_created' => 'Аккаунт успешно создан. Вам было отправлено письмо с инструкциями для продолжения регистрации.',
     'Answers' => 'Ответы',
     'Ask any question and you be sure find your answer...' => 'Задайте любой вопрос и вы обязательно найдете ответ на него...',
     'Ask Now' => 'Задать вопрос',
@@ -26,6 +27,7 @@ $messages = [
     'Edit Setting' => 'Изменить настройки',
     'Edit Theme' => 'Изменить тему',
     'E-Mail' => 'E-Mail',
+    'err_send_registration_email' => 'Возникла ошибка при отправке регистрационного письма.',
     // F
     'First Name' => 'Имя',
     'flag_question' => 'Тревога',

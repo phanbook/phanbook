@@ -5,6 +5,7 @@ $messages = [
     'about' => 'Về chúng tôi',
     'About Us' => 'Về chúng tôi',
     'about_us' => 'Về chúng tôi',
+    'account_successfully_created' => 'Your account was successfully created. An email was sent to your address in order to continue the process.',
     'account_switched_successfully' => 'Bạn đã đổi tài khoản thành công',
     'activation_code' => 'Mã kích hoạt',
     'add' => 'Thêm',
@@ -44,6 +45,7 @@ $messages = [
     'email_not_valid' => 'Địa chỉ Email không hợp lệ',
     'enter_phone_number' => 'Nhập số điện thoại',
     'enter_your_message' => 'Nhập nội dung tin nhắn',
+    'err_send_registration_email' => 'An error occurred when trying to send registration email.',
     'example_john_doe' => 'Example: John Doe',
     // F
     'field_is_required' => 'Trường %field% bắt buộc',
