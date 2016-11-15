@@ -12,6 +12,8 @@
  */
 namespace Phanbook\Common\Library\Volt;
 
+use Phanbook\Models\Services\Service;
+
 /***
  * \Phanbook\Common\Library\Volt\VoltFunctions
  *
@@ -44,6 +46,8 @@ class VoltFunctions
                 return '$this->auth->isAdmin()';
             case 'teaser':
                 return Functions\Teaser::class . "::create({$arguments})";
+            case 'vote_score':
+                return 'container(' . Service\Vote::class . ")->getScore({$arguments})";
         }
 
         $property = $name;

@@ -46,6 +46,7 @@ class UsersController extends ControllerBase
             $this->flashSession->error(t("The User doesn't exits"));
             return $this->indexRedirect();
         }
+
         $tab     = $this->request->getQuery('tab');
         $page    = isset($_GET['page']) ? (int)$_GET['page'] : $this->numberPage;
         $perPage = isset($_GET['perPage']) ? (int)$_GET['perPage'] : $this->perPage;
@@ -65,7 +66,7 @@ class UsersController extends ControllerBase
             list($itemBuilder, $totalBuilder) =
                 ModelBase::prepareQueriesPosts('', $where, $this->perPage);
         }
-        $params =[];
+
         switch ($tab) {
             case 'questions':
                 $this->tag->setTitle('Questions');
@@ -82,14 +83,17 @@ class UsersController extends ControllerBase
                 $this->tag->setTitle('All Questions');
                 break;
         }
+
         $conditions = 'p.deleted = 0 and p.usersId = ?0';
+
         if ($tab == 'answers') {
             $conditions = 'p.deleted = 0';
         }
+
         $itemBuilder->andWhere($conditions);
         $totalBuilder->andWhere($conditions);
         $params = array($user->getId());
-        //get all reply
+
         $parametersNumberReply = [
             'group' => 'id, postsId',
             'usersId = ?0',
@@ -103,22 +107,24 @@ class UsersController extends ControllerBase
         $totalPosts = $totalBuilder->getQuery()->setUniqueRow(true)->execute($params);
         $totalPages = ceil($totalPosts->count / $perPage);
         $offset     = ($page - 1) * $perPage + 1;
+
         if ($page > 1) {
             $itemBuilder->offset($offset);
         }
+
         $this->view->setVars(
             [
-                'user'              => $user,
-                'posts'             => $itemBuilder->getQuery()->execute($params),
-                'totalQuestions'    => Posts::count($paramQuestions),
-                'totalReply'        => PostsReply::find($parametersNumberReply)->count(),
-                'tab'               => $tab,
-                'totalPages'        => $totalPages,
-                'currentPage'       => $page,
-                'vote_service'      => $this->voteService,
+                'user'           => $user,
+                'posts'          => $itemBuilder->getQuery()->execute($params),
+                'totalQuestions' => Posts::count($paramQuestions),
+                'totalReply'     => PostsReply::find($parametersNumberReply)->count(),
+                'tab'            => $tab,
+                'totalPages'     => $totalPages,
+                'currentPage'    => $page,
             ]
         );
     }
+
     /**
      * Not use for now
      * @param  [type] $user [description]

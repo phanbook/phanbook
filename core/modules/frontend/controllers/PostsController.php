@@ -150,7 +150,6 @@ class PostsController extends ControllerBase
                 'posts'       => $itemBuilder->getQuery()->execute($params),
                 'totalPages'  => $totalPages,
                 'currentPage' => $page,
-                'vote_service'=> $this->voteService,
             ]
         );
 
@@ -366,7 +365,6 @@ class PostsController extends ControllerBase
                 'userPosts'   => $post->user,
                 'type'        => Posts::POST_QUESTIONS,
                 'postRelated' => Posts::postRelated($post),
-                'vote_service'=> $this->voteService,
             ]
         );
 

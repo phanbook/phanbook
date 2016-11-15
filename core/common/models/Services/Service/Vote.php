@@ -55,11 +55,11 @@ class Vote extends Service
      * Get votes for entity.
      *
      * @param int    $id
-     * @param string $object
+     * @param string $entity
      *
      * @return mixed
      */
-    public function getVotes($id, $object)
+    public function getVotes($id, $entity)
     {
         $modelsManager = $this->getDI()->getShared('modelsManager');
 
@@ -69,8 +69,23 @@ class Vote extends Service
             ->where('objectId = :objectId:')
             ->andWhere('object = :object:')
             ->getQuery()
-            ->execute(['objectId' => $id, 'object' => $object])
+            ->execute(['objectId' => $id, 'object' => $entity])
             ->getFirst()
             ->toArray();
+    }
+
+    /**
+     * Get entity's score.
+     *
+     * @param int    $id     The Entity ID.
+     * @param string $entity The Entity type.
+     *
+     * @return int
+     */
+    public function getScore($id, $entity)
+    {
+        $votes = $this->getVotes($id, $entity);
+
+        return intval($votes['positive'] - $votes['negative']);
     }
 }
