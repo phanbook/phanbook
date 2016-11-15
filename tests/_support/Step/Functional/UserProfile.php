@@ -28,6 +28,7 @@ class UserProfile extends \FunctionalTester
             'bio'       => $this->faker->paragraph,
             'birthdate' => $this->faker->date(),
             'status'    => Users::STATUS_ACTIVE,
+            'passwd'    => $this->faker->password,
         ];
 
         $I  = $this;

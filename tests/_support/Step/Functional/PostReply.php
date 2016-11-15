@@ -33,6 +33,7 @@ class PostReply extends \FunctionalTester
             'username' => $this->faker->userName,
             'email'    => $this->faker->email,
             'timezone' => $this->faker->timezone,
+            'passwd'   => $this->faker->password,
             'karma'    => 400
         ];
 

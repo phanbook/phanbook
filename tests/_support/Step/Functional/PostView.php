@@ -52,6 +52,7 @@ class PostView extends \FunctionalTester
             'birthdate' => $this->faker->date(),
             'karma'     => self::DEFAULT_KARMA,
             'status'    => Users::STATUS_ACTIVE,
+            'passwd'    => $this->faker->password,
         ];
 
         $id = $I->haveRecord(Users::class, $data);
