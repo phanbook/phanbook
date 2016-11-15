@@ -13,16 +13,15 @@
 namespace Phanbook\Models\Services;
 
 use Phalcon\Di;
-use Phalcon\Config;
 use Phalcon\DiInterface;
 use Phalcon\Di\Injectable;
-use Phalcon\Http\RequestInterface;
 
 /**
  * \Phanbook\Models\Services\Service
  *
  * @property \Phalcon\Security\Random $random
  * @property \Phalcon\Logger\AdapterInterface $logger
+ * @property \Phanbook\Auth\Auth $auth
  *
  * @package Phanbook\Models\Services
  */

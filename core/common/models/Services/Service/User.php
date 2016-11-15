@@ -153,6 +153,39 @@ class User extends Service
     }
 
     /**
+     * Finds User by registerHash.
+     *
+     * @param  string $hash The hash string generated on sign up time.
+     * @return Users|null
+     */
+    public function findFirstByRegisterHash($hash)
+    {
+        $user = Users::query()
+            ->where('registerHash = :hash:', ['hash' => $hash])
+            ->limit(1)
+            ->execute();
+
+        return $user->valid() ? $user->getFirst() : null;
+    }
+
+    /**
+     * Get User by registerHash.
+     *
+     * @param  string $hash The hash string generated on sign up time.
+     * @return Users
+     *
+     * @throws Exceptions\EntityNotFoundException
+     */
+    public function getFirstByRegisterHash($hash)
+    {
+        if (!$user = $this->findFirstByRegisterHash($hash)) {
+            throw new Exceptions\EntityNotFoundException($hash, 'registerHash');
+        }
+
+        return $user;
+    }
+
+    /**
      * Checks whether the User is moderator.
      *
      * @param  Users $user
@@ -251,5 +284,35 @@ class User extends Service
         }
 
         return $this->url->get(['for' => 'register'], ['registerhash' => $registerHash], null, env('APP_URL') . '/');
+    }
+
+    /**
+     * Confirm registration the new membership.
+     *
+     * @param Users  $entity
+     * @param string $password
+     *
+     * @throws Exceptions\EntityException
+     */
+    public function confirmRegistration(Users $entity, $password)
+    {
+        $attributes = [
+            'registerHash' => null,
+            'passwd'       => $this->security->hash($password),
+            'status'       => Users::STATUS_ACTIVE,
+        ];
+
+        $entity->assign($attributes);
+        if (!$entity->save()) {
+            throw new Exceptions\EntityException($entity, t("Couldn't to confirm the registration a new membership."));
+        }
+
+        $this->auth->check(
+            [
+                'email'    => $entity->getEmail(),
+                'password' => $password,
+                'remember' => true
+            ]
+        );
     }
 }
