@@ -577,7 +577,7 @@ class Users extends ModelBase
      * @param  string $passwdForgotHash
      * @return $this
      */
-    public function setPasswdforgothash($passwdForgotHash)
+    public function setPasswdForgotHash($passwdForgotHash)
     {
         $this->passwdForgotHash = $passwdForgotHash;
 
@@ -587,7 +587,7 @@ class Users extends ModelBase
     /**
      * Method to set the value of field lastPasswdReset
      *
-     * @param  integer $lastPasswdReset
+     * @param  int $lastPasswdReset
      * @return $this
      */
     public function setLastPasswdReset($lastPasswdReset)
@@ -600,7 +600,7 @@ class Users extends ModelBase
     /**
      * Method to set the value of field status
      *
-     * @param  integer $status
+     * @param  int $status
      * @return $this
      */
     public function setStatus($status)
@@ -920,7 +920,7 @@ class Users extends ModelBase
      *
      * @return integer
      */
-    public function getLastpasswdreset()
+    public function getLastPasswdReset()
     {
         return $this->lastPasswdReset;
     }

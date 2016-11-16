@@ -12,6 +12,8 @@
  */
 namespace Phanbook\Models\Services\Service;
 
+use DateTime;
+use DateTimeZone;
 use Phanbook\Models\Karma;
 use Phanbook\Models\Users;
 use Phanbook\Models\Services\Service;
@@ -283,7 +285,16 @@ class User extends Service
             throw new Exceptions\EntityException($entity, t('New member could not be registered.'));
         }
 
-        return $this->url->get(['for' => 'register'], ['registerhash' => $registerHash], null, env('APP_URL') . '/');
+        $endpoint = $this->url->get(
+            ['for' => 'register'],
+            ['registerhash' => $registerHash],
+            null,
+            env('APP_URL') . '/'
+        );
+
+        return [
+            'link' => $endpoint
+        ];
     }
 
     /**
@@ -314,5 +325,75 @@ class User extends Service
                 'remember' => true
             ]
         );
+    }
+
+    /**
+     * Validates reset password interval.
+     *
+     * @todo Create separated policy/validator.
+     * @param Users $entity
+     *
+     * @throws Exceptions\EntityException
+     */
+    public function validateResetPasswordInterval(Users $entity)
+    {
+        $timezone = $this->config->get('application')->timezone;
+        $passwdResetInterval = abs($this->config->get('application')->passwdResetInterval);
+
+        $lastResetDate = $entity->getLastPasswdReset();
+        if (!empty($lastResetDate) && $passwdResetInterval) {
+            $nextDateForReset = new DateTime(
+                date('Y-m-d H:i:s', $lastResetDate + $passwdResetInterval),
+                new DateTimeZone($timezone)
+            );
+            $lastResetDate = new DateTime(date('Y-m-d H:i:s', $lastResetDate), new DateTimeZone($timezone));
+
+            if ($lastResetDate > $nextDateForReset) {
+                $nextReset = $nextDateForReset->format('Y-m-d H:i:s');
+                throw new Exceptions\EntityException(
+                    $entity,
+                    t("Oh no! You can't reset the password so often. Please try after: %time%", ['time' => $nextReset])
+                );
+            }
+        }
+    }
+
+    /**
+     * Reset password for user.
+     *
+     * @param  Users $entity
+     * @return array
+     *
+     * @throws Exceptions\EntityException
+     */
+    public function resetPassword(Users $entity)
+    {
+        $this->validateResetPasswordInterval($entity);
+
+        $newAttributes = [
+            'passwdForgotHash' => $this->random->base58(),
+            'lastPasswdReset'  => time(),
+        ];
+
+        $entity->assign($newAttributes);
+        if (!$entity->save()) {
+            throw new Exceptions\EntityException(
+                $entity,
+                t('We were unable to reset your password. Please try again later.')
+            );
+        }
+
+        $endpoint = $this->url->get(
+            ['for' => 'resetpassword'],
+            ['forgothash' => $newAttributes['passwdForgotHash']],
+            null,
+            env('APP_URL') . '/'
+        );
+
+        return [
+            'firstname' => $entity->getFirstname(),
+            'lastname'  => $entity->getLastname(),
+            'link'      => $endpoint
+        ];
     }
 }
