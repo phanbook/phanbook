@@ -1,10 +1,10 @@
 {% extends 'layouts/layout.volt' %}
-{% block title %} {{ this.config.application.name ~ t('Login')}}{% endblock %}
+{% block title %}{{ t('Login') }}{% endblock %}
 {% block content %}
     <div class="login-box-body">
         <p class="login-box-msg">{{ t('Sign in to start your session') }}</p>
 
-        {{form('oauth/login', 'id' : 'login-form')}}
+        {{ form('oauth/login', 'id' : 'login-form') }}
 
             <div class="form-group has-feedback">
                 {{ form.render('email', ['class' : 'form-control'])}}
@@ -30,7 +30,7 @@
                 </div>
                 <!-- /.col -->
             </div>
-        </form>
+        {{ end_form() }}
 
         <div class="social-auth-links text-center">
             <p>- {{ t('OR') }} -</p>

@@ -209,7 +209,7 @@ class RegisterController extends ControllerBase
         $form = new ForgotPasswordForm;
 
         if ($this->request->isPost()) {
-            if (!$form->isValid($_POST)) {
+            if (!$form->isValid($this->request->getPost())) {
                 foreach ($form->getMessages() as $message) {
                     $this->flashSession->error($message);
                 }

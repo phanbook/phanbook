@@ -119,6 +119,9 @@ $frontend->add('/language/{code}', [
     'action'     => 'index'
 ]);
 
+$frontend->addGet('/legal/terms-of-service', 'Legal::terms')
+      ->setName('terms');
+
 $frontend->add('/', [
     'controller' => 'posts',
     'action'     => 'index',
