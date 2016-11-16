@@ -20,6 +20,7 @@ use Phanbook\Models\Services\Service;
 use Phanbook\Oauth\Forms\ResetPasswordForm;
 use Phanbook\Oauth\Forms\ForgotPasswordForm;
 use Phanbook\Models\Services\Exceptions\EntityException;
+use Phanbook\Models\Services\Exceptions\EntityNotFoundException;
 
 /**
  * Class RegisterController
@@ -161,49 +162,36 @@ class RegisterController extends ControllerBase
         $form = new SignupForm;
 
         if ($this->request->isPost()) {
-            $object = new Users();
-            $form->bind($this->request->getPost(), $object, ['firstname', 'lastname', 'email', 'username']);
+            $user = new Users();
+            $form->bind($this->request->getPost(), $user, ['firstname', 'lastname', 'email', 'username']);
 
             if (!$form->isValid()) {
                 foreach ($form->getMessages() as $message) {
                     $this->flashSession->error($message);
                 }
+            } else {
+                try {
+                    $params = $this->userService->registerNewMemberOrFail($user);
 
-                $this->currentRedirect();
-                return;
-            }
+                    if (!$this->mail->send($user->getEmail(), 'registration', $params)) {
+                        $this->flashSession->error(t('err_send_registration_email'));
+                    } else {
+                        $this->flashSession->success(t('account_successfully_created'));
+                        $this->response->redirect();
 
-            try {
-                $uniqueUrl = $this->userService->registerNewMemberOrFail($object);
-                $params = ['link' => $uniqueUrl];
-
-                if (!$this->mail->send($object->getEmail(), 'registration', $params)) {
-                    $message = t('err_send_registration_email');
-                } else {
-                    $message = t('account_successfully_created');
+                        return;
+                    }
+                } catch (EntityException $e) {
+                    $this->flashSession->error($e->getMessage());
                 }
-
-                $this->flashSession->success($message);
-                $this->response->redirect();
-
-                return;
-            } catch (EntityException $e) {
-                $this->flashSession->error($e->getMessage());
-                $this->currentRedirect();
-
-                return;
             }
         }
 
         $this->view->setVar('form', $form);
     }
 
-    /**
-     * @return \Phalcon\Http\ResponseInterface
-     */
     public function forgotpasswordAction()
     {
-        // Resets any "template before" layouts because we use multiple theme
         $this->view->cleanTemplateBefore();
 
         $form = new ForgotPasswordForm;
@@ -214,45 +202,31 @@ class RegisterController extends ControllerBase
                     $this->flashSession->error($message);
                 }
             } else {
-                $object = Users::findFirstByEmail($this->request->getPost('email'));
-                if (!$object) {
-                    // @TODO: Implement brute force protection
-                    $this->flashSession->error(t('User not found.'));
-                    return $this->currentRedirect();
-                }
-                $lastpass = $object->getLastPasswdReset();
-                if (!empty($lastpass)
-                    && (date('Y-m-d H:i:s') - $object->getLastPasswdReset())> $this->config->application->passwdResetInterval //password reset interval on configuration
-                ) {
-                    $this->flashSession->error(
-                        t('You need to wait ') . (date('Y-m-d H:i:s') - $object->getLastPasswdReset()) . ' minutes'
-                    );
-                    return $this->currentRedirect();
-                }
+                try {
+                    $user = $this->userService->getFirstByEmail($this->request->getPost('email', 'email'));
+                    $params = $this->userService->resetPassword($user);
 
-                $passwordForgotHash = sha1('forgot' . microtime());
-                $object->setPasswdForgotHash($passwordForgotHash);
-                $object->setLastPasswdReset(date('Y-m-d H:i:s'));
-
-                if (!$object->save()) {
-                    $this->displayModelErrors($object);
-                } else {
-                    $params = [
-                        'firstname' => $object->getFirstname(),
-                        'lastname'  => $object->getLastname(),
-                        'link'      => ($this->request->isSecureRequest()
-                                            ? 'https://' : 'http://') . $this->request->getHttpHost()
-                                        . '/oauth/resetpassword?forgothash=' . $passwordForgotHash
-                    ];
-                    if (!$this->mail->send($object->getEmail(), 'forgotpassword', $params)) {
-                        $this->flashSession->error(t('Error sending email.'));
+                    if (!$this->mail->send($user->getEmail(), 'forgotpassword', $params)) {
+                        $this->flashSession->error(t('err_send_reset_passwd_email'));
                     } else {
-                        $this->flashSession->success(
-                            t('An email was sent to your address in order to continue with the reset password process.')
-                        );
+                        $this->flashSession->success(t('an_email_with_reset_pass_was_sent'));
+                        $this->response->redirect();
 
-                        return $this->response->redirect();
+                        return;
                     }
+                } catch (EntityNotFoundException $e) {
+                    $this->response->setStatusCode(422);
+                    $this->flashSession->error(t('user_not_exist'));
+
+                    $userData = [
+                        'usersId'   => null,
+                        'userAgent' => $this->request->getUserAgent(),
+                        'ipAddress' => $this->request->getClientAddress(true),
+                    ];
+
+                    $this->getEventsManager()->fire('user:failedLogin', $this, $userData);
+                } catch (EntityException $e) {
+                    $this->flashSession->error($e->getMessage());
                 }
             }
         }
