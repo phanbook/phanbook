@@ -119,8 +119,7 @@ class RegisterController extends ControllerBase
         }
 
         if (!$user = $this->userService->findFirstByRegisterHash($registerHash)) {
-            $this->response->setStatusCode(404);
-            $this->flashSession->error(t('Attempt to access non-existent user.'));
+            $this->flashSession->error(t("Sorry! We can't seem to find the page you're looking for."));
 
             $this->dispatcher->forward([
                 'for'        => 'frontend',
@@ -224,7 +223,7 @@ class RegisterController extends ControllerBase
                         'ipAddress' => $this->request->getClientAddress(true),
                     ];
 
-                    $this->getEventsManager()->fire('user:failedLogin', $this, $userData);
+                    $this->getDI()->getShared('eventsManager')->fire('user:failedLogin', $this, $userData);
                 } catch (EntityException $e) {
                     $this->flashSession->error($e->getMessage());
                 }

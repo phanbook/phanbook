@@ -346,10 +346,10 @@ class User extends Service
                 date('Y-m-d H:i:s', $lastResetDate + $passwdResetInterval),
                 new DateTimeZone($timezone)
             );
-            $lastResetDate = new DateTime(date('Y-m-d H:i:s', $lastResetDate), new DateTimeZone($timezone));
+            $now = new DateTime('now', new DateTimeZone($timezone));
 
-            if ($lastResetDate > $nextDateForReset) {
-                $nextReset = $nextDateForReset->format('Y-m-d H:i:s');
+            if ($nextDateForReset > $now) {
+                $nextReset = $nextDateForReset->format('Y-m-d H:i:s') . ' ' . $timezone;
                 throw new Exceptions\EntityException(
                     $entity,
                     t("Oh no! You can't reset the password so often. Please try after: %time%", ['time' => $nextReset])
