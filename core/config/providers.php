@@ -50,6 +50,7 @@ return [
     Providers\ResponseServiceProvider::class,
     Providers\RoutingServiceProvider::class,
     Providers\FilesystemServiceProvider::class,
+    Providers\RandomServiceProvider::class,
 
     // Third Party Providers
     // ...

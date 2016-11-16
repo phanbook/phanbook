@@ -15,7 +15,7 @@ namespace Phanbook\Models\Services\Service;
 use Phanbook\Models\Karma;
 use Phanbook\Models\Users;
 use Phanbook\Models\Services\Service;
-use Phanbook\Models\Services\Exceptions\EntityNotFoundException;
+use Phanbook\Models\Services\Exceptions;
 
 /**
  * \Phanbook\Models\Services\Service\User
@@ -41,12 +41,12 @@ class User extends Service
      * @param  int $id The User ID.
      * @return Users
      *
-     * @throws EntityNotFoundException
+     * @throws Exceptions\EntityNotFoundException
      */
     public function getFirstById($id)
     {
         if (!$user = $this->findFirstById($id)) {
-            throw new EntityNotFoundException($id);
+            throw new Exceptions\EntityNotFoundException($id);
         }
 
         return $user;
@@ -74,12 +74,12 @@ class User extends Service
      * @param  string $email The email address.
      * @return Users
      *
-     * @throws EntityNotFoundException
+     * @throws Exceptions\EntityNotFoundException
      */
     public function getFirstByEmail($email)
     {
         if (!$user = $this->findFirstByEmail($email)) {
-            throw new EntityNotFoundException($email, 'email');
+            throw new Exceptions\EntityNotFoundException($email, 'email');
         }
 
         return $user;
@@ -107,12 +107,12 @@ class User extends Service
      * @param  string $name The username.
      * @return Users
      *
-     * @throws EntityNotFoundException
+     * @throws Exceptions\EntityNotFoundException
      */
     public function getFirstByUsername($name)
     {
         if (!$user = $this->findFirstByUsername($name)) {
-            throw new EntityNotFoundException($name, 'username');
+            throw new Exceptions\EntityNotFoundException($name, 'username');
         }
 
         return $user;
@@ -141,12 +141,45 @@ class User extends Service
      * @param  string $name The username.
      * @return Users
      *
-     * @throws EntityNotFoundException
+     * @throws Exceptions\EntityNotFoundException
      */
     public function getFirstByEmailOrUsername($name)
     {
         if (!$user = $this->findFirstByEmailOrUsername($name)) {
-            throw new EntityNotFoundException($name, 'email or username');
+            throw new Exceptions\EntityNotFoundException($name, 'email or username');
+        }
+
+        return $user;
+    }
+
+    /**
+     * Finds User by registerHash.
+     *
+     * @param  string $hash The hash string generated on sign up time.
+     * @return Users|null
+     */
+    public function findFirstByRegisterHash($hash)
+    {
+        $user = Users::query()
+            ->where('registerHash = :hash:', ['hash' => $hash])
+            ->limit(1)
+            ->execute();
+
+        return $user->valid() ? $user->getFirst() : null;
+    }
+
+    /**
+     * Get User by registerHash.
+     *
+     * @param  string $hash The hash string generated on sign up time.
+     * @return Users
+     *
+     * @throws Exceptions\EntityNotFoundException
+     */
+    public function getFirstByRegisterHash($hash)
+    {
+        if (!$user = $this->findFirstByRegisterHash($hash)) {
+            throw new Exceptions\EntityNotFoundException($hash, 'registerHash');
         }
 
         return $user;
@@ -194,7 +227,7 @@ class User extends Service
 
         if (!$visitor->save()) {
             foreach ($visitor->getMessages() as $message) {
-                $this->getLogger()->error((string) $message);
+                $this->logger->error((string) $message);
             }
 
             return false;
@@ -217,12 +250,69 @@ class User extends Service
 
         if (!$user->save()) {
             foreach ($user->getMessages() as $message) {
-                $this->getLogger()->error((string) $message);
+                $this->logger->error((string) $message);
             }
 
             return false;
         }
 
         return true;
+    }
+
+    /**
+     * Register a new member and returns register unique URL to confirm registration.
+     *
+     * @param Users $entity
+     *
+     * @return string
+     * @throws Exceptions\EntityException
+     */
+    public function registerNewMemberOrFail(Users $entity)
+    {
+        $registerHash = $this->random->base58();
+
+        $defaults = [
+            'registerHash' => $registerHash,
+            'passwd'       => $this->security->hash($this->random->base58()),
+            'status'       => Users::STATUS_PENDING,
+            'gender'       => Users::GENDER_UNKNOWN,
+        ];
+
+        $entity->assign($defaults);
+        if (!$entity->save()) {
+            throw new Exceptions\EntityException($entity, t('New member could not be registered.'));
+        }
+
+        return $this->url->get(['for' => 'register'], ['registerhash' => $registerHash], null, env('APP_URL') . '/');
+    }
+
+    /**
+     * Confirm registration the new membership.
+     *
+     * @param Users  $entity
+     * @param string $password
+     *
+     * @throws Exceptions\EntityException
+     */
+    public function confirmRegistration(Users $entity, $password)
+    {
+        $attributes = [
+            'registerHash' => null,
+            'passwd'       => $this->security->hash($password),
+            'status'       => Users::STATUS_ACTIVE,
+        ];
+
+        $entity->assign($attributes);
+        if (!$entity->save()) {
+            throw new Exceptions\EntityException($entity, t("Couldn't to confirm the registration a new membership."));
+        }
+
+        $this->auth->check(
+            [
+                'email'    => $entity->getEmail(),
+                'password' => $password,
+                'remember' => true
+            ]
+        );
     }
 }

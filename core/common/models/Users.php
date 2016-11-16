@@ -13,8 +13,9 @@
 namespace Phanbook\Models;
 
 use Phalcon\Validation;
-use Phalcon\Validation\Validator\Email as EmailValidator;
-use Phalcon\Validation\Validator\Uniqueness as UniquenessValidator;
+use Phalcon\Validation\Validator\Email;
+use Phalcon\Validation\Validator\PresenceOf;
+use Phalcon\Validation\Validator\Uniqueness;
 
 /**
  * \Phanbook\Models\Users
@@ -38,14 +39,17 @@ class Users extends ModelBase
     const DIGEST_YES = 'Y';
     const DIGEST_NO  = 'N';
 
-    //Never receive an e-mail notification
+    // Never receive an e-mail notification
     const NOTIFY_N = 'N';
-    //Receive e-mail notifications from all new threads and comments
+
+    // Receive e-mail notifications from all new threads and comments
     const NOTIFY_Y = 'Y';
-    //When someone replies to a discussion that I started or replied to
+
+    // When someone replies to a discussion that I started or replied to
     const NOTIFY_P = 'P';
 
     const TOKEN_TYPE = 'bearer';
+
     /**
      *
      * @var integer
@@ -230,6 +234,20 @@ class Users extends ModelBase
     protected $bio;
     protected $github;
     protected $twitter;
+
+    public function initialize()
+    {
+        parent::initialize();
+
+        $this->hasMany('id', UsersBadges::class, 'usersId', ['alias' => 'badges', 'reusable' => true]);
+
+        $this->hasMany('id', Posts::class, 'usersId', ['alias' => 'posts', 'reusable' => true]);
+
+        $this->hasMany('id', PostsReply::class, 'usersId', ['alias' => 'replies', 'reusable' => true]);
+
+        $this->hasMany('id', Vote::class, 'usersId', ['alias' => 'vote', 'reusable' => true]);
+    }
+
     /**
      * Method to set the value of field id
      *
@@ -947,28 +965,50 @@ class Users extends ModelBase
      */
     public function validation()
     {
-
         $validator = new Validation();
+
         $validator->add(
             'email',
-            new EmailValidator([
+            new PresenceOf([
                 'model' => $this,
-                'message' => 'Please enter a correct email address'
+                'message' => t('Please enter a correct email address'),
+                'cancelOnFail' => true
             ])
         );
+
         $validator->add(
             'email',
-            new UniquenessValidator([
+            new Email([
                 'model' => $this,
-                'message' => 'Another user with same email already exists'
+                'message' => t('Please enter a correct email address'),
+                'cancelOnFail' => true
+            ])
+        );
+
+        $validator->add(
+            'email',
+            new Uniqueness([
+                'model' => $this,
+                'message' => t('Another user with same email already exists'),
+                'cancelOnFail' => true
             ])
         );
 
         $validator->add(
             'username',
-            new UniquenessValidator([
+            new PresenceOf([
                 'model' => $this,
-                'message' => 'Another user with same username already exists'
+                'message' => t('The username is required'),
+                'cancelOnFail' => true
+            ])
+        );
+
+        $validator->add(
+            'username',
+            new Uniqueness([
+                'model' => $this,
+                'message' => t("Another user with same username already exists"),
+                'cancelOnFail' => true
             ])
         );
 
@@ -1019,24 +1059,7 @@ class Users extends ModelBase
 
         return false;
     }
-    /**
-     * Before create the user assign a password
-     */
-    public function beforeValidationOnCreate()
-    {
-        if (empty($this->passwd)) {
-            // Generate a plain temporary password
-            $tempPassword = preg_replace('/[^a-zA-Z0-9]/', '', base64_encode(openssl_random_pseudo_bytes(12)));
 
-            // The user must change its password in first login
-            $this->mustChangePassword = 'Y';
-
-            // Use this password as default
-            $this->passwd = $this->getDI()
-                ->getSecurity()
-                ->hash($tempPassword);
-        }
-    }
     /**
     * Create a posts-views logging the ipaddress where the post was created
     * This avoids that the same session counts as post view
@@ -1047,13 +1070,13 @@ class Users extends ModelBase
             $this->birthdate = null;
         }
 
-        $this->karma       += Karma::INITIAL_KARMA;
-        $this->votePoint   += Karma::INITIAL_KARMA;
-        $this->vote         = 0;
-        $this->timezone     = 'Europe/London';
-        $this->theme        = 'D';
-        $this->modifiedAt   = time();
-        $this->createdAt    = time();
+        $this->karma      += Karma::INITIAL_KARMA;
+        $this->votePoint  += Karma::INITIAL_KARMA;
+        $this->vote       = 0;
+        $this->timezone   = 'Europe/London';
+        $this->theme      = 'D';
+        $this->modifiedAt = time();
+        $this->createdAt  = time();
     }
 
     public function afterValidation()
@@ -1084,49 +1107,6 @@ class Users extends ModelBase
         }
 
         $this->modifiedAt = time();
-    }
-
-    public function initialize()
-    {
-        parent::initialize();
-        $this->hasMany(
-            'id',
-            __NAMESPACE__ . '\UsersBadges',
-            'usersId',
-            [
-                'alias' => 'badges',
-                'reusable' => true
-            ]
-        );
-
-        $this->hasMany(
-            'id',
-            __NAMESPACE__ . '\Posts',
-            'usersId',
-            [
-                'alias' => 'posts',
-                'reusable' => true
-            ]
-        );
-
-        $this->hasMany(
-            'id',
-            __NAMESPACE__ . '\PostsReply',
-            'usersId',
-            [
-                'alias' => 'replies',
-                'reusable' => true
-            ]
-        );
-        $this->hasMany(
-            'id',
-            __NAMESPACE__ . '\Vote',
-            'usersId',
-            [
-                'alias' => 'vote',
-                'reusable' => true
-            ]
-        );
     }
 
     /**

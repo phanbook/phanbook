@@ -12,21 +12,21 @@
  */
 namespace Phanbook\Models\Services;
 
+use Phalcon\Di;
 use Phalcon\DiInterface;
-use Phalcon\Di\InjectionAwareInterface;
-use Phanbook\Common\Library\Behavior\Di as DiBehavior;
+use Phalcon\Di\Injectable;
 
 /**
  * \Phanbook\Models\Services\Service
  *
+ * @property \Phalcon\Security\Random $random
+ * @property \Phalcon\Logger\AdapterInterface $logger
+ * @property \Phanbook\Auth\Auth $auth
+ *
  * @package Phanbook\Models\Services
  */
-abstract class Service implements InjectionAwareInterface
+abstract class Service extends Injectable
 {
-    use DiBehavior {
-        DiBehavior::__construct as protected injectDi;
-    }
-
     /**
      * Service constructor.
      *
@@ -34,7 +34,7 @@ abstract class Service implements InjectionAwareInterface
      */
     public function __construct(DiInterface $di = null)
     {
-        $this->injectDi($di);
+        $this->setDI($di ?: Di::getDefault());
     }
 
     protected function resolveClientAddress($ipAddress)

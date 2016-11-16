@@ -25,7 +25,7 @@
                                 <li><a href="/backend/dashboard">{{ t('Dashboard') }}</a></li>
                                 <li><a href="/backend/themes/custom">{{ t('Edit Theme') }}</a></li>
                                 <li><a href="/users/profile">{{ t('Edit Profile') }}</a></li>
-                                <li><a href="/oauth/logout">{{ t('Logout') }}</a></li>
+                                <li>{{ link_to(['for': 'logout'], t('Logout')) }}</li>
                             </ul>
                         </div>
                     </div><!-- End page-content -->
@@ -55,7 +55,7 @@
                     </li>
                 {% else %}
                     <li><a href="contact_us.html"><i class="fa fa-envelope"></i>{{ t('Contact') }}</a></li>
-                    <li><a href="/oauth/register/signup"><i class="fa fa-user"></i>{{ t('Sign Up') }}</a></li>
+                    <li>{{ link_to(['for': 'signup'], '<i class="fa fa-user"></i>' ~ t('Sign Up')) }}</li>
                     <li><a href="/oauth/login"><i class="fa fa-user"></i>{{ t('Log In') }}</a></li>
                 {% endif %}
             </ul>
