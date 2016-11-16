@@ -48,10 +48,8 @@ $oauth->add('/oauth/facebook/access_token', [
     'action'     => 'tokenFacebook'
 ]);
 
-$oauth->add('/oauth/resetpassword', [
-    'controller' => 'register',
-    'action'     => 'resetpassword'
-]);
+$oauth->add('/users/reset-password', 'Register::resetpassword', ['GET', 'POST'])
+      ->setName('resetpassword');
 
 $oauth->add('/users/forgot-password', 'Register::forgotpassword', ['GET', 'POST'])
       ->setName('forgotpassword');
