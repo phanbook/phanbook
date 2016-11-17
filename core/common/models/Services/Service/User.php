@@ -188,6 +188,39 @@ class User extends Service
     }
 
     /**
+     * Finds User by passwdForgotHash.
+     *
+     * @param  string $hash The hash string generated on sign up time.
+     * @return Users|null
+     */
+    public function findFirstByPasswdForgotHash($hash)
+    {
+        $user = Users::query()
+            ->where('passwdForgotHash = :hash:', ['hash' => $hash])
+            ->limit(1)
+            ->execute();
+
+        return $user->valid() ? $user->getFirst() : null;
+    }
+
+    /**
+     * Get User by passwdForgotHash.
+     *
+     * @param  string $hash The hash string generated on reset password up time.
+     * @return Users
+     *
+     * @throws Exceptions\EntityNotFoundException
+     */
+    public function getFirstByPasswdForgotHash($hash)
+    {
+        if (!$user = $this->findFirstByRegisterHash($hash)) {
+            throw new Exceptions\EntityNotFoundException($hash, 'passwdForgotHash');
+        }
+
+        return $user;
+    }
+
+    /**
      * Checks whether the User is moderator.
      *
      * @param  Users $user
@@ -395,5 +428,29 @@ class User extends Service
             'lastname'  => $entity->getLastname(),
             'link'      => $endpoint
         ];
+    }
+
+    /**
+     * Assign a new password for the User.
+     *
+     * @param  Users  $entity
+     * @param  string $password
+     *
+     * @throws Exceptions\EntityException
+     */
+    public function assignNewPassword(Users $entity, $password)
+    {
+        $newAttributes = [
+            'passwdForgotHash' => null,
+            'passwd'           => $this->security->hash($password),
+        ];
+
+        $entity->assign($newAttributes);
+        if (!$entity->save()) {
+            throw new Exceptions\EntityException(
+                $entity,
+                t('We were unable to create a new password. Please try again later.')
+            );
+        }
     }
 }

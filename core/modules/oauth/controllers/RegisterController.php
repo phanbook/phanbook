@@ -58,47 +58,57 @@ class RegisterController extends ControllerBase
         return true;
     }
 
-    /**
-     * @return \Phalcon\Http\ResponseInterface
-     */
     public function resetpasswordAction()
     {
-        $passwordForgotHash = $this->request->getQuery('forgothash');
+        $forgotHash = $this->request->getQuery('forgothash');
 
-        if (empty($passwordForgotHash)) {
-            $this->flashSession->error('Hack attempt!!!');
+        if (empty($forgotHash)) {
+            $this->flashSession->error(t("Sorry! We can't seem to find the page you're looking for."));
 
-            return $this->response->redirect();
+            $this->dispatcher->forward([
+                'for'        => 'frontend',
+                'controller' => 'posts',
+                'action'     => 'index',
+            ]);
+
+            return;
         }
 
-        $object  = Users::findFirstByPasswdForgotHash($passwordForgotHash);
+        if (!$user = $this->userService->findFirstByPasswdForgotHash($forgotHash)) {
+            $this->flashSession->error(t("Sorry! We can't seem to find the page you're looking for."));
 
-        if (!$object) {
-            $this->flashSession->error(t('Invalid data.'));
+            $this->dispatcher->forward([
+                'for'        => 'frontend',
+                'controller' => 'posts',
+                'action'     => 'index',
+            ]);
 
-            return $this->response->redirect();
+            return;
         }
 
-        $form             = new ResetPasswordForm;
-        $this->view->form = $form;
+        $form = new ResetPasswordForm();
 
         if ($this->request->isPost()) {
-            if (!$form->isValid($_POST)) {
+            if (!$form->isValid($this->request->getPost())) {
                 foreach ($form->getMessages() as $message) {
                     $this->flashSession->error($message);
                 }
             } else {
-                $object->setPasswd($this->security->hash($this->request->getPost('password_new_confirm')));
-                $object->setPasswdForgotHash(null);
-                if (!$object->save()) {
-                    $this->displayModelErrors($object);
-                } else {
-                    $this->flashSession->success(t('Your password was changed successfully.'));
+                $password = $this->request->getPost('password_new_confirm');
 
-                    return $this->response->redirect();
+                try {
+                    $this->userService->assignNewPassword($user, $password);
+                    $this->flashSession->success(t('Your password was changed successfully.'));
+                    $this->response->redirect();
+
+                    return;
+                } catch (EntityException $e) {
+                    $this->flashSession->error($e->getMessage());
                 }
             }
         }
+
+        $this->view->setVar('form', $form);
     }
 
     public function indexAction()
@@ -106,7 +116,6 @@ class RegisterController extends ControllerBase
         $registerHash = $this->request->getQuery('registerhash');
 
         if (empty($registerHash)) {
-            $this->response->setStatusCode(422);
             $this->flashSession->error(t("Sorry! We can't seem to find the page you're looking for."));
 
             $this->dispatcher->forward([
@@ -130,7 +139,7 @@ class RegisterController extends ControllerBase
             return;
         }
 
-        $form = new ResetPasswordForm;
+        $form = new ResetPasswordForm();
 
         if ($this->request->isPost()) {
             if (!$form->isValid($this->request->getPost())) {
@@ -158,7 +167,7 @@ class RegisterController extends ControllerBase
 
     public function signupAction()
     {
-        $form = new SignupForm;
+        $form = new SignupForm();
 
         if ($this->request->isPost()) {
             $user = new Users();
@@ -193,7 +202,7 @@ class RegisterController extends ControllerBase
     {
         $this->view->cleanTemplateBefore();
 
-        $form = new ForgotPasswordForm;
+        $form = new ForgotPasswordForm();
 
         if ($this->request->isPost()) {
             if (!$form->isValid($this->request->getPost())) {
