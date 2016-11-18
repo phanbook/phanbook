@@ -239,6 +239,16 @@ class Users extends ModelBase
     {
         parent::initialize();
 
+        $this->hasManyToMany(
+            'id',
+            RolesUsers::class,
+            'userId',
+            'roleId',
+            Roles::class,
+            'id',
+            ['alias' => 'roles']
+        );
+
         $this->hasMany('id', UsersBadges::class, 'usersId', ['alias' => 'badges', 'reusable' => true]);
 
         $this->hasMany('id', Posts::class, 'usersId', ['alias' => 'posts', 'reusable' => true]);
@@ -325,18 +335,21 @@ class Users extends ModelBase
 
         return $this;
     }
+
     public function setTokenGoogle($tokenGoogle)
     {
         $this->tokenGoogle = $tokenGoogle;
 
         return $this;
     }
+
     public function setTokenFacebook($tokenFacebook)
     {
         $this->tokenFacebook = $tokenFacebook;
 
         return $this;
     }
+
     public function setUid($uid)
     {
         $this->uid = $uid;
