@@ -575,7 +575,7 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` BIGINT unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(72) DEFAULT NULL,
   `email` varchar(70) DEFAULT NULL,
   `firstname` varchar(50) DEFAULT NULL,
@@ -616,6 +616,57 @@ CREATE TABLE `users` (
   KEY `notifications` (`notifications`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+INSERT INTO `users` (`id`, `username`, `email`, `firstname`, `createdAt`, `passwd`, `status`) VALUES
+    (1,'admin','admin@phanbook.com','Admin', 1427816610, '$2a$12$wCpQq8iqKlKhFdwh7SgKVeEmjkuriZYje20RKq5/lN3HuNKAvb.i2', 1);
+
+--
+-- Table structure for table `roles`
+--
+
+DROP TABLE IF EXISTS `roles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `roles` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(32) NOT NULL,
+    `description` TEXT,
+    `type` VARCHAR(32) NOT NULL,
+    `is_special` BOOLEAN DEFAULT FALSE,
+    `is_default` BOOLEAN DEFAULT FALSE,
+    PRIMARY KEY(`id`),
+    UNIQUE KEY `role_name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+INSERT INTO `roles` (`id`, `name`, `description`, `type`, `is_special`, `is_default`) VALUES
+    (1, 'Admins', 'Administrative user, has access to everything.', 'admin', true, false),
+    (2, 'Moderators', 'The regular members with moderation privileges.', 'moderator', true, false),
+    (3, 'Users', 'Member privileges, granted after account confirmation.', 'user', true, true),
+    (4, 'Anonymous', 'Guests can only view content. Anyone browsing the site who is not signed in is considered to be a "Guest".', 'guest', true, false);
+
+--
+-- Table structure for table `roles_users`
+--
+
+DROP TABLE IF EXISTS `roles_users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `roles_users` (
+    `users_id` BIGINT UNSIGNED NOT NULL,
+    `roles_id` INT UNSIGNED NOT NULL,
+    PRIMARY KEY (`users_id`, `roles_id`),
+    KEY `roles_users_users_id` (`users_id`),
+    KEY `roles_users_roles_id` (`roles_id`),
+    FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`roles_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+INSERT INTO `roles_users` (`users_id`, `roles_id`) VALUES
+    (1, 1),
+    (1, 2),
+    (1, 3);
 
 --
 -- Table structure for table `usersBadges`
