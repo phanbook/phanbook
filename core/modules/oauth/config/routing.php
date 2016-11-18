@@ -48,16 +48,32 @@ $oauth->add('/oauth/facebook/access_token', [
     'action'     => 'tokenFacebook'
 ]);
 
-$oauth->add('/oauth/resetpassword', [
-    'controller' => 'register',
-    'action'     => 'resetpassword'
-]);
+$oauth->add('/users/reset-password', 'Register::resetpassword', ['GET', 'POST'])
+      ->setName('resetpassword');
+
+$oauth->add('/users/forgot-password', 'Register::forgotpassword', ['GET', 'POST'])
+      ->setName('forgotpassword');
 
 $oauth->add('/users/register', 'Register::index', ['GET', 'POST'])
     ->setName('register');
 
 $oauth->add('/users/signup', 'Register::signup', ['GET', 'POST'])
     ->setName('signup');
+
+$oauth->addGet('/users/signin/google', 'Login::google')
+    ->setName('signin-google');
+
+$oauth->addGet('/users/signin/github', 'Login::github')
+    ->setName('signin-github');
+
+$oauth->addGet('/users/signin/facebook', 'Login::facebook')
+    ->setName('signin-facebook');
+
+$oauth->addGet('/users/signin/twitter', 'Login::twitter')
+    ->setName('signin-twitter');
+
+$oauth->add('/users/signin', 'Login::index', ['GET', 'POST'])
+      ->setName('signin');
 
 $oauth->addGet('/users/logout', 'Logout::index')
     ->setName('logout');

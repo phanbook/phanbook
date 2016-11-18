@@ -15,76 +15,59 @@ namespace Phanbook\Oauth\Forms;
 use Phalcon\Forms\Form;
 use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Element\Hidden;
-use Phalcon\Forms\Element\Password;
 use Phalcon\Forms\Element\Submit;
-use Phalcon\Forms\Element\Check;
-use Phalcon\Validation\Validator\PresenceOf;
 use Phalcon\Validation\Validator\Email;
 use Phalcon\Validation\Validator\Identical;
+use Phalcon\Validation\Validator\PresenceOf;
 
+/**
+ * \Phanbook\Oauth\Forms\ForgotPasswordForm
+ *
+ * @package Phanbook\Oauth\Forms
+ */
 class ForgotPasswordForm extends Form
 {
     public function initialize()
     {
-        //Email
         $email = new Text(
             'email',
             [
-            'placeholder' => 'Email',
-            'class'       => 'form-control',
-            'required'    => 'true',
-            'autofocus'   => 'true'
+                'placeholder' => 'Email',
+                'class'       => 'form-control',
+                'required'    => 'true',
+                'autofocus'   => 'true'
             ]
         );
+
         $email->addValidators(
             [
-                new PresenceOf(
-                    [
-                    'message' => 'The e-mail is required'
-                    ]
-                ),
-                new Email(
-                    [
-                    'message' => 'The e-mail is not valid'
-                    ]
-                )
+                new PresenceOf(['message' => t('The e-mail is required')]),
+                new Email(['message' => t('The e-mail is not valid')])
             ]
         );
         $this->add($email);
-        // CSRF
+
         $csrf = new Hidden('csrf');
 
         $csrf->addValidator(
             new Identical(
-                array(
-                'value'   => $this->security->getSessionToken(),
-                'message' => 'CSRF validation failed'
-                )
+                [
+                    'accepted' => $this->security->getSessionToken(),
+                    'message'  => t('This form has altered. Please try submitting it again.')
+                ]
             )
         );
 
         $this->add($csrf);
-        //Submit
+
         $this->add(
             new Submit(
                 'recover',
                 [
-                'class' => 'submit-button-login',
-                'value' => 'Recover'
+                    'class' => 'submit-button-login',
+                    'value' => t('Reset my password')
                 ]
             )
         );
-    }
-
-    /**
-     * Prints messages for a specific element
-     */
-    public function messages($name)
-    {
-        if ($this->hasMessagesFor($name)) {
-            foreach ($this->getMessagesFor($name) as $message) {
-                $this->flash->error($message);
-            }
-        }
     }
 }

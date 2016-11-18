@@ -19,9 +19,10 @@ use Phalcon\Di\Injectable;
 /**
  * \Phanbook\Models\Services\Service
  *
+ * @property \Phalcon\Config $config
+ * @property \Phanbook\Auth\Auth $auth
  * @property \Phalcon\Security\Random $random
  * @property \Phalcon\Logger\AdapterInterface $logger
- * @property \Phanbook\Auth\Auth $auth
  *
  * @package Phanbook\Models\Services
  */

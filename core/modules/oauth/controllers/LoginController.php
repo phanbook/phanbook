@@ -89,6 +89,7 @@ class LoginController extends ControllerBase
         $this->flashSession->success(t('Welcome back '. $this->auth->getName()));
         return $this->indexRedirect();
     }
+
     public function twitterAction()
     {
         //@todo later because Twitter use oauth v1
@@ -162,8 +163,7 @@ class LoginController extends ControllerBase
 
         $url = $this->request->getHTTPReferer();
         if (!empty($url)) {
-            $scheme = $this->request->isSecure() ? 'https://' : 'http://';
-            $url = $scheme . $this->request->getHttpHost() . '/oauth/login';
+            $url = $this->url->get(['for' => 'signin'], null, null, env('APP_URL') . '/');
 
             if ($this->cookies->has('HTTPBACK')) {
                 $this->cookies->delete('HTTPBACK');

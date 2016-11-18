@@ -20,6 +20,7 @@ use Phanbook\Models\Services\Service;
 use Phanbook\Oauth\Forms\ResetPasswordForm;
 use Phanbook\Oauth\Forms\ForgotPasswordForm;
 use Phanbook\Models\Services\Exceptions\EntityException;
+use Phanbook\Models\Services\Exceptions\EntityNotFoundException;
 
 /**
  * Class RegisterController
@@ -57,47 +58,57 @@ class RegisterController extends ControllerBase
         return true;
     }
 
-    /**
-     * @return \Phalcon\Http\ResponseInterface
-     */
     public function resetpasswordAction()
     {
-        $passwordForgotHash = $this->request->getQuery('forgothash');
+        $forgotHash = $this->request->getQuery('forgothash');
 
-        if (empty($passwordForgotHash)) {
-            $this->flashSession->error('Hack attempt!!!');
+        if (empty($forgotHash)) {
+            $this->flashSession->error(t("Sorry! We can't seem to find the page you're looking for."));
 
-            return $this->response->redirect();
+            $this->dispatcher->forward([
+                'for'        => 'frontend',
+                'controller' => 'posts',
+                'action'     => 'index',
+            ]);
+
+            return;
         }
 
-        $object  = Users::findFirstByPasswdForgotHash($passwordForgotHash);
+        if (!$user = $this->userService->findFirstByPasswdForgotHash($forgotHash)) {
+            $this->flashSession->error(t("Sorry! We can't seem to find the page you're looking for."));
 
-        if (!$object) {
-            $this->flashSession->error(t('Invalid data.'));
+            $this->dispatcher->forward([
+                'for'        => 'frontend',
+                'controller' => 'posts',
+                'action'     => 'index',
+            ]);
 
-            return $this->response->redirect();
+            return;
         }
 
-        $form             = new ResetPasswordForm;
-        $this->view->form = $form;
+        $form = new ResetPasswordForm();
 
         if ($this->request->isPost()) {
-            if (!$form->isValid($_POST)) {
+            if (!$form->isValid($this->request->getPost())) {
                 foreach ($form->getMessages() as $message) {
                     $this->flashSession->error($message);
                 }
             } else {
-                $object->setPasswd($this->security->hash($this->request->getPost('password_new_confirm')));
-                $object->setPasswdForgotHash(null);
-                if (!$object->save()) {
-                    $this->displayModelErrors($object);
-                } else {
-                    $this->flashSession->success(t('Your password was changed successfully.'));
+                $password = $this->request->getPost('password_new_confirm');
 
-                    return $this->response->redirect();
+                try {
+                    $this->userService->assignNewPassword($user, $password);
+                    $this->flashSession->success(t('Your password was changed successfully.'));
+                    $this->response->redirect();
+
+                    return;
+                } catch (EntityException $e) {
+                    $this->flashSession->error($e->getMessage());
                 }
             }
         }
+
+        $this->view->setVar('form', $form);
     }
 
     public function indexAction()
@@ -105,7 +116,6 @@ class RegisterController extends ControllerBase
         $registerHash = $this->request->getQuery('registerhash');
 
         if (empty($registerHash)) {
-            $this->response->setStatusCode(422);
             $this->flashSession->error(t("Sorry! We can't seem to find the page you're looking for."));
 
             $this->dispatcher->forward([
@@ -118,8 +128,7 @@ class RegisterController extends ControllerBase
         }
 
         if (!$user = $this->userService->findFirstByRegisterHash($registerHash)) {
-            $this->response->setStatusCode(404);
-            $this->flashSession->error(t('Attempt to access non-existent user.'));
+            $this->flashSession->error(t("Sorry! We can't seem to find the page you're looking for."));
 
             $this->dispatcher->forward([
                 'for'        => 'frontend',
@@ -130,7 +139,7 @@ class RegisterController extends ControllerBase
             return;
         }
 
-        $form = new ResetPasswordForm;
+        $form = new ResetPasswordForm();
 
         if ($this->request->isPost()) {
             if (!$form->isValid($this->request->getPost())) {
@@ -158,101 +167,74 @@ class RegisterController extends ControllerBase
 
     public function signupAction()
     {
-        $form = new SignupForm;
+        $form = new SignupForm();
 
         if ($this->request->isPost()) {
-            $object = new Users();
-            $form->bind($this->request->getPost(), $object, ['firstname', 'lastname', 'email', 'username']);
+            $user = new Users();
+            $form->bind($this->request->getPost(), $user, ['firstname', 'lastname', 'email', 'username']);
 
             if (!$form->isValid()) {
                 foreach ($form->getMessages() as $message) {
                     $this->flashSession->error($message);
                 }
+            } else {
+                try {
+                    $params = $this->userService->registerNewMemberOrFail($user);
 
-                $this->currentRedirect();
-                return;
-            }
+                    if (!$this->mail->send($user->getEmail(), 'registration', $params)) {
+                        $this->flashSession->error(t('err_send_registration_email'));
+                    } else {
+                        $this->flashSession->success(t('account_successfully_created'));
+                        $this->response->redirect();
 
-            try {
-                $uniqueUrl = $this->userService->registerNewMemberOrFail($object);
-                $params = ['link' => $uniqueUrl];
-
-                if (!$this->mail->send($object->getEmail(), 'registration', $params)) {
-                    $message = t('err_send_registration_email');
-                } else {
-                    $message = t('account_successfully_created');
+                        return;
+                    }
+                } catch (EntityException $e) {
+                    $this->flashSession->error($e->getMessage());
                 }
-
-                $this->flashSession->success($message);
-                $this->response->redirect();
-
-                return;
-            } catch (EntityException $e) {
-                $this->flashSession->error($e->getMessage());
-                $this->currentRedirect();
-
-                return;
             }
         }
 
         $this->view->setVar('form', $form);
     }
 
-    /**
-     * @return \Phalcon\Http\ResponseInterface
-     */
     public function forgotpasswordAction()
     {
-        // Resets any "template before" layouts because we use multiple theme
         $this->view->cleanTemplateBefore();
 
-        $form = new ForgotPasswordForm;
+        $form = new ForgotPasswordForm();
 
         if ($this->request->isPost()) {
-            if (!$form->isValid($_POST)) {
+            if (!$form->isValid($this->request->getPost())) {
                 foreach ($form->getMessages() as $message) {
                     $this->flashSession->error($message);
                 }
             } else {
-                $object = Users::findFirstByEmail($this->request->getPost('email'));
-                if (!$object) {
-                    // @TODO: Implement brute force protection
-                    $this->flashSession->error(t('User not found.'));
-                    return $this->currentRedirect();
-                }
-                $lastpass = $object->getLastPasswdReset();
-                if (!empty($lastpass)
-                    && (date('Y-m-d H:i:s') - $object->getLastPasswdReset())> $this->config->application->passwdResetInterval //password reset interval on configuration
-                ) {
-                    $this->flashSession->error(
-                        t('You need to wait ') . (date('Y-m-d H:i:s') - $object->getLastPasswdReset()) . ' minutes'
-                    );
-                    return $this->currentRedirect();
-                }
+                try {
+                    $user = $this->userService->getFirstByEmail($this->request->getPost('email', 'email'));
+                    $params = $this->userService->resetPassword($user);
 
-                $passwordForgotHash = sha1('forgot' . microtime());
-                $object->setPasswdForgotHash($passwordForgotHash);
-                $object->setLastPasswdReset(date('Y-m-d H:i:s'));
-
-                if (!$object->save()) {
-                    $this->displayModelErrors($object);
-                } else {
-                    $params = [
-                        'firstname' => $object->getFirstname(),
-                        'lastname'  => $object->getLastname(),
-                        'link'      => ($this->request->isSecureRequest()
-                                            ? 'https://' : 'http://') . $this->request->getHttpHost()
-                                        . '/oauth/resetpassword?forgothash=' . $passwordForgotHash
-                    ];
-                    if (!$this->mail->send($object->getEmail(), 'forgotpassword', $params)) {
-                        $this->flashSession->error(t('Error sending email.'));
+                    if (!$this->mail->send($user->getEmail(), 'forgotpassword', $params)) {
+                        $this->flashSession->error(t('err_send_reset_passwd_email'));
                     } else {
-                        $this->flashSession->success(
-                            t('An email was sent to your address in order to continue with the reset password process.')
-                        );
+                        $this->flashSession->success(t('an_email_with_reset_pass_was_sent'));
+                        $this->response->redirect();
 
-                        return $this->response->redirect();
+                        return;
                     }
+                } catch (EntityNotFoundException $e) {
+                    $this->response->setStatusCode(422);
+                    $this->flashSession->error(t('user_not_exist'));
+
+                    $userData = [
+                        'usersId'   => null,
+                        'userAgent' => $this->request->getUserAgent(),
+                        'ipAddress' => $this->request->getClientAddress(true),
+                    ];
+
+                    $this->getDI()->getShared('eventsManager')->fire('user:failedLogin', $this, $userData);
+                } catch (EntityException $e) {
+                    $this->flashSession->error($e->getMessage());
                 }
             }
         }

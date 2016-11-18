@@ -58,10 +58,8 @@ return [
         'dataDir' => app_path('core/data/'),
         'repo'    => env('APP_REPO', 'https://github.com/phanbook'),
 
-        /**
-         * The length password hash send to you when you forget password
-         * you can change it
-         */
+        // @todo Move to the database
+        // seconds
         'passwdResetInterval' => 10,
 
         /**
@@ -85,7 +83,7 @@ return [
          */
         'hashingFactor' => env('SECURITY_HASHING_FACTOR'),
 
-        'timezone' => env('APP_TIMEZONE'),
+        'timezone' => env('APP_TIMEZONE', 'UTC'),
 
         /**
          * Authentication Unique Keys and Salts. Change these to different unique key!

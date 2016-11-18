@@ -6,6 +6,7 @@ $messages = [
     'About Us' => 'О нас',
     'About Yourself' => 'Обо мне',
     'account_successfully_created' => 'Аккаунт успешно создан. Вам было отправлено письмо с инструкциями для продолжения регистрации.',
+    'an_email_with_reset_pass_was_sent' => 'Вам было отправлено письмо с инструкциями для продолжения процесса сброса пароля.',
     'Another user with same email already exists' => 'Пользователь с таким адресом электронной почты уже существует',
     'Another user with same username already exists' => 'Пользователь с таким логином уже существует',
     'Answers' => 'Ответы',
@@ -32,6 +33,7 @@ $messages = [
     'Edit Theme' => 'Изменить тему',
     'E-Mail' => 'E-Mail',
     'err_send_registration_email' => 'Возникла ошибка при отправке регистрационного письма.',
+    'err_send_reset_passwd_email' => 'Возникла ошибка при отправке письма с инструкциями для сброса пароля.',
     // F
     'First Name' => 'Имя',
     'flag_question' => 'Тревога',
@@ -114,6 +116,7 @@ $messages = [
     'Twitter profile' => 'Аккаунт в Twitter',
     // U
     'Update' => 'Обновить',
+    'user_not_exist' => 'Пользователь не найден.',
     'Username' => 'Логин',
     'Username or Email' => 'Логин или Email',
     'Users' => 'Участники',

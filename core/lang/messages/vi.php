@@ -12,6 +12,7 @@ $messages = [
     'add_account' => 'Thêm tài khoản',
     'add_campaign' => 'Thêm chiến dịch',
     'add_contact_group' => 'Tạo nhóm liên lạc',
+    'an_email_with_reset_pass_was_sent' => 'An email was sent to your address in order to continue with the reset password process.',
     'answers' => 'Câu trả lời',
     'ask_questions' => 'Đặt câu hỏi',
     // B
@@ -46,6 +47,7 @@ $messages = [
     'enter_phone_number' => 'Nhập số điện thoại',
     'enter_your_message' => 'Nhập nội dung tin nhắn',
     'err_send_registration_email' => 'An error occurred when trying to send registration email.',
+    'err_send_reset_passwd_email' => 'An error occurred when trying to send reset password email.',
     'example_john_doe' => 'Example: John Doe',
     // F
     'field_is_required' => 'Trường %field% bắt buộc',
@@ -106,6 +108,7 @@ $messages = [
     'time' => 'Giờ',
     // U
     'use_form_to_invite_user' => 'Vui lòng sử dụng mẫu bên dưới để mời bạn của bạn',
+    'user_not_exist' => 'User not found.',
     'user_added_successfully' => 'Người dùng được thêm thành công',
     'user_already_exists' => 'Người dùng đã tồn tại',
     'Users' => 'Người dùng',

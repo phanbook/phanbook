@@ -35,14 +35,14 @@ class EntityException extends Exception implements ServiceExceptionInterface
      * @param string         $message
      * @param string         $type
      * @param int            $code
-     * @param Exception|null $previous
+     * @param Exception|null $prev
      */
-    public function __construct($entity, $message = '', $type = 'id', $code = 0, Exception $previous = null)
+    public function __construct(ModelInterface $entity, $message = '', $type = 'id', $code = 0, Exception $prev = null)
     {
         $this->entity = $entity;
 
         $messages = [];
-        foreach ($entity->getMessages() as $entityMessage) {
+        foreach ((array) $entity->getMessages() as $entityMessage) {
             $messages[] = (string) $entityMessage;
         }
 
@@ -52,7 +52,7 @@ class EntityException extends Exception implements ServiceExceptionInterface
             return rtrim($value, '.');
         }, $messages));
 
-        parent::__construct($message, $code, $previous);
+        parent::__construct($message, $code, $prev);
     }
 
     /**
