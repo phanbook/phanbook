@@ -35,35 +35,37 @@ class DispatcherListener extends AbstractEvent
      */
     public function beforeException(Event $event, Dispatcher $dispatcher, $exception)
     {
+        $module = $dispatcher->getModuleName();
+
         if ($exception instanceof Exception) {
-            $message  = $exception->getMessage();
-
             switch ($exception->getCode()) {
-                case Dispatcher::EXCEPTION_INVALID_HANDLER:
-                case Dispatcher::EXCEPTION_HANDLER_NOT_FOUND:
-                    $this->response->redirect();
-                    break;
-
-                case Dispatcher::EXCEPTION_ACTION_NOT_FOUND:
-                    $this->response->redirect('action-not-found?msg=' . $message);
-                    break;
-
                 case Dispatcher::EXCEPTION_CYCLIC_ROUTING:
-                    $this->response->redirect('cyclic-routing?msg=' . $message);
+                    $code = 400;
+                    $dispatcher->forward([
+                        'for' => 'bad-request'
+                    ]);
+
+                    break;
+                default:
+                    $code = 404;
+                    $dispatcher->forward([
+                        'for' => 'page-not-found'
+                    ]);
+
                     break;
             }
 
-            $this->logger->error($dispatcher->getModuleName() . ': ' . $exception->getMessage());
-        } elseif (APPLICATION_ENV !== ENV_PRODUCTION && $exception instanceof \Exception) {
-            $this->logger->error($dispatcher->getModuleName() . ': ' . $exception->getMessage());
+            $this->logger->error($module . " [$code]: " . $exception->getMessage());
+
+            return false;
+        }
+
+        if (APPLICATION_ENV !== ENV_PRODUCTION && $exception instanceof \Exception) {
+            $this->logger->error($module . " [{$exception->getCode()}]: " . $exception->getMessage());
 
             throw $exception;
         }
 
-        if ($event->isCancelable()) {
-            $event->stop();
-        }
-
-        return false;
+        return $event->isStopped();
     }
 }
