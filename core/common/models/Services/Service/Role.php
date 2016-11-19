@@ -35,6 +35,11 @@ class Role extends Service
     protected $defaultRole;
 
     /**
+     * @var Roles
+     */
+    protected $adminRole;
+
+    /**
      * Finds first default role.
      *
      * @return Roles|null
@@ -43,7 +48,7 @@ class Role extends Service
     {
         $role = Roles::query()
             ->where('isDefault = :default:', ['default' => true])
-            ->cache(['key' => $this->getCacheKey()])
+            ->cache(['key' => $this->getCacheKey('default')])
             ->limit(1)
             ->execute();
 
@@ -62,10 +67,57 @@ class Role extends Service
         }
 
         if (!$entity = $this->findFirstDefault()) {
-            $entity = $this->restoreDefault();
+            $entity = $this->restoreSystemRole([
+                'name'        => self::USERS_SYSTEM_ROLE,
+                'description' => 'Member privileges, granted after account confirmation.',
+                'type'        => 'user',
+            ]);
         }
 
         $this->defaultRole = $entity;
+
+        return $entity;
+    }
+
+    /**
+     * Finds first admin role.
+     *
+     * @return Roles|null
+     */
+    public function findFirstAdmin()
+    {
+        $role = Roles::query()
+            ->where('type = :type:', ['type' => 'admin'])
+            ->cache(['key' => $this->getCacheKey('admin')])
+            ->limit(1)
+            ->execute();
+
+        return $role->valid() ? $role->getFirst() : null;
+    }
+
+    /**
+     * Gets (or creates) first admin role.
+     *
+     * @return Roles
+     */
+    public function getOrCreateAdminRole()
+    {
+        if ($this->adminRole) {
+            return $this->adminRole;
+        }
+
+        if (!$entity = $this->findFirstAdmin()) {
+            $entity = $this->restoreSystemRole(
+                [
+                    'name'        => self::ADMINS_SYSTEM_ROLE,
+                    'description' => 'Administrative user, has access to everything.',
+                    'type'        => 'admin',
+                ],
+                false
+            );
+        }
+
+        $this->adminRole = $entity;
 
         return $entity;
     }
@@ -81,7 +133,12 @@ class Role extends Service
         $result = $entities->toArray();
 
         if (empty($result)) {
-            $entity = $this->restoreDefault();
+            $entity = $this->restoreSystemRole([
+                'name'        => self::USERS_SYSTEM_ROLE,
+                'description' => 'Member privileges, granted after account confirmation.',
+                'type'        => 'user',
+            ]);
+
             $result[0] = [
                 'id'          => $entity->getId(),
                 'name'        => $entity->getName(),
@@ -99,30 +156,29 @@ class Role extends Service
     }
 
     /**
-     * Restore default role.
+     * Restore system role.
      *
+     * @param  array $attributes
+     * @param  bool  $isDefault
      * @return Roles
+     *
      * @throws Exceptions\EntityException
      */
-    protected function restoreDefault()
+    protected function restoreSystemRole(array $attributes, $isDefault = true)
     {
-        $entity = new Roles([
-            'name'        => 'Users',
-            'description' => 'Member privileges, granted after account confirmation.',
-            'type'        => 'user',
-            'isSpecial'   => true,
-            'isDefault'   => true,
-        ]);
+        $attributes['isSpecial'] = true;
+        $attributes['isDefault'] = (bool) $isDefault;
 
+        $entity = new Roles($attributes);
         if (!$entity->save()) {
-            throw new Exceptions\EntityException($entity, 'Unable to restore default user role.');
+            throw new Exceptions\EntityException($entity, 'Unable to restore user role.');
         }
 
         return $entity;
     }
 
-    protected function getCacheKey()
+    protected function getCacheKey($suffix)
     {
-        return Text::underscore(str_replace('\\', ' ', trim(Roles::class, '\\'))) . '_Default';
+        return Text::underscore(str_replace('\\', ' ', trim(Roles::class, '\\'))) . '_' . ucfirst($suffix);
     }
 }
