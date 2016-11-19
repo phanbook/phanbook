@@ -51,6 +51,7 @@ return [
     Providers\RoutingServiceProvider::class,
     Providers\FilesystemServiceProvider::class,
     Providers\RandomServiceProvider::class,
+    Providers\AnnotationsServiceProvider::class,
 
     // Third Party Providers
     // ...
