@@ -14,11 +14,11 @@ namespace Phanbook\Common\Library\Acl;
 
 use Phalcon\Acl;
 use Phalcon\Config;
-use Phalcon\Mvc\Model;
-use Phanbook\Models\Access;
 use ReflectionClass;
+use Phalcon\Mvc\Model;
 use DirectoryIterator;
 use Phalcon\Di\Injectable;
+use Phanbook\Models\Access;
 use Phalcon\Acl\AdapterInterface;
 use Phanbook\Models\Services\Service;
 use Phanbook\Common\Library\Annotations\Adapter\Memory as AnnotationAdapter;
