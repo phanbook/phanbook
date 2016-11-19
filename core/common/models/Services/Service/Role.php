@@ -32,12 +32,12 @@ class Role extends Service
     /**
      * @var Roles
      */
-    protected $defaultRole;
+    private $defaultRole;
 
     /**
      * @var Roles
      */
-    protected $adminRole;
+    private $adminRole;
 
     /**
      * Finds first default role.
@@ -133,11 +133,7 @@ class Role extends Service
         $result = $entities->toArray();
 
         if (empty($result)) {
-            $entity = $this->restoreSystemRole([
-                'name'        => self::USERS_SYSTEM_ROLE,
-                'description' => 'Member privileges, granted after account confirmation.',
-                'type'        => 'user',
-            ]);
+            $entity = $this->getOrCreateFirstDefaultRole();
 
             $result[0] = [
                 'id'          => $entity->getId(),
