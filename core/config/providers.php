@@ -52,6 +52,7 @@ return [
     Providers\FilesystemServiceProvider::class,
     Providers\RandomServiceProvider::class,
     Providers\AnnotationsServiceProvider::class,
+    Providers\AclServiceProvider::class,
 
     // Third Party Providers
     // ...
