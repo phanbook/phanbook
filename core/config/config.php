@@ -44,7 +44,7 @@ return [
          * Please don't change it
          */
         'httpStatusCode' => 200, // 503
-        'modelsDir'      => app_path('core/models/'),
+        'modelsDir'      => app_path('core/common/models/'),
         'baseUri'        => env('APP_BASE_URI'),
         'view' => [
             'viewsDir'          => app_path('views/'),
