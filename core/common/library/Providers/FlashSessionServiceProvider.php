@@ -46,7 +46,13 @@ class FlashSessionServiceProvider extends AbstractServiceProvider
         $this->di->setShared(
             $this->serviceName,
             function () use ($bannerStyle) {
-                return new Session($bannerStyle);
+                $flash = new Session();
+
+                $flash->setAutoescape(true);
+                $flash->setDI($this);
+                $flash->setCssClasses($bannerStyle);
+
+                return $flash;
             }
         );
     }
