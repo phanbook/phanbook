@@ -21,6 +21,10 @@ use Phalcon\Paginator\Adapter\QueryBuilder as PaginatorQueryBuilder;
 /**
  * \Phanbook\Controllers\Controller
  *
+ * @property \Phanbook\Auth\Auth $auth
+ * @property \Phalcon\Logger\Adapter\File $logger
+ * @property \Phanbook\Common\Library\Acl\Manager $aclManager
+ *
  * @package Phanbook\Controllers
  */
 class Controller extends AbstractController

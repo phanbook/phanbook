@@ -17,6 +17,7 @@ use Phalcon\Loader;
 use Phalcon\DiInterface;
 use Phalcon\Mvc\ModuleDefinitionInterface;
 use Phanbook\Common\Library\Events\ViewListener;
+use Phanbook\Common\Library\Events\AccessListener;
 use Phanbook\Common\Library\Events\DispatcherListener;
 
 /**
@@ -61,7 +62,8 @@ class Module implements ModuleDefinitionInterface
 
         // Setting up the MVC Dispatcher
         $eventsManager = $di->getShared('eventsManager');
-        $eventsManager->attach('dispatch:beforeException', new DispatcherListener($di));
+        $eventsManager->attach('dispatch:beforeDispatch', new AccessListener($di), 1000);
+        $eventsManager->attach('dispatch:beforeException', new DispatcherListener($di), 999);
 
         // Setting up the View Component
         $eventsManager->attach('view:notFoundView', new ViewListener($di));
