@@ -38,7 +38,14 @@ class DbListener extends AbstractEvent
         $context   = $variables ?: [];
 
         $logger = $this->getDI()->getLogger(date('Y-m-d') . '-' . 'db');
-        $logger->debug($string . ' [' . implode(', ', $context) . ']');
+
+        if (!empty($context)) {
+            $context = ' [' . implode(', ', $context) . ']';
+        } else {
+            $context = '';
+        }
+
+        $logger->debug($string . $context);
 
         return true;
     }
