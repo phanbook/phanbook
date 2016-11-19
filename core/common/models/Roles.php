@@ -24,7 +24,9 @@ use Phalcon\Mvc\Model\Resultset\Simple;
  * @property bool   $isSpecial
  * @property bool   $isDefault
  * @property Simple $users
+ * @property Access $access
  *
+ * @method Access getAccess()
  * @method Simple getUsers($params = null)
  * @method static Roles|false findFirst($params = null)
  * @method static Roles|false findFirstByIsDefault(bool $flag)
@@ -34,7 +36,7 @@ use Phalcon\Mvc\Model\Resultset\Simple;
 class Roles extends ModelBase
 {
     /**
-     * @var integer
+     * @var int
      */
     protected $id;
 
@@ -74,6 +76,8 @@ class Roles extends ModelBase
             'id',
             ['alias' => 'users']
         );
+
+        $this->hasOne('id', Access::class, 'roleId', ['alias' => 'access', 'reusable' => true]);
     }
 
     /**

@@ -669,6 +669,29 @@ INSERT INTO `roles_users` (`users_id`, `roles_id`) VALUES
     (1, 3);
 
 --
+-- Table structure for table `access`
+--
+
+DROP TABLE IF EXISTS `access`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `access` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `object` VARCHAR(64) NOT NULL,
+    `action` VARCHAR(255) NOT NULL,
+    `role_id` INT UNSIGNED NOT NULL,
+    `value` VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+INSERT INTO `access` (`id`, `object`, `action`, `role_id`, `value`) VALUES
+    (1, 'AdminArea', 'access', 1, 'allow'),
+    (2, 'AdminArea', 'access', 2, 'deny'),
+    (3, 'AdminArea', 'access', 3, 'deny');
+
+--
 -- Table structure for table `usersBadges`
 --
 
