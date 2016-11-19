@@ -24,6 +24,11 @@ use Phanbook\Models\Services\Exceptions;
  */
 class Role extends Service
 {
+    const ADMINS_SYSTEM_ROLE = 'Admins';
+    const USERS_SYSTEM_ROLE = 'Users';
+    const ANONYMOUS_SYSTEM_ROLE = 'Anonymous';
+    const MODERATORS_SYSTEM_ROLE = 'Moderators';
+
     /**
      * @var Roles
      */
