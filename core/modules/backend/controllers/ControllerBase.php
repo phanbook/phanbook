@@ -19,9 +19,6 @@ use Phanbook\Controllers\Controller;
 /**
  * \Phanbook\Backend\Controllers\ControllerBase
  *
- * @property \Phanbook\Auth\Auth $auth
- * @property \Phalcon\Logger\Adapter\File $logger
- *
  * @package Phanbook\Backend\Controllers
  */
 class ControllerBase extends Controller

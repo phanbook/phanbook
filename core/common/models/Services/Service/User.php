@@ -27,6 +27,11 @@ use Phanbook\Models\Services\Exceptions;
 class User extends Service
 {
     /**
+     * @var Users
+     */
+    protected $viewer;
+
+    /**
      * Finds User by ID.
      *
      * @param  int $id The User ID.
@@ -452,5 +457,62 @@ class User extends Service
                 t('We were unable to create a new password. Please try again later.')
             );
         }
+    }
+
+    /**
+     * Gets current viewer.
+     *
+     * @return Users
+     */
+    public function getCurrentViewer()
+    {
+        if ($this->viewer) {
+            return $this->viewer;
+        }
+
+        $entity = null;
+        if ($this->auth->isAuthorizedVisitor()) {
+            $entity = $this->findFirstById($this->auth->getUserId());
+        }
+
+        if (!$entity) {
+            $entity = $this->createDefaultViewer();
+        }
+
+        $this->viewer = $entity;
+
+        return $entity;
+    }
+
+    /**
+     * Sets current viewer.
+     *
+     * @param Users $entity
+     */
+    public function setCurrentViewer(Users $entity)
+    {
+        $this->viewer = $entity;
+    }
+
+    /**
+     * Gets role names for current viewer.
+     *
+     * @return string[]
+     */
+    public function getRoleNamesForCurrentViewer()
+    {
+        $entity = $this->getCurrentViewer();
+        if ($entity->getId() == 0 || $entity->countRoles() == 0) {
+            return [Role::ANONYMOUS_SYSTEM_ROLE];
+        }
+
+        return array_column($entity->getRoles(['columns' => ['name']])->toArray(), 'name');
+    }
+
+    protected function createDefaultViewer()
+    {
+        $entity = new Users(['id' => 0]);
+
+        return $entity;
     }
 }

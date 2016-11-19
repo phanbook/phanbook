@@ -13,6 +13,7 @@
 namespace Phanbook\Models;
 
 use Phalcon\Validation;
+use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Validation\Validator\Email;
 use Phalcon\Validation\Validator\PresenceOf;
 use Phalcon\Validation\Validator\Uniqueness;
@@ -20,6 +21,12 @@ use Phalcon\Validation\Validator\Uniqueness;
 /**
  * \Phanbook\Models\Users
  *
+ * @property Simple $roles
+ * @property Simple $rolesUsers
+ *
+ * @method int countRoles($params = null)
+ * @method Simple getRoles($params = null)
+ * @method Simple getRolesUsers($params = null)
  * @method static Users|false findFirstById(int $id)
  * @method static Users|false findFirstByUsername(string $name)
  *
@@ -239,6 +246,18 @@ class Users extends ModelBase
     {
         parent::initialize();
 
+        $this->hasManyToMany(
+            'id',
+            RolesUsers::class,
+            'userId',
+            'roleId',
+            Roles::class,
+            'id',
+            ['alias' => 'roles']
+        );
+
+        $this->hasMany('id', RolesUsers::class, 'userId', ['alias' => 'rolesUsers', 'reusable' => true]);
+
         $this->hasMany('id', UsersBadges::class, 'usersId', ['alias' => 'badges', 'reusable' => true]);
 
         $this->hasMany('id', Posts::class, 'usersId', ['alias' => 'posts', 'reusable' => true]);
@@ -325,18 +344,21 @@ class Users extends ModelBase
 
         return $this;
     }
+
     public function setTokenGoogle($tokenGoogle)
     {
         $this->tokenGoogle = $tokenGoogle;
 
         return $this;
     }
+
     public function setTokenFacebook($tokenFacebook)
     {
         $this->tokenFacebook = $tokenFacebook;
 
         return $this;
     }
+
     public function setUid($uid)
     {
         $this->uid = $uid;
