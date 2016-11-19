@@ -71,6 +71,34 @@ class Role extends Service
     }
 
     /**
+     * Gets roles list.
+     *
+     * @return \stdClass[]
+     */
+    public function getList()
+    {
+        $entities = Roles::find(['columns' => ['id', 'name', 'description']]);
+        $result = $entities->toArray();
+
+        if (empty($result)) {
+            $entity = $this->restoreDefault();
+            $result[0] = [
+                'id'          => $entity->getId(),
+                'name'        => $entity->getName(),
+                'description' => $entity->getDescription(),
+            ];
+        }
+
+        $result = array_map(function ($role) {
+            $role['id'] = (int) $role['id'];
+
+            return (object) $role;
+        }, $result);
+
+        return $result;
+    }
+
+    /**
      * Restore default role.
      *
      * @return Roles
