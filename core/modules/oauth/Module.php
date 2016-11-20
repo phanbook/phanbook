@@ -15,7 +15,7 @@ namespace Phanbook\Oauth;
 
 use Phalcon\Loader;
 use Phalcon\DiInterface;
-use Phalcon\Mvc\ModuleDefinitionInterface;
+use Phanbook\Common\Module as BaseModule;
 use Phanbook\Common\Library\Events\UserLogins;
 use Phanbook\Common\Library\Events\ViewListener;
 use Phanbook\Common\Library\Events\DispatcherListener;
@@ -25,8 +25,18 @@ use Phanbook\Common\Library\Events\DispatcherListener;
  *
  * @package Phanbook\Oauth
  */
-class Module implements ModuleDefinitionInterface
+class Module extends BaseModule
 {
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getHandlersNamespace()
+    {
+        return 'Phanbook\Oauth\Controllers';
+    }
+
     /**
      * Registers an autoloader related to the module.
      *
@@ -37,8 +47,8 @@ class Module implements ModuleDefinitionInterface
         $loader = new Loader();
 
         $namespaces = [
-            'Phanbook\Oauth\Controllers' => __DIR__ . '/controllers/',
-            'Phanbook\Oauth\Forms'       => __DIR__ . '/forms/',
+            $this->getHandlersNamespace() => __DIR__ . '/controllers/',
+            'Phanbook\Oauth\Forms'        => __DIR__ . '/forms/',
         ];
 
         $loader->registerNamespaces($namespaces, true);
