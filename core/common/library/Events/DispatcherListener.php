@@ -111,6 +111,13 @@ class DispatcherListener extends AbstractEvent
             throw $exception;
         }
 
+        $dispatcher->forward([
+            'module'     => 'error',
+            'namespace'  => 'Phanbook\Error\Controllers',
+            'controller' => 'index',
+            'action'     => 'show500',
+        ]);
+
         return $event->isStopped();
     }
 }
