@@ -39,8 +39,7 @@ class RoutingServiceProvider extends AbstractServiceProvider
         $this->di->setShared(
             $this->serviceName,
             function () {
-                /** @var \Phalcon\DiInterface $this */
-                $bootstrap = $this->getShared('bootstrap');
+                $bootstrap = container('bootstrap');
 
                 if ($bootstrap->getMode() == 'cli') {
                     $router = new CliRouter();
@@ -49,7 +48,7 @@ class RoutingServiceProvider extends AbstractServiceProvider
                     $router = new MvcRouter(false);
                     $router->removeExtraSlashes(true);
 
-                    foreach ($this->getShared('modules') as $module) {
+                    foreach (container('modules') as $module) {
                         if (empty($module->router)) {
                             continue;
                         }
@@ -62,11 +61,11 @@ class RoutingServiceProvider extends AbstractServiceProvider
                         }
 
                         $router->mount($group);
+                        $router->setEventsManager(container('eventsManager'));
                     }
                 }
 
-                $router->setDI($this);
-                $router->setEventsManager($this->getShared('eventsManager'));
+                $router->setDI(container());
 
                 return $router;
             }
