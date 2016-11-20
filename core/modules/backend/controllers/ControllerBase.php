@@ -13,7 +13,6 @@
  */
 namespace Phanbook\Backend\Controllers;
 
-use Phalcon\Mvc\DispatcherInterface;
 use Phanbook\Controllers\Controller;
 
 /**
@@ -23,55 +22,20 @@ use Phanbook\Controllers\Controller;
  */
 class ControllerBase extends Controller
 {
-    /**
-     * @var array
-     */
-    private $securedRoutes = [
-        ['controller' => 'admin'],
-        ['controller' => 'template'],
-        ['controller' => 'posts'],
-        ['controller' => 'settings'],
-        ['controller' => 'pages'],
-        ['controller' => 'users'],
-        ['controller' => 'tags'],
-        ['controller' => 'dashboard'],
-        ['controller' => 'update'],
-        ['controller' => 'tests'],
-        ['controller' => 'media'],
-        ['controller' => 'themes']
-
-    ];
-
-    /**
-     * Triggered before executing the controller/action method.
-     *
-     * @param  DispatcherInterface $dispatcher
-     * @return bool
-     */
-    public function beforeExecuteRoute(DispatcherInterface $dispatcher)
-    {
-        if ($this->auth->isAdmin() && $this->isSecuredRoute($dispatcher)) {
-            return true;
-        }
-        header('Location:/oauth/login');
-        exit;
-    }
-
-
     public function initialize()
     {
-        $this->view->currentOrder = $this->currentOrder;
         $this->loadDefaultAssets();
-        $this->view->menuStruct = $this->menuStruct;
+
+        $this->view->setVars([
+            'currentOrder' => $this->currentOrder,
+            'menuStruct'   => container('menuStruct'),
+        ]);
     }
 
     /**
-     * loadDefaultAssets function.
-     *
-     * @access private
-     * @return void
+     * Load module assets.
      */
-    private function loadDefaultAssets()
+    protected function loadDefaultAssets()
     {
         $this->assets
             ->addCss('//fonts.googleapis.com/css?family=Open+Sans', false)
@@ -80,6 +44,7 @@ class ControllerBase extends Controller
             ->addCss('core/assets/css/animate.css')
             ->addCss('backend/assets/css/app.css')
             ->addCss('backend/assets/css/app-custom.css');
+
         $this->assets
             ->addJs('core/assets/js/jquery.js')
             ->addJs('core/assets/js/jquery-ui.js')
@@ -89,21 +54,5 @@ class ControllerBase extends Controller
             ->addJs('backend/assets/js/jquery.taginput.src.js')
             ->addJs('backend/assets/js/app.js')
             ->addJs('backend/assets/js/app.plugin-custom.js');
-    }
-
-    /**
-     * @param DispatcherInterface $dispatcher
-     *
-     * @return bool
-     */
-    private function isSecuredRoute(DispatcherInterface $dispatcher)
-    {
-        foreach ($this->securedRoutes as $route) {
-            if ($route['controller'] == $dispatcher->getControllerName()) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }
