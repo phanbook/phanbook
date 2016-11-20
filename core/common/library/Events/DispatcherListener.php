@@ -15,6 +15,7 @@ namespace Phanbook\Common\Library\Events;
 use Phalcon\Dispatcher;
 use Phalcon\Events\Event;
 use Phalcon\Mvc\Dispatcher\Exception;
+use Phalcon\Di\Exception as DiException;
 
 /**
  * \Phanbook\Common\Library\Events\DispatcherListener
@@ -23,6 +24,42 @@ use Phalcon\Mvc\Dispatcher\Exception;
  */
 class DispatcherListener extends AbstractEvent
 {
+    /**
+     * Before forwarding is happening.
+     *
+     * @param Event      $event      Event object.
+     * @param Dispatcher $dispatcher Dispatcher object.
+     * @param array      $forward    The forward data.
+     *
+     * @return bool
+     * @throws Exception
+     * @throws DiException
+     */
+    public function beforeForward(Event $event, Dispatcher $dispatcher, array $forward)
+    {
+        if (!empty($forward['module'])) {
+            if (!container('modules')->offsetExists($forward['module'])) {
+                throw new Exception("Module {$forward['module']} does not exist.");
+            }
+
+            $moduleDefinition = container('modules')->offsetGet($forward['module']);
+
+            if (!container()->has($moduleDefinition->className)) {
+                throw new DiException(
+                    "Service '{$moduleDefinition->className}' wasn't found in the dependency injection container"
+                );
+            }
+
+            /** @var \Phanbook\Common\ModuleInterface $module */
+            $module = container($moduleDefinition->className);
+
+            $dispatcher->setModuleName($forward['module']);
+            $dispatcher->setNamespaceName($module->getHandlersNamespace());
+        }
+
+        return true;
+    }
+
     /**
      * Before exception is happening.
      *
@@ -38,18 +75,26 @@ class DispatcherListener extends AbstractEvent
         $module = $dispatcher->getModuleName();
 
         if ($exception instanceof Exception) {
+            $dispatcher->setModuleName('error');
+
             switch ($exception->getCode()) {
                 case Dispatcher::EXCEPTION_CYCLIC_ROUTING:
                     $code = 400;
                     $dispatcher->forward([
-                        'for' => 'bad-request'
+                        'module'     => 'error',
+                        'namespace'  => 'Phanbook\Error\Controllers',
+                        'controller' => 'index',
+                        'action'     => 'show400',
                     ]);
 
                     break;
                 default:
                     $code = 404;
                     $dispatcher->forward([
-                        'for' => 'page-not-found'
+                        'module'     => 'error',
+                        'namespace'  => 'Phanbook\Error\Controllers',
+                        'controller' => 'index',
+                        'action'     => 'show404',
                     ]);
 
                     break;
