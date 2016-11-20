@@ -16,6 +16,7 @@ use Phalcon\Registry;
 use RecursiveDirectoryIterator;
 use Phanbook\Cli\Module as Cli;
 use Phanbook\Oauth\Module as oAuth;
+use Phanbook\Error\Module as Error;
 use Phanbook\Backend\Module as Backend;
 use Phanbook\Frontend\Module as Frontend;
 
@@ -57,6 +58,10 @@ class ModulesServiceProvider extends AbstractServiceProvider
         }
 
         $core = [
+            'error' => [
+                'className' => Error::class,
+                'path'      => modules_path('error/Module.php')
+            ],
             'frontend' => [
                 'className' => Frontend::class,
                 'path'      => modules_path('frontend/Module.php')
@@ -72,7 +77,7 @@ class ModulesServiceProvider extends AbstractServiceProvider
             'cli' => [
                 'className' => Cli::class,
                 'path'      => modules_path('cli/Module.php')
-            ]
+            ],
         ];
 
         $this->modules = array_merge($core, $this->modules);
@@ -109,10 +114,29 @@ class ModulesServiceProvider extends AbstractServiceProvider
     public function boot()
     {
         /** @var \Phanbook\Common\Application $bootstrap */
-        $bootstrap = $this->getDI()->getShared('bootstrap');
+        $bootstrap = container('bootstrap');
+
+        $modules = [];
+        foreach ($this->modules as $name => $module) {
+            $moduleClass = $module['className'];
+            if (!class_exists($moduleClass)) {
+                /** @noinspection PhpIncludeInspection */
+                include $module['path'];
+            }
+
+            /** @var \Phanbook\Common\ModuleInterface $moduleBootstrap */
+            $moduleBootstrap = new $moduleClass(container());
+            $modules[$name] = function () use ($moduleBootstrap) {
+                $moduleBootstrap->initialize();
+
+                return $moduleBootstrap;
+            };
+
+            $this->getDI()->setShared($module['className'], $modules[$name]);
+        }
 
         /** @var \Phalcon\Mvc\Application $app */
         $app = $bootstrap->getApplication();
-        $app->registerModules($this->modules);
+        $app->registerModules($modules);
     }
 }
