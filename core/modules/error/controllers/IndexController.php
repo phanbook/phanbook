@@ -49,11 +49,32 @@ class IndexController extends Controller
 
     public function show400Action()
     {
-        $this->response->setStatusCode(400, 'Page Not Found');
+        $this->response->setStatusCode(400);
+    }
+
+    public function show401Action()
+    {
+        $this->response->setStatusCode(401);
+        $this->response->setHeader('WWW-Authenticate', 'Digest realm="Access denied"');
+    }
+
+    public function show403Action()
+    {
+        $this->response->setStatusCode(403);
     }
 
     public function show404Action()
     {
-        $this->response->setStatusCode(404, 'Page Not Found');
+        $this->response->setStatusCode(404);
+    }
+
+    public function show500Action()
+    {
+        $this->response->setStatusCode(500);
+    }
+
+    public function show503Action()
+    {
+        $this->response->setStatusCode(503);
     }
 }
