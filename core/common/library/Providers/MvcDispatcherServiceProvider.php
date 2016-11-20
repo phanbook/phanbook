@@ -12,8 +12,10 @@
  */
 namespace Phanbook\Common\Library\Providers;
 
-use Phalcon\Mvc\Dispatcher as MvcDi;
 use Phalcon\Cli\Dispatcher as CliDi;
+use Phanbook\Common\Library\Events\AccessListener;
+use Phanbook\Common\Library\Mvc\Dispatcher as MvcDi;
+use Phanbook\Common\Library\Events\DispatcherListener;
 
 /**
  * \Phanbook\Common\Library\Providers\MvcDispatcherServiceProvider
@@ -38,12 +40,17 @@ class MvcDispatcherServiceProvider extends AbstractServiceProvider
         $this->di->setShared(
             $this->serviceName,
             function () {
-                /** @var \Phalcon\DiInterface $this */
-                $bootstrap = $this->getShared('bootstrap');
-                $dispatcher = $bootstrap->getMode() == 'cli'  ? new CliDi() : new MvcDi();
+                if (container('bootstrap')->getMode() == 'cli') {
+                    $dispatcher = new CliDi();
+                } else {
+                    $dispatcher = new MvcDi();
+                }
 
-                $dispatcher->setDI($this);
-                $dispatcher->setEventsManager($this->getShared('eventsManager'));
+                container('eventsManager')->attach('dispatch', new DispatcherListener($this));
+                container('eventsManager')->attach('dispatch:beforeDispatch', new AccessListener($this));
+
+                $dispatcher->setDI(container());
+                $dispatcher->setEventsManager(container('eventsManager'));
 
                 return $dispatcher;
             }

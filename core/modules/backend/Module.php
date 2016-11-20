@@ -17,8 +17,6 @@ use Phalcon\Loader;
 use Phalcon\DiInterface;
 use Phanbook\Common\Module as BaseModule;
 use Phanbook\Common\Library\Events\ViewListener;
-use Phanbook\Common\Library\Events\AccessListener;
-use Phanbook\Common\Library\Events\DispatcherListener;
 
 /**
  * \Phanbook\Backend\Module
@@ -70,13 +68,10 @@ class Module extends BaseModule
         $url = $di->getShared('url');
         $url->setBaseUri($moduleConfig->application->baseUri);
 
-        // Setting up the MVC Dispatcher
         $eventsManager = $di->getShared('eventsManager');
-        $eventsManager->attach('dispatch:beforeDispatch', new AccessListener($di), 1000);
-        $eventsManager->attach('dispatch:beforeException', new DispatcherListener($di), 999);
+        $eventsManager->attach('view:notFoundView', new ViewListener($di));
 
         // Setting up the View Component
-        $eventsManager->attach('view:notFoundView', new ViewListener($di));
         $view = $di->getShared('view');
         $view->setViewsDir($moduleConfig->application->viewsDir);
 
