@@ -66,6 +66,7 @@ class RoutingServiceProvider extends AbstractServiceProvider
                 }
 
                 $router->setDI($this);
+                $router->setEventsManager($this->getShared('eventsManager'));
 
                 return $router;
             }
