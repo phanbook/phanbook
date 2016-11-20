@@ -20,50 +20,23 @@ $backend = new RouterGroup([
     'namespace'  => 'Phanbook\Backend\Controllers',
 ]);
 
-$backend->add('/backend/:controller', [
-    'module'     => 'backend',
-    'controller' => 1,
-]);
-$backend->add('/backend/:controller/:int', [
-    'module'     => 'backend',
-    'controller' => 1,
-    'id'         => 2,
-]);
-$backend->add('/backend/:controller/:action/:params', [
-    'module'     => 'backend',
+$backend->add('/:module/:controller/:action/:params', [
     'controller' => 1,
     'action'     => 2,
     'params'     => 3,
 ]);
 
-$backend->add('/backend', [
-    'module'     => 'backend',
+$backend->add('/:module/:controller/:int', [
+    'controller' => 1,
+    'id'         => 2,
+]);
+
+$backend->add('/:module/:controller', [
+    'controller' => 1,
+]);
+
+$backend->add('/:module[/]?', [
     'controller' => 'dashboard',
-    'action'     => 'index'
-]);
-
-$backend->add('/maintenance', [
-    'module'     => 'backend',
-    'controller' => 'errors',
-    'action'     => 'show503'
-]);
-
-$backend->add('/action-not-found', [
-    'module'     => 'backend',
-    'controller' => 'errors',
-    'action'     => 'show404'
-]);
-
-$backend->add('/cyclic-routing', [
-    'module'     => 'backend',
-    'controller' => 'errors',
-    'action'     => 'show404'
-]);
-
-$backend->add('/error-reporting', [
-    'module'     => 'backend',
-    'controller' => 'errors',
-    'action'     => 'show505'
 ]);
 
 return $backend;
