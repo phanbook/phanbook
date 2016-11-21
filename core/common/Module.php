@@ -72,8 +72,6 @@ abstract class Module implements ModuleInterface
         } else {
             $eventsManager = new Manager();
             $eventsManager->enablePriorities(true);
-
-            $this->di->setShared('eventsManager', $eventsManager);
         }
 
         $this->setEventsManager($eventsManager);
