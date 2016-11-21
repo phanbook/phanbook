@@ -20,22 +20,27 @@ $backend = new RouterGroup([
     'namespace'  => 'Phanbook\Backend\Controllers',
 ]);
 
-$backend->add('/:module/:controller/:action/:params', [
+$backend->add('/backend/:controller/:action/:params', [
     'controller' => 1,
     'action'     => 2,
     'params'     => 3,
 ]);
 
-$backend->add('/:module/:controller/:int', [
+$backend->add('/backend/:controller/:action', [
+    'controller' => 1,
+    'action'     => 2,
+]);
+
+$backend->add('/backend/:controller/:int', [
     'controller' => 1,
     'id'         => 2,
 ]);
 
-$backend->add('/:module/:controller', [
+$backend->add('/backend/:controller', [
     'controller' => 1,
 ]);
 
-$backend->add('/:module[/]?', [
+$backend->add('/backend[/]?', [
     'controller' => 'dashboard',
 ]);
 
