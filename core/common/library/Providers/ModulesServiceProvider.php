@@ -19,6 +19,8 @@ use Phanbook\Oauth\Module as oAuth;
 use Phanbook\Error\Module as Error;
 use Phanbook\Backend\Module as Backend;
 use Phanbook\Frontend\Module as Frontend;
+use Phalcon\Cli\Console as ConsoleApplication;
+use Phalcon\Mvc\Application as MvcApplication;
 
 /**
  * \Phanbook\Common\Library\Providers\ModulesServiceProvider
@@ -113,20 +115,19 @@ class ModulesServiceProvider extends AbstractServiceProvider
      */
     public function boot()
     {
-        /** @var \Phanbook\Common\Application $bootstrap */
-        $bootstrap = container('bootstrap');
-
         $modules = [];
-        foreach ($this->modules as $name => $module) {
-            $moduleClass = $module['className'];
-            if (!class_exists($moduleClass)) {
-                /** @noinspection PhpIncludeInspection */
-                include $module['path'];
-            }
 
-            /** @var \Phanbook\Common\ModuleInterface $moduleBootstrap */
-            $moduleBootstrap = new $moduleClass(container());
-            $modules[$name] = function () use ($moduleBootstrap) {
+        foreach ($this->modules as $name => $module) {
+            $modules[$name] = function () use ($module) {
+                $moduleClass = $module['className'];
+                if (!class_exists($moduleClass)) {
+                    /** @noinspection PhpIncludeInspection */
+                    include_once $module['path'];
+                }
+
+                /** @var \Phanbook\Common\ModuleInterface $moduleBootstrap */
+                $moduleBootstrap = new $moduleClass(container());
+
                 $moduleBootstrap->initialize();
 
                 return $moduleBootstrap;
@@ -135,8 +136,13 @@ class ModulesServiceProvider extends AbstractServiceProvider
             $this->getDI()->setShared($module['className'], $modules[$name]);
         }
 
-        /** @var \Phalcon\Mvc\Application $app */
-        $app = $bootstrap->getApplication();
-        $app->registerModules($modules);
+        /** @var MvcApplication|ConsoleApplication $application */
+        $application = container('bootstrap')->getApplication();
+
+        if ($application instanceof ConsoleApplication) {
+            $application->registerModules($this->modules);
+        } else {
+            $application->registerModules($modules);
+        }
     }
 }
