@@ -13,11 +13,12 @@
 namespace Phanbook\Common\Library\Events;
 
 use Phalcon\Text;
+use Phalcon\Dispatcher;
 use Phalcon\Events\Event;
-use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\Dispatcher\Exception;
 use Phanbook\Models\Services\Service;
 use Phanbook\Common\Library\Acl\Manager;
+use Phalcon\Cli\DispatcherInterface as CliDispatcher;
 
 /**
  * \Phanbook\Common\Library\Events\AccessListener
@@ -37,6 +38,11 @@ class AccessListener extends AbstractEvent
      */
     public function beforeDispatch(Event $event, Dispatcher $dispatcher, array $data = null)
     {
+        if (is_subclass_of($dispatcher, CliDispatcher::class)) {
+            // Do not check access rights on CLI mode
+            return true;
+        }
+
         /** @var Service\User $userService */
         $userService = $this->getDI()->getShared(Service\User::class);
 
