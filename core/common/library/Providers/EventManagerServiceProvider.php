@@ -41,8 +41,6 @@ class EventManagerServiceProvider extends AbstractServiceProvider
                 $em = new Manager();
                 $em->enablePriorities(true);
 
-                $this->setEventsManager($em);
-
                 return $em;
             }
         );

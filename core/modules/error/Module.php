@@ -11,18 +11,17 @@
  * @author  Phanbook <hello@phanbook.com>
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
-namespace Phanbook\Oauth;
+namespace Phanbook\Error;
 
 use Phalcon\Loader;
 use Phalcon\DiInterface;
 use Phanbook\Common\Module as BaseModule;
-use Phanbook\Common\Library\Events\UserLogins;
 use Phanbook\Common\Library\Events\ViewListener;
 
 /**
- * \Phanbook\Oauth\Module
+ * \Phanbook\Error\Module
  *
- * @package Phanbook\Oauth
+ * @package Phanbook\Error
  */
 class Module extends BaseModule
 {
@@ -33,7 +32,7 @@ class Module extends BaseModule
      */
     public function getHandlersNamespace()
     {
-        return 'Phanbook\Oauth\Controllers';
+        return 'Phanbook\Error\Controllers';
     }
 
     /**
@@ -47,7 +46,6 @@ class Module extends BaseModule
 
         $namespaces = [
             $this->getHandlersNamespace() => __DIR__ . '/controllers/',
-            'Phanbook\Oauth\Forms'        => __DIR__ . '/forms/',
         ];
 
         $loader->registerNamespaces($namespaces, true);
@@ -63,20 +61,13 @@ class Module extends BaseModule
     public function registerServices(DiInterface $di)
     {
         // Read configuration
-        $moduleConfig = require_once __DIR__ . '/config/config.php';
-
-        $eventsManager = $di->getShared('eventsManager');
-        $eventsManager->attach('user', new UserLogins($di));
-
-        // Tune Up the URL Component
-        $url = $di->getShared('url');
-        $url->setBaseUri($moduleConfig->application->baseUri);
+        $moduleConfig = require __DIR__ . '/config/config.php';
 
         $eventsManager = $di->getShared('eventsManager');
         $eventsManager->attach('view:notFoundView', new ViewListener($di));
 
         // Setting up the View Component
         $view = $di->getShared('view');
-        $view->setViewsDir($moduleConfig->application->viewsDir);
+        $view->setViewsDir($moduleConfig['viewsDir']);
     }
 }

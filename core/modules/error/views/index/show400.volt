@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html>
-    <head>
-
-    </head>
+    <head></head>
     <body class="text-center" style="background: #f1f1f1">
         <div class="m-b-md">
         <h3 class="m-b-none">{{ t('Phanbook Errors') }}</h3>

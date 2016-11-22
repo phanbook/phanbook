@@ -13,10 +13,12 @@
 namespace Phanbook\Common\Library\Events;
 
 use Phalcon\Text;
+use Phalcon\Dispatcher;
 use Phalcon\Events\Event;
-use Phalcon\Mvc\Dispatcher;
+use Phalcon\Mvc\Dispatcher\Exception;
 use Phanbook\Models\Services\Service;
 use Phanbook\Common\Library\Acl\Manager;
+use Phalcon\Cli\DispatcherInterface as CliDispatcher;
 
 /**
  * \Phanbook\Common\Library\Events\AccessListener
@@ -48,10 +50,11 @@ class AccessListener extends AbstractEvent
         $protectedResource = $dispatcher->getModuleName() === 'backend' || Text::startsWith($controller, 'Admin', true);
 
         if ($protectedResource && !$aclManager->isAllowed($roles, Manager::ADMIN_AREA, 'access')) {
+            $resource = "{$dispatcher->getControllerClass()}::{$dispatcher->getActiveMethod()}";
             $this->getDI()->getShared('eventsManager')->fire(
                 'dispatch:beforeException',
                 $dispatcher,
-                new Dispatcher\Exception
+                new Exception("Unauthorized attempt to access protected resource: {$resource}.")
             );
         }
 
