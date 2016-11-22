@@ -13,12 +13,11 @@
 namespace Phanbook\Common\Library\Events;
 
 use Phalcon\Text;
-use Phalcon\Dispatcher;
 use Phalcon\Events\Event;
+use Phalcon\DispatcherInterface;
 use Phalcon\Mvc\Dispatcher\Exception;
 use Phanbook\Models\Services\Service;
 use Phanbook\Common\Library\Acl\Manager;
-use Phalcon\Cli\DispatcherInterface as CliDispatcher;
 
 /**
  * \Phanbook\Common\Library\Events\AccessListener
@@ -30,13 +29,13 @@ class AccessListener extends AbstractEvent
     /**
      * This action is executed before execute any action in the application.
      *
-     * @param Event      $event      Event object.
-     * @param Dispatcher $dispatcher Dispatcher object.
-     * @param array      $data       The event data.
+     * @param Event               $event   Event object.
+     * @param DispatcherInterface $dispatcher Dispatcher object.
+     * @param array               $data    The event data.
      *
      * @return mixed
      */
-    public function beforeDispatch(Event $event, Dispatcher $dispatcher, array $data = null)
+    public function beforeDispatch(Event $event, DispatcherInterface $dispatcher, array $data = null)
     {
         /** @var Service\User $userService */
         $userService = $this->getDI()->getShared(Service\User::class);
@@ -47,6 +46,7 @@ class AccessListener extends AbstractEvent
         $roles = $userService->getRoleNamesForCurrentViewer();
         $controller = $dispatcher->getControllerName();
 
+        // @todo Get secure resources e.g. controllers from module config
         $protectedResource = $dispatcher->getModuleName() === 'backend' || Text::startsWith($controller, 'Admin', true);
 
         if ($protectedResource && !$aclManager->isAllowed($roles, Manager::ADMIN_AREA, 'access')) {
