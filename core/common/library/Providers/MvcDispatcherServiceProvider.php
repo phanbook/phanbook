@@ -44,10 +44,10 @@ class MvcDispatcherServiceProvider extends AbstractServiceProvider
                     $dispatcher = new CliDi();
                 } else {
                     $dispatcher = new MvcDi();
+                    container('eventsManager')->attach('dispatch:beforeDispatch', new AccessListener($this));
                 }
 
                 container('eventsManager')->attach('dispatch', new DispatcherListener($this));
-                container('eventsManager')->attach('dispatch:beforeDispatch', new AccessListener($this));
 
                 $dispatcher->setDI(container());
                 $dispatcher->setEventsManager(container('eventsManager'));

@@ -38,11 +38,6 @@ class AccessListener extends AbstractEvent
      */
     public function beforeDispatch(Event $event, Dispatcher $dispatcher, array $data = null)
     {
-        if (is_subclass_of($dispatcher, CliDispatcher::class)) {
-            // Do not check access rights on CLI mode
-            return true;
-        }
-
         /** @var Service\User $userService */
         $userService = $this->getDI()->getShared(Service\User::class);
 
