@@ -15,17 +15,26 @@ namespace Phanbook\Frontend;
 
 use Phalcon\Loader;
 use Phalcon\DiInterface;
-use Phalcon\Mvc\ModuleDefinitionInterface;
+use Phanbook\Common\Module as BaseModule;
 use Phanbook\Common\Library\Events\ViewListener;
-use Phanbook\Common\Library\Events\DispatcherListener;
 
 /**
  * \Phanbook\Frontend\Module
  *
  * @package Phanbook\Frontend
  */
-class Module implements ModuleDefinitionInterface
+class Module extends BaseModule
 {
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getHandlersNamespace()
+    {
+        return 'Phanbook\Frontend\Controllers';
+    }
+
     /**
      * Registers an autoloader related to the module.
      *
@@ -36,8 +45,8 @@ class Module implements ModuleDefinitionInterface
         $loader = new Loader();
 
         $namespaces = [
-            'Phanbook\Frontend\Controllers' => __DIR__ . '/controllers/',
-            'Phanbook\Frontend\Forms'       => __DIR__ . '/forms/',
+            $this->getHandlersNamespace() => __DIR__ . '/controllers/',
+            'Phanbook\Frontend\Forms'     => __DIR__ . '/forms/',
         ];
 
         $loader->registerNamespaces($namespaces);
@@ -59,12 +68,10 @@ class Module implements ModuleDefinitionInterface
         $url = $di->getShared('url');
         $url->setBaseUri($moduleConfig->application->baseUri);
 
-        // Setting up the MVC Dispatcher
         $eventsManager = $di->getShared('eventsManager');
-        $eventsManager->attach('dispatch:beforeException', new DispatcherListener($di));
+        $eventsManager->attach('view:notFoundView', new ViewListener($di));
 
         // Setting up the View Component
-        $eventsManager->attach('view:notFoundView', new ViewListener($di));
         $theme = $di->getShared('theme');
         $view = $di->getShared('view');
         $view->setViewsDir(themes_path($theme->getThemeName()));

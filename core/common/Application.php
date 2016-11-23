@@ -23,6 +23,7 @@ use Phalcon\Mvc\Application as MvcApplication;
 use Phalcon\Application as AbstractApplication;
 use Phanbook\Common\Library\Providers\ModulesServiceProvider;
 use Phanbook\Common\Library\Providers\ServiceProviderInterface;
+use Phanbook\Common\Library\Providers\EventManagerServiceProvider;
 
 /**
  * \Phanbook\Common\Application
@@ -77,8 +78,9 @@ class Application
         $this->di->setShared('dotenv', $dotenv);
         $this->di->setShared('bootstrap', $this);
 
-        $this->initializeServiceProvider(new ModulesServiceProvider($this->di));
         Di::setDefault($this->di);
+        $this->initializeServiceProvider(new EventManagerServiceProvider($this->di));
+        $this->initializeServiceProvider(new ModulesServiceProvider($this->di));
 
         /** @noinspection PhpIncludeInspection */
         $providers = require config_path('providers.php');

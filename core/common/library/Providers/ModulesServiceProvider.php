@@ -16,8 +16,11 @@ use Phalcon\Registry;
 use RecursiveDirectoryIterator;
 use Phanbook\Cli\Module as Cli;
 use Phanbook\Oauth\Module as oAuth;
+use Phanbook\Error\Module as Error;
 use Phanbook\Backend\Module as Backend;
 use Phanbook\Frontend\Module as Frontend;
+use Phalcon\Cli\Console as ConsoleApplication;
+use Phalcon\Mvc\Application as MvcApplication;
 
 /**
  * \Phanbook\Common\Library\Providers\ModulesServiceProvider
@@ -57,6 +60,10 @@ class ModulesServiceProvider extends AbstractServiceProvider
         }
         
         $core = [
+            'error' => [
+                'className' => Error::class,
+                'path'      => modules_path('error/Module.php')
+            ],
             'frontend' => [
                 'className' => Frontend::class,
                 'path'      => modules_path('frontend/Module.php')
@@ -72,7 +79,7 @@ class ModulesServiceProvider extends AbstractServiceProvider
             'cli' => [
                 'className' => Cli::class,
                 'path'      => modules_path('cli/Module.php')
-            ]
+            ],
         ];
 
         $this->modules = array_merge($core, $this->modules);
@@ -108,11 +115,34 @@ class ModulesServiceProvider extends AbstractServiceProvider
      */
     public function boot()
     {
-        /** @var \Phanbook\Common\Application $bootstrap */
-        $bootstrap = $this->getDI()->getShared('bootstrap');
+        $modules = [];
 
-        /** @var \Phalcon\Mvc\Application $app */
-        $app = $bootstrap->getApplication();
-        $app->registerModules($this->modules);
+        foreach ($this->modules as $name => $module) {
+            $modules[$name] = function () use ($module) {
+                $moduleClass = $module['className'];
+                if (!class_exists($moduleClass)) {
+                    /** @noinspection PhpIncludeInspection */
+                    include_once $module['path'];
+                }
+
+                /** @var \Phanbook\Common\ModuleInterface $moduleBootstrap */
+                $moduleBootstrap = new $moduleClass(container());
+
+                $moduleBootstrap->initialize();
+
+                return $moduleBootstrap;
+            };
+
+            $this->getDI()->setShared($module['className'], $modules[$name]);
+        }
+
+        /** @var MvcApplication|ConsoleApplication $application */
+        $application = container('bootstrap')->getApplication();
+
+        if ($application instanceof ConsoleApplication) {
+            $application->registerModules($this->modules);
+        } else {
+            $application->registerModules($modules);
+        }
     }
 }

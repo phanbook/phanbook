@@ -14,7 +14,8 @@ namespace Phanbook\Common\Library\Events;
 
 use Phalcon\Text;
 use Phalcon\Events\Event;
-use Phalcon\Mvc\Dispatcher;
+use Phalcon\DispatcherInterface;
+use Phalcon\Mvc\Dispatcher\Exception;
 use Phanbook\Models\Services\Service;
 use Phanbook\Common\Library\Acl\Manager;
 
@@ -28,13 +29,13 @@ class AccessListener extends AbstractEvent
     /**
      * This action is executed before execute any action in the application.
      *
-     * @param Event      $event      Event object.
-     * @param Dispatcher $dispatcher Dispatcher object.
-     * @param array      $data       The event data.
+     * @param Event               $event   Event object.
+     * @param DispatcherInterface $dispatcher Dispatcher object.
+     * @param array               $data    The event data.
      *
      * @return mixed
      */
-    public function beforeDispatch(Event $event, Dispatcher $dispatcher, array $data = null)
+    public function beforeDispatch(Event $event, DispatcherInterface $dispatcher, array $data = null)
     {
         /** @var Service\User $userService */
         $userService = $this->getDI()->getShared(Service\User::class);
@@ -45,13 +46,15 @@ class AccessListener extends AbstractEvent
         $roles = $userService->getRoleNamesForCurrentViewer();
         $controller = $dispatcher->getControllerName();
 
+        // @todo Get secure resources e.g. controllers from module config
         $protectedResource = $dispatcher->getModuleName() === 'backend' || Text::startsWith($controller, 'Admin', true);
 
         if ($protectedResource && !$aclManager->isAllowed($roles, Manager::ADMIN_AREA, 'access')) {
+            $resource = "{$dispatcher->getControllerClass()}::{$dispatcher->getActiveMethod()}";
             $this->getDI()->getShared('eventsManager')->fire(
                 'dispatch:beforeException',
                 $dispatcher,
-                new Dispatcher\Exception
+                new Exception("Unauthorized attempt to access protected resource: {$resource}.")
             );
         }
 
