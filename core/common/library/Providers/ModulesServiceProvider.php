@@ -41,7 +41,7 @@ class ModulesServiceProvider extends AbstractServiceProvider
      */
     public function configure()
     {
-        $directory = new RecursiveDirectoryIterator(modules_path());
+        $directory = new RecursiveDirectoryIterator(content_modules_path());
 
         foreach ($directory as $item) {
             $name = $item->getFilename();
@@ -51,11 +51,11 @@ class ModulesServiceProvider extends AbstractServiceProvider
 
             $this->modules[$name] = [
                 'className' => 'Phanbook\\' . ucfirst($name) . '\\Module',
-                'path'      => modules_path("{$name}/Module.php"),
-                'router'    => modules_path("{$name}/config/routing.php"),
+                'path'      => content_modules_path("{$name}/Module.php"),
+                'router'    => content_modules_path("{$name}/config/routing.php"),
             ];
         }
-
+        
         $core = [
             'frontend' => [
                 'className' => Frontend::class,
