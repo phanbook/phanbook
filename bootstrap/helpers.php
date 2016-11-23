@@ -178,3 +178,15 @@ if (!function_exists('container')) {
         return call_user_func_array([$default, 'get'], $args);
     }
 }
+if (!function_exists('content_modules_path')) {
+    /**
+     * Get the modules path.
+     *
+     * @param  string $path
+     * @return string
+     */
+    function content_modules_path($path = '')
+    {
+        return content_path('modules') . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+    }
+}
