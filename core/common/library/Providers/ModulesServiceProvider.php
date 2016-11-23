@@ -62,23 +62,31 @@ class ModulesServiceProvider extends AbstractServiceProvider
         $core = [
             'error' => [
                 'className' => Error::class,
-                'path'      => modules_path('error/Module.php')
+                'path'      => modules_path('error/Module.php'),
+                'router'    => modules_path('error/config/routing.php'),
+
             ],
             'frontend' => [
                 'className' => Frontend::class,
-                'path'      => modules_path('frontend/Module.php')
+                'path'      => modules_path('frontend/Module.php'),
+                'router'    => modules_path('frontend/config/routing.php'),
+
             ],
             'oauth' => [
                 'className' => oAuth::class,
-                'path'      => modules_path('oauth/Module.php')
+                'path'      => modules_path('oauth/Module.php'),
+                'router'    => modules_path('oauth/config/routing.php'),
+
             ],
             'backend' => [
                 'className' => Backend::class,
-                'path'      => modules_path('backend/Module.php')
+                'path'      => modules_path('backend/Module.php'),
+                'router'    => modules_path('backend/config/routing.php'),
             ],
             'cli' => [
                 'className' => Cli::class,
-                'path'      => modules_path('cli/Module.php')
+                'path'      => modules_path('cli/Module.php'),
+                'router'    => modules_path('cli/config/routing.php')
             ],
         ];
 
