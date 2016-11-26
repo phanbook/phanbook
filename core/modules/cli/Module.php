@@ -15,51 +15,53 @@ namespace Phanbook\Cli;
 
 use Phalcon\Loader;
 use Phalcon\DiInterface;
-use Phalcon\Mvc\Dispatcher;
-use Phalcon\Mvc\View;
-use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
-use Phalcon\Mvc\ModuleDefinitionInterface;
-use Phalcon\Mvc\View\Engine\Volt;
-use Phalcon\Config\Adapter\Php  as AdapterPhp;
-use Phalcon\Events\Manager as EventsManager;
+use Phanbook\Common\Module as BaseModule;
 
-class Module implements ModuleDefinitionInterface
+/**
+ * \Phanbook\Cli\Module
+ *
+ * @package Phanbook\Cli
+ */
+class Module extends BaseModule
 {
-    public function registerAutoloaders(DiInterface $dependencyInjector = null)
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getHandlersNamespace()
     {
+        return 'Phanbook\Cli\Tasks';
     }
 
     /**
-     * Register the services here to make them general
-     * or register in the ModuleDefinition to make them module-specific
+     * Registers an autoloader related to the module.
+     *
+     * @param DiInterface $di
+     */
+    public function registerAutoloaders(DiInterface $di = null)
+    {
+        $loader = new Loader();
+
+        $namespaces = [
+            $this->getHandlersNamespace() => __DIR__ . '/tasks/',
+            'Phanbook\Cli\Library'        => __DIR__ . '/library/',
+            'Phanbook\Seeders'            => __DIR__ . '/seeders/',
+        ];
+
+        $loader->registerNamespaces($namespaces);
+
+        $loader->register();
+    }
+
+    /**
+     * Registers services related to the module.
      *
      * @param DiInterface $di
      */
     public function registerServices(DiInterface $di)
     {
-        $di->set(
-            'view',
-            function () {
-                $view = new View();
-                $view->setViewsDir(__DIR__ . '/views/');
-                $view->disableLevel([View::LEVEL_MAIN_LAYOUT => true, View::LEVEL_LAYOUT => true]);
-                $view->registerEngines(['.volt' => 'volt']);
-
-                // Create an event manager
-                $eventsManager = new EventsManager();
-                $eventsManager->attach(
-                    'view',
-                    function ($event, $view) {
-                        if ($event->getType() == 'notFoundView') {
-                            throw new \Exception('View not found!!! (' . $view->getActiveRenderPath() . ')');
-                        }
-                    }
-                );
-                // Bind the eventsManager to the view component
-                $view->setEventsManager($eventsManager);
-
-                return $view;
-            }
-        );
+        // Setting up the MVC Dispatcher
+        $di->getShared('dispatcher')->setDefaultNamespace($this->getHandlersNamespace());
     }
 }

@@ -1,78 +1,32 @@
+#!/usr/bin/env php
 <?php
-
 /**
- * a cli launcher and a cli script that launches phalcon tasks
+ * Phanbook : Delightfully simple forum and Q&A software
  *
- * @example php cli.php [task] [action] [param1 [param2 ...]]
- * @example php cli.php Example index
- * @example php cli.php Example index --debug --single --no-record
+ * Licensed under The GNU License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @link    http://phanbook.com Phanbook Project
+ * @since   1.0.0
+ * @author  Phanbook <hello@phanbook.com>
+ * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
 
+use Phanbook\Common\Application;
 
-define('ROOT_DIR', __DIR__ . '/');
-define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'local'));
-date_default_timezone_set('UTC');
+// Register The Auto Loader
+require __DIR__ . '/bootstrap/autoloader.php';
 
-// Necessary requires to get things going
-require ROOT_DIR . '/vendor/autoload.php';
-require ROOT_DIR . '/core/common/tools/cli/PhpError.php';
-require ROOT_DIR . '/core/common/tools/cli/IRun.php';
-require ROOT_DIR . '/core/common/tools/cli/Output.php';
-require ROOT_DIR . '/core/common/Console.php';
+// Create the Application
+$app = new Application('cli');
 
-use Phalcon\DI\FactoryDefault\CLI;
-use Phanbook\Console as ConsoleApp;
-
-// Capture runtime errors
-register_shutdown_function(['Phanbook\Tools\Cli\PhpError', 'runtimeShutdown']);
+$console = $app->getApplication();
+$console->setArgs($argv, $argc);
 
 try {
-    $app = new ConsoleApp( new CLI());
-    // Record any php warnings/errors
-    set_error_handler(['Phanbook\Tools\Cli\PhpError', 'errorHandler']);
-
-    // Check if only run single instance
-    if ($key = array_search('--single', $argv)) {
-        $app->setSingleInstance(true);
-        // Ensure pid removes even on fatal error
-        register_shutdown_function([$app, 'removeProcessInstance']);
-    }
-
-    // Check if logging to database
-    if ($key = array_search('--record', $argv)) {
-        $app->setRecording(true);
-    }
-
-    // Check if debug mode
-    if ($key = array_search('--debug', $argv)) {
-        $app->setDebug(true);
-        //todo laster
-        // Ensure debug display even on fatal error
-        //register_shutdown_function([new Events\Cli\Debug(FALSE), 'display'], $app);
-    }
-
-    $app->setArgs($argv, $argc);
-
-    // Boom, Run
-    $app->run();
+    $console->run();
 } catch (Exception $e) {
-    echo $e;
-    exit(255);
-}
-
-function d($object, $kill = true)
-{
-    var_export($object);
-    if ($kill) {
-        exit;
-    }
-}
-/**
- * Fix undefined function t when save object which is have method
- * Validate in model
- *
- */
-function t($string)
-{
-    //nothing
+    fwrite(STDERR, $e->getMessage() . PHP_EOL);
+    exit(1);
 }

@@ -22,7 +22,9 @@ use Phanbook\Frontend\Forms\UserSettingForm;
 use Phanbook\Frontend\Forms\ChangePasswordForm;
 
 /**
- * Class UsersController
+ * \Phanbook\Frontend\Controllers\UsersController
+ *
+ * @package Phanbook\Frontend\Controllers
  */
 class UsersController extends ControllerBase
 {
@@ -34,6 +36,7 @@ class UsersController extends ControllerBase
     public function initialize()
     {
         parent::initialize();
+
         $this->view->pick('user');
     }
 
@@ -43,6 +46,7 @@ class UsersController extends ControllerBase
             $this->flashSession->error(t("The User doesn't exits"));
             return $this->indexRedirect();
         }
+
         $tab     = $this->request->getQuery('tab');
         $page    = isset($_GET['page']) ? (int)$_GET['page'] : $this->numberPage;
         $perPage = isset($_GET['perPage']) ? (int)$_GET['perPage'] : $this->perPage;
@@ -62,7 +66,7 @@ class UsersController extends ControllerBase
             list($itemBuilder, $totalBuilder) =
                 ModelBase::prepareQueriesPosts('', $where, $this->perPage);
         }
-        $params =[];
+
         switch ($tab) {
             case 'questions':
                 $this->tag->setTitle('Questions');
@@ -79,16 +83,19 @@ class UsersController extends ControllerBase
                 $this->tag->setTitle('All Questions');
                 break;
         }
+
         $conditions = 'p.deleted = 0 and p.usersId = ?0';
+
         if ($tab == 'answers') {
             $conditions = 'p.deleted = 0';
         }
+
         $itemBuilder->andWhere($conditions);
         $totalBuilder->andWhere($conditions);
         $params = array($user->getId());
-        //get all reply
+
         $parametersNumberReply = [
-            'group' => 'postsId',
+            'group' => 'id, postsId',
             'usersId = ?0',
             'bind' => [$user->getId()],
         ];
@@ -100,25 +107,27 @@ class UsersController extends ControllerBase
         $totalPosts = $totalBuilder->getQuery()->setUniqueRow(true)->execute($params);
         $totalPages = ceil($totalPosts->count / $perPage);
         $offset     = ($page - 1) * $perPage + 1;
+
         if ($page > 1) {
             $itemBuilder->offset($offset);
         }
+
         $this->view->setVars(
             [
-                'user'              => $user,
-                'posts'             => $itemBuilder->getQuery()->execute($params),
-                'totalQuestions'    => Posts::count($paramQuestions),
-                'totalReply'        => PostsReply::find($parametersNumberReply)->count(),
-                'tab'               => $tab,
-                'totalPages'        => $totalPages,
-                'currentPage'       => $page
+                'user'           => $user,
+                'posts'          => $itemBuilder->getQuery()->execute($params),
+                'totalQuestions' => Posts::count($paramQuestions),
+                'totalReply'     => PostsReply::find($parametersNumberReply)->count(),
+                'tab'            => $tab,
+                'totalPages'     => $totalPages,
+                'currentPage'    => $page,
             ]
         );
     }
+
     /**
      * Not use for now
      * @param  [type] $user [description]
-     * @return [type]       [description]
      */
     public function contributionAction($user = null)
     {
@@ -163,46 +172,85 @@ class UsersController extends ControllerBase
     }
 
     /**
-     * @return \Phalcon\Http\Response|\Phalcon\Http\ResponseInterface
+     * View and edit user profile.
      */
     public function profileAction()
     {
-        $object = Users::findFirstById($this->auth->getAuth()['id']);
+        if (!$this->auth->isAuthorizedVisitor()) {
+            $this->response->setStatusCode(404);
+            $this->flashSession->error(t("Sorry! We can't seem to find the page you're looking for."));
 
-        if (!$object) {
-            $this->flashSession->error(t('Hack attempt!!!'));
+            $this->dispatcher->forward([
+                'controller' => 'posts',
+                'action'     => 'index',
+            ]);
 
-            return $this->response->redirect($this->router->getControllerName() . '/profile');
+            return;
         }
-        $form = new UserForm($object);
-        $form->bind($_POST, $object);
+
+        $user = $this->userService->findFirstById($this->auth->getUserId());
+
+        if (!$user || !$this->userService->isActiveMember($user)) {
+            $this->response->setStatusCode(404);
+            $this->flashSession->error(t('Attempt to access non-existent user.'));
+
+            $this->dispatcher->forward([
+                'controller' => 'posts',
+                'action'     => 'index',
+            ]);
+
+            return;
+        }
+
+        $form = new UserForm($user);
 
         if ($this->request->isPost()) {
-            if (!$form->isValid()) {
-                foreach ($form->getMessages() as $message) {
-                    $this->flashSession->error($message->getMessage());
-                }
-            } else {
-                $object->setFirstname($this->request->getPost('firstname', 'striptags'));
-                $object->setLastname($this->request->getPost('lastname', 'striptags'));
-                $object->setGender($this->request->getPost('gender'));
-                $object->setDigest($this->request->getPost('digest'));
+            // Validate the form and assign the values from the user input
+            $form->bind($this->request->getPost(), $user);
 
-                if (!$object->save()) {
-                    foreach ($object->getMessages() as $message) {
-                        $this->flashSession->error($message->getMessage());
-                    }
-                } else {
-                    $this->flashSession->success(t('Data was successfully saved'));
-                    $this->refreshAuthSession($object->toArray());
-                    return $this->response->redirect($this->router->getControllerName() . '/profile');
+            if (!$form->isValid()) {
+                $messages = [];
+                $this->response->setStatusCode(400);
+                foreach ($form->getMessages() as $message) {
+                    $messages[] = (string) $message->getMessage();
                 }
+                $this->flashSession->error(implode('<br>', $messages));
+            } else {
+                // @todo Process missed fields
+                $user->setFirstname($this->request->getPost('firstname', 'striptags'));
+                $user->setLastname($this->request->getPost('lastname', 'striptags'));
+                $user->setEmail($this->request->getPost('email', 'email'));
+                $user->setUsername($this->request->getPost('username', 'striptags'));
+                $user->setBirthdate($this->request->getPost('birthDate'));
+                $user->setBio($this->request->getPost('bio', 'trim'));
+                $user->setTwitter($this->request->getPost('twitter'));
+                $user->setGithub($this->request->getPost('github'));
+
+                if (!$user->save()) {
+                    $messages = [];
+                    $this->response->setStatusCode(400);
+                    foreach ($user->getMessages() as $message) {
+                        $messages[] = (string) $message->getMessage();
+                    }
+                    $this->flashSession->error(implode('<br>', $messages));
+                    return;
+                }
+
+                $this->response->setStatusCode(200);
+                $this->flashSession->success(t('Profile successfully updated.'));
+                $this->refreshAuthSession($user->toArray());
             }
         }
-        $this->tag->setTitle(t('Edit profile'));
-        $this->view->form   = $form;
-        $this->view->object = $object;
+
+        $this->tag->setTitle(t('Edit Profile'));
+
+        $this->view->setVars([
+            'form'   => $form,
+            'object' => $user,
+            'email'  => $user->getEmail(),
+        ]);
     }
+
     private function refreshAuthSession($array)
     {
         $auth = $this->auth->getAuth();
@@ -217,7 +265,7 @@ class UsersController extends ControllerBase
     public function changepasswordAction()
     {
         $form = new ChangePasswordForm();
-        $object = Users::findFirstById($this->auth->getAuth()['id']);
+        $object = Users::findFirstById($this->auth->getUserId());
 
         $this->view->form = $form;
 
@@ -256,37 +304,67 @@ class UsersController extends ControllerBase
     }
 
     /**
-     * @return \Phalcon\Http\Response|\Phalcon\Http\ResponseInterface
+     *
      */
     public function settingAction()
     {
-        $object = Users::findFirstById($this->auth->getAuth()['id']);
-        if (!$object) {
-            $this->flashSession->error(t('Hack attempt!!!'));
-            return $this->response->redirect();
+        if (!$this->auth->isAuthorizedVisitor()) {
+            $this->response->setStatusCode(404);
+            $this->flashSession->error(t("Sorry! We can't seem to find the page you're looking for."));
+
+            $this->dispatcher->forward([
+                'controller' => 'posts',
+                'action'     => 'index',
+            ]);
+
+            return;
         }
-        $form = new UserSettingForm($object);
-        $form->bind($_POST, $object);
+
+        $user = $this->userService->findFirstById($this->auth->getUserId());
+
+        if (!$user || !$this->userService->isActiveMember($user)) {
+            $this->response->setStatusCode(404);
+            $this->flashSession->error(t('Attempt to access non-existent user.'));
+
+            $this->dispatcher->forward([
+                'controller' => 'posts',
+                'action'     => 'index',
+            ]);
+
+            return;
+        }
+
+        $form = new UserSettingForm($user);
+
         if ($this->request->isPost()) {
+            $form->bind($this->request->getPost(), $user);
+
             if (!$form->isValid()) {
+                $messages = [];
+                $this->response->setStatusCode(400);
                 foreach ($form->getMessages() as $message) {
-                    $this->flashSession->error($message->getMessage());
+                    $messages[] = (string) $message->getMessage();
                 }
+                $this->flashSession->error(implode('<br>', $messages));
             } else {
-                $object->setDigest($this->request->getPost('digest'));
-                if (!$object->save()) {
-                    foreach ($object->getMessages() as $message) {
-                        $this->flashSession->error($message->getMessage());
-                    }
+                $value = $this->request->getPost('digest', 'yes_no');
+                if (!$this->userService->updateDigestSettings($user, $value)) {
+                    $this->flashSession->error(t('Something was wrong. Please try later'));
                 } else {
-                    $this->flashSession->success(t('Data was successfully saved'));
-                    $this->refreshAuthSession($object->toArray());
-                    return $this->response->redirect($this->router->getControllerName() . '/setting');
+                    $this->flashSession->success(t('Settings successfully updated.'));
+                    $this->refreshAuthSession($user->toArray());
+                    $this->response->redirect('/users/setting');
+
+                    return;
                 }
             }
         }
+
         $this->tag->setTitle(t('Edit profile'));
-        $this->view->form   = $form;
-        $this->view->object = $object;
+
+        $this->view->setVars([
+            'form'   => $form,
+            'object' => $user,
+        ]);
     }
 }

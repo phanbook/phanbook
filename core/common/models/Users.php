@@ -13,9 +13,25 @@
 namespace Phanbook\Models;
 
 use Phalcon\Validation;
-use Phalcon\Validation\Validator\Email as EmailValidator;
-use Phalcon\Validation\Validator\Uniqueness as UniquenessValidator;
+use Phalcon\Mvc\Model\Resultset\Simple;
+use Phalcon\Validation\Validator\Email;
+use Phalcon\Validation\Validator\PresenceOf;
+use Phalcon\Validation\Validator\Uniqueness;
 
+/**
+ * \Phanbook\Models\Users
+ *
+ * @property Simple $roles
+ * @property Simple $rolesUsers
+ *
+ * @method int countRoles($params = null)
+ * @method Simple getRoles($params = null)
+ * @method Simple getRolesUsers($params = null)
+ * @method static Users|false findFirstById(int $id)
+ * @method static Users|false findFirstByUsername(string $name)
+ *
+ * @package Phanbook\Models
+ */
 class Users extends ModelBase
 {
     const STATUS_ACTIVE   = 1;
@@ -30,14 +46,17 @@ class Users extends ModelBase
     const DIGEST_YES = 'Y';
     const DIGEST_NO  = 'N';
 
-    //Never receive an e-mail notification
+    // Never receive an e-mail notification
     const NOTIFY_N = 'N';
-    //Receive e-mail notifications from all new threads and comments
+
+    // Receive e-mail notifications from all new threads and comments
     const NOTIFY_Y = 'Y';
-    //When someone replies to a discussion that I started or replied to
+
+    // When someone replies to a discussion that I started or replied to
     const NOTIFY_P = 'P';
 
     const TOKEN_TYPE = 'bearer';
+
     /**
      *
      * @var integer
@@ -171,7 +190,7 @@ class Users extends ModelBase
     protected $votePoint;
 
     /**
-     * 9-unknow,1-male,2-female
+     * 9-unknown,1-male,2-female
      *
      * @var integer
      */
@@ -222,6 +241,32 @@ class Users extends ModelBase
     protected $bio;
     protected $github;
     protected $twitter;
+
+    public function initialize()
+    {
+        parent::initialize();
+
+        $this->hasManyToMany(
+            'id',
+            RolesUsers::class,
+            'userId',
+            'roleId',
+            Roles::class,
+            'id',
+            ['alias' => 'roles']
+        );
+
+        $this->hasMany('id', RolesUsers::class, 'userId', ['alias' => 'rolesUsers', 'reusable' => true]);
+
+        $this->hasMany('id', UsersBadges::class, 'usersId', ['alias' => 'badges', 'reusable' => true]);
+
+        $this->hasMany('id', Posts::class, 'usersId', ['alias' => 'posts', 'reusable' => true]);
+
+        $this->hasMany('id', PostsReply::class, 'usersId', ['alias' => 'replies', 'reusable' => true]);
+
+        $this->hasMany('id', Vote::class, 'usersId', ['alias' => 'vote', 'reusable' => true]);
+    }
+
     /**
      * Method to set the value of field id
      *
@@ -299,18 +344,21 @@ class Users extends ModelBase
 
         return $this;
     }
+
     public function setTokenGoogle($tokenGoogle)
     {
         $this->tokenGoogle = $tokenGoogle;
 
         return $this;
     }
+
     public function setTokenFacebook($tokenFacebook)
     {
         $this->tokenFacebook = $tokenFacebook;
 
         return $this;
     }
+
     public function setUid($uid)
     {
         $this->uid = $uid;
@@ -319,7 +367,8 @@ class Users extends ModelBase
     }
 
     /**
-     * @param string $uuidFacebook
+     * @param  string $uuidFacebook
+     * @return $this
      */
     public function setUuidFacebook($uuidFacebook)
     {
@@ -329,7 +378,8 @@ class Users extends ModelBase
     }
 
     /**
-     * @param string $uuidGithub
+     * @param  string $uuidGithub
+     * @return $this
      */
     public function setUuidGithub($uuidGithub)
     {
@@ -339,7 +389,8 @@ class Users extends ModelBase
     }
 
     /**
-     * @param string $uuidGoogle
+     * @param  string $uuidGoogle
+     * @return $this
      */
     public function setUuidGoogle($uuidGoogle)
     {
@@ -348,9 +399,9 @@ class Users extends ModelBase
         return $this;
     }
     /**
-     * Method to set the value of field accesToken
+     * Method to set the value of field tokenGithub
      *
-     * @param  string $accesToken
+     * @param  string $tokenGithub
      * @return $this
      */
     public function setTokenGithub($tokenGithub)
@@ -480,7 +531,7 @@ class Users extends ModelBase
     /**
      * Method to set the value of field votesPoints
      *
-     * @param  integer $votesPoint
+     * @param  integer $votePoint
      * @return $this
      */
     public function setVotepoint($votePoint)
@@ -548,7 +599,7 @@ class Users extends ModelBase
      * @param  string $passwdForgotHash
      * @return $this
      */
-    public function setPasswdforgothash($passwdForgotHash)
+    public function setPasswdForgotHash($passwdForgotHash)
     {
         $this->passwdForgotHash = $passwdForgotHash;
 
@@ -558,7 +609,7 @@ class Users extends ModelBase
     /**
      * Method to set the value of field lastPasswdReset
      *
-     * @param  integer $lastPasswdReset
+     * @param  int $lastPasswdReset
      * @return $this
      */
     public function setLastPasswdReset($lastPasswdReset)
@@ -571,7 +622,7 @@ class Users extends ModelBase
     /**
      * Method to set the value of field status
      *
-     * @param  integer $status
+     * @param  int $status
      * @return $this
      */
     public function setStatus($status)
@@ -605,11 +656,13 @@ class Users extends ModelBase
 
         return $this;
     }
+
     public function setTwitter($twitter)
     {
         $this->twitter = $twitter;
         return $this;
     }
+
     public function setGithub($github)
     {
         $this->github = $github;
@@ -677,7 +730,7 @@ class Users extends ModelBase
     }
 
     /**
-     * Returns the value of field accesToken
+     * Returns the value of field tokenGithub
      *
      * @return string
      */
@@ -733,6 +786,7 @@ class Users extends ModelBase
     {
         return $this->uuidGoogle;
     }
+
     /**
      * Returns the value of field createdAt
      *
@@ -888,7 +942,7 @@ class Users extends ModelBase
      *
      * @return integer
      */
-    public function getLastpasswdreset()
+    public function getLastPasswdReset()
     {
         return $this->lastPasswdReset;
     }
@@ -912,14 +966,17 @@ class Users extends ModelBase
     {
         return $this->theme;
     }
+
     public function getBio()
     {
         return $this->bio;
     }
-    public function getTwiter()
+
+    public function getTwitter()
     {
         return $this->twitter;
     }
+
     public function getGithub()
     {
         return $this->github;
@@ -930,28 +987,50 @@ class Users extends ModelBase
      */
     public function validation()
     {
-
         $validator = new Validation();
+
         $validator->add(
             'email',
-            new EmailValidator([
+            new PresenceOf([
                 'model' => $this,
-                'message' => 'Please enter a correct email address'
+                'message' => t('Please enter a correct email address'),
+                'cancelOnFail' => true
             ])
         );
+
         $validator->add(
             'email',
-            new UniquenessValidator([
+            new Email([
                 'model' => $this,
-                'message' => 'Another user with same email already exists'
+                'message' => t('Please enter a correct email address'),
+                'cancelOnFail' => true
+            ])
+        );
+
+        $validator->add(
+            'email',
+            new Uniqueness([
+                'model' => $this,
+                'message' => t('Another user with same email already exists'),
+                'cancelOnFail' => true
             ])
         );
 
         $validator->add(
             'username',
-            new UniquenessValidator([
+            new PresenceOf([
                 'model' => $this,
-                'message' => 'Another user with same username already exists'
+                'message' => t('The username is required'),
+                'cancelOnFail' => true
+            ])
+        );
+
+        $validator->add(
+            'username',
+            new Uniqueness([
+                'model' => $this,
+                'message' => t("Another user with same username already exists"),
+                'cancelOnFail' => true
             ])
         );
 
@@ -1002,38 +1081,26 @@ class Users extends ModelBase
 
         return false;
     }
-    /**
-     * Before create the user assign a password
-     */
-    public function beforeValidationOnCreate()
-    {
-        if (empty($this->passwd)) {
-            // Generate a plain temporary password
-            $tempPassword = preg_replace('/[^a-zA-Z0-9]/', '', base64_encode(openssl_random_pseudo_bytes(12)));
 
-            // The user must change its password in first login
-            $this->mustChangePassword = 'Y';
-
-            // Use this password as default
-            $this->passwd = $this->getDI()
-                ->getSecurity()
-                ->hash($tempPassword);
-        }
-    }
     /**
     * Create a posts-views logging the ipaddress where the post was created
     * This avoids that the same session counts as post view
     */
     public function beforeCreate()
     {
-        $this->karma       += Karma::INITIAL_KARMA;
-        $this->votePoint   += Karma::INITIAL_KARMA;
-        $this->vote         = 0;
-        $this->timezone     = 'Europe/London';
-        $this->theme        = 'D';
-        $this->modifiedAt   = time();
-        $this->createdAt    = time();
+        if (empty($this->birthdate) || $this->birthdate == '0000-00-00') {
+            $this->birthdate = null;
+        }
+
+        $this->karma      += Karma::INITIAL_KARMA;
+        $this->votePoint  += Karma::INITIAL_KARMA;
+        $this->vote       = 0;
+        $this->timezone   = 'Europe/London';
+        $this->theme      = 'D';
+        $this->modifiedAt = time();
+        $this->createdAt  = time();
     }
+
     public function afterValidation()
     {
         if ($this->votePoint >= 50) {
@@ -1041,6 +1108,7 @@ class Users extends ModelBase
             $this->votePoint = 0;
         }
     }
+
     public function afterCreate()
     {
         if ($this->id > 0) {
@@ -1050,55 +1118,19 @@ class Users extends ModelBase
             $activity->save();
         }
     }
+
     /**
      * Implement hook beforeUpdate of Model Phalcon
      */
     public function beforeUpdate()
     {
+        if (empty($this->birthdate) || $this->birthdate == '0000-00-00') {
+            $this->birthdate = null;
+        }
+
         $this->modifiedAt = time();
     }
-    public function initialize()
-    {
-        parent::initialize();
-        $this->hasMany(
-            'id',
-            __NAMESPACE__ . '\UsersBadges',
-            'usersId',
-            [
-                'alias' => 'badges',
-                'reusable' => true
-            ]
-        );
 
-        $this->hasMany(
-            'id',
-            __NAMESPACE__ . '\Posts',
-            'usersId',
-            [
-                'alias' => 'posts',
-                'reusable' => true
-            ]
-        );
-
-        $this->hasMany(
-            'id',
-            __NAMESPACE__ . '\PostsReply',
-            'usersId',
-            [
-                'alias' => 'replies',
-                'reusable' => true
-            ]
-        );
-        $this->hasMany(
-            'id',
-            __NAMESPACE__ . '\Vote',
-            'usersId',
-            [
-                'alias' => 'vote',
-                'reusable' => true
-            ]
-        );
-    }
     /**
      * @param $karma
      */
@@ -1116,6 +1148,7 @@ class Users extends ModelBase
         $this->karma -= $karma;
         $this->votePoint -= $karma;
     }
+
     /**
      * Get information username
      *
@@ -1128,6 +1161,7 @@ class Users extends ModelBase
         }
         return $this->username;
     }
+
     /**
      * Get information full name
      *
@@ -1142,6 +1176,7 @@ class Users extends ModelBase
         }
         return $this->username;
     }
+
     /**
      * Get information editor user
      *
@@ -1160,6 +1195,7 @@ class Users extends ModelBase
 
         return false;
     }
+
     /**
      * @return string
      */
@@ -1186,7 +1222,7 @@ class Users extends ModelBase
             return $user;
         }
     }
-    
+
     /**
      * Independent Column Mapping.
      */

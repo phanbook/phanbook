@@ -8,9 +8,8 @@ class_name: AcceptanceTester
 modules:
     enabled:
         - Helper\Acceptance
-        - Db
+        - App\Test\Module\Db
         - Filesystem
-        - PhpBrowser:
-            url: 'http://localhost:8000'
-            curl:
-                CURLOPT_RETURNTRANSFER: true
+        - Phalcon:
+            part: services
+        - PhpBrowser

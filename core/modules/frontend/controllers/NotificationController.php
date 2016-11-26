@@ -23,7 +23,7 @@ class NotificationController extends ControllerBase
     public function readnotifyAction()
     {
         $this->view->disable();
-        $usersId = $this->auth->getAuth()['id'];
+        $usersId = $this->auth->getUserId();
         if ($this->request->isPost()) {
             $id = $this->request->getPost('id');
             $object = $this->request->getPost('object');
@@ -45,7 +45,7 @@ class NotificationController extends ControllerBase
             if ($notify) {
                 $notify->setWasRead('Y');
                 if (!$notify->save()) {
-                    $this->saveLoger($notify->getMessages());
+                    $this->saveLogger($notify->getMessages());
                 }
             }
         }

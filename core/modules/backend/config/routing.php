@@ -10,46 +10,38 @@
  * @since   1.0.0
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
-$router->add('/backend/:controller', [
-    'module' => 'backend',
-    'controller' => 1,
-]);
-$router->add('/backend/:controller/:int', [
-    'module' => 'backend',
-    'controller' => 1,
-    'id' => 2,
-]);
-$router->add('/backend/:controller/:action/:params', [
-    'module' => 'backend',
-    'controller' => 1,
-    'action' => 2,
-    'params' => 3,
-]);
 
-$router->add('/backend', [
+use Phalcon\Mvc\Router\Group as RouterGroup;
+
+$backend = new RouterGroup([
     'module'     => 'backend',
     'controller' => 'dashboard',
-    'action'     => 'index'
+    'action'     => 'index',
+    'namespace'  => 'Phanbook\Backend\Controllers',
 ]);
 
-$router->add('/maintenance', [
-    'module'     => 'backend',
-    'controller' => 'errors',
-    'action'     => 'show503'
-]);
-$router->add('/action-not-found', [
-    'module'     => 'backend',
-    'controller' => 'errors',
-    'action'     => 'show404'
-]);
-$router->add('/cyclic-routing', [
-    'module'     => 'backend',
-    'controller' => 'errors',
-    'action'     => 'show404'
+$backend->add('/backend/:controller/:action/:params', [
+    'controller' => 1,
+    'action'     => 2,
+    'params'     => 3,
 ]);
 
-$router->add('/error-reporting', [
-    'module'     => 'backend',
-    'controller' => 'errors',
-    'action'     => 'show505'
+$backend->add('/backend/:controller/:action', [
+    'controller' => 1,
+    'action'     => 2,
 ]);
+
+$backend->add('/backend/:controller/:int', [
+    'controller' => 1,
+    'id'         => 2,
+]);
+
+$backend->add('/backend/:controller', [
+    'controller' => 1,
+]);
+
+$backend->add('/backend[/]?', [
+    'controller' => 'dashboard',
+]);
+
+return $backend;

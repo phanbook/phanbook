@@ -12,35 +12,47 @@
  */
 namespace Phanbook\Models;
 
+/**
+ * \Phanbook\Models\SuccessLogins
+ *
+ * @package Phanbook\Models
+ */
 class SuccessLogins extends ModelBase
 {
-
     /**
-     *
+     * The Entity ID.
      * @var integer
      */
     protected $id;
 
     /**
-     *
+     * The User ID.
      * @var integer
      */
     protected $usersId;
 
     /**
-     *
-     * @var string
+     * The used IP address.
+     * @var int
      */
     protected $ipAddress;
 
     /**
-     *
+     * The used User Agent.
      * @var integer
      */
     protected $userAgent;
 
     /**
-     * Method to set the value of field id
+     * Initialize SuccessLogins model.
+     */
+    public function initialize()
+    {
+        $this->belongsTo('usersId', Users::class, 'id', ['alias' => 'user', 'reusable' => true]);
+    }
+
+    /**
+     * Method to set the value of field id.
      *
      * @param  integer $id
      * @return $this
@@ -53,7 +65,7 @@ class SuccessLogins extends ModelBase
     }
 
     /**
-     * Method to set the value of field usersId
+     * Method to set the value of field usersId.
      *
      * @param  integer $usersId
      * @return $this
@@ -66,9 +78,9 @@ class SuccessLogins extends ModelBase
     }
 
     /**
-     * Method to set the value of field ipAddress
+     * Method to set the value of field ipAddress.
      *
-     * @param  string $ipAddress
+     * @param  integer $ipAddress
      * @return $this
      */
     public function setIpaddress($ipAddress)
@@ -79,7 +91,7 @@ class SuccessLogins extends ModelBase
     }
 
     /**
-     * Method to set the value of field userAgent
+     * Method to set the value of field userAgent.
      *
      * @param  string $userAgent
      * @return $this
@@ -92,7 +104,7 @@ class SuccessLogins extends ModelBase
     }
 
     /**
-     * Returns the value of field id
+     * Returns the value of field id.
      *
      * @return integer
      */
@@ -102,7 +114,7 @@ class SuccessLogins extends ModelBase
     }
 
     /**
-     * Returns the value of field usersId
+     * Returns the value of field usersId.
      *
      * @return integer
      */
@@ -112,9 +124,9 @@ class SuccessLogins extends ModelBase
     }
 
     /**
-     * Returns the value of field ipAddress
+     * Returns the value of field ipAddress.
      *
-     * @return string
+     * @return integer
      */
     public function getIpaddress()
     {
@@ -122,7 +134,7 @@ class SuccessLogins extends ModelBase
     }
 
     /**
-     * Returns the value of field userAgent
+     * Returns the value of field userAgent.
      *
      * @return integer
      */
@@ -130,8 +142,6 @@ class SuccessLogins extends ModelBase
     {
         return $this->userAgent;
     }
-
-
 
     /**
      * Returns table name mapped in the model.
@@ -144,10 +154,10 @@ class SuccessLogins extends ModelBase
     }
 
     /**
-     * Allows to query a set of records that match the specified conditions
+     * Allows to query a set of records that match the specified conditions.
      *
      * @param  mixed $parameters
-     * @return Successlogins[]
+     * @return \Phalcon\Mvc\Model\ResultsetInterface|SuccessLogins[]
      */
     public static function find($parameters = null)
     {
@@ -155,24 +165,13 @@ class SuccessLogins extends ModelBase
     }
 
     /**
-     * Allows to query the first record that match the specified conditions
+     * Allows to query the first record that match the specified conditions.
      *
      * @param  mixed $parameters
-     * @return Successlogins
+     * @return SuccessLogins
      */
     public static function findFirst($parameters = null)
     {
         return parent::findFirst($parameters);
-    }
-    public function initialize()
-    {
-        $this->belongsTo(
-            'usersId',
-            __NAMESPACE__ .'\Users',
-            'id',
-            array(
-            'alias' => 'user'
-            )
-        );
     }
 }

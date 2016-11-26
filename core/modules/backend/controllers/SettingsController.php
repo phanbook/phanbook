@@ -13,19 +13,30 @@
  */
 namespace Phanbook\Backend\Controllers;
 
+use Phanbook\Google\Analytic;
 use Phanbook\Backend\Forms\LogoForm;
+use Phanbook\Models\Services\Service;
 use Phanbook\Backend\Forms\ConfigurationsForm;
 use Phanbook\Backend\Forms\GoogleAnalyticForm;
-use Phanbook\Models\Settings;
-use Phanbook\Google\Analytic;
 use Phanbook\Backend\Forms\SettingReadingForm;
 
 /**
- * Class SettingsController
+ * \Phanbook\Backend\Controllers\SettingsController
+ *
  * @package Phanbook\Backend\Controller
  */
 class SettingsController extends ControllerBase
 {
+    /**
+     * @var Service\Settings
+     */
+    protected $settingsService;
+
+    public function inject(Service\Settings $settingsService)
+    {
+        $this->settingsService = $settingsService;
+    }
+
     public function indexAction()
     {
         $this->tag->setTitle(t('Site Settings'));
@@ -118,9 +129,8 @@ class SettingsController extends ControllerBase
     public function changeLogo($name)
     {
         $this->view->disable();
-        $user = $this->auth->getAuth();
 
-        if (!$user) {
+        if (!$this->auth->isAuthorizedVisitor()) {
             $this->flashSession->error(t('Hack attempt!!!'));
             return $this->response->redirect($this->router->getControllerName());
         }
@@ -131,7 +141,7 @@ class SettingsController extends ControllerBase
                     // $image = new Imagick($file->getTempName());
                     // $image->resize(200, 200)->crop(100, 100);
                     // $image->save('images/thumb.jpg');
-                    $path = ROOT_DIR . '/content/uploads/';
+                    $path = config_path('uploads/');
                     if ($file->getRealType() == "image/x-icon") {
                         $result = $file->moveTo($path . $name .'.ico');
                     } else {
@@ -139,7 +149,7 @@ class SettingsController extends ControllerBase
                     }
                     if (!$result) {
                         $this->flashSession->error(
-                            t('Data was not saved, you need to change permisson for directory upload')
+                            t('Data was not saved, you need to change permission for directory upload')
                         );
                         return $this->currentRedirect();
                     }
@@ -197,14 +207,25 @@ class SettingsController extends ControllerBase
     {
         $analytic = new Analytic();
         $this->view->isLogged = false;
+
         // We check if user authorization
-        if ($analytic->checkAccessToken()) {
-            $this->view->isLogged = true;
+        try {
+            if ($analytic->checkAccessToken()) {
+                $this->view->isLogged = true;
+            }
+        } catch (\Google_Exception $e) {
+            // Skip Google errors
+            $this->logger->error(
+                sprintf('%s:%s: %s', __FILE__, __LINE__, $e->getMessage())
+            );
         }
+
         $this->assets->addCss('assets/css/bootstrap-multiselect.css');
         $this->assets->addJs('assets/js/bootstrap-multiselect.js');
-        $trackingID = Settings::getAnalyticTrackingID();
-        $accountID = Settings::getAnalyticAccountID();
+
+        $trackingID = $this->settingsService->findAnalyticTrackingID();
+        $accountID = $this->settingsService->findAnalyticAccountID();
+
         $this->view->isConfigured = false;
         if ($accountID) {
             $profile = $analytic->getViewInfo($accountID, $trackingID);
@@ -236,7 +257,7 @@ class SettingsController extends ControllerBase
                 }
             }
         }
-        $this->flashSession->error(t('An error occured when verify access code!'));
+        $this->flashSession->error(t('An error occurred when verify access code!'));
         return $this->currentRedirect();
     }
     /**
@@ -259,7 +280,7 @@ class SettingsController extends ControllerBase
         $this->view->disable();
         $analytic = new Analytic();
         $analytic->clearAuth();
-        Settings::clearAuth();
+        $this->settingsService->clearGoogleAuth();
         $this->flashSession->error(t('Clear Authorization Success!'));
         return $this->currentRedirect();
     }
@@ -269,29 +290,30 @@ class SettingsController extends ControllerBase
     public function analyticSettingAction()
     {
         $this->view->disable();
+
         if ($this->request->getPost('save')) {
             $obj = explode("_._", $this->request->getPost('selectView'));
             $trackingID = $obj[0];
             $accountID = $obj[1];
-            if (Settings::setAnalyticTrackingID($trackingID)) {
-                if (Settings::setAnalyticAccountID($accountID)) {
+            if ($this->settingsService->setAnalyticTrackingID($trackingID)) {
+                if ($this->settingsService->setAnalyticAccountID($accountID)) {
                     $analytic = new Analytic();
                     $profile = $analytic->getViewInfo($accountID, $trackingID);
                     if ($profile['state']) {
                         if ($this->phanbook->saveConfig(['googleAnalytic' => $profile['profile']['trackingID']])) {
-                            if (Settings::setAnalyticProfileID($profile['profile']['profileID'])) {
+                            if ($this->settingsService->setAnalyticProfileID($profile['profile']['profileID'])) {
                                 $this->flashSession->success(t('Save Analytic setting success!'));
                             }
                         } else {
-                            $this->flashSession->error(t('An error occured, We can\'t save tracking ID!'));
+                            $this->flashSession->error(t('An error occurred, We can\'t save tracking ID!'));
                         }
                     } else {
-                        $this->flashSession->error(t('An error occured, We can\'t find Profile information!'));
+                        $this->flashSession->error(t('An error occurred, We can\'t find Profile information!'));
                     }
                     return $this->currentRedirect();
                 }
             }
-            $this->flashSession->error(t('An error occured when save setting!'));
+            $this->flashSession->error(t('An error occurred when save setting!'));
         }
         return $this->currentRedirect();
     }
@@ -301,12 +323,13 @@ class SettingsController extends ControllerBase
     public function moduleDisplayAction()
     {
         $this->view->disable();
+
         if ($this->request->getPost('save')) {
             $listActivity = $this->request->getPost('topActivity');
-            if (Settings::setListTopActivity($listActivity)) {
+            if ($this->settingsService->setListTopActivity($listActivity)) {
                 $this->flashSession->success(t('Save Analytic module(s) position success!'));
             } else {
-                $this->flashSession->error(t('An error occured, We can\'t save this change!'));
+                $this->flashSession->error(t('An error occurred, We can\'t save this change!'));
             }
         }
         return $this->currentRedirect();

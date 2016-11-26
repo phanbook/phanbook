@@ -1,7 +1,9 @@
 <?php
 
-$messages = array(
+$messages = [
+    'account_successfully_created' => 'Your account was successfully created. An email was sent to your address in order to continue the process.',
     'account_switched_successfully' => 'Account Switched Successfully',
+    'an_email_with_reset_pass_was_sent' => 'An email was sent to your address in order to continue with the reset password process.',
     'switch_company_account' => 'Switch Company Account',
     'company_name' => 'Company Name',
     'next' => 'Next',
@@ -26,10 +28,12 @@ $messages = array(
     'id' => 'ID',
     'actions' => 'Actions',
     'name' => 'Name',
-    'user_added_successsfully' => 'User has been added successfully.',
+    'user_added_successfully' => 'User has been added successfully.',
     'user_saved_successfully' => 'User has been saved successfully.',
     'edit_user_capabilities' => 'Edit User Capabilities',
     'edit_user' => 'Edit User',
+    'err_send_registration_email' => 'An error occurred when trying to send registration email.',
+    'err_send_reset_passwd_email' => 'An error occurred when trying to send reset password email.',
     'manage_user_roles' => 'Manage User Roles',
     'manage_roles' => 'Manage Roles',
     'active' => 'Active',
@@ -62,7 +66,7 @@ $messages = array(
     'forgot_password_submit' => 'Okay, we have sent you an email with instructions. Please check your inbox.',
     'submit' => 'Submit',
     'forgot_password' => 'Forgotten Password',
-    'invalid_request_csrf' => 'This request is invaild.',
+    'invalid_request_csrf' => 'This request is invalid.',
     'register' => 'Register',
     'tryme' => 'Try me',
     'send_us_message_text' => 'Send us a message and let us know how we can help. Please be as descriptive as possible as it will help us serve you better.',
@@ -130,7 +134,6 @@ $messages = array(
     'services' => 'Services',
     'products' => 'Products',
     'prices' => 'Prices',
-    'login' => 'Login',
     'receive' => 'Receive',
     'reports' => 'Reports',
     'settings' => 'Settings',
@@ -143,9 +146,10 @@ $messages = array(
     'password_too_short_min_chars' => 'Your password is too short. It needs to contain at least %num% characters',
     'password_not_match' => 'Password does not match.',
     'invalid_activation_request' => 'The request for activation is invalid.',
-    'internal_error_occurred' => 'Internal error occurred. We apologize for the inconvinience.',
+    'internal_error_occurred' => 'Internal error occurred. We apologize for the inconvenience.',
     'send_confirmation_mail' => 'Send confirmation mail',
     'try_free' => 'Try for Free',
+    'flag_question' => 'flag',
     'country_AND' => 'Andorra',
     'country_ARE' => 'United Arab Emirates',
     'country_AFG' => 'Afghanistan',
@@ -397,6 +401,6 @@ $messages = array(
     'country_ZMB' => 'Zambia',
     'country_ZWE' => 'Zimbabwe',
     'become_host' => 'Become a host'
-);
+];
 
 return $messages;

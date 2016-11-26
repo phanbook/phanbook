@@ -11,105 +11,120 @@
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
 
-$router->setDefaults([
+use Phalcon\Mvc\Router\Group as RouterGroup;
+
+$frontend = new RouterGroup([
     'module'     => 'frontend',
+    'controller' => 'posts',
+    'action'     => 'index',
+    'namespace'  => 'Phanbook\Frontend\Controllers',
+]);
+
+$frontend->add('/:controller/:action/:params', [
+    'controller' => 1,
+    'action'     => 2,
+    'params'     => 3,
+]);
+
+$frontend->add('/:controller/:int', [
+    'controller' => 1,
+    'id'         => 2,
+]);
+
+$frontend->add('/:controller/:int/{slug}', [
+    'controller' => 1,
+    'id'         => 2,
+    'slug'       => 3,
+    'action'     => 'view'
+]);
+
+$frontend->add('/posts/:int/{slug}', [
+    'id'     => 1,
+    'slug'   => 2,
+    'action' => 'view'
+]);
+
+$frontend->add('/:controller[/]?', [
+    'controller' => 1,
+]);
+
+$frontend->add('/blog/{id:[0-9]+}/{slug}', [
+    'controller' => 'posts',
+    'action'     => 'view'
+]);
+
+$frontend->add('/questions/{id:[0-9]+}/{slug}', [
+    'controller' => 'posts',
+    'action'     => 'view'
+]);
+
+$frontend->add('/questions/new', [
+    'controller' => 'posts',
+    'action'     => 'new'
+]);
+
+$frontend->add('/questions/edit/{id:[0-9]+}', [
+    'controller' => 'posts',
+    'action'     => 'edit'
+]);
+
+$frontend->add('/questions', [
     'controller' => 'posts',
     'action'     => 'index'
 ]);
-$router->removeExtraSlashes(true);
 
-
-$router->add('/:controller/:action/:params', [
-    'controller' => 1,
-    'action' => 2,
-    'params' => 3,
-]);
-$router->add('/:controller/:int', [
-    'controller' => 1,
-    'id' => 2,
-]);
-$router->add('/:controller/:int/{slug}', [
-    'controller' => 1,
-    'id' => 2,
-    'slug' => 3,
-    'action' => 'view'
-]);
-$router->add('/posts/:int/{slug}', [
-    'id'        => 1,
-    'slug'      => 2,
-    'action'    => 'view'
-]);
-$router->add('/:controller[/]?', [
-    'controller' => 1,
-]);
-$router->add('/blog/{id:[0-9]+}/{slug}', [
+$frontend->add('/posts/{type}', [
     'controller' => 'posts',
-    'action' => 'view'
-]);
-$router->add('/questions/{id:[0-9]+}/{slug}', [
-    'controller' => 'posts',
-    'action' => 'view'
-]);
-$router->add('/questions/new', [
-    'controller' => 'posts',
-    'action' => 'new'
-]);
-$router->add('/questions/edit/{id:[0-9]+}', [
-    'controller' => 'posts',
-    'action' => 'edit'
-]);
-$router->add('/questions', [
-    'controller' => 'posts',
-    'action' => 'index'
+    'action'     => 'index'
 ]);
 
-$router->add('/posts/{type}', [
+$frontend->add('/posts/new', [
     'controller' => 'posts',
-    'action' => 'index'
+    'action'     => 'new'
 ]);
 
-$router->add('/posts/new', [
+$frontend->addPost('/posts/vote', [
     'controller' => 'posts',
-    'action' => 'new'
-]);
-$router->add('/posts/vote', [
-    'controller' => 'posts',
-    'action' => 'vote'
+    'action'     => 'vote'
 ]);
 
-/**
- * @link https://docs.phalconphp.com/en/latest/reference/routing.html#match-callbacks
- */
-$router->add('/{router}', [
+$frontend->add('/{router}', [
     'module'     => 'frontend',
     'controller' => 'router',
 ])->beforeMatch(function ($uri, $route) {
-    $uris = ['posts', 'users', 'tags', 'search' , 'questions', 'backend'];
-    if (in_array(ltrim($uri, '/'), $uris)) {
+    $uris = ['posts', 'users', 'tags', 'search', 'questions', 'backend'];
+
+    if ($uri == '/' || in_array(ltrim($uri, '/'), $uris)) {
         return false;
     }
-    if ('/' == $uri) {
-        return false;
-    }
-    if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])
-        && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
-        return false;
-    }
-    return true;
+
+    return ! $this->getRequest()->isAjax();
 });
 
-$router->add('/tags/{id:[0-9]+}/{slug}', [
+$frontend->add('/tags/{id:[0-9]+}/{slug}', [
     'controller' => 'tags',
-    'action' => 'postByTag'
+    'action'     => 'postByTag'
 ]);
-$router->add(
+
+$frontend->add(
     '/@{username:[a-zA-Z0-9]+}',
     [
         'controller' => 'users',
         'action'     => 'detail'
     ]
 );
-$router->add('/language/{code}', [
+
+$frontend->add('/language/{code}', [
     'controller' => 'language',
     'action'     => 'index'
 ]);
+
+$frontend->addGet('/legal/terms-of-service', 'Legal::terms')
+      ->setName('terms');
+
+$frontend->add('/', [
+    'controller' => 'posts',
+    'action'     => 'index',
+]);
+
+return $frontend;

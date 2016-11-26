@@ -69,7 +69,7 @@ class ChangePasswordForm extends Form
                 ),
                 new Confirmation(
                     array(
-                    'message' => t('Password doesn\'t match confirmation'),
+                    'message' => t("Password doesn't match confirmation"),
                     'with'    => 'passwd_new_confirm'
                     )
                 )

@@ -69,7 +69,8 @@ class UserSettingForm extends Form
         );
 
         // Timezone
-        $timezones = require ROOT_DIR .'core/config/timezone.php';
+        /** @noinspection PhpIncludeInspection */
+        $timezones = require config_path('timezone.php');
         $this->add(new Select('timezone', $timezones));
 
         // Submit

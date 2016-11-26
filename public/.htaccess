@@ -1,0 +1,14 @@
+<IfModule mod_rewrite.c>
+    # Turn on URL rewriting
+    RewriteEngine On
+
+    # Do not rewrite index.php
+    RewriteRule ^index\.php$ - [L]
+
+    # Allow any files or directories that exist to be displayed directly
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Rewrite all other URLs to index.php?_url=/URL
+    RewriteRule ^((?s).*)$ index.php?_url=/$1 [QSA,L]
+</IfModule>

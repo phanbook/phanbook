@@ -15,106 +15,68 @@ namespace Phanbook\Oauth;
 
 use Phalcon\Loader;
 use Phalcon\DiInterface;
-use Phalcon\Mvc\Dispatcher;
-use Phalcon\Mvc\View;
-use Phalcon\Mvc\Url;
-use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
-use Phalcon\Mvc\ModuleDefinitionInterface;
-use Phalcon\Mvc\View\Engine\Volt;
-use Phalcon\Config\Adapter\Php  as AdapterPhp;
-use Phalcon\Events\Manager as EventsManager;
+use Phanbook\Common\Module as BaseModule;
+use Phanbook\Common\Library\Events\UserLogins;
+use Phanbook\Common\Library\Events\ViewListener;
 
-class Module implements ModuleDefinitionInterface
+/**
+ * \Phanbook\Oauth\Module
+ *
+ * @package Phanbook\Oauth
+ */
+class Module extends BaseModule
 {
-    public function registerAutoloaders(DiInterface $dependencyInjector = null)
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getHandlersNamespace()
+    {
+        return 'Phanbook\Oauth\Controllers';
+    }
+
+    /**
+     * Registers an autoloader related to the module.
+     *
+     * @param DiInterface $di
+     */
+    public function registerAutoloaders(DiInterface $di = null)
     {
         $loader = new Loader();
 
-        $loader->registerNamespaces([
-            'Phanbook\Oauth\Controllers' => __DIR__ . '/controllers/',
-            'Phanbook\Oauth\Forms'       => __DIR__ . '/forms/'
-        ]);
+        $namespaces = [
+            $this->getHandlersNamespace() => __DIR__ . '/controllers/',
+            'Phanbook\Oauth\Forms'        => __DIR__ . '/forms/',
+        ];
+
+        $loader->registerNamespaces($namespaces, true);
 
         $loader->register();
     }
 
     /**
-     * Register the services here to make them general
-     * or register in the ModuleDefinition to make them module-specific
+     * Registers services related to the module.
+     *
+     * @param DiInterface $di
      */
     public function registerServices(DiInterface $di)
     {
-        //Read configuration
-        $config = include __DIR__ . "/config/config.php";
+        // Read configuration
+        $moduleConfig = require_once __DIR__ . '/config/config.php';
 
-        $configGlobal = $di->getConfig();
+        $eventsManager = $di->getShared('eventsManager');
+        $eventsManager->attach('user', new UserLogins($di));
 
-        // The URL component is used to generate all kind of urls in the application
-        $di->set('url', function () use ($config, $configGlobal) {
-            $url = new Url();
-            if (APPLICATION_ENV == 'production') {
-                $url->setStaticBaseUri($configGlobal->application->production->staticBaseUri);
-            } else {
-                $url->setStaticBaseUri($configGlobal->application->development->staticBaseUri);
-            }
-            $url->setBaseUri($config->application->baseUri);
+        // Tune Up the URL Component
+        $url = $di->getShared('url');
+        $url->setBaseUri($moduleConfig->application->baseUri);
 
-            return $url;
-        });
+        $eventsManager = $di->getShared('eventsManager');
+        $eventsManager->attach('view:notFoundView', new ViewListener($di));
 
-        //Registering a dispatcher
-        $di->set('dispatcher', function () use ($di) {
-            $eventsManager = new EventsManager();
-            $eventsManager->attach("dispatch", function ($event, $dispatcher, $exception) use ($di) {
-                //controller or action doesn't exist
-                if ($event->getType() == 'beforeException') {
-                    $message  = $exception->getMessage();
-                    $response = $di->getResponse();
-                    switch ($exception->getCode()) {
-                        case Dispatcher::EXCEPTION_HANDLER_NOT_FOUND:
-                            $response->redirect();
-                            return false;
-                        case Dispatcher::EXCEPTION_ACTION_NOT_FOUND:
-                            $response->redirect('action-not-found?msg=' . $message);
-                            return false;
-
-                        case Dispatcher::EXCEPTION_CYCLIC_ROUTING:
-                            $response->redirect('cyclic-routing?msg=' . $message);
-                            return false;
-                    }
-                }
-            });
-            $dispatcher = new Dispatcher();
-            $dispatcher->setDefaultNamespace("Phanbook\Oauth\Controllers");
-            $dispatcher->setEventsManager($eventsManager);
-            return $dispatcher;
-        });
-        /**
-         * Setting up the view component
-         */
-        $di->set(
-            'view',
-            function () {
-                $view = new View();
-                $view->setViewsDir(__DIR__ . '/views/');
-                $view->disableLevel([View::LEVEL_MAIN_LAYOUT => true, View::LEVEL_LAYOUT => true]);
-                $view->registerEngines(['.volt' => 'volt']);
-
-                // Create an event manager
-                $eventsManager = new EventsManager();
-                $eventsManager->attach(
-                    'view',
-                    function ($event, $view) {
-                        if ($event->getType() == 'notFoundView') {
-                            throw new \Exception('View not found!!! (' . $view->getActiveRenderPath() . ')');
-                        }
-                    }
-                );
-                // Bind the eventsManager to the view component
-                $view->setEventsManager($eventsManager);
-
-                return $view;
-            }
-        );
+        // Setting up the View Component
+        $view = $di->getShared('view');
+        $view->setViewsDir($moduleConfig->application->viewsDir);
     }
 }

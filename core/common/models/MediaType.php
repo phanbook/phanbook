@@ -12,11 +12,8 @@
  */
 namespace Phanbook\Models;
 
-use Phalcon\Config\Adapter\Php         as AdapterPhp;
-
 class MediaType extends ModelBase
 {
-
     /**
      *
      * @var integer
@@ -190,7 +187,7 @@ class MediaType extends ModelBase
     }
     /**
      * get file extension allowed for upload from db
-     * @return list extension allowed
+     * @return array
      */
     public static function getExtensionAllowed()
     {
@@ -241,30 +238,4 @@ class MediaType extends ModelBase
         }
         return $config;
     }
-
-    // public static function getConfigFile($userName)
-    // {
-    //     $filename = ROOT_DIR. 'content/uploads/'. $userName. "/userConfig.php";
-    //     if (file_exists($filename))
-    //         return (new AdapterPhp($filename))->toArray();
-    //     return [];
-    // }
-    // public static function saveConfigFile($userName,$arrayConfig)
-    // {
-    //     $filename = ROOT_DIR. 'content/uploads/'. $userName. "/userConfig.php";
-    //     if (!file_exists($filename)) {
-    //         $makeFile = ZFunction::makeFile($filename);
-    //         file_put_contents($filename, "<?php return [];");
-    //     }
-    //     if (file_exists($filename)) {
-    //         $data   = new AdapterPhp($filename);
-    //         $result = array_merge($data->toArray(), $arrayConfig);
-    //         $result ='<?php return ' . var_export($result, true) . ';';
-
-    //         if (!file_put_contents($filename, $result)) {
-    //             return false;
-    //         }
-    //         return true;
-    //     }
-    // }
 }

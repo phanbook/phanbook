@@ -12,43 +12,41 @@
  */
 namespace Phanbook\Models;
 
-use Phalcon\Mvc\Model\Exception as ModelException;
+use Phalcon\Mvc\Model;
 
+/**
+ * \Phanbook\Models\Settings
+ *
+ * @method static Settings|false findFirstByName(string $name)
+ * @method static Settings|false findFirstById(int $id)
+ *
+ * @package Phanbook\Models
+ */
 class Settings extends ModelBase
 {
-
     /**
-     *
      * @var integer
      */
     protected $id;
 
     /**
-     *
      * @var string
      */
     protected $name;
 
     /**
-     *
      * @var string
      */
     protected $value;
 
     /**
-     *
      * @var string
      */
     protected $note;
 
     public function initialize()
     {
-        \Phalcon\Mvc\Model::setup(
-            [
-            'notNullValidations' => false
-            ]
-        );
-        $this->checkName();
+        Model::setup(['notNullValidations' => false]);
     }
 
     /**
@@ -157,7 +155,7 @@ class Settings extends ModelBase
      * Allows to query a set of records that match the specified conditions
      *
      * @param  mixed $parameters
-     * @return Settings[]
+     * @return \Phalcon\Mvc\Model\ResultsetInterface|Settings[]
      */
     public static function find($parameters = null)
     {
@@ -177,212 +175,17 @@ class Settings extends ModelBase
 
     /**
      * Independent Column Mapping.
-     * Keys are the real names in the table and the values their names in the application
+     * Keys are the real names in the table and the values their names in the application.
      *
      * @return array
      */
     public function columnMap()
     {
         return [
-            'id' => 'id',
-            'name' => 'name',
+            'id'    => 'id',
+            'name'  => 'name',
             'value' => 'value',
-            'note' => 'note'
+            'note'  => 'note'
         ];
-    }
-    /**
-     * Get google access token from database
-     * @return string google access token
-     */
-
-    public static function getAccessToken()
-    {
-        $accessToken = Settings::findFirstByName("googleAnalyticAccessToken");
-        if ($accessToken && $accessToken->value) {
-            return $accessToken->value;
-        }
-        return null;
-    }
-
-    /**
-     * Get google refresh code from database
-     * @return string google access token
-     */
-
-    public static function getRefreshToken()
-    {
-        $refreshToken = Settings::findFirstByName("googleAnalyticRefreshToken");
-        if ($refreshToken && $refreshToken->value) {
-            return $refreshToken->value;
-        }
-        return null;
-    }
-
-    /**
-     * Set google access code to database
-     * @param string $code google analytic access code
-     * @return boolean true if all ok. other wise, false
-     */
-    public static function setAccessToken($code)
-    {
-        $accessToken = Settings::findFirstByName("googleAnalyticAccessToken");
-        if ($accessToken) {
-            $accessToken->value = $code;
-            if ($accessToken->save()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Set google refresh code to database
-     * @param string $code google analytic access code
-     * @return boolean true if all ok. other wise, false
-     */
-    public static function setRefreshToken($code)
-    {
-        $refreshToken = Settings::findFirstByName("googleAnalyticRefreshToken");
-        if ($refreshToken) {
-            $refreshToken->value = $code;
-            if ($refreshToken->save()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static function clearAuth()
-    {
-        self::setAccessToken("");
-        self::setRefreshToken("");
-        self::setAnalyticAccountID("");
-        self::setAnalyticProfileID("");
-        self::setAnalyticTrackingID("");
-    }
-
-    public static function setAnalyticProfileID($profileID)
-    {
-        $profileObj = Settings::findFirstByName("googleAnalyticProfileId");
-        if ($profileObj) {
-            $profileObj->value = $profileID;
-            if ($profileObj->save()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static function setAnalyticTrackingID($trackingID)
-    {
-        $trackingObj = Settings::findFirstByName("googleAnalyticTrackingId");
-        if ($trackingObj) {
-            $trackingObj->value = $trackingID;
-            if ($trackingObj->save()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static function getAnalyticTrackingID()
-    {
-        $trackingObj = Settings::findFirstByName("googleAnalyticTrackingId");
-        if ($trackingObj && $trackingObj->value) {
-            return $trackingObj->value;
-        }
-        return null;
-    }
-
-    public static function getAnalyticProfileID()
-    {
-        $profileObj = Settings::findFirstByName("googleAnalyticProfileId");
-        if ($profileObj && $profileObj->value) {
-            return $profileObj->value;
-        }
-        return null;
-    }
-
-    public static function setAnalyticAccountID($accountID)
-    {
-        $accountObj = Settings::findFirstByName("googleAnalyticAccountId");
-        if ($accountObj) {
-            $accountObj->value = $accountID;
-            if ($accountObj->save()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static function getAnalyticAccountID()
-    {
-        $accountObj = Settings::findFirstByName("googleAnalyticAccountId");
-        if ($accountObj && $accountObj->value) {
-            return $accountObj->value;
-        }
-        return null;
-    }
-
-    public static function getListTopActivity()
-    {
-        $activitiesObj = Settings::findFirstByName("googleAnalyticTopActivities");
-        if ($activitiesObj && $activitiesObj->value) {
-            return json_decode($activitiesObj->value);
-        }
-    }
-
-    public static function setItem($name, $value)
-    {
-        $obj = Settings::findFirstByName($name);
-        if ($obj) {
-            $obj->value = $value;
-            if ($obj->save()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static function setListTopActivity($arrayTop)
-    {
-        $listTopActivity = Settings::getListTopActivity();
-        for ($i = 0; $i < count($listTopActivity); $i++) {
-            $listTopActivity[$i]->default = 0;
-            foreach ($arrayTop as $key => $element) {
-                if ($listTopActivity[$i]->code == $element) {
-                    $listTopActivity[$i]->default = 1;
-                }
-            }
-        }
-        $listTopActivity = json_encode($listTopActivity);
-        return Settings::setItem("googleAnalyticTopActivities", $listTopActivity);
-    }
-    /**
-     * It will check value name in table setting
-     *
-     * @return mixed
-     */
-    public function checkName()
-    {
-        $array = [
-            'googleAnalyticAccessToken',
-            'googleAnalyticRefreshToken',
-            'googleAnalyticProfileId',
-            'googleAnalyticAccountId',
-            'googleAnalyticTrackingId',
-            'googleAnalyticTopActivities',
-        ];
-        foreach ($array as $key => $value) {
-            $result = self::findFirstByName($value);
-            if (!$result) {
-                $view = $this->getDI()->getView();
-                $menuStruct = $this->getDI()->get('menuStruct');
-                $view->partial(
-                    'errors/model',
-                    ['name' => $value ,'menuStruct' =>$menuStruct, 'model' => __CLASS__]
-                );
-            }
-        }
     }
 }

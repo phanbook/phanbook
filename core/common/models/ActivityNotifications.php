@@ -65,7 +65,7 @@ class ActivityNotifications extends ModelBase
     protected $type;
 
     /**
-     * This is field of user recive notification
+     * This is field of user receive notification
      *
      * @var integer
      */
@@ -312,7 +312,7 @@ class ActivityNotifications extends ModelBase
         $this->belongsTo('postsReplyId', __NAMESPACE__ . '\Posts', 'id', ['alias' => 'reply']);
     }
     /**
-     * @return Activitynotifications[]
+     * @return ActivityNotifications[]
      */
     public static function find($parameters = array())
     {
@@ -320,7 +320,7 @@ class ActivityNotifications extends ModelBase
     }
 
     /**
-     * @return Activitynotifications
+     * @return ActivityNotifications
      */
     public static function findFirst($parameters = array())
     {

@@ -4,24 +4,20 @@ sudo: required
 dist: trusty
 
 php:
-  - 5.5
   - 5.6
 
 matrix:
-  allow_failures:
-    - php: 7.1
   include:
     - php: 7.0
       env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="v3.0.0"
     - php: 7.0
-      env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="3.0.x"
-    - php: 7.1
-      env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="v3.0.0"
-    - php: 7.1
+      env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="v3.0.1"
+    - php: 7.0
       env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="3.0.x"
 
 services:
   - mysql
+  - memcached
 
 git:
   depth: 1
@@ -37,21 +33,23 @@ cache:
 
 env:
   global:
-    - APPLICATION_ENV="travis"
     - ZEND_DONT_UNLOAD_MODULES=1
     - CC="ccache gcc"
     - PATH="$PATH:~/bin"
     - DISPLAY=":99.0"
     - PHPIZE_BIN="$(which phpize 2> /dev/null || which phpize5 2> /dev/null)"
+    - APPLICATION_ENV=testing
   matrix:
     - PHALCON_VERSION="3.0.x"
     - PHALCON_VERSION="v3.0.0"
+    - PHALCON_VERSION="v3.0.1"
 
 before_install:
   - export PHP_MAJOR="$(echo $TRAVIS_PHP_VERSION | cut -d '.' -f 1,2)"
   - phpenv config-rm xdebug.ini || true
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
-  - travis_retry composer install --prefer-dist --no-interaction
+  - travis_retry composer install --prefer-dist --no-interaction --ignore-platform-reqs
+  - travis_retry composer require --dev "phalcon/zephir:dev-master" --ignore-platform-reqs
   - ( bash tests/_ci/install_zephir.sh )
   - bash tests/_ci/install_prereqs_$PHP_MAJOR.sh
 
@@ -64,10 +62,9 @@ install:
 before_script:
   - echo 'CREATE DATABASE phanbook CHARSET=utf8 COLLATE=utf8_unicode_ci' | mysql -u root
   - cat schema/phanbook.sql | mysql -uroot phanbook
-  - cp ./core/config/config.example.php ./core/config/config.php
-  - cp ./tests/config.travis.php ./core/config/config.travis.php
-  #- (cd ./scripts/ && php random-entries.php > /dev/null)
-  - php -S 127.0.0.1:8000 -t . .htrouter.php >/dev/null 2>&1 &
+  - cat schema/examples.sql | mysql -uroot phanbook
+  - cp ./tests/.env.travis .env
+  - php -S 127.0.0.1:8000 -t public/ .htrouter.php >/dev/null 2>&1 &
   - ulimit -c unlimited -S || true
 
 script:
@@ -77,7 +74,11 @@ script:
 
 notifications:
   email:
-    - hello@phanbook.com
+    recipients:
+      - hello@phanbook.com
+      - serghei@phalconphp.com
+    on_success: change
+    on_failure: always
   slack: phanbook:"${SLAK_TOKEN}"
 
 addons:

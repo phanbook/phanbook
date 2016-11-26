@@ -12,29 +12,48 @@
  */
 namespace Phanbook\Oauth\Controllers;
 
-use Phanbook\Oauth\Forms\LoginForm;
-use Phanbook\Oauth\Forms\SignupForm;
-use Phanbook\Models\Users;
 use Phalcon\Mvc\Model;
+use Phanbook\Models\Users;
+use Phanbook\Oauth\Forms\LoginForm;
+use Phalcon\Mvc\DispatcherInterface;
 use Phanbook\Github\Auth as GithubAuth;
 use Phanbook\Google\Auth as GoogleAuth;
-use Phanbook\Twitter\Auth as TwitterAuth;
 use Phanbook\Facebook\Auth as FacebookAuth;
+use Phanbook\Auth\Exception as AuthException;
 
 /**
- * AuthController class.
+ * \Phanbook\Oauth\Controllers\LoginController
  *
- * @extends ControllerBase
+ * @package Phanbook\Oauth\Controllers
  */
 class LoginController extends ControllerBase
 {
+    /**
+     * Triggered before executing the controller/action method.
+     *
+     * @param  DispatcherInterface $dispatcher
+     * @return bool
+     */
+    public function beforeExecuteRoute(DispatcherInterface $dispatcher)
+    {
+        if ($this->auth->hasRememberMe() && !$this->request->isPost()) {
+            $this->auth->loginWithRememberMe();
+        }
+
+        if ($this->auth->isAuthorizedVisitor() && !$this->request->isPost()) {
+            $this->currentRedirect();
+        }
+
+        return true;
+    }
+
     /**
      * @return array|\Phalcon\Http\Response|\Phalcon\Http\ResponseInterface
      */
     public function githubAction()
     {
         $this->view->disable();
-        if (!$this->auth->getAuth()) {
+        if (!$this->auth->isAuthorizedVisitor()) {
             $config= $this->config->github;
             $auth = new GithubAuth($config);
             return $auth->authorize();
@@ -49,7 +68,7 @@ class LoginController extends ControllerBase
     public function googleAction()
     {
         $this->view->disable();
-        if (!$this->auth->getAuth()) {
+        if (!$this->auth->isAuthorizedVisitor()) {
             $auth = new GoogleAuth($this->config->google);
             return $auth->authorize();
         }
@@ -63,13 +82,14 @@ class LoginController extends ControllerBase
     public function facebookAction()
     {
         $this->view->disable();
-        if (!$this->auth->getAuth()) {
+        if (!$this->auth->isAuthorizedVisitor()) {
             $auth = new FacebookAuth($this->config->facebook);
             return $auth->authorize();
         }
         $this->flashSession->success(t('Welcome back '. $this->auth->getName()));
         return $this->indexRedirect();
     }
+
     public function twitterAction()
     {
         //@todo later because Twitter use oauth v1
@@ -133,50 +153,54 @@ class LoginController extends ControllerBase
         }
     }
 
-    /**
-     * @return \Phalcon\Http\ResponseInterface
-     */
     public function indexAction()
     {
-
-        $url = $this->request->getHTTPReferer();
-        if (empty($url)) {
-            $url = ($this->request->isSecure()
-            ? 'https://' : 'http://') . $this->request->getHttpHost() . '/oauth/login';
-        }
-
-        $this->cookies->set('HTTPBACK', serialize($url));
-
-        if ($this->auth->getAuth()) {
+        if ($this->auth->isAuthorizedVisitor()) {
             $this->view->disable();
 
             return $this->response->redirect();
         }
 
+        $url = $this->request->getHTTPReferer();
+        if (!empty($url)) {
+            $url = $this->url->get(['for' => 'signin'], null, null, env('APP_URL') . '/');
+
+            if ($this->cookies->has('HTTPBACK')) {
+                $this->cookies->delete('HTTPBACK');
+            }
+
+            $this->cookies->set('HTTPBACK', serialize($url));
+        }
 
         $form = new LoginForm;
 
-        if ($this->request->isPost()) {
-            if (!$form->isValid($this->request->getPost())) {
-                foreach ($form->getMessages() as $message) {
-                    $this->flashSession->error($message->getMessage());
+        try {
+            if ($this->request->isPost()) {
+                if (!$form->isValid($this->request->getPost())) {
+                    $messages = [];
+                    foreach ($form->getMessages() as $message) {
+                        $messages[] = $message;
+                    }
+
+                    $this->flashSession->error(implode('<br>', $messages));
+                } else {
+                    $this->auth->check([
+                        'email'    => $this->request->getPost('email'),
+                        'password' => $this->request->getPost('password'),
+                        'remember' => true,
+                    ]);
+
+                    $this->flashSession->success(t('Welcome back '. $this->auth->getName()));
+
+                    return $this->currentRedirect();
                 }
             }
-
-            $check =
-            $this->auth->check(
-                [
-                    'email' => $this->request->getPost('email'),
-                    'password' => $this->request->getPost('password'),
-                    'remember' => true
-                ]
-            );
-            if ($check) {
-                $this->flashSession->success(t('Welcome back '. $this->auth->getName()));
-            }
-            return $this->currentRedirect();
+        } catch (AuthException $e) {
+            $this->response->setStatusCode(422);
+            $this->flashSession->error(t($e->getMessage()));
         }
-        $this->view->form  = $form;
+
+        $this->view->setVar('form', $form);
     }
 
     /**

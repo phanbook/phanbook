@@ -1,9 +1,18 @@
+@charset "UTF-8";
 
+/***********************************************************************************************
+ Note: all theme related assets can be mapped to the <theme-name> path.
+ For example:
+     "/content/themes/<theme-name>/assets/images/chrome.png" => "/<theme-name>/images/chrome.png"
+ ***********************************************************************************************/
+
+/*noinspection CssUnknownTarget*/
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,300,600,700);
 @import url("/core/assets/css/bootstrap.min.css");
 @import url("/core/assets/css/base.css");
 @import url("/core/assets/css/prettyPhoto.css");
 @import url("/core/assets/css/font-awesome.min.css");
+
 body {
     background-color: #f3f3f3;
     color: #2f3239;
@@ -57,26 +66,24 @@ body {
     animation: spin 1s linear infinite;
 }
 .boxed_body {
-    background: url(images/patterns/bg13.png) repeat;
 }
+
 .boxed_body_2 {
-    background: url(../ask-me/images/demo/bg_big.jpg) no-repeat center center fixed;
     background-size: 100% 100%;
 }
 .boxed_body2 {
-    background: url(../ask-me/images/demo/bg-image1.jpg) no-repeat center center fixed;
     -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
+       -moz-background-size: cover;
+         -o-background-size: cover;
+            background-size: cover;
 }
 .boxed,.boxed2 {
     background-color: #f3f3f3;
     width: 970px;
     margin: 0 auto;
     -webkit-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
-    -moz-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
-    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+       -moz-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
     position: relative;
 }
 .index-no-box {
@@ -102,8 +109,8 @@ body {
     border: none;
     padding: 0;
     -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
+       -moz-box-shadow: none;
+            box-shadow: none;
 }
 .login-panel h2 {
     font-size: 16px;
@@ -335,7 +342,7 @@ div[class*="slider_shadow"]:before, div[class^="header_shadow"] {
     line-height: 35px;
     position: relative;
     width: 300px;
-    margin-top: 25.5px;
+    margin-top: 25px;
     float: right;
 }
 .navigation_mobile ul {
@@ -515,7 +522,8 @@ div[class*="slider_shadow"]:before, div[class^="header_shadow"] {
     margin-bottom: 30px !important;
 }
 .ask-me .col-md-9 form {
-    background: url("../images/chrome.png") no-repeat center bottom;
+    /*noinspection CssUnknownTarget*/
+    background: url("/default/images/chrome.png") no-repeat center bottom;
     height: 324px;
     width: 100%;
     background-size: 100% 100%;
@@ -2339,6 +2347,12 @@ span.date i,span.comment i {
     margin: 0;
     text-transform: capitalize;
 }
+
+.text-normal {
+    /* Not all languages use capital letters for titles */
+    text-transform: none!important;
+}
+
 .question .boxedtitle h2,.post-meta .boxedtitle h2,.post-meta .boxedtitle h3,.single-post .boxedtitle h2,.single-question-title h2 {
     padding-bottom: 1px;
     margin-bottom: 1px;
@@ -2662,7 +2676,7 @@ span.date i,span.comment i {
 .box_icon .form-style textarea {
     border-color: #E8E7E7;
 }
-.form-style-2 .form-style input:not(tpye=checkbox) {
+.form-style-2 .form-style input:not([type='checkbox']) {
     width: 100%;
 }
 .form-style-3 .form-inputs p {
@@ -2670,7 +2684,7 @@ span.date i,span.comment i {
     margin-right: 0;
     float: none;
 }
-.form-style-3 .form-style input:not(tpye=checkbox) {
+.form-style-3 .form-style input:not([type='checkbox']) {
     width: 100%;
 }
 .form-style-4 .form-inputs p {
@@ -3252,9 +3266,7 @@ span.small_arrow_dowm {
 [class^="icons-"],
 [class*=" icons-"] {
     display: inline-block;
-    background-image: url(images/icons.png);
-    background-position: top left;
-    background-repeat: no-repeat;
+    background: transparent url(/core/assets/images/icons.png) no-repeat top left;
     line-height: 1;
     vertical-align: middle !important;
     width: 32px;
@@ -4190,9 +4202,9 @@ h2 [class^="icons-"], h2 [class*=" icons-"] {
     box-shadow: inset 0 1px rgba(255,255,255,0.3),inset 0 0 0 rgba(0, 0, 0, 0.1);
 }
 .custom-button:hover {
-    -moz-box-shadow: inset 0 rgba(0,0,0,0.2);
-    -webkit-box-shadow: inset 0 rgba(0,0,0,0.2);
-    box-shadow: inset 0 rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: inset 0 1px rgba(0,0,0,0.2);
+    -webkit-box-shadow: inset 0 1px rgba(0,0,0,0.2);
+    box-shadow: inset 0 1px rgba(0,0,0,0.2);
 }
 /* Audio */
 .audio-soundcloud {
@@ -4218,7 +4230,7 @@ h2 [class^="icons-"], h2 [class*=" icons-"] {
     line-height: 35px;
     font-size: 22px;
     text-align: center;
-    margin-top: 5px 10px 0 0;
+    margin: 5px 10px 0 0;
 }
 .dropcap.dropcap_soft_r {
     -moz-border-radius: 5px;
@@ -4232,7 +4244,7 @@ h2 [class^="icons-"], h2 [class*=" icons-"] {
     line-height: 40px;
     font-size: 22px;
     text-align: center;
-    margin-top: 5px 10px 0 0;
+    margin: 5px 10px 0 0;
     border-radius: 50%;
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
@@ -4260,7 +4272,6 @@ h2 [class^="icons-"], h2 [class*=" icons-"] {
 }
 .divider-3:after {
     height: 7px;
-    background: url(images/shadow_1.html) repeat-x;
     content: '';
     position: absolute;
     width: 100%;
@@ -4272,7 +4283,6 @@ h2 [class^="icons-"], h2 [class*=" icons-"] {
 }
 .divider-4:after {
     height: 10px;
-    background: url(images/splitter.html) bottom repeat-x;
     content: '';
     position: absolute;
     width: 100%;
@@ -4280,7 +4290,6 @@ h2 [class^="icons-"], h2 [class*=" icons-"] {
     left: 0;
 }
 .divider-4-dark:after {
-    background: url(images/splitter_dark.html) bottom repeat-x;
 }
 /* Quote */
 .quote-left {
@@ -4313,7 +4322,7 @@ h2 [class^="icons-"], h2 [class*=" icons-"] {
 .progressbar-percent {
     height: 100%;
     background-image: -webkit-gradient(linear,0 0,100% 100%,color-stop(.25,rgba(255,255,255,.2)),color-stop(.25,transparent),color-stop(.5,transparent),color-stop(.5,rgba(255,255,255,.2)),color-stop(.75,rgba(255,255,255,.2)),color-stop(.75,transparent),to(transparent) );
-    background-image: -moz-linear-gradient( -45deg,rgba(255,255,255,.2) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.2) 50%,rgba(255,255,255,.2) 75%,transparent 75%,transparent );
+    background-image: -moz-linear-gradient(45deg,rgba(255,255,255,.2) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.2) 50%,rgba(255,255,255,.2) 75%,transparent 75%,transparent );
     -webkit-background-size: 30px 30px;
     -moz-background-size: 30px 30px;
     background-size: 30px 30px;
@@ -4325,8 +4334,18 @@ h2 [class^="icons-"], h2 [class*=" icons-"] {
     -webkit-border-radius: 2px;
     border-radius: 2px;
 }
-@-webkit-animation expandWidth { 0%{width:0} 100%{width:auto} }
-@-webkit-keyframes move { 0%{background-position:0 0} 100%{background-position:90px 90px} }
+
+/*noinspection CssInvalidAtRule*/
+@-webkit-animation expandWidth {
+    0% { width:0 }
+    100% { width:auto }
+}
+
+@-webkit-keyframes move {
+    0% { background-position:0 0 }
+    100% { background-position:90px 90px }
+}
+
 .progressbar-title {
     font-size: 13px;
     color: #2f3239;
@@ -4672,7 +4691,7 @@ a.carousel-next {
     box-sizing: border-box;
 }
 .testimonial-warp-2 .testimonial {
-    background-color: transperant;
+    background-color: transparent;
     border: none;
     padding: 0;
 }
@@ -5189,6 +5208,13 @@ html[xmlns] .slides {
 .more:hover,.button.color,.button.black:hover,.go-up,.widget_portfolio .portfolio-widget-item:hover .portfolio_img:before,.popular_posts .popular_img:hover a:before,.widget_flickr a:hover:before,.widget_highest_points .author-img a:hover:before,.question-author-img:hover span,.pagination a:hover,.pagination span:hover,.pagination span.current,.about-author .author-image a:hover:before,.question-comments a,.flex-direction-nav li a:hover,.button.dark_button.color:hover,.table-style-2 thead th,.progressbar-percent,.carousel-arrow a:hover,.box_icon:hover .icon_circle,.box_icon:hover .icon_soft_r,.box_icon:hover .icon_square,.bg_default,.box_warp_colored,.box_warp_hover:hover,.post .boxedtitle i,.single-question-title i,.question-type,.post-type,.social_icon a,.page-content .boxedtitle,.main-content .boxedtitle,.flex-caption h2,.flex-control-nav li a.flex-active,.bxslider-overlay:before,.navigation ul li ul li:hover > a,.navigation ul li ul li.current_page_item > a,#header-top,.navigation > ul > li:hover > a,.navigation > ul > li.current_page_item > a,.ask-me,.breadcrumbs,#footer-bottom .social_icons ul li a:hover,.widget_tag_cloud a:hover,input[type="checkbox"],.login-password a:hover,.tab a.current,.question-type-main,.question-report:hover,.load-questions,.del-poll-li:hover,.styled-select::before,.fileinputs span,.post .post-type,.divider span,.widget_menu li.current_page_item a,.accordion .accordion-title.active a,.tab-inner-warp,.navigation_mobile_click:before {
      background-color: #1bbc9b;
 }
+
+a.question-type-main:hover {
+    background-color: #2f3239;
+    color: #fff;
+    cursor: pointer;
+}
+
 p a,li a, a:hover,.button.normal:hover,span.color,#footer a:hover,.widget a:hover,.question h3 a:hover,.boxedtitle h1 a:hover,.boxedtitle h2 a:hover,.boxedtitle h3 a:hover,.boxedtitle h4 a:hover,.boxedtitle h5 a:hover,.boxedtitle h6 a:hover,.box_icon:hover span i,.color_default,.navigation_mobile > ul a:hover,.navigation_mobile > ul li ul li:hover:before,.post .post-meta .meta-author a:hover,.post .post-meta .meta-categories a:hover,.post .post-meta .meta-comment a:hover,.question h2 a:hover,.question-category a:hover,.question-reply:hover i,.question-category a:hover i,.question-comment a:hover,.question-comment a:hover i,.question-reply:hover,.post .post-meta .meta-author:hover a,.post .post-meta .meta-author:hover i,.post .post-meta .meta-categories:hover a,.post .post-meta .meta-categories:hover i,.post .post-meta .meta-comment:hover a,.post .post-meta .meta-comment:hover i,.post-title a:hover,.question-tags a,.question .question-type,.comment-author a:hover,.comment-reply:hover,.user-profile-widget li a:hover,.taglist .tag a.delete:before,.form-style p span.color,.post-tags,.post-tags a,.related-posts li a:hover,#footer.footer_light_top .related-posts li a:hover,.share-inside,.share-inside-warp ul li a:hover,.user-points .question-vote-result,.navigation > ul > li > a > .menu-nav-arrow,#footer-bottom a,.widget h3.widget_title,#footer .related-item span,.widget_twitter ul li:before,#footer .widget_twitter .tweet_time a,.widget_highest_points li h6 a,#footer .widget_contact ul li span,.rememberme label,.login-text i,.login-password i,.question-tags,.question-tags i,.panel-pop h2,input[type="text"],input[type="password"],input[type="email"],textarea,select,.panel-pop p,.main-content .page-content .boxedtitle.page-title h2,.fakefile button,.login p,.login h2,.contact-us h2,.share-inside i,#related-posts h2,.comment-reply,.post-title,.post-title a,.user-profile h2,.stats-head,.block-stats-1,.block-stats-2,.block-stats-3,.block-stats-4,.user-question h3 a,.icon_shortcode .ul_icons li,.testimonial-client span,.box_icon h1,.box_icon h2,.box_icon h3,.box_icon h4,.box_icon h5,.box_icon h6,.widget_contact ul li i,#footer.footer_light_top .widget a:hover {
      color: #1bbc9b;
 }

@@ -18,7 +18,7 @@ use Phanbook\Models\Subscribe;
 use Phanbook\Models\PostsSubscribers;
 
 /**
- * Class SubcribeController
+ * Class SubscribeController
  */
 class SubscribeController extends ControllerBase
 {
@@ -47,19 +47,18 @@ class SubscribeController extends ControllerBase
         }
 
         /**
-        * Sometime We need to get object User login, so I do check user like below
-        * By the way, you can checking session
-        *
-        * {code} Users::findFirstById($this->auth->getAuth()['id'] {/code}
-        */
-        $userId = $this->auth->getAuth()['id'];
-        if (!$userId) {
+         * The test for user authorization
+         */
+        if (!$this->auth->isAuthorizedVisitor()) {
             $this->jsonMessages['messages'][] = [
                 'type'    => 'error',
                 'content' => 'You must log in first to subscribe post'
             ];
+
             return $this->jsonMessages;
         }
+
+        $userId = $this->auth->getUserId();
         $subscription = PostsSubscribers::findFirst(
             [
             'postsId = ?0 AND usersId = ?1',
@@ -83,7 +82,7 @@ class SubscribeController extends ControllerBase
             ];
             return $this->jsonMessages;
         } else {
-            //unsubsribe posts
+            // unsubscribe posts
             if (!$subscription->delete()) {
                 foreach ($subscription->getMessages() as $message) {
                     $this->logger->error('Unsubscribe delete false '. $message . __LINE__ .'and'. __CLASS__);
@@ -109,7 +108,7 @@ class SubscribeController extends ControllerBase
         }
         $email = $this->request->getPost('email');
         if (!$email) {
-            $this->flashSession->error(t('Please input your Emai'));
+            $this->flashSession->error(t('Please input your Email'));
             return $this->indexRedirect();
         }
         $subscribe = new Subscribe();

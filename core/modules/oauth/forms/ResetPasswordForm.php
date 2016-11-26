@@ -51,7 +51,7 @@ class ResetPasswordForm extends Form
                 ),
                 new Confirmation(
                     array(
-                    'message' => 'Password doesn\'t match confirmation',
+                    'message' => "Password doesn't match confirmation",
                     'with'    => 'password_new_confirm'
                     )
                 )
