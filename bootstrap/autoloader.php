@@ -30,7 +30,7 @@ require 'constants.php';
         'Phanbook\Common\Library' => ROOT_DIR . '/core/common/library/',
     ])
     ->registerFiles([
-        ROOT_DIR . '/bootstrap/helpers.php',
+        __DIR__ . '/helpers.php',
     ])
     ->register();
 
