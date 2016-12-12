@@ -229,9 +229,9 @@ class LoginController extends ControllerBase
     public function notification($object)
     {
         if ($object->getOperationMade() == Model::OP_CREATE) {
-            $this->flashSession->success('Welcome ' . $object->getInforUser());
+            $this->flashSession->success('Welcome ' . $object->getFullName());
         } else {
-            $this->flashSession->success('Welcome back ' . $object->getInforUser());
+            $this->flashSession->success('Welcome back ' . $object->getFullName());
         }
     }
 }

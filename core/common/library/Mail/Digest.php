@@ -45,7 +45,7 @@ class Digest extends Injectable
         foreach (Users::find($parameters) as $user) {
             $toMail= $user->getEmail();
             if ($toMail && strpos($user->email, '@phalconbook') === false) {
-                $users[trim($toMail)] = $user->getInforUser();
+                $users[trim($toMail)] = $user->getFullName();
             }
         }
 
