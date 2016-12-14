@@ -64,9 +64,9 @@ class ControllerBase extends Controller
      */
     public function beforeExecuteRoute(Dispatcher $dispatcher)
     {
-
+        
         if (!$this->auth->isAdmin()) {
-            $this->flashSession->notice(t('You have not permission access this page'));
+            $this->flashSession->notice(t('You do not have permission to access this page'));
             $dispatcher->setReturnedValue($this->response->redirect('/', true));
             return false;
         }
