@@ -13,6 +13,7 @@
  */
 namespace Phanbook\Backend\Controllers;
 
+use Phalcon\Mvc\Dispatcher;
 use Phanbook\Controllers\Controller;
 
 /**
@@ -54,5 +55,20 @@ class ControllerBase extends Controller
             ->addJs('backend/assets/js/jquery.taginput.src.js')
             ->addJs('backend/assets/js/app.js')
             ->addJs('backend/assets/js/app.plugin-custom.js');
+    }
+
+    /**
+     * @param Dispatcher $dispatcher
+     *
+     * @return bool
+     */
+    public function beforeExecuteRoute(Dispatcher $dispatcher)
+    {
+        
+        if (!$this->auth->isAdmin()) {
+            $this->flashSession->notice(t('You do not have permission to access this page'));
+            $dispatcher->setReturnedValue($this->response->redirect('/', true));
+            return false;
+        }
     }
 }
