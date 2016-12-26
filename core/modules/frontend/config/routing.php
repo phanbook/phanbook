@@ -127,4 +127,9 @@ $frontend->add('/', [
     'action'     => 'index',
 ]);
 
+$frontend->add('/posts/save', [
+    'controller' => 'posts',
+    'action'     => 'save',
+]);
+
 return $frontend;
