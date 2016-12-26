@@ -197,11 +197,11 @@ return [
     ],
 
     /**
-     * Set theme you want to use, for example 'discourse'
+     * Set theme you want to use
      *
      * @link http://github.com/phanbook/docs/theme.md
      */
-    'theme' => 'default',
+    'theme' => env('THEME_CODE'),
 
     /**
      * Set editor you want to use
