@@ -249,27 +249,26 @@ class PostsController extends ControllerBase
             return $this->response->redirect(
                 $this->router->getControllerName().(!is_null($id) ? '/edit/'.$id : '/new')
             );
-        } else {
-            $this->db->begin();
-            if (!$object->save()) {
-                $this->db->rollback();
-                $this->saveLogger($object->getMessages());
-                return $this->dispatcher->forward(
-                    ['controller' => $this->router->getControllerName(), 'action' => 'new']
-                );
-            } else {
-                if (!$this->phanbook->tag()->saveTagsInPosts($tags, $object)) {
-                    $this->db->rollback();
-                    return $this->response->redirect(
-                        $this->router->getControllerName().(!is_null($id) ? '/edit/'.$id : '/new')
-                    );
-                }
-                $this->flashSession->success(t('Data was successfully saved'));
-                // Commit the transaction
-                $this->db->commit();
-                return $this->response->redirect($this->router->getControllerName());
-            }
         }
+        $this->db->begin();
+        if (!$object->save()) {
+            $this->db->rollback();
+            $this->saveLogger($object->getMessages());
+            $this->dispatcher->forward(
+                ['controller' => $this->router->getControllerName(), 'action' => 'new']
+            );
+            return false;
+        }
+        if (!$this->phanbook->tag()->saveTagsInPosts($tags, $object)) {
+            $this->db->rollback();
+            return $this->response->redirect(
+                $this->router->getControllerName().(!is_null($id) ? '/edit/'.$id : '/new')
+            );
+        }
+        $this->flashSession->success(t('Data was successfully saved'));
+        // Commit the transaction
+        $this->db->commit();
+        return $this->response->redirect();
     }
 
     /**
