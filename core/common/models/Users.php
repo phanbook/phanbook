@@ -1149,18 +1149,6 @@ class Users extends ModelBase
         $this->votePoint -= $karma;
     }
 
-    /**
-     * Get information username
-     *
-     * @return string
-     */
-    public function getInforUser()
-    {
-        if ($this->firstname) {
-            return $this->firstname;
-        }
-        return $this->username;
-    }
 
     /**
      * Get information full name

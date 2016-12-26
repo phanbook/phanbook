@@ -78,7 +78,7 @@ class ControllerBase extends Controller
         $this->auth->setSession($object);
 
         //Store the user data in cookies
-        $this->auth->setRememberEnviroment($object);
+        $this->auth->setRememberEnvironment($object);
 
         //Display notification when user login
         $this->notification($object);

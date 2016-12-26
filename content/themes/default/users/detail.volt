@@ -3,7 +3,7 @@
         <div class="user-profile">
             <div class="col-md-12">
                 <div class="page-content">
-                    <h2>About {{ user.getFullname() }}</h2>
+                    <h2>About {{ user.getFullName() }}</h2>
                     <div class="user-profile-img">
                     <img width="60" height="60" src="{{ getUrlAvatar(user.email) }}" alt="admin">
                     </div>

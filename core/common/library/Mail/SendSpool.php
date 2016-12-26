@@ -66,7 +66,7 @@ class SendSpool extends Injectable
                         $link = $url .'/posts/' .$post->getId(). '/' . $post->getSlug() . '#C' . $reply->getId();
                     }
                     $params = [
-                        'name' => $user->getInforUser(),
+                        'name' => $user->getFullName(),
                         'link' => $link,
                         'subject' => $sitename,
                         'content' => strip_tags($content)

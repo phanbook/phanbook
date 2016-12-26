@@ -37,7 +37,6 @@ env:
     - CC="ccache gcc"
     - PATH="$PATH:~/bin"
     - DISPLAY=":99.0"
-    - PHPIZE_BIN="$(which phpize 2> /dev/null || which phpize5 2> /dev/null)"
     - APPLICATION_ENV=testing
   matrix:
     - PHALCON_VERSION="3.0.x"
@@ -46,6 +45,8 @@ env:
 
 before_install:
   - export PHP_MAJOR="$(echo $TRAVIS_PHP_VERSION | cut -d '.' -f 1,2)"
+  - sudo ln -s /home/travis/.phpenv/versions/$(phpenv version-name)/bin/phpize /usr/bin/
+  - sudo ln -s /home/travis/.phpenv/versions/$(phpenv version-name)/bin/php-config /usr/bin/
   - phpenv config-rm xdebug.ini || true
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
   - travis_retry composer install --prefer-dist --no-interaction --ignore-platform-reqs
@@ -56,7 +57,7 @@ before_install:
 install:
   - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b ${PHALCON_VERSION}
   - '( cd cphalcon; zephir fullclean && zephir generate $ZEND_BACKEND )'
-  - (cd cphalcon/ext; export CFLAGS="-g3 -O1 -std=gnu90 -Wall -DZEPHIR_RELEASE=1"; $PHPIZE_BIN &> /dev/null && ./configure --silent --enable-phalcon &> /dev/null && make --silent -j4 &> /dev/null && make --silent install)
+  - (cd cphalcon/ext; export CFLAGS="-g3 -O1 -std=gnu90 -Wall -DZEPHIR_RELEASE=1"; /usr/bin/phpize &> /dev/null && ./configure --silent --enable-phalcon &> /dev/null && make --silent -j2 &> /dev/null && make --silent install)
   - phpenv config-add cphalcon/tests/_ci/phalcon.ini
 
 before_script:
