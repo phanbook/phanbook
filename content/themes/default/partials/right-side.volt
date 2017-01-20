@@ -69,7 +69,7 @@
 </div>
 {% endif %}
 
-{% if hotPosts is defined %}
+{% if hotPosts | length > 0 %}
 <div class="widget">
     <h3 class="widget_title">{{ t('Recent Questions') }}</h3>
     <ul class="related-posts">
