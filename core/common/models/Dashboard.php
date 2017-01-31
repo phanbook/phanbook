@@ -15,6 +15,7 @@ namespace Phanbook\Models;
 use Phanbook\Google\Analytic;
 use Phanbook\Factory\TopDashboardFactory;
 use Phanbook\Factory\TopDashboardSubject;
+use Phanbook\Models\Services\Service;
 
 class Dashboard extends ModelBase
 {
@@ -35,7 +36,9 @@ class Dashboard extends ModelBase
      */
     public function getAnalyticData()
     {
-        $listTopActivity = Settings::getListTopActivity();
+        $settingsService = new Service\Settings();
+
+        $listTopActivity = $settingsService->getListTopActivity();
         $objectSubject = new TopDashboardSubject();
         $topDashboardFactory = new TopDashboardFactory();
         $topDashboardFactory->setAnalytic($this->analytic);

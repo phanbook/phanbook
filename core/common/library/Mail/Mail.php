@@ -14,16 +14,40 @@ namespace Phanbook\Mail;
 
 use Swift_Mailer;
 use Swift_Message;
+use LogicException;
 use Phalcon\Mvc\View;
-use Swift_SmtpTransport;
+use Phalcon\DiInterface;
 use Phanbook\Models\Template;
 use Phalcon\Mvc\User\Component;
+use Phanbook\Common\Library\Behavior\Di as DiBehavior;
 
+/**
+ * \Phanbook\Mail\Mail
+ *
+ * @package Phanbook\Mail
+ */
 class Mail extends Component
 {
-    protected $transport;
+    use DiBehavior {
+        DiBehavior::__construct as protected injectDi;
+    }
+
+    /**
+     * @var Swift_Mailer
+     */
+    protected $mailer;
 
     protected $template;
+
+    /**
+     * Mail constructor.
+     *
+     * @param DiInterface|null $di
+     */
+    public function __construct(DiInterface $di = null)
+    {
+        $this->injectDi($di);
+    }
 
     private function getTemplate($key, $params)
     {
@@ -34,20 +58,23 @@ class Mail extends Component
         if ($key != 'test' && empty($params['subject'])) {
             $params['subject'] = $this->template->getSubject();
         }
-        //Set views layout
+
+        // Set views layout
         $this->view->setViewsDir(app_path('core/data/'));
         $render = $this->view->getRender(
-            rtrim($this->config->mail->templatesDir, '/'),
+            rtrim($this->getConfig()->get('mail')->templatesDir, '/'),
             $key,
             $params,
             function ($view) {
                 $view->setRenderLevel(View::LEVEL_LAYOUT);
             }
         );
+
         if (!empty($render)) {
             return $render;
         }
-        //When use template for cli
+
+        // When use template for cli
         return $this->view->getContent();
     }
 
@@ -63,10 +90,17 @@ class Mail extends Component
     public function send($to, $templateKey, $params = [])
     {
         $body = $this->getTemplate($templateKey, $params);
+
         if (!$body) {
-            d('You need to create templates email in database');
-            return false;
+            throw new LogicException('You need to create templates email in database');
         }
+
+        if (!$this->getConfig()->offsetExists('mail') || empty($this->getConfig()->get('mail'))) {
+            $this->getLogger()->error('Unable to get mail config. Exit...');
+            return 0;
+        }
+
+        $config = $this->getConfig()->get('mail');
 
         if (empty($this->template)) {
             $subject = 'Phanbook - TEST';
@@ -76,23 +110,37 @@ class Mail extends Component
             $subject = $params['subject'];
         }
 
-        // Create the message
-        $message = Swift_Message::newInstance()
-            ->setSubject($subject)
-            ->setTo($to)
-            ->setFrom([$this->config->mail->fromEmail => $this->config->mail->fromName])
-            ->setBody($body, 'text/html');
-        if (!$this->transport) {
-            $this->transport = Swift_SmtpTransport::newInstance(
-                $this->config->mail->smtp->server,
-                $this->config->mail->smtp->port
-            )
-                ->setUsername($this->config->mail->smtp->username)
-                ->setPassword($this->config->mail->smtp->password);
-        }
+        try {
+            $message = Swift_Message::newInstance()
+                ->setSubject($subject)
+                ->setTo($to)
+                ->setFrom([$config->get('fromEmail') => $config->get('fromName')])
+                ->setBody($body, 'text/html');
 
-        $mailer = Swift_Mailer::newInstance($this->transport);
-        return $mailer->send($message);
+            $failedRecipients = [];
+            $sent = $this->mailer->send($message, $failedRecipients);
+
+            if (!empty($failedRecipients)) {
+                $this->getLogger()->error('Unable to sent mail for: ' . implode(', ', $failedRecipients));
+            }
+
+            return $sent;
+        } catch (\Exception $e) {
+            $this->getLogger($e->getMessage());
+
+            return 0;
+        }
+    }
+
+    /**
+     * @param  Swift_Mailer $mailer
+     * @return $this
+     */
+    public function setMailer(Swift_Mailer $mailer)
+    {
+        $this->mailer = $mailer;
+
+        return $this;
     }
 
     /**

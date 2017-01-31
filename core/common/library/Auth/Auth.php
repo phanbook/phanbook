@@ -12,111 +12,90 @@
  */
 namespace Phanbook\Auth;
 
-use Phalcon\Mvc\User\Component;
 use Phanbook\Models\Users;
+use Phalcon\Mvc\User\Component;
 use Phanbook\Models\RememberTokens;
-use Phanbook\Models\SuccessLogins;
-use Phanbook\Models\FailedLogins;
+use Phanbook\Models\Services\Service;
+use Phanbook\Models\Services\Exceptions\EntityNotFoundException;
 
 /**
- * Phanbook\Auth\Auth
+ * \Phanbook\Auth\Auth
+ *
  * Manages Authentication/Identity Management in Phanbook
+ *
+ * @property \Phalcon\Config $config
+ * @package Phanbook\Auth
  */
 class Auth extends Component
 {
     /**
-     * Checks the user credentials
+     * @var Service\User
+     */
+    protected $userService;
+
+    /**
+     * @var int
+     */
+    protected $cookieLifetime;
+
+    /**
+     * Auth constructor.
+     *
+     * @param null $cookieLifetime
+     */
+    public function __construct($cookieLifetime = null)
+    {
+        $this->userService = $this->di->getShared(Service\User::class);
+
+        if ($cookieLifetime === null) {
+            $cookieLifetime = $this->config->get('application')->cookieLifetime;
+        }
+
+        $this->cookieLifetime = $cookieLifetime;
+    }
+
+    /**
+     * Performs an authentication attempt.
      *
      * @param  array $credentials
-     * @return boolean
+     * @throws Exception
      */
     public function check(array $credentials)
     {
+        $clientIp  = $this->request->getClientAddress(true);
+        $userAgent = $this->request->getUserAgent();
 
-        // Check if the user exist
-        $user = Users::findByEmailOrUsername($credentials['email']);
-        if (!$user) {
-            $this->registerUserThrottling(0);
-            $this->flashSession->error(t('Wrong email/password combination!'));
-            return false;
-        }
+        try {
+            // Check if the user exist
+            $user = $this->userService->getFirstByEmailOrUsername($credentials['email']);
+            $userData = [
+                'usersId'   => $user->getId(),
+                'userAgent' => $userAgent,
+                'ipAddress' => $clientIp,
+            ];
 
-        // Check the password
-        if (!$this->security->checkHash($credentials['password'], $user->getPasswd())) {
-            //$this->registerUserThrottling($user->id);
-            $this->flashSession->error(t('Wrong email/password combination!'));
-            return false;
-        }
+            // Check the password
+            if (!$this->security->checkHash($credentials['password'], $user->getPasswd())) {
+                $this->getEventsManager()->fire('user:failedLogin', $this, $userData);
+                throw new Exception('Wrong email/password combination');
+            }
 
-        // Check if the user was flagged
-        $this->checkUserFlags($user);
+            // Check if the user was flagged
+            if (!$this->userService->isActiveMember($user)) {
+                throw new Exception('The user is inactive');
+            }
 
-        // Register the successful login
-        $this->saveSuccessLogin($user);
+            $this->getEventsManager()->fire('user:successLogin', $this, $userData);
 
-        // Check if the remember me was selected
-        if (isset($credentials['remember'])) {
-            $this->setRememberEnvironment($user);
-        }
+            // Check if the remember me was selected
+            if (isset($credentials['remember'])) {
+                $this->setRememberEnvironment($user);
+            }
 
-        $this->setSession($user);
-        return true;
-    }
-
-    /**
-     * Creates the remember me environment settings the related cookies and generating tokens
-     *
-     * @param \Phanbook\Models\Users $user
-     */
-    public function saveSuccessLogin(Users $user)
-    {
-        $successLogin = new SuccessLogins();
-        $successLogin->setUsersId($user->getId());
-        $successLogin->setIpaddress($this->request->getClientAddress());
-        $successLogin->setUserAgent($this->request->getUserAgent());
-        if (!$successLogin->save()) {
-            $messages = $successLogin->getMessages();
-            error_log('saveSuccessLogin false ' . __LINE__. ' and ' . __CLASS__ . $messages[0]);
-            return false;
-        }
-    }
-
-    /**
-     * Implements login throttling
-     * Reduces the effectiveness of brute force attacks
-     *
-     * @param int $userId
-     */
-    public function registerUserThrottling($userId)
-    {
-        $failedLogin = new FailedLogins();
-        $failedLogin->setUsersId($userId);
-        $failedLogin->setIpaddress($this->request->getClientAddress());
-        $failedLogin->setAttempted(time());
-        $failedLogin->save();
-
-        $attempts = FailedLogins::count(
-            array(
-            'ipAddress = ?0 AND attempted >= ?1',
-            'bind' => array(
-                $this->request->getClientAddress(),
-                time() - 3600 * 6
-            )
-            )
-        );
-
-        switch ($attempts) {
-            case 1:
-            case 2:
-                // no delay
-                break;
-            case 3:
-            case 4:
-                sleep(2);
-                break;
-            default:
-                sleep(4);
-                break;
+            $this->setSession($user);
+        } catch (EntityNotFoundException $e) {
+            $this->getEventsManager()->fire('user:failedLogin', $this, ['ipAddress' => $clientIp]);
+            throw new Exception('Wrong email/password combination');
         }
     }
 
@@ -130,12 +109,14 @@ class Auth extends Component
     {
         $userAgent = $this->request->getUserAgent();
         $token = md5($user->getEmail() . $user->getPasswd() . $userAgent);
+
         $remember = new RememberTokens();
         $remember->setUsersId($user->getId());
         $remember->setToken($token);
         $remember->setUserAgent($userAgent);
+
         if ($remember->save()) {
-            $expire = time() + $this->config->application->cookieLifetime;
+            $expire = time() + $this->cookieLifetime;
             $this->cookies->set('RMU', $user->getId(), $expire);
             $this->cookies->set('RMT', $token, $expire);
         }
@@ -152,64 +133,78 @@ class Auth extends Component
     }
 
     /**
-     * Logs on using the information in the cookies, it will call in beforeExecuteRoute
+     * Check if the session has a remember token
      *
-     * @return \Phalcon\Http\Response
+     * @return boolean
      */
-    public function loginWithRememberMe()
+    public function hasRememberToken()
     {
-        $userId = $this->cookies->get('RMU')->getValue();
-        $cookieToken = $this->cookies->get('RMT')->getValue();
-
-        $user = Users::findFirstById($userId);
-        if ($user) {
-            $userAgent = $this->request->getUserAgent();
-            $token = md5($user->getEmail() . $user->getPasswd() . $userAgent);
-
-            if ($cookieToken == $token) {
-                $remember = RememberTokens::findFirst(
-                    [
-                    'usersId = ?0 AND token = ?1',
-                    'bind' => [ $user->getId(), $token ],
-                    'order' => 'createdAt DESC' //it mean only remember token
-                    ]
-                );
-                if ($remember) {
-                    // Check if the cookie has not expired
-                    if ((time() - $this->config->application->cookieLifetime) < $remember->getCreatedAt()) {
-                        // Register identity
-                        $this->setSession($user);
-                        // Register the successful login
-                        $this->saveSuccessLogin($user);
-                        // Check if the user was flagged
-                        if (!$this->checkUserFlags($user)) {
-                            $this->flashSession->error('banned');
-                            $this->remove();
-                        }
-                    } else {
-                        $this->cookies->get('RMU')->delete();
-                        $this->cookies->get('RMT')->delete();
-                    }
-                }
-            }
-        }
+        return $this->cookies->has('RMT');
     }
 
     /**
-     * Checks if the user is banned/inactive/suspended
-     *
-     * @param  \Phanbook\Models\Users $user
-     * @return bool
+     * Logs on using the information in the cookies, it will call in beforeExecuteRoute
      */
-    public function checkUserFlags(Users $user)
+    public function loginWithRememberMe()
     {
-        return ($user->getStatus() == Users::STATUS_ACTIVE);
+        if (!$this->hasRememberMe() || !$this->hasRememberToken() || $this->isAuthorizedVisitor()) {
+            // Do nothing
+            return;
+        }
+
+        $cToken = $this->cookies->get('RMT')->getValue();
+        $userId = $this->cookies->get('RMU')->getValue();
+
+        try {
+            $user = $this->userService->getFirstById($userId);
+
+            // Check if the user was flagged
+            if (!$this->userService->isActiveMember($user)) {
+                $this->remove();
+
+                return;
+            }
+        } catch (EntityNotFoundException $e) {
+            $this->remove();
+
+            return;
+        }
+
+        $userAgent = $this->request->getUserAgent();
+        $uToken    = md5($user->getEmail() . $user->getPasswd() . $userAgent);
+        $userData  = [
+            'usersId'   => $user->getId(),
+            'userAgent' => $userAgent,
+            'ipAddress' => $this->request->getClientAddress(true),
+        ];
+
+        if (strcmp($cToken, $uToken) === 0) {
+            $remember = RememberTokens::findFirst([
+                'condition' => 'usersId = ?0 AND token = ?1',
+                'bind' => [$user->getId(), $uToken],
+                'order' => 'createdAt DESC' // it mean only remember token
+            ]);
+
+            if ($remember) {
+                // Check if the cookie has not expired
+                if ((time() - $this->cookieLifetime) < $remember->getCreatedAt()) {
+                    // Register identity
+                    $this->setSession($user);
+                    $this->getEventsManager()->fire('user:successLogin', $this, $userData);
+
+                    return;
+                }
+            }
+        }
+
+        $this->cookies->get('RMU')->delete();
+        $this->cookies->get('RMT')->delete();
     }
 
     /**
      * Returns the current identity
      *
-     * @return array
+     * @return array|null
      */
     public function getAuth()
     {
@@ -219,46 +214,83 @@ class Auth extends Component
     /**
      * Returns the current identity
      *
-     * @return string
+     * @return string|null
      */
     public function getName()
     {
+        if (!$this->isAuthorizedVisitor()) {
+            return null;
+        }
+
         $identity = $this->session->get('auth');
+
         return $identity['name'];
     }
+
     /**
      * Returns the current user id
      *
-     * @return int
+     * @return int|null
      */
     public function getUserId()
     {
-        if (!$this->session->has('auth')) {
+        if (!$this->isAuthorizedVisitor()) {
             return null;
         }
+
         $identity = $this->session->get('auth');
+
         return (int) $identity['id'];
     }
+
     /**
      * Returns the current identity
      *
-     * @return string
+     * @return string|null
      */
     public function getFullName()
     {
+        if (!$this->isAuthorizedVisitor()) {
+            return null;
+        }
+
         $identity = $this->session->get('auth');
+
         return $identity['fullname'];
     }
+
     /**
      * Returns the current identity
      *
-     * @return string
+     * @return string|null
      */
     public function getUsername()
     {
+        if (!$this->isAuthorizedVisitor()) {
+            return null;
+        }
+
         $identity = $this->session->get('auth');
+
         return $identity['username'];
     }
+
+    /**
+     * Gets current user's email if any.
+     *
+     * @return string|null
+     */
+    public function getEmail()
+    {
+        if (!$this->isAuthorizedVisitor()) {
+            return null;
+        }
+
+        $identity = $this->session->get('auth');
+
+        return $identity['email'];
+    }
+
     /**
      * Checking user is have permission admin
      *
@@ -266,35 +298,44 @@ class Auth extends Component
      */
     public function isAdmin()
     {
+        if (!$this->isAuthorizedVisitor()) {
+            return false;
+        }
+
         $identity = $this->session->get('auth');
 
-        return ($identity['admin'] == 'Y');
+        return $identity['admin'] == 'Y';
     }
+
     public function isModerator()
     {
+        if (!$this->isAuthorizedVisitor()) {
+            return false;
+        }
+
         $identity = $this->session->get('auth');
 
-        return ($identity['moderator'] == 'Y');
+        return $identity['moderator'] == 'Y';
     }
-    public function isLogin()
-    {
-        return $this->session->get('auth') ? :false;
-    }
-     /**
-     * Checking user is have permission admin
+
+    /**
+     * Check whether the user is authorized.
      *
-     * @return boolean
+     * @return bool
      */
+    public function isAuthorizedVisitor()
+    {
+        return $this->session->has('auth');
+    }
+
+     /**
+      * Checking user is have permission admin
+      *
+      * @return boolean
+      */
     public function isTrustModeration()
     {
-        $identity = $this->session->get('auth');
-        if ($identity['admin'] == 'Y') {
-            return true;
-        }
-        if ($identity['moderator'] == 'Y') {
-            return true;
-        }
-        return false;
+        return $this->isAdmin() || $this->isModerator();
     }
 
     /**
@@ -305,72 +346,16 @@ class Auth extends Component
         if ($this->cookies->has('RMU')) {
             $this->cookies->get('RMU')->delete();
         }
+
         if ($this->cookies->has('RMT')) {
             $this->cookies->get('RMT')->delete();
         }
-        $this->cookies->get('RMT')->delete();
-        $this->cookies->get('RMU')->delete();
-
 
         $this->session->remove('auth');
     }
 
     /**
-     * Authorize the user by his/her id
-     *
-     * @param int $id
-     * @return Users|bool
-     */
-    public function authUserById($id)
-    {
-        $user = Users::findFirstById($id);
-        if (!$user) {
-            error_log('The user does not exist');
-            return false;
-        }
-        return $user;
-    }
-
-    /**
-     * Get the entity related to user in the active identity
-     *
-     * @return \Phanbook\Models\Users
-     */
-    public function getUser()
-    {
-        $identity = $this->session->get('auth');
-        if (!isset($identity['id'])) {
-            return false;
-        }
-
-        $user = Users::findFirstById($identity['id']);
-        if (!$user) {
-            error_log('The user does not exist' . __CLASS__ . ' and '. __LINE__);
-            return false;
-        }
-        return $user;
-    }
-    /**
-     * Check condition to allow comment or vote
-     *
-     * @return mixed
-     */
-    public function getVote()
-    {
-        $identity = $this->session->get('auth');
-        if (!isset($identity['id'])) {
-            return false;
-        }
-
-        $user = Users::findFirstById($identity['id']);
-        if (!$user) {
-            error_log('The user does not exist' . __CLASS__ . ' and '. __LINE__);
-            return false;
-        }
-
-        return $user->getVote();
-    }
-    /**
+     * Save user session.
      *
      * @param \Phanbook\Models\Users $object
      */
@@ -378,16 +363,16 @@ class Auth extends Component
     {
         $this->session->set(
             'auth',
-            array(
-            'id'        => $object->getId(),
-            'admin'     => $object->getAdmin(),
-            'moderator' => $object->getModerator(),
-            'theme'     => $object->getTheme(),
-            'name'      => $object->getInforUser(),
-            'fullname'  => $object->getFullName(),
-            'username'  => $object->getUsername(),
-            'email'     => $object->getEmail()
-            )
+            [
+                'id'        => $object->getId(),
+                'admin'     => $object->getAdmin(),
+                'moderator' => $object->getModerator(),
+                'theme'     => $object->getTheme(),
+                'name'      => $object->getFullName(),
+                'fullname'  => $object->getFullName(),
+                'username'  => $object->getUsername(),
+                'email'     => $object->getEmail(),
+            ]
         );
     }
 }

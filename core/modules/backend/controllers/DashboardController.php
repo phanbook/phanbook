@@ -57,7 +57,9 @@ class DashboardController extends ControllerBase
             }
         } catch (\Google_Exception $e) {
             // Skip Google errors
-            $this->logger->error($e->getMessage() . PHP_EOL . $e->getTraceAsString());
+            $this->logger->error(
+                sprintf('%s:%s: %s', __FILE__, __LINE__, $e->getMessage())
+            );
         }
 
         $this->tag->setTitle(t('Dashboard'));

@@ -1,10 +1,10 @@
 {% extends 'layouts/layout.volt' %}
-{% block title %}{{ post.getTitle() ? post.getTitle() : 'Phanbook'}}{% endblock %}
+{% block title %}{{ post.getTitle() ? post.getTitle() : 'Phanbook' }}{% endblock %}
 {% block content %}
     {% if post is defined %}
     <div class="row">
             <div class="col-md-9">
-                {{ partial('partials/question', ['single' : true])}}
+                {{ partial('partials/question', ['single' : true]) }}
 
                 <div class="share-tags page-content">
                     <div class="question-tags"><i class="fa fa-tags"></i>
@@ -65,7 +65,7 @@
 
                 <div class="about-author clearfix">
                     <div class="author-image">
-                        <a href="/@{{post.user.username}}" original-title="" class="tooltip-n">
+                        <a href="/@{{ post.user.username }}" original-title="" class="tooltip-n">
                         {{ image(getUrlAvatar(post.user.email)  ,false) }}
                         </a>
                     </div>
@@ -81,7 +81,7 @@
                     {% if postRelated is defined %}
                         {% for item in postRelated %}
                         <li class="related-item">
-                            <h3><a href="/posts/{{item.id}}/{{item.slug}}">
+                            <h3><a href="/posts/{{ item.id }}/{{ item.slug }}">
                                 <i class="icon-double-angle-right"></i>{{ item.title }}
                                 </a>
                             </h3>
@@ -95,7 +95,7 @@
                 {% if postsReply|length > 0 %}
                 <div id="commentlist" class="page-content">
                     <div class="boxedtitle page-title">
-                        <h2>Answers ( <span class="color">{{postsReply|length}}</span> )</h2>
+                        <h2>Answers ( <span class="color">{{ postsReply|length }}</span> )</h2>
                     </div>
                     <ol class="commentlist clearfix">
                         {% for answer in postsReply %}
@@ -107,10 +107,10 @@
                                 <div class="comment-text">
                                     <div class="author clearfix">
                                         <div class="comment-author">
-                                            <a href="/@{{answer.user.username}}">{{answer.user.getFullName()}}</a>
+                                            <a href="/@{{ answer.user.username }}">{{ answer.user.getFullName() }}</a>
                                         </div>
 
-                                        {{ partial('partials/vote-reply', ['objectId' : answer.id, 'object' : 'postsReply', 'votes' : answer])}}
+                                        {{ partial('partials/vote-reply', ['objectId' : answer.id, 'object' : 'postsReply', 'votes' : answer]) }}
                                         <div class="comment-meta">
                                             <div class="date"><i class="fa fa-time"></i>
                                             {{ getHumanDate(answer.createdAt)  }}
@@ -146,7 +146,7 @@
                         <div id="respond-textarea">
                             <p>
                                 <label class="required" for="comment">Your answer<span>*</span></label>
-                                {{ form.render('content')}}
+                                {{ form.render('content') }}
                             </p>
                         </div>
                         <p class="form-submit">
@@ -166,7 +166,7 @@
                 </div><!-- End post-next-prev -->
             </div><!-- End main -->
             <aside class="col-md-3 sidebar">
-            {{ partial('partials/right-side')}}
+            {{ partial('partials/right-side') }}
             </aside>
         </div><!-- End row -->
     {% else %}

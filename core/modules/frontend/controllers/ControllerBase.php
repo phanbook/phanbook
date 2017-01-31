@@ -17,15 +17,16 @@ use Phanbook\Models\Vote;
 use Phanbook\Models\Users;
 use Phanbook\Models\Karma;
 use Phanbook\Models\Posts;
-use Phalcon\Mvc\Dispatcher;
 use Phanbook\Models\Comment;
 use Phanbook\Models\PostsReply;
 use Phanbook\Controllers\Controller;
+use Phalcon\Mvc\DispatcherInterface;
+use Phanbook\Models\Services\Service;
 use Phanbook\Frontend\Forms\CommentForm;
 use Phanbook\Models\ActivityNotifications;
 
 /**
- * Class ControllerBase
+ * \Phanbook\Frontend\Controllers\ControllerBase
  *
  * @property \Phanbook\Auth\Auth $auth
  * @property \Phalcon\Config $config
@@ -35,27 +36,40 @@ use Phanbook\Models\ActivityNotifications;
  */
 class ControllerBase extends Controller
 {
-
     /**
      * @var int
      */
     public $perPage = 30;
 
+    /**
+     * @var Service\Post
+     */
+    protected $postService;
 
     /**
-     * @param Dispatcher $dispatcher
+     * @var Service\User
+     */
+    protected $userService;
+
+    /**
+     * @var Service\Vote
+     */
+    protected $voteService;
+
+    /**
+     * Triggered before executing the controller/action method.
      *
+     * @param  DispatcherInterface $dispatcher
      * @return bool
      */
-    public function beforeExecuteRoute(Dispatcher $dispatcher)
+    public function beforeExecuteRoute(DispatcherInterface $dispatcher)
     {
-        // @TODO: something
         if ($this->auth->hasRememberMe() && !$this->request->isPost()) {
             $this->auth->loginWithRememberMe();
         }
+
+        return true;
     }
-
-
 
     public function initialize()
     {
@@ -74,6 +88,13 @@ class ControllerBase extends Controller
         }
     }
 
+    public function inject(Service\Post $postService, Service\User $userService, Service\Vote $voteService)
+    {
+        $this->postService = $postService;
+        $this->userService = $userService;
+        $this->voteService = $voteService;
+    }
+
     /**
      * Method for voting a task
      *
@@ -82,29 +103,32 @@ class ControllerBase extends Controller
     public function voteAction()
     {
         $this->view->disable();
-        if (!$this->request->isPost()) {
-            return $this->response->redirect($this->router->getControllerName());
-        }
 
         $way = 'positive';
         if ($this->request->getPost('way') == 'negative') {
             $way = 'negative';
         }
-        $objectId = $this->request->getPost('objectId');
-        $object   = $this->request->getPost('object');
-        $user     = Users::findFirstById($this->auth->getAuth()['id']);
+
+        $objectId = $this->request->getPost('objectId', 'int');
+        $object   = $this->request->getPost('object', 'alphanum');
+
         $this->setJsonResponse();
 
-        if (!$user) {
+        if (!$this->auth->isAuthorizedVisitor() ||
+            $user = $this->userService->findFirstById($this->auth->getUserId())
+        ) {
             $this->jsonMessages['messages'][] = [
                 'type'    => 'error',
-                'content' =>  'You need to login first'
+                'content' => t('Only authorized users can vote')
             ];
+
             return $this->jsonMessages;
         }
+
         $this->db->begin();
+
         if ($object == Vote::OBJECT_POSTS) {
-            if (!$post = Posts::findFirstById($objectId)) {
+            if (!$post = $this->postService->findFirstById($objectId)) {
                 $this->jsonMessages['messages'][] = [
                     'type'    => 'error',
                     'content' => 'Post does not exist'
@@ -113,11 +137,12 @@ class ControllerBase extends Controller
             }
             $this->setPointPost($way, $user, $post);
 
-            //Adding notification when you have receive vote on the post, and not for now for post replies
+            // Adding notification when you have receive vote on the post, and not for now for post replies
             if ($user->getId() != $post->getUsersId()) {
                 $this->setActivityNotifications($user, $post);
             }
         }
+
         if ($object == Vote::OBJECT_POSTS_REPLIES) {
             if (!$postReply = PostsReply::findFirstById($objectId)) {
                 $this->jsonMessages['messages'][] = [
@@ -130,7 +155,9 @@ class ControllerBase extends Controller
             // Set karma Voting someone else's post (positive or negative) on posts reply
             $this->setPointReply($way, $user, $postReply);
         }
+
         $vote = Vote::vote($objectId, $object, $way);
+
         if (!$vote) {
             $this->db->rollback();
             $this->jsonMessages['messages'][] = [
@@ -139,6 +166,7 @@ class ControllerBase extends Controller
             ];
             return $this->jsonMessages;
         }
+
         if ($user->getVote() <= 0) {
             $this->jsonMessages['messages'][] = [
                 'type'    => 'error',
@@ -146,18 +174,21 @@ class ControllerBase extends Controller
             ];
             return $this->jsonMessages;
         }
+
         //checking the user have already voted this post yet
         if (is_array($vote)) {
             $this->db->rollback();
             $this->jsonMessages['messages'][] = $vote;
             return $this->jsonMessages;
         }
+
         $this->db->commit();
 
         if ($this->request->isAjax()) {
-            $vote = (new Vote)->getVotes($objectId, $object);
-            return (['data' => $vote['positive'] - $vote['negative']]);
+            $votes = $this->voteService->getVotes($objectId, $object);
+            return ['data' => $votes['positive'] - $votes['negative']];
         }
+
         echo 0;
         return 0;
     }
@@ -176,7 +207,7 @@ class ControllerBase extends Controller
         if (!$this->request->isPost()) {
             return $this->response->redirect($this->router->getControllerName());
         }
-        $user = Users::findFirstById($this->auth->getAuth()['id']);
+        $user = Users::findFirstById($this->auth->getUserId());
 
         if (!$user) {
             $this->flashSession->error(t('You need to login first'));

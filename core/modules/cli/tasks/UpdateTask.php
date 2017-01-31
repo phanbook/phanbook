@@ -14,7 +14,7 @@ namespace Phanbook\Cli\Tasks;
 
 use Phalcon\CLI\Task;
 use Phanbook\Tools\ZFunction;
-use Phanbook\Tools\Cli\Output;
+use Phanbook\Cli\Library\Output;
 
 class UpdateTask extends Task
 {

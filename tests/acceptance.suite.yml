@@ -8,6 +8,8 @@ class_name: AcceptanceTester
 modules:
     enabled:
         - Helper\Acceptance
-        - Db
+        - App\Test\Module\Db
         - Filesystem
+        - Phalcon:
+            part: services
         - PhpBrowser

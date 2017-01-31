@@ -1,7 +1,9 @@
 <?php
 
 $messages = [
+    'account_successfully_created' => 'Your account was successfully created. An email was sent to your address in order to continue the process.',
     'account_switched_successfully' => 'Account Switched Successfully',
+    'an_email_with_reset_pass_was_sent' => 'An email was sent to your address in order to continue with the reset password process.',
     'switch_company_account' => 'Switch Company Account',
     'company_name' => 'Company Name',
     'next' => 'Next',
@@ -30,6 +32,8 @@ $messages = [
     'user_saved_successfully' => 'User has been saved successfully.',
     'edit_user_capabilities' => 'Edit User Capabilities',
     'edit_user' => 'Edit User',
+    'err_send_registration_email' => 'An error occurred when trying to send registration email.',
+    'err_send_reset_passwd_email' => 'An error occurred when trying to send reset password email.',
     'manage_user_roles' => 'Manage User Roles',
     'manage_roles' => 'Manage Roles',
     'active' => 'Active',

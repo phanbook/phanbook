@@ -3,13 +3,13 @@
         <div class="user-profile">
             <div class="col-md-12">
                 <div class="page-content">
-                    <h2>About {{ user.getFullname()}}</h2>
+                    <h2>About {{ user.getFullName() }}</h2>
                     <div class="user-profile-img">
-                    <img width="60" height="60" src="{{getUrlAvatar(user.email)}}" alt="admin">
+                    <img width="60" height="60" src="{{ getUrlAvatar(user.email) }}" alt="admin">
                     </div>
                     <div class="ul_list ul_list-icon-ok about-user">
                         <ul>
-                            <li><i class="fa fa-plus"></i>Registerd : <span>{{user.getHumanCreatedAt()}}</span></li>
+                            <li><i class="fa fa-plus"></i>Registered : <span>{{ user.getHumanCreatedAt() }}</span></li>
                             <li><i class="fa fa-globe"></i>Website : <a target="_blank" href="#">view</a></li>
                         </ul>
                     </div>
@@ -61,7 +61,7 @@
                             <ul>
                                 <li><i class="icon-question-sign"></i>
                                     <a href="?tab=questions">Questions
-                                        <span> ( <span>{{ totalQuestions}}</span> )
+                                        <span> ( <span>{{ totalQuestions }}</span> )
                                     </span>
                                 </a></li>
                                 <li><i class="fa fa-comment"></i>
@@ -74,7 +74,7 @@
                                 </a></li>
                                 <li><i class="fa fa-heart"></i>
                                     <a href="">Karma
-                                    <span> ( <span>{{user.getHumanKarma()}}</span> ) </span>
+                                    <span> ( <span>{{ user.getHumanKarma() }}</span> ) </span>
                                 </a></li>
                             </ul>
                         </div>
@@ -105,16 +105,16 @@
     <div class="clearfix"></div>
     <div class="page-content page-content-user">
         <div class="user-questions">
-            {{ partial('partials/list-posts')}}
+            {{ partial('partials/list-posts') }}
         </div>
     </div>
 
     <div class="height_20"></div>
-    {{ partial('partials/pagination')}}
+    {{ partial('partials/pagination') }}
     <!-- if no questions
     <p>No questions yet</p>
     -->
 </div><!-- End main -->
 <aside class="col-md-3 sidebar">
-    {{ partial('partials/right-side')}}
+    {{ partial('partials/right-side') }}
 </aside>

@@ -37,126 +37,6 @@ if (!function_exists('t')) {
     }
 }
 
-if (!function_exists('vd')) {
-    /**
-     * The var_dump helper.
-     *
-     * @param mixed $expression
-     */
-    function vd($expression)
-    {
-        echo PHP_SAPI == 'cli' ? ' ' : '<pre style="overflow: auto;" class="code-dump">';
-
-        $trace = debug_backtrace();
-        echo sprintf(
-            'Called From: %s:%d %s',
-            $trace[1]['file'],
-            $trace[1]['line'],
-            PHP_SAPI == 'cli' ? PHP_EOL : '<br>'
-        );
-
-        var_dump($expression);
-        echo PHP_SAPI == 'cli' ? ' ' : '</pre>';
-    }
-}
-
-if (!function_exists('vdd')) {
-    /**
-     * The var_dump helper.
-     *
-     * @param mixed $expression
-     */
-    function vdd($expression)
-    {
-        vd($expression);
-        die();
-    }
-}
-
-if (!function_exists('pr')) {
-    /**
-     * The print_r helper.
-     *
-     * @param mixed $expression
-     */
-    function pr($expression)
-    {
-        e(print_r($expression, true));
-    }
-}
-
-if (!function_exists('prd')) {
-    /**
-     * The print_r helper.
-     *
-     * @param mixed $expression
-     */
-    function prd($expression)
-    {
-        pr($expression);
-        die();
-    }
-}
-
-if (!function_exists('e')) {
-    /**
-     * The echo helper.
-     *
-     * @param string $string
-     */
-    function e($string)
-    {
-        echo PHP_SAPI == 'cli' ? ' ' : '<pre style="overflow: auto;" class="code-dump">';
-
-        $trace = debug_backtrace();
-        echo sprintf(
-            'Called From: %s:%d %s',
-            $trace[1]['file'],
-            $trace[1]['line'],
-            PHP_SAPI == 'cli' ? PHP_EOL : '<br>'
-        );
-
-        echo $string;
-        echo PHP_SAPI == 'cli' ? ' ' : '</pre>';
-    }
-}
-
-if (!function_exists('gcm')) {
-    /**
-     * The get_class_methods helper.
-     *
-     * @param  string $class
-     * @return array
-     */
-    function gcm($class)
-    {
-        if (!is_string($class) || !class_exists($class)) {
-            $methods = [];
-        } else {
-            $methods = get_class_methods($class);
-        }
-
-        return $methods;
-    }
-}
-
-if (!function_exists('d')) {
-    /**
-     * The echo && die helper.
-     *
-     * @param mixed $expression
-     * @param bool  $kill Exit?
-     */
-    function d($expression, $kill = true)
-    {
-        e($expression);
-
-        if ($kill) {
-            die();
-        }
-    }
-}
-
 if (!function_exists('app_path')) {
     /**
      * Get the Application path.
@@ -232,5 +112,81 @@ if (!function_exists('logs_path')) {
     function logs_path($path = '')
     {
         return content_path('logs') . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+    }
+}
+
+if (!function_exists('value')) {
+    /**
+     * Return the default value of the given value.
+     *
+     * @param  mixed $value
+     * @return mixed
+     */
+    function value($value)
+    {
+        return $value instanceof Closure ? $value() : $value;
+    }
+}
+
+if (!function_exists('env')) {
+    /**
+     * Gets the value of an environment variable.
+     *
+     * @param  string $key
+     * @param  mixed  $default
+     * @return mixed
+     */
+    function env($key, $default = null)
+    {
+        $value = getenv($key);
+
+        if ($value === false) {
+            return value($default);
+        }
+
+        switch (strtolower($value)) {
+            case 'true':
+                return true;
+            case 'false':
+                return false;
+            case 'empty':
+                return '';
+            case 'null':
+                return null;
+        }
+
+        return $value;
+    }
+}
+
+if (!function_exists('container')) {
+    /**
+     * Calls the default Dependency Injection container.
+     *
+     * @param  mixed
+     * @return mixed|\Phalcon\DiInterface
+     */
+    function container()
+    {
+        $default = Di::getDefault();
+        $args = func_get_args();
+
+        if (empty($args)) {
+            return $default;
+        }
+
+        return call_user_func_array([$default, 'get'], $args);
+    }
+}
+if (!function_exists('content_modules_path')) {
+    /**
+     * Get the modules path.
+     *
+     * @param  string $path
+     * @return string
+     */
+    function content_modules_path($path = '')
+    {
+        return content_path('modules') . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
 }

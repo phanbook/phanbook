@@ -13,7 +13,7 @@
 namespace Phanbook\Cli\Tasks;
 
 use Phalcon\Cli\Task;
-use Phanbook\Tools\Cli\Output;
+use Phanbook\Cli\Library\Output;
 
 /**
  * \Phanbook\Cli\Tasks\TestsTask
@@ -33,28 +33,10 @@ class TestsTask extends Task
         Output::stdout("Main Action");
     }
 
-    public function cmdAction()
-    {
-        $cmd = \Cli\Execute::singleton();
-        $success = $cmd->execute("whoami", __FILE__, __LINE__, $output);
-
-        Output::stdout("You're running this script under $output user");
-    }
-
     public function test2Action($paramArray)
     {
-        Output::stdout("First param: $paramArray[0]");
-        Output::stdout("Second param: $paramArray[1]");
-    }
-
-    /**
-     * Action to trigger a fatal error
-     */
-    public function fatalAction()
-    {
-        // trigger a fatal error w/ Class that doesn't exist
-        //new TriggerARuntimeFatal();
-        strpos();
+        Output::stdout('First param: ' . $paramArray[0]);
+        Output::stdout('Second param: ' . $paramArray[1]);
     }
 
     public function renderAction()

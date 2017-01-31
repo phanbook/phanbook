@@ -14,18 +14,20 @@
 namespace Phanbook\Controllers;
 
 use Phalcon\Mvc\Dispatcher;
-use Phalcon\Db\Adapter\Pdo;
 use Phanbook\Models\ModelBase;
-use Phalcon\Mvc\Controller as ControllerPhalcon;
 use Phalcon\Paginator\Adapter\NativeArray as PaginatorNativeArray;
 use Phalcon\Paginator\Adapter\QueryBuilder as PaginatorQueryBuilder;
 
 /**
- * Class Controller
+ * \Phanbook\Controllers\Controller
+ *
+ * @property \Phanbook\Auth\Auth $auth
+ * @property \Phalcon\Logger\Adapter\File $logger
+ * @property \Phanbook\Common\Library\Acl\Manager $aclManager
  *
  * @package Phanbook\Controllers
  */
-class Controller extends ControllerPhalcon
+class Controller extends AbstractController
 {
     /**
      * @var array
@@ -76,7 +78,6 @@ class Controller extends ControllerPhalcon
      */
     protected $statusCode = 200;
 
-
     /**
      * Check if we need to throw a json response. For ajax calls.
      *
@@ -99,8 +100,6 @@ class Controller extends ControllerPhalcon
         return $this;
     }
 
-
-
     /**
      * After execute route event
      *
@@ -120,11 +119,10 @@ class Controller extends ControllerPhalcon
         }
     }
 
-
-
     /**
      * Set a flash message with messages from objects
      *
+     * @todo Move to the trait
      * @param $object
      */
     public function displayModelErrors($object)
@@ -137,7 +135,6 @@ class Controller extends ControllerPhalcon
             $this->flashSession->error(t('No object found. No errors.'));
         }
     }
-
 
     public function toggleAction($id)
     {
@@ -246,8 +243,6 @@ class Controller extends ControllerPhalcon
         return $this->delete($id);
     }
 
-
-
     /**
      * Attempt to determine the real file type of a file.
      *
@@ -268,7 +263,6 @@ class Controller extends ControllerPhalcon
 
         return in_array($extension, $allowedTypes);
     }
-
 
     /**
      * Create a QueryBuilder paginator, show 15 rows by page starting from $page
@@ -308,6 +302,7 @@ class Controller extends ControllerPhalcon
             ]
         );
     }
+
     /**
      * Create a paginator default use adapter PaginatorQueryBuilder,
      * show 30 rows by page starting from $page
@@ -349,9 +344,10 @@ class Controller extends ControllerPhalcon
     }
 
     /**
+     * @todo Move to the trait
      * @return \Phalcon\Http\Response|\Phalcon\Http\ResponseInterface
      */
-    public function currentRedirect()
+    protected function currentRedirect()
     {
         if ($url = $this->cookies->get('urlCurrent')->getValue()) {
             $this->cookies->delete('urlCurrent');
@@ -359,6 +355,7 @@ class Controller extends ControllerPhalcon
         }
         return $this->response->redirect($this->request->getHTTPReferer(), true);
     }
+
     public function getPathController()
     {
         return $this->router->getControllerName();
@@ -479,7 +476,7 @@ class Controller extends ControllerPhalcon
     /**
      * parseGridSubmit function.
      *
-     * @access public
+     * @param  string $class Model class.
      * @return mixed
      */
     protected function renderGrid($class)
@@ -536,7 +533,7 @@ class Controller extends ControllerPhalcon
             }
         }
 
-        $paginator = new Paginator(
+        $paginator = new PaginatorNativeArray(
             [
                 'data'  => $collections,
                 'limit' => (empty($this->gridFilters[$filterKey]['perPage']) ?
@@ -596,6 +593,7 @@ class Controller extends ControllerPhalcon
             return $cookieValue;
         }
     }
+
     /**
      * The function sending log for nginx or apache, it will to analytic later
      *

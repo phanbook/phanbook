@@ -1,4 +1,4 @@
-{% if isLogin() %}
+{% if is_authorized() %}
 <div class="setting-panel" style="display:none">
         <section class="container">
             <div class="row">
@@ -25,7 +25,7 @@
                                 <li><a href="/backend/dashboard">{{ t('Dashboard') }}</a></li>
                                 <li><a href="/backend/themes/custom">{{ t('Edit Theme') }}</a></li>
                                 <li><a href="/users/profile">{{ t('Edit Profile') }}</a></li>
-                                <li><a href="/oauth/logout">{{ t('Logout') }}</a></li>
+                                <li>{{ link_to(['for': 'logout'], t('Logout')) }}</li>
                             </ul>
                         </div>
                     </div><!-- End page-content -->
@@ -39,9 +39,9 @@
         <nav class="header-top-nav">
             <ul>
                 <li><a href="#"><i class="fa fa-headphones"></i>{{ t('Support') }}</a></li>
-                {% if isLogin() %}
+                {% if is_authorized() %}
                     <li>
-                        <a href="/oauth/logout" id="setting-panel">
+                        <a href="#" id="setting-panel">
                             <i class="fa fa-plus"></i>{{ t('Settings') }}
                         </a>
                     </li>
@@ -55,7 +55,8 @@
                     </li>
                 {% else %}
                     <li><a href="contact_us.html"><i class="fa fa-envelope"></i>{{ t('Contact') }}</a></li>
-                    <li><a href="/oauth/login"><i class="fa fa-user"></i>{{ t('Login Area') }}</a></li>
+                    <li>{{ link_to(['for': 'signup'], '<i class="fa fa-user"></i>' ~ t('Sign Up')) }}</li>
+                    <li>{{ link_to(['for': 'signin'], '<i class="fa fa-user"></i>' ~ t('Log In')) }}</a></li>
                 {% endif %}
             </ul>
         </nav>
@@ -82,7 +83,7 @@
             -%}
 
             {%- for value, key in menu -%}
-                {%- if (key == 'my' or key == 'answers') and not isLogin() -%}
+                {%- if (key == 'my' or key == 'answers') and not is_authorized() -%}
                     {% continue %}
                 {%- endif -%}
 

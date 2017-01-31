@@ -17,9 +17,6 @@ use Phalcon\Loader;
 // Load constants
 require 'constants.php';
 
-// Register The Composer Auto Loader
-require ROOT_DIR . '/vendor/autoload.php';
-
 (new Loader)
     ->registerNamespaces([
         'Phanbook' => ROOT_DIR . '/core/common/library/',
@@ -27,16 +24,15 @@ require ROOT_DIR . '/vendor/autoload.php';
         'Phanbook\Tools' => ROOT_DIR . '/core/common/tools/',
         'Phanbook\Common' => ROOT_DIR . '/core/common/',
         'Phanbook\Models' => ROOT_DIR . '/core/common/models/',
-        'Phanbook\Seeder' => ROOT_DIR . '/core/modules/seeder/',
         'Phanbook\Factory' => ROOT_DIR . '/core/common/factory',
-        'Phanbook\Plugins' => ROOT_DIR . '/core/common/plugins/',
-        'Phanbook\Tools\Cli' => ROOT_DIR . '/core/common/tools/cli/',
-        'Phanbook\Cli\Tasks' => ROOT_DIR . '/core/modules/cli/tasks/',
         'Phanbook\Validators' => ROOT_DIR . '/core/common/validators/',
         'Phanbook\Controllers' => ROOT_DIR . '/core/common/controllers/',
-        'Phanbook\Common\Exceptions' => ROOT_DIR . '/core/common/exceptions/'
+        'Phanbook\Common\Library' => ROOT_DIR . '/core/common/library/',
     ])
     ->registerFiles([
-        ROOT_DIR . '/bootstrap/helpers.php',
+        __DIR__ . '/helpers.php',
     ])
     ->register();
+
+// Register The Composer Auto Loader
+require ROOT_DIR . '/vendor/autoload.php';

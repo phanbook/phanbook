@@ -13,65 +13,30 @@
  */
 namespace Phanbook\Backend\Controllers;
 
-use Phanbook\Controllers\Controller;
 use Phalcon\Mvc\Dispatcher;
+use Phanbook\Controllers\Controller;
 
 /**
  * \Phanbook\Backend\Controllers\ControllerBase
  *
- * @property \Phalcon\Logger\Adapter\File $logger
  * @package Phanbook\Backend\Controllers
  */
 class ControllerBase extends Controller
 {
-    /**
-     * @var array
-     */
-    private $securedRoutes = [
-        ['controller' => 'admin'],
-        ['controller' => 'template'],
-        ['controller' => 'posts'],
-        ['controller' => 'settings'],
-        ['controller' => 'pages'],
-        ['controller' => 'users'],
-        ['controller' => 'tags'],
-        ['controller' => 'dashboard'],
-        ['controller' => 'update'],
-        ['controller' => 'tests'],
-        ['controller' => 'media'],
-        ['controller' => 'themes']
-
-    ];
-
-    /**
-     * @param Dispatcher $dispatcher
-     *
-     * @return bool
-     */
-    public function beforeExecuteRoute(Dispatcher $dispatcher)
-    {
-        if ($this->auth->isAdmin() && $this->isSecuredRoute($dispatcher)) {
-            return true;
-        }
-        header('Location:/oauth/login');
-        exit;
-    }
-
-
     public function initialize()
     {
-        $this->view->currentOrder = $this->currentOrder;
         $this->loadDefaultAssets();
-        $this->view->menuStruct = $this->menuStruct;
+
+        $this->view->setVars([
+            'currentOrder' => $this->currentOrder,
+            'menuStruct'   => container('menuStruct'),
+        ]);
     }
 
     /**
-     * loadDefaultAssets function.
-     *
-     * @access private
-     * @return void
+     * Load module assets.
      */
-    private function loadDefaultAssets()
+    protected function loadDefaultAssets()
     {
         $this->assets
             ->addCss('//fonts.googleapis.com/css?family=Open+Sans', false)
@@ -80,6 +45,7 @@ class ControllerBase extends Controller
             ->addCss('core/assets/css/animate.css')
             ->addCss('backend/assets/css/app.css')
             ->addCss('backend/assets/css/app-custom.css');
+
         $this->assets
             ->addJs('core/assets/js/jquery.js')
             ->addJs('core/assets/js/jquery-ui.js')
@@ -96,14 +62,12 @@ class ControllerBase extends Controller
      *
      * @return bool
      */
-    private function isSecuredRoute(Dispatcher $dispatcher)
+    public function beforeExecuteRoute(Dispatcher $dispatcher)
     {
-        foreach ($this->securedRoutes as $route) {
-            if ($route['controller'] == $dispatcher->getControllerName()) {
-                return true;
-            }
+        if (!$this->auth->isAdmin()) {
+            $this->flashSession->notice(t('You do not have permission to access this page'));
+            $dispatcher->setReturnedValue($this->response->redirect('/', true));
+            return false;
         }
-
-        return false;
     }
 }

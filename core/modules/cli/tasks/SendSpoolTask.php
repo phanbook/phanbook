@@ -14,7 +14,7 @@ namespace Phanbook\Cli\Tasks;
 
 use Phalcon\CLI\Task;
 use Phanbook\Mail\SendSpool;
-use Phanbook\Tools\Cli\Output;
+use Phanbook\Cli\Library\Output;
 
 class SendSpoolTask extends Task
 {

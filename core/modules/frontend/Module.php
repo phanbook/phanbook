@@ -15,108 +15,65 @@ namespace Phanbook\Frontend;
 
 use Phalcon\Loader;
 use Phalcon\DiInterface;
-use Phalcon\Mvc\Dispatcher;
-use Phalcon\Mvc\View;
-use Phalcon\Mvc\Url;
-use Phalcon\Mvc\ModuleDefinitionInterface;
-use Phalcon\Mvc\View\Engine\Volt;
-use Phalcon\Events\Manager as EventsManager;
+use Phanbook\Common\Module as BaseModule;
+use Phanbook\Common\Library\Events\ViewListener;
 
-class Module implements ModuleDefinitionInterface
+/**
+ * \Phanbook\Frontend\Module
+ *
+ * @package Phanbook\Frontend
+ */
+class Module extends BaseModule
 {
-    public function registerAutoloaders(DiInterface $dependencyInjector = null)
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getHandlersNamespace()
+    {
+        return 'Phanbook\Frontend\Controllers';
+    }
+
+    /**
+     * Registers an autoloader related to the module.
+     *
+     * @param DiInterface $di
+     */
+    public function registerAutoloaders(DiInterface $di = null)
     {
         $loader = new Loader();
 
-        $loader->registerNamespaces([
-            'Phanbook\Frontend\Controllers' => __DIR__ . '/controllers/',
-            'Phanbook\Frontend\Forms'       => __DIR__ . '/forms/'
-        ]);
+        $namespaces = [
+            $this->getHandlersNamespace() => __DIR__ . '/controllers/',
+            'Phanbook\Frontend\Forms'     => __DIR__ . '/forms/',
+        ];
+
+        $loader->registerNamespaces($namespaces);
 
         $loader->register();
     }
 
     /**
-     * Register the services here to make them general
-     * or register in the ModuleDefinition to make them module-specific
+     * Registers services related to the module.
+     *
+     * @param DiInterface $di
      */
     public function registerServices(DiInterface $di)
     {
+        // Read configuration
+        $moduleConfig = require __DIR__ . '/config/config.php';
 
-        //Read configuration
-        $config = include __DIR__ . "/config/config.php";
+        // Tune Up the URL Component
+        $url = $di->getShared('url');
+        $url->setBaseUri($moduleConfig->application->baseUri);
 
-        $configGlobal = $di->getConfig();
+        $eventsManager = $di->getShared('eventsManager');
+        $eventsManager->attach('view:notFoundView', new ViewListener($di));
 
-        $di->set('url', function () use ($config, $configGlobal) {
-            $url = new Url();
-            if (APPLICATION_ENV == 'production') {
-                $url->setStaticBaseUri($configGlobal->application->production->staticBaseUri);
-            } else {
-                $url->setStaticBaseUri($configGlobal->application->development->staticBaseUri);
-            }
-            $url->setBaseUri($config->application->baseUri);
-
-            return $url;
-        });
-
-        //Registering a dispatcher
-        $di->set(
-            'dispatcher',
-            function () {
-                $eventsManager = $this->getEventsManager();
-                $eventsManager->attach("dispatch", function ($event, $dispatcher, $exception) {
-                    //controller or action doesn't exist
-                    if ($event->getType() == 'beforeException') {
-                        $message  = $exception->getMessage();
-                        $response = $this->getResponse();
-                        switch ($exception->getCode()) {
-                            case Dispatcher::EXCEPTION_HANDLER_NOT_FOUND:
-                                $response->redirect();
-                                return false;
-                            case Dispatcher::EXCEPTION_ACTION_NOT_FOUND:
-                                $response->redirect('action-not-found?msg=' . $message);
-                                return false;
-
-                            case Dispatcher::EXCEPTION_CYCLIC_ROUTING:
-                                $response->redirect('cyclic-routing?msg=' . $message);
-                                return false;
-                        }
-                    }
-                });
-                $dispatcher = new Dispatcher();
-                $dispatcher->setDefaultNamespace("Phanbook\Frontend\Controllers");
-                $dispatcher->setEventsManager($eventsManager);
-                return $dispatcher;
-            }
-        );
-        /**
-         * Setting up the view component
-         */
-        $di->set(
-            'view',
-            function () use ($di) {
-                $config = $di->get('config');
-                $view = new View();
-                $view->setViewsDir(themes_path($config->theme));
-                $view->disableLevel([View::LEVEL_MAIN_LAYOUT => true, View::LEVEL_LAYOUT => true]);
-                $view->registerEngines(['.volt' => 'volt']);
-
-                // Create an event manager
-                $eventsManager = $this->getEventsManager();
-                $eventsManager->attach(
-                    'view',
-                    function ($event, $view) {
-                        if ($event->getType() == 'notFoundView') {
-                            throw new \Exception('View not found!!! (' . $view->getActiveRenderPath() . ')');
-                        }
-                    }
-                );
-                // Bind the eventsManager to the view component
-                $view->setEventsManager($eventsManager);
-
-                return $view;
-            }
-        );
+        // Setting up the View Component
+        $theme = $di->getShared('theme');
+        $view = $di->getShared('view');
+        $view->setViewsDir(themes_path($theme->getThemeName()));
     }
 }

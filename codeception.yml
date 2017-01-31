@@ -23,7 +23,8 @@ coverage:
     enabled: true
     whitelist:
       include:
-        - apps/*
+        - core/common/*
+        - core/modules/*
 extensions:
     enabled:
         - Codeception\Extension\RunFailed # default extension
@@ -32,20 +33,26 @@ extensions:
 settings:
     lint: false
 
+# Get params from .env file
+params:
+    - .env
+
 # Global modules configuration.
 modules:
     config:
-        Db:
-            dsn: 'mysql:host=localhost;dbname=phanbook'
-            user: 'root'
-            password: ''
-            dump: tests/_data/dump.sql
+        App\Test\Module\Db:
+            dsn: "%DB_DSN%"
+            user: "%DB_USERNAME%"
+            password: "%DB_PASSWORD%"
+            dump: "tests/_data/dump.sql"
+            populate: false
+            cleanup: false
         Phalcon:
-            bootstrap: 'tests/_config/bootstrap.php'
-            cleanup: true
-            savepoints: true
+            bootstrap: "tests/_config/bootstrap.php"
+            cleanup: false
+            savepoints: false
         PhpBrowser:
-            url: 'http://localhost:8000'
+            url: "%APP_URL%"
             curl:
                 CURLOPT_RETURNTRANSFER: true
 

@@ -13,20 +13,21 @@
 namespace Phanbook\Frontend\Controllers;
 
 use Phanbook\Utils\Slug;
+use Phanbook\Models\Vote;
 use Phanbook\Utils\Editor;
 use Phanbook\Models\Posts;
-use Phanbook\Models\Vote;
 use Phanbook\Models\Karma;
 use Phanbook\Models\Users;
 use Phanbook\Models\ModelBase;
-use Phanbook\Models\PostsViews;
 use Phanbook\Models\PostsHistory;
 use Phanbook\Frontend\Forms\ReplyForm;
 use Phanbook\Frontend\Forms\CommentForm;
 use Phanbook\Frontend\Forms\QuestionsForm;
 
 /**
- * Class QuestionsController.
+ * \Phanbook\Frontend\Controllers\PostsController
+ *
+ * @package Phanbook\Frontend\Controllers
  */
 class PostsController extends ControllerBase
 {
@@ -35,7 +36,6 @@ class PostsController extends ControllerBase
      */
     public function initialize()
     {
-
         parent::initialize();
 
         $editor = new Editor();
@@ -142,15 +142,17 @@ class PostsController extends ControllerBase
         if ($page > 1) {
             $itemBuilder->offset($offset);
         }
+
         $this->view->setVars(
             [
                 'tab'         => $tab,
                 'type'        => Posts::POST_ALL,
                 'posts'       => $itemBuilder->getQuery()->execute($params),
                 'totalPages'  => $totalPages,
-                'currentPage' => $page
+                'currentPage' => $page,
             ]
         );
+
         return $this->view->pick('post');
     }
 
@@ -159,9 +161,8 @@ class PostsController extends ControllerBase
      */
     public function editAction($id)
     {
-        $auth = $this->auth->getAuth();
         $object = Posts::findFirstById($id);
-        if (!$auth) {
+        if (!$this->auth->isAuthorizedVisitor()) {
             $this->flashSession->error('You must be logged first');
             return $this->indexRedirect();
         }
@@ -169,7 +170,7 @@ class PostsController extends ControllerBase
             $this->flashSession->error(t("Post doesn't exist."));
             return $this->indexRedirect();
         }
-        if (!$this->auth->isTrustModeration() && $auth['id'] != $object->getUsersId()) {
+        if (!$this->auth->isTrustModeration() && $this->auth->getUserId() != $object->getUsersId()) {
             $this->flashSession->error(t("You don't have permission"));
             return $this->currentRedirect();
         }
@@ -202,10 +203,9 @@ class PostsController extends ControllerBase
         }
 
         $id   = $this->request->getPost('id');
-        $auth = $this->auth->getAuth();
         $tags = $this->request->getPost('tags', 'string', null);
 
-        if (!$auth) {
+        if (!$this->auth->isAuthorizedVisitor()) {
             $this->flashSession->error('You must be logged first');
 
             return $this->currentRedirect();
@@ -216,11 +216,11 @@ class PostsController extends ControllerBase
             $object->setSlug(Slug::generate($this->request->getPost('title')));
             // @Todo continue When moderator or admin edit post
             // Just to save history when user is TrustModerator and the user not owner the post
-            if ($this->auth->isTrustModeration() && $auth['id'] != $object->getUsersId()) {
+            if ($this->auth->isTrustModeration() && $this->auth->getUserId() != $object->getUsersId()) {
                 $object->setEditedAt(time());
                 $postHistory = new PostsHistory();
                 $postHistory->setPostsId($id);
-                $postHistory->setUsersId($auth['id']);
+                $postHistory->setUsersId($this->auth->getUserId());
                 $postHistory->setContent($this->request->getPost('content'));
                 if (!$postHistory->save()) {
                     $this->saveLogger($postHistory->getMessages());
@@ -230,9 +230,9 @@ class PostsController extends ControllerBase
             $object = new Posts();
             $object->setType(Posts::POST_QUESTIONS);
             $object->setSlug(Slug::generate($this->request->getPost('title')));
-            $object->setUsersId($auth['id']);
+            $object->setUsersId($this->auth->getUserId());
 
-            $user = Users::findFirstById($auth['id']);
+            $user = Users::findFirstById($this->auth->getUserId());
             $user->increaseKarma(Karma::ADD_NEW_POST);
             if (!$user->save()) {
                 $this->saveLogger($user->getMessages());
@@ -249,27 +249,26 @@ class PostsController extends ControllerBase
             return $this->response->redirect(
                 $this->router->getControllerName().(!is_null($id) ? '/edit/'.$id : '/new')
             );
-        } else {
-            $this->db->begin();
-            if (!$object->save()) {
-                $this->db->rollback();
-                $this->saveLogger($object->getMessages());
-                return $this->dispatcher->forward(
-                    ['controller' => $this->router->getControllerName(), 'action' => 'new']
-                );
-            } else {
-                if (!$this->phanbook->tag()->saveTagsInPosts($tags, $object)) {
-                    $this->db->rollback();
-                    return $this->response->redirect(
-                        $this->router->getControllerName().(!is_null($id) ? '/edit/'.$id : '/new')
-                    );
-                }
-                $this->flashSession->success(t('Data was successfully saved'));
-                // Commit the transaction
-                $this->db->commit();
-                return $this->response->redirect($this->router->getControllerName());
-            }
         }
+        $this->db->begin();
+        if (!$object->save()) {
+            $this->db->rollback();
+            $this->saveLogger($object->getMessages());
+            $this->dispatcher->forward(
+                ['controller' => $this->router->getControllerName(), 'action' => 'new']
+            );
+            return false;
+        }
+        if (!$this->phanbook->tag()->saveTagsInPosts($tags, $object)) {
+            $this->db->rollback();
+            return $this->response->redirect(
+                $this->router->getControllerName().(!is_null($id) ? '/edit/'.$id : '/new')
+            );
+        }
+        $this->flashSession->success(t('Data was successfully saved'));
+        // Commit the transaction
+        $this->db->commit();
+        return $this->response->redirect();
     }
 
     /**
@@ -277,11 +276,12 @@ class PostsController extends ControllerBase
      */
     public function deleteAction($id)
     {
-        $auth = $this->auth->getAuth();
-        if (!$auth) {
+        if (!$this->auth->isAuthorizedVisitor()) {
             $this->flashSession->error('You must be logged first');
             return $this->indexRedirect();
         }
+
+        $auth = $this->auth->getAuth();
         $parameters = [
             "id = ?0 AND (usersId = ?1 OR 'Y' = ?2 OR 'Y' = ?3)",
             "bind" => [$id, $auth['id'], $auth['moderator'], $auth['admin']]
@@ -303,7 +303,7 @@ class PostsController extends ControllerBase
      */
     public function newAction()
     {
-        $usersId   = $this->auth->getAuth()['id'];
+        $usersId   = $this->auth->getUserId();
         if (!$usersId) {
             $this->flashSession->error('You must be logged first');
             return $this->indexRedirect();
@@ -325,89 +325,53 @@ class PostsController extends ControllerBase
     }
 
     /**
-     * Displays a post and its comments
+     * Displays a Post and its comments.
      *
-     * @param int $id The Post id
+     * @param int    $id   The Post ID
      * @param string $slug The Post slug
-     *
-     * @return \Phalcon\Http\ResponseInterface
      */
     public function viewAction($id, $slug)
     {
-        $id     = (int) $id;
-        $userId = $this->auth->getUserId();
+        $post = $this->postService->findFirstById($id);
 
-        if (!$object = Posts::findFirstById($id)) {
-            $this->flashSession->error(t("Posts doesn't exist."));
-            return $this->indexRedirect();
+        if (!$post || !$this->postService->isPublished($post)) {
+            $this->response->setStatusCode(404);
+            $this->flashSession->error(t("Sorry! We can't seem to find the page you're looking for."));
+
+            $this->dispatcher->forward([
+                'controller' => 'posts',
+                'action'     => 'index',
+            ]);
+            return;
         }
 
-        if ($object->getDeleted()) {
-            $this->flashSession->error(t('The Post is deleted.'));
-            return $this->indexRedirect();
-        }
+        if ($this->auth->isAuthorizedVisitor() && !$this->postService->hasViewsByIpAddress($post)) {
+            $this->postService->increaseNumberViews($post, $this->auth->getUserId());
+            $visitor = $this->userService->findFirstById($this->auth->getUserId());
 
-        if (!$object->isPublish()) {
-            $this->flashSession->error(t('The Post have not publish.'));
-            return $this->indexRedirect();
-        }
-
-        $ipAddress = $this->request->getClientAddress();
-        $parameters = [
-            'postsId = ?0 AND ipaddress = ?1',
-            'bind' => [$id, $ipAddress]
-        ];
-        $viewed = PostsViews::count($parameters);
-
-        // A view is stored by ipaddress
-        // @todo: Move this logic to separated method
-        if (!$viewed && $userId) {
-            //Increase the number of views in the post
-            $object->setNumberViews($object->getNumberViews() + 1);
-            if ($object->getUsersId() != $userId) {
-                $object->user->increaseKarma(Karma::VISIT_ON_MY_POST);
-                if ($userId > 0) {
-                    $user = Users::findFirstById($userId);
-                    if ($user) {
-                        if ($user->getModerator() == 'Y') {
-                            $user->increaseKarma(Karma::MODERATE_VISIT_POST);
-                        } else {
-                            $user->increaseKarma(Karma::VISIT_POST);
-                        }
-                        //send log to server
-                        if (!$user->save()) {
-                            $this->saveLogger($user->getMessages());
-                        }
-                    }
-                }
-            }
-            if (!$object->save()) {
-                $this->saveLogger($object->getMessages());
-            }
-            $postView = new PostsViews();
-            $postView->setPostsId($id);
-            $postView->setIpaddress($ipAddress);
-            if (!$postView->save()) {
-                $this->saveLogger($postView->getMessages());
+            if ($visitor && !$this->postService->isAuthorVisitor($post, $visitor->getId())) {
+                $this->userService->increaseVisitorKarmaForViewingPost($visitor);
             }
         }
 
         $this->view->setVars(
             [
-                'post'          => $object,
-                'form'          => new ReplyForm(),
-                'votes'         => $object->getVotes($id, Vote::OBJECT_POSTS),
-                'postsReply'    => $object->getPostsWithVotes($id),
-                'commentForm'   => new CommentForm(),
-                'userPosts'     => $object->user,
-                'type'          => Posts::POST_QUESTIONS,
-                'postRelated'   => Posts::postRelated($object)
+                'post'        => $post,
+                'form'        => new ReplyForm(),
+                'votes'       => $this->voteService->getVotes($id, Vote::OBJECT_POSTS),
+                'postsReply'  => $post->getPostsWithVotes($id),
+                'commentForm' => new CommentForm(),
+                'userPosts'   => $post->user,
+                'type'        => Posts::POST_QUESTIONS,
+                'postRelated' => Posts::postRelated($post),
             ]
         );
 
-        $this->tag->setTitle($this->escaper->escapeHtml($object->getTitle()));
-        return $this->view->pick('single');
+        $this->tag->setTitle($this->escaper->escapeHtml($post->getTitle()));
+
+        $this->view->pick('single');
     }
+
     protected function addAssetsSelect()
     {
         $this->assets->addCss('core/assets/js/select/select2.min.css');

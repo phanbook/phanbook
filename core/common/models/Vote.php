@@ -17,6 +17,13 @@ use Phalcon\Validation\Validator\Email as EmailValidator;
 use Phalcon\Validation\Validator\Uniqueness as UniquenessValidator;
 use Phalcon\Validation\Validator\InclusionIn as InclusionInValidator;
 
+/**
+ * \Phanbook\Models\Vote
+ *
+ * @method static Vote|false findFirstById(int $id)
+ *
+ * @package Phanbook\Models
+ */
 class Vote extends ModelBase
 {
 

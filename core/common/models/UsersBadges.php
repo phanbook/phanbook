@@ -326,6 +326,6 @@ class UsersBadges extends ModelBase
         }
         $activity->setExtra($this->badge);
         $activity->setUsersOriginId($this->usersId);
-        var_dump($activity->save());
+        $activity->save();
     }
 }

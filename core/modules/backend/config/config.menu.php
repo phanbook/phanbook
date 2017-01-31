@@ -1,19 +1,17 @@
 <?php
 /**
- * The base configuration for Phanbook
+ * Phanbook : Delightfully simple forum and Q&A software
  *
- * The config.php creation script uses this file during the
- * installation. You don't have to use the web site, you can
- * copy this file to "config.php" and fill in the values.
+ * Licensed under The GNU License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
  *
- * This file contains the following configurations:
- *
- * * Menu Structure of Admin panel
- *
- * @link https://github.com/phanbook/docs/config.md
- *
- * @package Phanbook
+ * @link    http://phanbook.com Phanbook Project
+ * @since   1.0.0
+ * @author  Phanbook <hello@phanbook.com>
+ * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
+
 return new \Phalcon\Config(
     [
         /**

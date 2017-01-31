@@ -12,20 +12,21 @@
  */
 namespace Phanbook\Media;
 
-use League\Flysystem\Filesystem;
-use League\Flysystem\Adapter\Local as Adapter;
-
 /**
-*
-*/
+ * \Phanbook\Media\MediaFiles
+ *
+ * @package Phanbook\Media
+ */
 class MediaFiles
 {
+    /**
+     * @var \League\Flysystem\FilesystemInterface
+     */
     private $fileSystem;
-    private $adapter;
+
     public function __construct()
     {
-        $this->adapter = new Adapter(config_path('uploads/'));
-        $this->fileSystem = new Filesystem($this->adapter);
+        $this->fileSystem = container('filesystem');
     }
 
     /**
@@ -38,8 +39,10 @@ class MediaFiles
     {
         $stream = fopen($localPath, 'r+');
         $status = $this->fileSystem->writeStream($serverPath, $stream);
+
         return $status;
     }
+
     /**
      * Looking given file is already on server or not
      * @param  String $serverPath
@@ -49,6 +52,7 @@ class MediaFiles
     {
         return $this->fileSystem->has($serverPath);
     }
+
     /**
      * Get content of analytic file for each user
      * @param  String $userName
@@ -64,6 +68,7 @@ class MediaFiles
         $contents = $this->fileSystem->read($filename);
         return json_decode($contents, true);
     }
+
     /**
      * Save after modify content of analytic file
      * @param  String $userName
@@ -72,10 +77,12 @@ class MediaFiles
      */
     public function saveConfigFile($userName, $arrayConfig)
     {
-        $filename = $userName. "/userConfig.json";
+        $filename = $userName. DIRECTORY_SEPARATOR . 'userConfig.json';
+
         if (!$this->fileSystem->has($filename)) {
             $this->fileSystem->write($filename, '[]');
         }
+
         $contents = $this->fileSystem->read($filename);
         $result = array_merge(json_decode($contents, true), $arrayConfig);
         $result = json_encode($result);

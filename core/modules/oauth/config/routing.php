@@ -11,41 +11,71 @@
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
  */
 
-$router->add('/oauth/:controller', [
-    'module' => 'oauth',
-    'controller' => 1,
-]);
-$router->add('/oauth/:controller/:int', [
-    'module' => 'oauth',
-    'controller' => 1,
-    'id' => 2,
-]);
-$router->add('/oauth/:controller/:action/:params', [
-    'module' => 'oauth',
-    'controller' => 1,
-    'action' => 2,
-    'params' => 3,
+use Phalcon\Mvc\Router\Group as RouterGroup;
+
+$oauth = new RouterGroup([
+    'module'    => 'oauth',
+    'namespace' => 'Phanbook\Oauth\Controllers',
 ]);
 
+$oauth->add('/oauth/:controller', [
+    'controller' => 1,
+]);
 
+$oauth->add('/oauth/:controller/:int', [
+    'controller' => 1,
+    'id'         => 2,
+]);
 
-$router->add('/oauth/github/access_token', [
-    'module'     => 'oauth',
+$oauth->add('/oauth/:controller/:action/:params', [
+    'controller' => 1,
+    'action'     => 2,
+    'params'     => 3,
+]);
+
+$oauth->add('/oauth/github/access_token', [
     'controller' => 'login',
     'action'     => 'tokenGithub'
 ]);
-$router->add('/oauth/google/access_token', [
-    'module'     => 'oauth',
+
+$oauth->add('/oauth/google/access_token', [
     'controller' => 'login',
     'action'     => 'tokenGoogle'
 ]);
-$router->add('/oauth/facebook/access_token', [
-    'module'     => 'oauth',
+
+$oauth->add('/oauth/facebook/access_token', [
     'controller' => 'login',
     'action'     => 'tokenFacebook'
 ]);
-$router->add('/oauth/resetpassword', [
-    'module'     => 'oauth',
-    'controller' => 'register',
-    'action'     => 'resetpassword'
-]);
+
+$oauth->add('/users/reset-password', 'Register::resetpassword', ['GET', 'POST'])
+      ->setName('resetpassword');
+
+$oauth->add('/users/forgot-password', 'Register::forgotpassword', ['GET', 'POST'])
+      ->setName('forgotpassword');
+
+$oauth->add('/users/register', 'Register::index', ['GET', 'POST'])
+    ->setName('register');
+
+$oauth->add('/users/signup', 'Register::signup', ['GET', 'POST'])
+    ->setName('signup');
+
+$oauth->addGet('/users/signin/google', 'Login::google')
+    ->setName('signin-google');
+
+$oauth->addGet('/users/signin/github', 'Login::github')
+    ->setName('signin-github');
+
+$oauth->addGet('/users/signin/facebook', 'Login::facebook')
+    ->setName('signin-facebook');
+
+$oauth->addGet('/users/signin/twitter', 'Login::twitter')
+    ->setName('signin-twitter');
+
+$oauth->add('/users/signin', 'Login::index', ['GET', 'POST'])
+      ->setName('signin');
+
+$oauth->addGet('/users/logout', 'Logout::index')
+    ->setName('logout');
+
+return $oauth;

@@ -13,36 +13,24 @@
  */
 namespace Phanbook\Oauth\Controllers;
 
-use Phalcon\Mvc\Controller;
 use Phanbook\Models\Users;
 use Phanbook\Models\Karma;
+use Phanbook\Controllers\Controller;
 
 /**
- * Class TestsController
+ * \Phanbook\Oauth\Controllers\ControllerBase
  *
- * @package Phanbook\Frontend\Controllers
+ * @property \Phanbook\Auth\Auth $auth
+ * @property \Phalcon\Config $config
+ * @property \Phanbook\Mail\Mail $mail
+ *
+ * @package Phanbook\Oauth\Controllers
  */
 class ControllerBase extends Controller
 {
     public function initialize()
     {
         $this->loadDefaultAssets();
-    }
-
-    /**
-     * Set a flash message with messages from objects
-     *
-     * @param $object
-     */
-    public function displayModelErrors($object)
-    {
-        if (is_object($object) && method_exists($object, 'getMessages')) {
-            foreach ($object->getMessages() as $message) {
-                $this->flashSession->error($message);
-            }
-        } else {
-            $this->flashSession->error(t('No object found. No errors.'));
-        }
     }
 
     /**
@@ -90,7 +78,7 @@ class ControllerBase extends Controller
         $this->auth->setSession($object);
 
         //Store the user data in cookies
-        $this->auth->setRememberEnviroment($object);
+        $this->auth->setRememberEnvironment($object);
 
         //Display notification when user login
         $this->notification($object);
@@ -98,15 +86,15 @@ class ControllerBase extends Controller
         return $this->currentRedirect();
     }
 
-    public function currentRedirect()
+    protected function currentRedirect()
     {
         if ($this->cookies->has('HTTPBACK')) {
-            $url   = $this->cookies->get('HTTPBACK');
-            $clone = clone $url;
-            $url->delete();
+            $url = $this->cookies->get('HTTPBACK')->getValue();
+            $this->cookies->delete('HTTPBACK');
 
-            return $this->response->redirect(unserialize($clone->getValue()));
+            return $this->response->redirect(unserialize($url));
         }
+
         return $this->response->redirect($this->request->getHTTPReferer(), true);
     }
 

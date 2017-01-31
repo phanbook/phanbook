@@ -1,0 +1,5 @@
+docs/* linguist-documentation
+
+*.sql linguist-language=SQL
+
+core/assets/* linguist-vendored

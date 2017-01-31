@@ -13,26 +13,20 @@
  */
 namespace Phanbook\Oauth\Controllers;
 
-use Phalcon\Mvc\Controller;
-
 /**
- * Class LogoutController
+ * \Phanbook\Oauth\Controllers\LogoutController
  *
  * @package Phanbook\Oauth\Controllers
  */
 class LogoutController extends ControllerBase
 {
-
     /**
-     * logoutAction
-     *
-     * @return void
+     * Log Out Action
      */
     public function indexAction()
     {
         // Destroy the whole session
         $this->auth->remove();
-        $this->view->disable();
         $this->response->redirect();
     }
 }
