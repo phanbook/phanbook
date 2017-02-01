@@ -43,6 +43,7 @@ class MediaController extends ControllerBase
 
     public function uploadAction()
     {
+
         if ($this->request->hasFiles()) {
             $uploads = $this->request->getUploadedFiles();
             $this->view->disable();

@@ -12,9 +12,10 @@
  */
 namespace Phanbook\Models;
 
+use Phalcon\Http\Request\File;
 use Phanbook\Media\MediaFiles;
-use Phanbook\Utils\Constants;
 use Phalcon\Image\Adapter\Gd;
+use Phanbook\Media\MediaType;
 
 class Media extends ModelBase
 {
@@ -31,13 +32,7 @@ class Media extends ModelBase
      *
      * @var string
      */
-    protected $username;
-
-    /**
-     *
-     * @var integer
-     */
-    protected $type;
+    protected $userId;
 
     /**
      *
@@ -49,7 +44,7 @@ class Media extends ModelBase
      *
      * @var string
      */
-    protected $filename;
+    protected $metaFile;
 
     /**
      * store error
@@ -58,22 +53,16 @@ class Media extends ModelBase
     protected $error;
 
     /**
-     * [Object of flysystem, manager files]
-     * @var [flysystem]
+     * @var object MediaFiles
      */
     protected $fileSystem;
 
-    /**
-     * Constructor
-     */
-    protected $constants;
 
     public function initialize()
     {
         parent::initialize();
         $this->error = [];
         $this->fileSystem = new MediaFiles();
-        $this->constants = new Constants();
     }
 
     /**
@@ -90,31 +79,6 @@ class Media extends ModelBase
         return $this;
     }
 
-    /**
-     * Method to set the value of field username
-     *
-     * @param  string $username
-     * @return $this
-     */
-    public function setUsername($username)
-    {
-        $this->username = $username;
-
-        return $this;
-    }
-
-    /**
-     * Method to set the value of field type
-     *
-     * @param  integer $type
-     * @return $this
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-
-        return $this;
-    }
 
     /**
      * Method to set the value of field createdAt
@@ -129,18 +93,6 @@ class Media extends ModelBase
         return $this;
     }
 
-    /**
-     * Method to set the value of field filename
-     *
-     * @param  string $filename
-     * @return $this
-     */
-    public function setFilename($filename)
-    {
-        $this->filename = $filename;
-
-        return $this;
-    }
 
     /**
      * Returns the value of field id
@@ -150,26 +102,6 @@ class Media extends ModelBase
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Returns the value of field username
-     *
-     * @return string
-     */
-    public function getUsername()
-    {
-        return $this->username;
-    }
-
-    /**
-     * Returns the value of field type
-     *
-     * @return integer
-     */
-    public function getType()
-    {
-        return $this->type;
     }
 
     /**
@@ -183,15 +115,40 @@ class Media extends ModelBase
     }
 
     /**
-     * Returns the value of field filename
-     *
-     * @return string
+     * @param string $userId
      */
-    public function getFilename()
+    public function setUserId($userId)
     {
-        return $this->filename;
+        $this->userId = $userId;
+        return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getUserId()
+    {
+        return $this->userId;
+    }
+
+    /**
+     * @param string $metaFile
+     */
+    public function setMetaFile($metaFile)
+    {
+        if (is_array($metaFile)) {
+            $metaFile = serialize($metaFile);
+        }
+        $this->metaFile = $metaFile;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetaFile()
+    {
+        return $this->metaFile;
+    }
     /**
      * Returns table name mapped in the model.
      *
@@ -233,11 +190,10 @@ class Media extends ModelBase
     public function columnMap()
     {
         return array(
-            'id' => 'id',
-            'username' => 'username',
-            'type' => 'type',
+            'id'        => 'id',
+            'userId'    => 'userId',
+            'metaFile'  => 'metaFile',
             'createdAt' => 'createdAt',
-            'filename' => 'filename'
         );
     }
     /**
@@ -257,27 +213,23 @@ class Media extends ModelBase
 
     /**
      * Input file for media, using for upload file
-     * @param File Object $fileObj File upload by user
-     * @return boolean           true if all ok. Otherwise, false
+     * @param File $fileObj
+     * @return bool true if all ok. Otherwise, false
+     * @internal param Object $File $fileObj File upload by user
      */
-    public function initFile($fileObj)
+    public function initFile(File $fileObj)
     {
-        $fileExt     = $fileObj->getExtension();
-        $filesAccept =  MediaType::getExtensionAllowed();
-
+        $fileExt     = $fileObj->getRealType();
+        $mediaType   = new MediaType();
+        
         // Check if file extension's allowed
-        if (!in_array($fileExt, $filesAccept)) {
+        if (!$mediaType->checkExtension($fileExt)) {
             return $this->setError(t("Can't upload because file type's not allowed"). ": ". $fileExt);
         }
-         // determine directory for this file. <username>/<file type>/<year>/<month>/<filename>
-        $userName = $this->getDI()->getAuth()->getUsername();
-        $year     = date("Y");
-        $month    = date("M");
-        $fileName = $fileObj->getName();
-        $fileType = MediaType::getTypeFromExt($fileExt);
 
         // generate path of file
-        $serverPath = $userName. DS. $fileType->getName(). DS. $year. DS. $month. DS. $fileName;
+        $key = date('Y/m/') .  $fileObj->getName();
+        $serverPath = content_path('uploads/' . $key);
         $localPath = $fileObj->getTempName();
 
         if (!file_exists($localPath)) {
@@ -291,94 +243,36 @@ class Media extends ModelBase
                 )
             );
         }
-        if (!$this->fileSystem->uploadFile($localPath, $serverPath)) {
+
+        if (!$this->fileSystem->uploadFile($localPath, $key)) {
             return $this->setError(t("Can't find temp file for upload. This maybe caused by server configure"));
         }
-        $uploadStatus = $this->saveToDB(
-            $userName,
-            $fileType->getId(),
-            time(),
-            $fileName
-        );
+
+        if ($mediaType->imageCheck($fileExt)) {
+            //@TODO add thumbnail
+        }
+        $meta['title'] = $fileObj->getName();
+        $meta['file']  = $key;
+        $uploadStatus = $this->saveToDB($meta);
         if (!$uploadStatus) {
             return $this->setError(t("An error(s) occurred when uploading file(s). Please try again later"));
         }
-        // Update analytic file
-        $config        = $this->fileSystem->getConfigFile($userName);
-        $defaultConfig = MediaType::getConfig();
-        $config        = array_merge($defaultConfig, $config);
-        $config[$fileType->getName()] ++;
-
-        $this->fileSystem->saveConfigFile($userName, $config);
-        if ($fileType->getName() == "Images") {
-            $this->generateThumb($localPath, $serverPath);
-        }
         return true;
     }
-
-    /**
-     * Generate thumb file for image.
-     * The thumb file has same type with original file. However it have small resolution and name has thumb_ prefix
-     * @param  string $localPath
-     * @return boolean
-     */
-    public function generateThumb($localPath, $serverPath)
+    public function beforeSave()
     {
-        $thumbServerPath = dirname($serverPath) . DS . "thumb_" . DS . basename($serverPath);
-        $thumbLocalPath = $localPath. "_thumb";
-        $resizeStatus = $this->resizeImage($localPath, $thumbLocalPath, self::MAX_WIDTH_THUMB, self::MAX_HEIGHT_THUMB);
-        if ($resizeStatus) {
-            $uploadStatus = $this->fileSystem->uploadFile($thumbLocalPath, $thumbServerPath);
-            if ($uploadStatus) {
-                return true;
-            }
-        }
-        return false;
+        $this->userId = container('auth')->getUserId();
+        $this->createdAt = time();
     }
 
     /**
-     * Resize of image uploaded
-     * @param  string  $source
-     * @param  string  $dest
-     * @param  integer $new_width
-     * @param  integer $new_height
-     * @return   boolean
+     * @param $key
+     * @return bool
      */
-    private function resizeImage($source, $dest, $new_width, $new_height)
-    {
-        $image = new Gd($source);
-        $source_height = $image->getHeight();
-        $source_width = $image->getWidth();
-        $source_aspect_ratio = $source_width / $source_height;
-        $desired_aspect_ratio = $new_width / $new_height;
-        if ($source_aspect_ratio > $desired_aspect_ratio) {
-            $temp_height = $new_height;
-            $temp_width = ( int ) ($new_height * $source_aspect_ratio);
-        } else {
-            $temp_width = $new_width;
-            $temp_height = ( int ) ($new_width / $source_aspect_ratio);
-        }
-        $x0 = ($temp_width - $new_width) / 2;
-        $y0 = ($temp_height - $new_height) / 2;
-        $image->resize($temp_width, $temp_height)->crop($new_width, $new_height, $x0, $y0);
-        return $image->save($dest);
-    }
-
-    /**
-     * Save file info uploaded to database
-     * @param  string $userName
-     * @param  id     $type
-     * @param  time   $createdAt
-     * @param  string $filename
-     * @return boolean
-     */
-    public function saveToDB($userName, $type, $createdAt, $filename)
+    public function saveToDB($key)
     {
         $media = new Media();
-        $media->setFilename($filename);
-        $media->setType($type);
-        $media->setUsername($userName);
-        $media->setCreatedAt($createdAt);
+        $media->setMetaFile($key);
         if ($media->save()) {
             return true;
         }
