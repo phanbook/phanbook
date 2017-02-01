@@ -734,12 +734,4 @@ CREATE TABLE `vote` (
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
-INSERT INTO `mediaType` (`id`, `name`, `code`, `note`) VALUES
-(1, 'Images', 'jpg,png,bmp,gif,sgv', ''),
-(2, 'Videos', 'mp4,avi,mkv', ''),
-(3, 'Audios', 'mp3,wav', ''),
-(4, 'Documents', 'pdf,doc,tex', ''),
-(5, 'Archives', 'zip,rar', '');
-
 -- Dump completed on 2016-11-10 18:07:26
