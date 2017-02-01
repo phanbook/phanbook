@@ -14,13 +14,17 @@ namespace Phanbook\Models;
 
 use Phalcon\Http\Request\File;
 use Phanbook\Media\MediaFiles;
-use Phalcon\Image\Adapter\Gd;
 use Phanbook\Media\MediaType;
 
 class Media extends ModelBase
 {
     const MAX_WIDTH_THUMB = 200;
     const MAX_HEIGHT_THUMB = 200;
+
+    const IMAGE_TYPE = 'image';
+    const VIDEO_TYPE = 'video';
+    //Such as pdf, docs, xls
+    const DOCUMENT_TYPE   = 'document';
 
     /**
      *
@@ -39,6 +43,11 @@ class Media extends ModelBase
      * @var integer
      */
     protected $createdAt;
+
+    /**
+     * @var string
+     */
+    //protected $type;
 
     /**
      *
@@ -147,6 +156,9 @@ class Media extends ModelBase
      */
     public function getMetaFile()
     {
+        if (container('phanbook')->isSerialized($this->metaFile)) {
+            return unserialize($this->metaFile);
+        }
         return $this->metaFile;
     }
     /**
@@ -221,7 +233,7 @@ class Media extends ModelBase
     {
         $fileExt     = $fileObj->getRealType();
         $mediaType   = new MediaType();
-        
+
         // Check if file extension's allowed
         if (!$mediaType->checkExtension($fileExt)) {
             return $this->setError(t("Can't upload because file type's not allowed"). ": ". $fileExt);
@@ -244,11 +256,12 @@ class Media extends ModelBase
             );
         }
 
-        if (!$this->fileSystem->uploadFile($localPath, $key)) {
+        if (!$this->fileSystem->uploadFile($localPath, $key, $fileObj->getExtension())) {
             return $this->setError(t("Can't find temp file for upload. This maybe caused by server configure"));
         }
-
+        $meta['type'] = null;
         if ($mediaType->imageCheck($fileExt)) {
+            $meta['type'] = self::IMAGE_TYPE;
             //@TODO add thumbnail
         }
         $meta['title'] = $fileObj->getName();
@@ -273,9 +286,9 @@ class Media extends ModelBase
     {
         $media = new Media();
         $media->setMetaFile($key);
-        if ($media->save()) {
-            return true;
+        if (!$media->save()) {
+            return false;
         }
-        return false;
+        return true;
     }
 }

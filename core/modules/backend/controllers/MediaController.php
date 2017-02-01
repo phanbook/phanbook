@@ -24,37 +24,38 @@ use Phanbook\Models\MediaType;
  */
 class MediaController extends ControllerBase
 {
-    private $mediaModel;
-
-    public function onConstruct()
-    {
-        $this->mediaModel = new Media();
-    }
 
     public function indexAction()
     {
-        $this->view->form = new MediaForm();
-        $this->view->files = [];
-    }
+        $sql =[
+            'model' => 'Media',
+            'joins' => []
+        ];
+        $pagination = $this->paginator($sql)->getPaginate();
 
-    public function settingAction()
-    {
+        $this->view->setVars([
+            'imageType'     => Media::IMAGE_TYPE,
+            'items'         => $pagination->items,
+            'totalPages'    => $pagination->total_pages,
+            'currentPage'   => $pagination->current,
+        ]);
     }
 
     public function uploadAction()
     {
 
         if ($this->request->hasFiles()) {
+            $media = new Media();
             $uploads = $this->request->getUploadedFiles();
             $this->view->disable();
             $uploaded = true;
             foreach ($uploads as $fileObj) {
-                if (!$this->mediaModel->initFile($fileObj)) {
+                if (!$media->initFile($fileObj)) {
                     $uploaded = false;
                 }
             }
             if (!$uploaded) {
-                $error = implode("\n", $this->mediaModel->getError());
+                $error = implode("\n", $media->getError());
                 $this->response->setStatusCode(406, $error);
                 $this->response->setContent($error);
             } else {

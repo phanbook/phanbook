@@ -42,74 +42,38 @@
         <div class="col-lg-9 animated fadeInRight">
             <div class="row">
                 <div class="col-lg-12">
+                    {% if items | length >0 %}
+                    {% for item in items %}
+
                     <div class="col-md-3 file-box">
                         <div class="file">
                             <a href="#">
                                 <span class="corner"></span>
-
-                                <div class="icon">
-                                    <i class="fa fa-file"></i>
-                                </div>
-                                <div class="file-name">
-                                    Document_2014.doc
-                                    <br/>
-                                    <small>Added: Jan 11, 2014</small>
-                                </div>
-                            </a>
-                        </div>
-
-                    </div>
-                    <div class="col-md-3 file-box">
-                        <div class="file">
-                            <a href="#">
-                                <span class="corner"></span>
-
+                                {% set metaFile = item.getMetaFile() %}
+                                {% if metaFile['type'] == imageType %}
                                 <div class="image">
-                                    <img alt="image" class="img-responsive" src="/content/uploads/p1.jpg">
+                                    {{ image('content/uploads/' ~ metaFile['file'], 'class' : 'img-responsive') }}
                                 </div>
+                                {% else %}
+                                    <div class="icon">
+                                        <i class="fa fa-file"></i>
+                                    </div>
+                                {% endif %}
+
                                 <div class="file-name">
-                                    Italy street.jpg
+                                    {{ metaFile['title'] }}
                                     <br/>
-                                    <small>Added: Jan 6, 2014</small>
+                                    <small>Added: {{ getHumanDate(item.createdAt) }}</small>
                                 </div>
                             </a>
 
                         </div>
                     </div>
-                    <div class="col-md-3 file-box">
-                        <div class="file">
-                            <a href="#">
-                                <span class="corner"></span>
 
-                                <div class="image">
-                                    <img alt="image" class="img-responsive" src="/content/uploads/p1.jpg">
-                                </div>
-                                <div class="file-name">
-                                    Italy street.jpg
-                                    <br/>
-                                    <small>Added: Jan 6, 2014</small>
-                                </div>
-                            </a>
-
-                        </div>
-                    </div>
-                    <div class="col-md-3 file-box">
-                        <div class="file">
-                            <a href="#">
-                                <span class="corner"></span>
-
-                                <div class="image">
-                                    <img alt="image" class="img-responsive" src="/content/uploads/p1.jpg">
-                                </div>
-                                <div class="file-name">
-                                    Italy street.jpg
-                                    <br/>
-                                    <small>Added: Jan 6, 2014</small>
-                                </div>
-                            </a>
-
-                        </div>
-                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <p>Currently your server have not data</p>
+                    {% endif %}
                 </div>
             </div>
         </div>

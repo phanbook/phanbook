@@ -30,6 +30,11 @@ class MediaType
         'video/mp3',
         'video/mp4'
     ];
+
+    public $documentTypes  = [
+        'text/plain',
+        'application/pdf'
+    ];
     /**
      * Attempt to determine the real file type of a file.
      *
@@ -59,7 +64,7 @@ class MediaType
      */
     public function getExtensionAllowed()
     {
-        return array_merge($this->imageTypes, $this->videoTypes);
+        return array_merge($this->imageTypes, $this->videoTypes, $this->documentTypes);
     }
 
     public function checkExtension($extension)

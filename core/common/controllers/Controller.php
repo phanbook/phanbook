@@ -15,6 +15,7 @@ namespace Phanbook\Controllers;
 
 use Phalcon\Mvc\Dispatcher;
 use Phanbook\Models\ModelBase;
+use Phalcon\Paginator\Adapter\Model as PaginatorModel;
 use Phalcon\Paginator\Adapter\NativeArray as PaginatorNativeArray;
 use Phalcon\Paginator\Adapter\QueryBuilder as PaginatorQueryBuilder;
 
@@ -304,33 +305,39 @@ class Controller extends AbstractController
     }
 
     /**
-     * Create a paginator default use adapter PaginatorQueryBuilder,
+     * \Phalcon\Paginator\AdapterInterface
+     *
+     * Create a pagination default use adapter pagination QueryBuilder,
      * show 30 rows by page starting from $page
      *
      * @return array
      */
-    public function paginator($query, $adapter = null)
+    public function paginator($query)
     {
-        $page  = isset($_GET['page']) ? (int)$_GET['page'] : $this->numberPage;
-        $perPage  = isset($_GET['perPage']) ? (int)$_GET['perPage'] : $this->perPage;
-        $builder  = ModelBase::modelQuery($query);
+        $page    = $this->request->getQuery('page') ? : 1;
+        $perPage = $this->request->getQuery('limit') ? : $this->perPage;
 
-        if (is_null($adapter)) {
+        if (is_object($query)) {
+            $paginator = new PaginatorModel([
+                'data' => $query,
+                'limit' => $perPage,
+                'page' => $page
+            ]);
+        } elseif(isset($query['model'])) {
+            $builder  = ModelBase::modelQuery($query);
             $paginator  = new PaginatorQueryBuilder(
                 [
-                    'builder'  => $builder,
+                    'builder'   => $builder,
                     'limit'     => $perPage,
                     'page'      => $page
                 ]
             );
         } else {
-            $paginator = new PaginatorNativeArray(
-                [
-                    'data'  => $builder->getQuery()->execute()->toArray(),
-                    'limit' => $perPage,
-                    'page'  => $page
-                ]
-            );
+            $paginator = new PaginatorNativeArray([
+                'data' => $query,
+                'limit' => $perPage,
+                'page' => $page
+            ]);
         }
         return $paginator;
     }
