@@ -156,7 +156,7 @@ class Media extends ModelBase
      */
     public function getMetaFile()
     {
-        if (container('phanbook')->isSerialized($this->metaFile)) {
+        if (container('phanbook')->text()->isSerialized($this->metaFile)) {
             return unserialize($this->metaFile);
         }
         return $this->metaFile;
