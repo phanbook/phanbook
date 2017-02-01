@@ -12,10 +12,10 @@
  */
 namespace Phanbook\Utils;
 
-use Phalcon\Text;
+use Phalcon\Text as PhalconText;
 
 
-class Text extends Text
+class Text extends PhalconText
 {
     /**
      * Check value to find if it was serialized.
