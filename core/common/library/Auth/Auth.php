@@ -180,7 +180,7 @@ class Auth extends Component
 
         if (strcmp($cToken, $uToken) === 0) {
             $remember = RememberTokens::findFirst([
-                'condition' => 'usersId = ?0 AND token = ?1',
+                'usersId = ?0 AND token = ?1',
                 'bind' => [$user->getId(), $uToken],
                 'order' => 'createdAt DESC' // it mean only remember token
             ]);
