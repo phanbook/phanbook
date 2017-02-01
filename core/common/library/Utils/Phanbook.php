@@ -154,58 +154,61 @@ class Phanbook
      * @param bool   $strict Optional. Whether to be strict about the end of the string. Default true.
      * @return bool False if not serialized and true if it was.
      */
-    public function isSerialized( $data, $strict = true )
+    public function isSerialized($data, $strict = true)
     {
         // if it isn't a string, it isn't serialized.
-        if ( ! is_string( $data ) ) {
+        if (! is_string($data)) {
             return false;
         }
-        $data = trim( $data );
-        if ( 'N;' == $data ) {
+        $data = trim($data);
+        if ('N;' == $data) {
             return true;
         }
-        if ( strlen( $data ) < 4 ) {
+        if (strlen($data) < 4) {
             return false;
         }
-        if ( ':' !== $data[1] ) {
+        if (':' !== $data[1]) {
             return false;
         }
-        if ( $strict ) {
-            $lastc = substr( $data, -1 );
-            if ( ';' !== $lastc && '}' !== $lastc ) {
+        if ($strict) {
+            $lastc = substr($data, -1);
+            if (';' !== $lastc && '}' !== $lastc) {
                 return false;
             }
         } else {
-            $semicolon = strpos( $data, ';' );
-            $brace     = strpos( $data, '}' );
+            $semicolon = strpos($data, ';');
+            $brace     = strpos($data, '}');
             // Either ; or } must exist.
-            if ( false === $semicolon && false === $brace )
+            if (false === $semicolon && false === $brace) {
                 return false;
+            }
             // But neither must be in the first X characters.
-            if ( false !== $semicolon && $semicolon < 3 )
+            if (false !== $semicolon && $semicolon < 3) {
                 return false;
-            if ( false !== $brace && $brace < 4 )
+            }
+            if (false !== $brace && $brace < 4) {
                 return false;
+            }
         }
         $token = $data[0];
-        switch ( $token ) {
-            case 's' :
-                if ( $strict ) {
-                    if ( '"' !== substr( $data, -2, 1 ) ) {
+        switch ($token) {
+            case 's':
+                if ($strict) {
+                    if ('"' !== substr($data, -2, 1)) {
                         return false;
                     }
-                } elseif ( false === strpos( $data, '"' ) ) {
+                } elseif (false === strpos($data, '"')) {
                     return false;
                 }
             // or else fall through
-            case 'a' :
-            case 'O' :
-                return (bool) preg_match( "/^{$token}:[0-9]+:/s", $data );
-            case 'b' :
-            case 'i' :
-            case 'd' :
+            case 'a':
+            case 'O':
+                return (bool) preg_match("/^{$token}:[0-9]+:/s", $data);
+            case 'b':
+            case 'i':
+            case 'd':
                 $end = $strict ? '$' : '';
-                return (bool) preg_match( "/^{$token}:[0-9.E-]+;$end/", $data );
+                return (bool) preg_match("/^{$token}:[0-9.E-]+;$end/", $data);
         }
         return false;
     }

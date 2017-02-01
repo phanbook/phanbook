@@ -323,7 +323,7 @@ class Controller extends AbstractController
                 'limit' => $perPage,
                 'page' => $page
             ]);
-        } elseif(isset($query['model'])) {
+        } elseif (isset($query['model'])) {
             $builder  = ModelBase::modelQuery($query);
             $paginator  = new PaginatorQueryBuilder(
                 [
