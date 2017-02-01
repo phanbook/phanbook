@@ -14,7 +14,6 @@ namespace Phanbook\Utils;
 
 use Phalcon\Text as PhalconText;
 
-
 class Text extends PhalconText
 {
     /**
