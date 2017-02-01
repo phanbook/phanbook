@@ -12,7 +12,7 @@
                         <a href="#" class="file-control">Audio</a>
                         <a href="#" class="file-control">Images</a>
                         <div class="hr-line-dashed"></div>
-                        <button class="btn btn-primary btn-block">Upload Files</button>
+                        <a href="/backend/media/upload" class="btn btn-primary btn-block">Upload Files</a>
                         <div class="hr-line-dashed"></div>
                         <h5>Folders</h5>
                         <ul class="folder-list" style="padding: 0">

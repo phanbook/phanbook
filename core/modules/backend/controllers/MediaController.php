@@ -45,7 +45,7 @@ class MediaController extends ControllerBase
     {
 
         if ($this->request->hasFiles()) {
-            $media = new Media();
+            $media   = new Media();
             $uploads = $this->request->getUploadedFiles();
             $this->view->disable();
             $uploaded = true;
@@ -66,6 +66,5 @@ class MediaController extends ControllerBase
 
         $this->assets->addCss('/core/assets/css/dropzone.css', false);
         $this->assets->addJs('/core/assets/js/dropzone.js', false);
-        $this->view->acceptExt = implode(",", MediaType::getExtensionAllowed());
     }
 }
