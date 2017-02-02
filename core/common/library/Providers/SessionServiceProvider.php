@@ -40,16 +40,17 @@ class SessionServiceProvider extends AbstractServiceProvider
             $this->serviceName,
             function () {
                 /** @var \Phalcon\DiInterface $this */
-                $config = $this->getShared('config');
+                $config = $this->getShared('config')->application->session;
 
-                if (isset($config->application->session->adapter)) {
-                    $sessionAdapter = '\Phalcon\Session\Adapter\\'  . $config->application->session->adapter;
+                if (isset($config->adapter)) {
+                    $sessionAdapter = '\Phalcon\Session\Adapter\\'  . $config->adapter;
                     if (class_exists($sessionAdapter)) {
-                        $config = $config->application->session->toArray();
-                        unset($config['adapter']);
-
+                        if (isset($config->domain)) {
+                            ini_set('session.cookie_domain', $config->domain);
+                        }
+                        $options = $config->options->toArray();
                         /** @var \Phalcon\Session\AdapterInterface $session */
-                        $session = new $sessionAdapter($config);
+                        $session = new $sessionAdapter($options);
                         $session->start();
 
                         return $session;
