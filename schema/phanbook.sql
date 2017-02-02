@@ -160,10 +160,9 @@ DROP TABLE IF EXISTS `media`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `media` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(72) NOT NULL,
-  `type` int(11) NOT NULL,
+  `userId` int(11) NOT NULL,
+  `metaFile` longtext NOT NULL,
   `createdAt` int(15) NOT NULL,
-  `filename` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;

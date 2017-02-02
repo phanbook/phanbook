@@ -17,6 +17,7 @@ use Phanbook\Models\Users;
 use Phanbook\Tools\ZFunction;
 use Phalcon\Config\Adapter\Php as AdapterPhp;
 use Phanbook\Utils\Slug;
+use Phanbook\Utils\Text;
 
 /**
  *
@@ -143,5 +144,12 @@ class Phanbook
     public function tag()
     {
         return new Tag();
+    }
+    /**
+     * @return Text
+     */
+    public function text()
+    {
+        return new Text();
     }
 }

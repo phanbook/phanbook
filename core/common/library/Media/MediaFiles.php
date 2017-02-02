@@ -35,8 +35,12 @@ class MediaFiles
      * @param  string $serverPath path to upload
      * @return boolean
      */
-    public function uploadFile($localPath, $serverPath)
+    public function uploadFile($localPath, $serverPath, $extension = null)
     {
+        if ($this->checkFileExists($serverPath)) {
+            $item = explode($extension, $serverPath);
+            $serverPath = $item[0] . uniqid() . '.' . $extension;
+        }
         $stream = fopen($localPath, 'r+');
         $status = $this->fileSystem->writeStream($serverPath, $stream);
 
@@ -51,45 +55,5 @@ class MediaFiles
     public function checkFileExists($serverPath)
     {
         return $this->fileSystem->has($serverPath);
-    }
-
-    /**
-     * Get content of analytic file for each user
-     * @param  String $userName
-     * @return array
-     */
-    public function getConfigFile($userName)
-    {
-        $filename = $userName. "/userConfig.json";
-        if (!$this->fileSystem->has($filename)) {
-            return [];
-        }
-
-        $contents = $this->fileSystem->read($filename);
-        return json_decode($contents, true);
-    }
-
-    /**
-     * Save after modify content of analytic file
-     * @param  String $userName
-     * @param  array $arrayConfig
-     * @return boolean
-     */
-    public function saveConfigFile($userName, $arrayConfig)
-    {
-        $filename = $userName. DIRECTORY_SEPARATOR . 'userConfig.json';
-
-        if (!$this->fileSystem->has($filename)) {
-            $this->fileSystem->write($filename, '[]');
-        }
-
-        $contents = $this->fileSystem->read($filename);
-        $result = array_merge(json_decode($contents, true), $arrayConfig);
-        $result = json_encode($result);
-
-        if (!$this->fileSystem->update($filename, $result)) {
-            return false;
-        }
-        return true;
     }
 }
