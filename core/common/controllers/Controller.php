@@ -631,7 +631,7 @@ class Controller extends AbstractController
             'publicUrl'     => $this->config->application->publicUrl,
             'action'        => $this->router->getActionName(),
             'controller'    => $this->router->getControllerName(),
-            'baseUri'       => '/',
+            'baseUri'       => $this->config->application->baseUri,
             'auth'          => $this->auth->getAuth()
         ]);
     }

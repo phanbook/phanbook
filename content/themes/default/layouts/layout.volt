@@ -16,7 +16,7 @@
     <meta property="og:url" content="{{publicUrl}}">
     <link rel="shortcut icon" href="{{ getImageSrc('favicon.png') }}">
     <title>{% block title%}{% endblock %} - {{name}}</title>
-
+   
     <!-- Main Style -->
     {{ assets.outputCss('theme_css') }}
 
