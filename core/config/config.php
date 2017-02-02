@@ -101,9 +101,14 @@ return [
 
         'session' => [
             'adapter' => env('SESSION_DRIVER'),
+            'domain'  => env('SESSION_DOMAIN'),
             'options' => [
-                'lifetime' => env('SESSION_LIFETIME'),
-                'uniqueId' => env('SESSION_UNIQUE_ID'),
+                'host'      => env('SESSION_HOST'),
+                'port'      => env('SESSION_PORT'),
+                'index'     => env('SESSION_INDEX'),
+                'prefix'    => env('SESSION_PREFIX'),
+                'lifetime'  => env('SESSION_LIFETIME'),
+                'uniqueId'  => env('SESSION_UNIQUE_ID'),
             ],
         ],
 
