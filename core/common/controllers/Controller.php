@@ -626,13 +626,14 @@ class Controller extends AbstractController
     public function onConstruct()
     {
         $this->view->setVars([
+            'auth'          => $this->auth->getAuth(),
             'name'          => $this->config->application->name,
-            'gAnalytic'     => $this->config->googleAnalytic,
             'publicUrl'     => $this->config->application->publicUrl,
             'action'        => $this->router->getActionName(),
             'controller'    => $this->router->getControllerName(),
             'baseUri'       => $this->config->application->baseUri,
-            'auth'          => $this->auth->getAuth()
+            'googleAnalytic'=> $this->config->googleAnalytic
+
         ]);
     }
 }
