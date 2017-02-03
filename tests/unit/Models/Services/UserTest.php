@@ -190,6 +190,10 @@ class UserTest extends UnitTest
     /** @test */
     public function shouldDetectModerators()
     {
+        $auth = $this->di->get('auth');
+        $hash = $this->di->get('security');
+
+        $password = $this->faker->password;
         $userService = new User();
 
         $data = [
@@ -199,14 +203,24 @@ class UserTest extends UnitTest
             'email'     => $this->faker->email,
             'bio'       => $this->faker->paragraph,
             'birthdate' => $this->faker->date(),
-            'passwd'    => $this->faker->password,
-            'moderator' => 'Y',
+            'passwd'    => $hash->hash($password),
+            'status'    => 1
         ];
 
-        $id = $this->tester->haveInDatabase('users', $data);
-        $user = $userService->getFirstById($id);
 
-        $this->assertTrue($userService->isModerator($user));
+
+        $id   = $this->tester->haveInDatabase('users', $data);
+        $role = ['users_id' => $id, 'roles_id' => 2];
+        $data['password'] = $password;
+        $auth->check($data);
+        
+        $moderator = $this->tester->haveInDatabase('roles_users', $role);
+
+        $this->assertTrue($userService->isModerator());
+
+
+        $password = $this->faker->password;
+        $userService = new User();
 
         $data = [
             'username'  => $this->faker->userName,
@@ -215,14 +229,20 @@ class UserTest extends UnitTest
             'email'     => $this->faker->email,
             'bio'       => $this->faker->paragraph,
             'birthdate' => $this->faker->date(),
-            'passwd'    => $this->faker->password,
-            'moderator' => 'N',
+            'passwd'    => $hash->hash($password),
+            'status'    => 1
         ];
 
-        $id = $this->tester->haveInDatabase('users', $data);
-        $user = $userService->getFirstById($id);
 
-        $this->assertFalse($userService->isModerator($user));
+
+        $id   = $this->tester->haveInDatabase('users', $data);
+        $role = ['users_id' => $id, 'roles_id' => 3];
+        $data['password'] = $password;
+        $auth->check($data);
+        
+        $moderator = $this->tester->haveInDatabase('roles_users', $role);
+
+        $this->assertFalse($userService->isModerator());
     }
 
     /**

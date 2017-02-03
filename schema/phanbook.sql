@@ -586,8 +586,6 @@ CREATE TABLE `users` (
   `notifications` char(1) DEFAULT 'N',
   `digest` char(1) DEFAULT 'Y',
   `timezone` varchar(48) DEFAULT NULL,
-  `moderator` char(1) DEFAULT 'N',
-  `admin` char(1) NOT NULL DEFAULT 'N',
   `karma` int(11) DEFAULT NULL,
   `vote` int(10) unsigned DEFAULT NULL,
   `votePoint` int(11) DEFAULT NULL,
