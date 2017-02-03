@@ -3,9 +3,6 @@
 <!--[if IE 9 ]><html class="ie ie9" lang="en"> <![endif]-->
 <!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
 <head>
-    <!-- Basic Page Needs -->
-    {% set controller = this.view.getControllerName(), action =  this.view.getActionName()%}
-    {% set name = this.config.application.name, publicUrl = this.config.application.publicUrl %}
     <!-- Add meta tags to refactor-->
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -19,7 +16,7 @@
     <meta property="og:url" content="{{publicUrl}}">
     <link rel="shortcut icon" href="{{ getImageSrc('favicon.png') }}">
     <title>{% block title%}{% endblock %} - {{name}}</title>
-
+   
     <!-- Main Style -->
     {{ assets.outputCss('theme_css') }}
 
@@ -28,10 +25,10 @@
 
     {{ this.assets.outputCss() }}
     <script type="text/javascript">
-        var baseUri     = '{{ this.config.application.baseUri }}';
+        var baseUri     = '{{ baseUri }}';
         var controller  = '{{ controller }}';
         var action      = '{{ action }}';
-        var googleAnalytic = '{{ this.config.googleAnalytic }}';
+        var googleAnalytic = '{{ googleAnalytic }}';
     </script>
 </head>
 <body class="{{action}} {{controller}}">

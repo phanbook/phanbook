@@ -622,4 +622,18 @@ class Controller extends AbstractController
             $logger->error($e);
         }
     }
+
+    public function onConstruct()
+    {
+        $this->view->setVars([
+            'auth'          => $this->auth->getAuth(),
+            'name'          => $this->config->application->name,
+            'publicUrl'     => $this->config->application->publicUrl,
+            'action'        => $this->router->getActionName(),
+            'controller'    => $this->router->getControllerName(),
+            'baseUri'       => $this->config->application->baseUri,
+            'googleAnalytic'=> $this->config->googleAnalytic
+
+        ]);
+    }
 }
