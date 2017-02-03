@@ -301,21 +301,18 @@ class Auth extends Component
         if (!$this->isAuthorizedVisitor()) {
             return false;
         }
-
-        $identity = $this->session->get('auth');
-
-        return $identity['admin'] == 'Y';
+        return $this->userService->isAdmin();
     }
 
+    /**
+     * @return bool
+     */
     public function isModerator()
     {
         if (!$this->isAuthorizedVisitor()) {
             return false;
         }
-
-        $identity = $this->session->get('auth');
-
-        return $identity['moderator'] == 'Y';
+        return $this->userService->isModerator();
     }
 
     /**
@@ -365,8 +362,6 @@ class Auth extends Component
             'auth',
             [
                 'id'        => $object->getId(),
-                'admin'     => $object->getAdmin(),
-                'moderator' => $object->getModerator(),
                 'theme'     => $object->getTheme(),
                 'name'      => $object->getFullName(),
                 'fullname'  => $object->getFullName(),
