@@ -1,0 +1,8 @@
+# Phanbook.com
+# Copyright (C) YEAR phanbook.com
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR hello@phanbook.com, YEAR.
+# Running command: msgfmt -o messages.mo messages.po
+#
+
+#, php-format

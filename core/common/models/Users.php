@@ -160,18 +160,6 @@ class Users extends ModelBase
 
     /**
      *
-     * @var string
-     */
-    protected $moderator = 'N';
-
-    /**
-     *
-     * @var string
-     */
-    protected $admin ='N';
-
-    /**
-     *
      * @var integer
      */
     protected $karma;
@@ -472,32 +460,6 @@ class Users extends ModelBase
     public function setTimezone($timezone)
     {
         $this->timezone = $timezone;
-
-        return $this;
-    }
-
-    /**
-     * Method to set the value of field moderator
-     *
-     * @param  string $moderator
-     * @return $this
-     */
-    public function setModerator($moderator)
-    {
-        $this->moderator = $moderator;
-
-        return $this;
-    }
-
-    /**
-     * Method to set the value of field admin
-     *
-     * @param  string $admin
-     * @return $this
-     */
-    public function setAdmin($admin)
-    {
-        $this->admin = $admin;
 
         return $this;
     }
@@ -835,26 +797,6 @@ class Users extends ModelBase
     public function getTimezone()
     {
         return $this->timezone;
-    }
-
-    /**
-     * Returns the value of field moderator
-     *
-     * @return string
-     */
-    public function getModerator()
-    {
-        return $this->moderator;
-    }
-
-    /**
-     * Returns the value of field admin
-     *
-     * @return string
-     */
-    public function getAdmin()
-    {
-        return $this->admin;
     }
 
     /**
@@ -1235,8 +1177,6 @@ class Users extends ModelBase
             'notifications'     => 'notifications',
             'digest'            => 'digest',
             'timezone'          => 'timezone',
-            'moderator'         => 'moderator',
-            'admin'             => 'admin',
             'karma'             => 'karma',
             'vote'              => 'vote',
             'votePoint'         => 'votePoint',

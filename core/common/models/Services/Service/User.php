@@ -226,17 +226,6 @@ class User extends Service
     }
 
     /**
-     * Checks whether the User is moderator.
-     *
-     * @param  Users $user
-     * @return bool
-     */
-    public function isModerator(Users $user)
-    {
-        return $user->getModerator() == 'Y';
-    }
-
-    /**
      * Checks whether the User is active.
      *
      * @param  Users $user
@@ -514,5 +503,24 @@ class User extends Service
         $entity = new Users(['id' => 0]);
 
         return $entity;
+    }
+
+    /**
+     * Checks whether the User is Admin.
+     *
+     * @return bool
+     */
+    public function isAdmin()
+    {
+        return in_array(Role::ADMINS_SYSTEM_ROLE, $this->getRoleNamesForCurrentViewer());
+    }
+    /**
+     * Checks whether the User is moderator.
+     *
+     * @return bool
+     */
+    public function isModerator()
+    {
+        return in_array(Role::MODERATORS_SYSTEM_ROLE, $this->getRoleNamesForCurrentViewer());
     }
 }

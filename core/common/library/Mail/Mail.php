@@ -51,14 +51,9 @@ class Mail extends Component
 
     private function getTemplate($key, $params)
     {
-        if ($key != 'test' && !$this->template = Template::findFirstByKey($key)) {
-            return false;
-        }
-
-        if ($key != 'test' && empty($params['subject'])) {
-            $params['subject'] = $this->template->getSubject();
-        }
-
+        
+        $this->template = Template::findFirstByKey($key);
+        
         // Set views layout
         $this->view->setViewsDir(app_path('core/data/'));
         $render = $this->view->getRender(
@@ -103,7 +98,7 @@ class Mail extends Component
         $config = $this->getConfig()->get('mail');
 
         if (empty($this->template)) {
-            $subject = 'Phanbook - TEST';
+            $subject = $config->get('fromName');
         } elseif (empty($params['subject'])) {
             $subject = $this->template->getSubject();
         } else {

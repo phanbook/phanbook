@@ -15,13 +15,7 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
---
--- Current Database: `phanbook`
---
 
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `phanbook` /*!40100 DEFAULT CHARACTER SET utf8 */;
-
-USE `phanbook`;
 
 --
 -- Table structure for table `activities`
@@ -166,10 +160,9 @@ DROP TABLE IF EXISTS `media`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `media` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(72) NOT NULL,
-  `type` int(11) NOT NULL,
+  `userId` int(11) NOT NULL,
+  `metaFile` longtext NOT NULL,
   `createdAt` int(15) NOT NULL,
-  `filename` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -593,8 +586,6 @@ CREATE TABLE `users` (
   `notifications` char(1) DEFAULT 'N',
   `digest` char(1) DEFAULT 'Y',
   `timezone` varchar(48) DEFAULT NULL,
-  `moderator` char(1) DEFAULT 'N',
-  `admin` char(1) NOT NULL DEFAULT 'N',
   `karma` int(11) DEFAULT NULL,
   `vote` int(10) unsigned DEFAULT NULL,
   `votePoint` int(11) DEFAULT NULL,
@@ -740,5 +731,4 @@ CREATE TABLE `vote` (
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
 -- Dump completed on 2016-11-10 18:07:26
