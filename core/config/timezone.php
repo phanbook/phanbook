@@ -68,7 +68,7 @@ return [
     'Asia/Rangoon'                   => '(GMT+06:30) Rangoon',
     'Asia/Bangkok'                   => '(GMT+07:00) Bangkok/Hanoi/Jakarta',
     'Asia/Krasnoyarsk'               => '(GMT+07:00) Krasnoyarsk',
-    'Asia/Hong_Kong'                 => '(GMT+08:00) Beijing/Chongqing/Hong Kong/Urumqi',
+    'Asia/Hong_Kong'                 => '(GMT+08:00) 北京/重庆/香港/乌鲁木齐',
     'Asia/Irkutsk'                   => '(GMT+08:00) Irkutsk/Ulaan Bataar',
     'Asia/Singapore'                 => '(GMT+08:00) Singapore/Kuala Lumpur',
     'Australia/Perth'                => '(GMT+08:00) Perth',
