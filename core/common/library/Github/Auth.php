@@ -8,7 +8,7 @@
  *
  * @link    http://phanbook.com Phanbook Project
  * @since   1.0.0
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
+ * @license https://github.com/phanbook/phanbook/blob/master/LICENSE.txt
  */
 namespace Phanbook\Github;
 

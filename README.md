@@ -87,7 +87,7 @@ Copyright 2014 - 2016 Phanbook Construction Kit, Inc.
 Licensed under the [BSD General Public License][:license:] Version 2.0 (or later);
 you may not use this work except in compliance with the License.
 
-You may obtain a copy of the License in the LICENSE.txt file, or at http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
+You may obtain a copy of the License in the LICENSE.txt file, or at https://github.com/phanbook/phanbook/blob/master/LICENSE.txt
 
 [:site:]: http://phanbook.com
 [:meta:]: http://meta.phanbook.com
