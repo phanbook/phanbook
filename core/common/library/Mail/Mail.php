@@ -2,7 +2,7 @@
 /**
  * Phanbook : Delightfully simple forum software
  *
- * Licensed under The GNU License
+ * Licensed under The BSD License
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
@@ -51,9 +51,9 @@ class Mail extends Component
 
     private function getTemplate($key, $params)
     {
-        
+
         $this->template = Template::findFirstByKey($key);
-        
+
         // Set views layout
         $this->view->setViewsDir(app_path('core/data/'));
         $render = $this->view->getRender(

@@ -2,7 +2,7 @@
 /**
  * Phanbook : Delightfully simple forum software
  *
- * Licensed under The GNU License
+ * Licensed under The BSD License
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
@@ -58,7 +58,7 @@ class ModulesServiceProvider extends AbstractServiceProvider
                 'router'    => content_modules_path("{$name}/config/routing.php"),
             ];
         }
-        
+
         $core = [
             'error' => [
                 'className' => Error::class,
