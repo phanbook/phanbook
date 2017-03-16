@@ -20,7 +20,7 @@ for professional and enthusiast people. Also the name Phanbook is mean - Phan(Ph
 - **Easily deploy** With Docker and Vagrant you can easy deploy to production with Docker and setup environment develop
   with Vagrant.
 - **Blogging** Create a beautiful, independent online publication
-- **Free and open.** Phanbook is released under the [BSD General Public License][:license:].
+- **Free and open.** Phanbook is released under the [BSD License][:license:].
 
 ## Features
 
@@ -84,7 +84,7 @@ to the official Phanbook blog and GitHub's list of contributors.
 
 Copyright 2014 - 2016 Phanbook Construction Kit, Inc.
 
-Licensed under the [BSD General Public License][:license:] Version 2.0 (or later);
+Licensed under the [BSD License][:license:] (or later);
 you may not use this work except in compliance with the License.
 
 You may obtain a copy of the License in the LICENSE.txt file, or at https://github.com/phanbook/phanbook/blob/master/LICENSE.txt
