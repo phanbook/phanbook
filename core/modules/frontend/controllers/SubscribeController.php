@@ -111,9 +111,12 @@ class SubscribeController extends ControllerBase
             $this->flashSession->error(t('Please input your Email'));
             return $this->indexRedirect();
         }
-        $subscribe = new Subscribe();
+        $subscribe = Subscribe::findFirstByEmail($email);
+        if (!$subscribe) {
+            $subscribe = new Subscribe();
+            $subscribe->setEmail($email);
+        }
         $subscribe->setStatus('Y');
-        $subscribe->setEmail($email);
 
         if (!$subscribe->save()) {
             foreach ($subscribe->getMessages() as $message) {
@@ -121,7 +124,40 @@ class SubscribeController extends ControllerBase
                 return $this->indexRedirect();
             }
         }
+        $name   = $this->config->application->name;
+        $link   = ($this->request->isSecure()
+                ? 'https://' : 'http://') . $this->request->getHttpHost();
+        $params = [
+            'link'    => $link,
+            'unLink'  => $link . '/subscribe/remove?email=' . urlencode($this->crypt->encryptBase64(trim($email))),
+            'name'    => $name,
+            'subject' => 'Please confirm your subscription for ' . $name
+        ];
+        $this->mail->send($email, 'subscribe', $params);
+
         $this->flashSession->success(t('Thank you for subscribing to our newsletter'));
+        return $this->currentRedirect();
+    }
+
+    public function removeAction()
+    {
+        $email = $this->request->get('email');
+        $email = $this->crypt->decryptBase64(urldecode($email));
+
+        $subscribe = Subscribe::findFirstByEmail($email);
+        if (!$subscribe) {
+            $this->flashSession->error(t('The email have not exits!'));
+            return $this->indexRedirect();
+        }
+        $subscribe->setStatus('N');
+
+        if (!$subscribe->save()) {
+            foreach ($subscribe->getMessages() as $message) {
+                $this->flashSession->error($message);
+                return $this->indexRedirect();
+            }
+        }
+        $this->flashSession->success(t('Unsubscribe Successful'));
         return $this->indexRedirect();
     }
 }

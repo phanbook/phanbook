@@ -12,8 +12,9 @@
  */
 namespace Phanbook\Models;
 
-use Phalcon\Mvc\Model\Validator\Email as Email;
-use Phalcon\Mvc\Model\Validator\Uniqueness as Uniqueness;
+use Phalcon\Validation;
+use Phalcon\Validation\Validator\Email as EmailValidator;
+use Phalcon\Validation\Validator\Uniqueness as UniquenessValidator;
 
 /**
  * To use for subscribe weekly post
@@ -117,25 +118,21 @@ class Subscribe extends ModelBase
     public function validation()
     {
 
-        $this->validate(
-            new Email(
-                array(
-                    'field'    => 'email',
-                    'required' => true,
-                )
-            )
+        $validator = new Validation();
+        $validator->add(
+            'email',
+            new EmailValidator([
+                'model' => $this,
+                'message' => 'Please enter a correct email address'
+            ])
         );
-
-        $this->validate(
-            new Uniqueness(
-                array(
-                    'field' => 'email'
-                )
-            )
+        $validator->add(
+            'email',
+            new UniquenessValidator([
+                'model' => $this,
+                'message' => 'Another user with same email already exists'
+            ])
         );
-        if ($this->validationHasFailed() == true) {
-            return false;
-        }
     }
 
     /**
