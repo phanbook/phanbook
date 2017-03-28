@@ -2,13 +2,13 @@
 /**
  * Phanbook : Delightfully simple forum software
  *
- * Licensed under The GNU License
+ * Licensed under The BSD License
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
  * @link    http://phanbook.com Phanbook Project
  * @since   1.0.0
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
+ * @license https://github.com/phanbook/phanbook/blob/master/LICENSE.txt
  */
 
 return [
@@ -68,7 +68,7 @@ return [
     'Asia/Rangoon'                   => '(GMT+06:30) Rangoon',
     'Asia/Bangkok'                   => '(GMT+07:00) Bangkok/Hanoi/Jakarta',
     'Asia/Krasnoyarsk'               => '(GMT+07:00) Krasnoyarsk',
-    'Asia/Hong_Kong'                 => '(GMT+08:00) Beijing/Chongqing/Hong Kong/Urumqi',
+    'Asia/Hong_Kong'                 => '(GMT+08:00) 北京/重庆/香港/乌鲁木齐',
     'Asia/Irkutsk'                   => '(GMT+08:00) Irkutsk/Ulaan Bataar',
     'Asia/Singapore'                 => '(GMT+08:00) Singapore/Kuala Lumpur',
     'Australia/Perth'                => '(GMT+08:00) Perth',
