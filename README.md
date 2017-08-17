@@ -41,9 +41,9 @@ snapshot of what we’ll be working on first:
 - Simple CMS
 - The modular structure with a convenient hierarchy that is based on namespaces
 
-## Installation
+## Installation / Configuration
 
-To see how to run Phanbook you can take look at [here][:install:]
+Please see the [installation][:install:] and [configuration][:config:] guides respectively.  
 
 ## Security
 
@@ -103,5 +103,6 @@ You may obtain a copy of the License in the LICENSE.txt file, or at https://gith
 [:slack:]: http://chat.phalcontip.com
 [:bg-slack:]: https://img.shields.io/badge/slack-join%20chat%20%E2%86%92-brightgreen.svg?style=flat-square
 [:install:]: https://github.com/phanbook/docs/blob/master/install.md
+[:config:]: https://github.com/phanbook/docs/blob/master/config.md
 [:license:]: https://github.com/phanbook/phanbook/blob/master/LICENSE.txt
 [:authors:]: https://github.com/phanbook/phanbook/blob/master/docs/AUTHORS.md
