@@ -88,16 +88,21 @@ class UsersController extends ControllerBase
                 'query' => [
                 'columns' => [
                     'a.id',
-                    "CONCAT(a.firstname, ' ', a.lastname) as name ",
+                    "CONCAT(a.firstname, ' ', a.lastname) as name",
                     'a.username',
                     'a.gender',
                     'a.email',
                     'a.status',
-                    'a.admin',
-                    'a.moderator',
+                    "IF(SUM(c.type = 'admin'),'Y','N') AS admin",
+                    "IF(SUM(c.type = 'moderator'),'Y','N') AS moderator",
                     'a.karma',
                 ],
-                'joins'   => [],
+                // See modelBase.php's modelQuery   $join['model'], $join['on'], $join['alias']
+                // note "users_id" becomes "userId" and "roles_id" becomes "roleId"
+                'joins'   => [
+                                 ['type'=>'leftJoin', 'model'=>'RolesUsers' ,'alias'=>'b', 'on'=>"a.id=b.userId"],
+                                 ['type'=>'leftJoin', 'model'=>'Roles',      'alias'=>'c', 'on'=>"c.id=b.roleId"]
+                             ],
                 'groupBy' => 'a.id'
                 ]
                 /*'actions' => [
