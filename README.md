@@ -45,6 +45,15 @@ snapshot of what we’ll be working on first:
 
 Please see the [installation][:install:] and [configuration][:config:] guides respectively.  
 
+## Running the Application ##
+
+You can run the application with either Apache, Nginx, or with the [built-in web server](http://php.net/manual/en/features.commandline.webserver.php) feature of PHP.  The command would look something like: `php -S 127.0.0.1:8081 -t . .htrouter.php` The .htrouter file would then act like an .htaccess file.  Or you can run the application through Apache or Nginx.  
+
+**Note that there are two .htaccess files in the application:**  
+`/.htaccess` and `/public/.htaccess`.  
+The web root should be `/` not `/public/` for this application. The .htaccess rewrites to public for you.
+
+
 ## Security
 
 We take security very seriously at Phanbook; all our code is 100% open source and peer reviewed.
