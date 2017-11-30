@@ -48,7 +48,7 @@
         "fzaninotto/faker": "^1.6",
         "squizlabs/php_codesniffer": "^2.7",
         "codeception/codeception": "2.2.x-dev",
-        "phalcongelist/dd": "^1"
+        "phalcon/dd": "^1"
     },
     "support": {
         "issues": "https://github.com/phanbook/phanbook/issues",
