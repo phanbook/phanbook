@@ -5,7 +5,7 @@ if [ ! -d "opsfile" ]; then
 fi
 
 chmod 777 -R public/
-chmod 777 -R cache/
+chmod 777 -R content/cache/
 chmod 777 -R content/logs
 
 
@@ -34,18 +34,15 @@ docker-compose build
 docker-compose up -d
 
 if [ 'rebuild' == "$1" ]; then
-	cd opsfiles/docker
 	docker-compose down -v
 	docker-compose up -d
 fi
 
 if [ 'composer' == "$1" ]; then
-	cd opsfiles/docker
     docker-compose up composer
 fi
 
 if [ 'migrate' == "$1" ]; then
-	cd opsfiles/docker
     docker-compose up migrate
 fi
 
