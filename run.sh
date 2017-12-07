@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ ! -d "opsfile" ]; then
+if [ ! -d "opsfiles" ]; then
     git clone --depth=1  https://github.com/phanbook/opsfiles.git
 fi
 
