@@ -591,7 +591,7 @@ CREATE TABLE `users` (
   `votePoint` int(11) DEFAULT NULL,
   `gender` int(1) NOT NULL DEFAULT '9',
   `birthdate` date DEFAULT NULL,
-  `passwd` varchar(60) NOT NULL,
+  `passwd` varchar(60) DEFAULT NULL,
   `registerHash` varchar(60) DEFAULT NULL,
   `passwdForgotHash` varchar(60) DEFAULT NULL,
   `lastPasswdReset` int(11) DEFAULT NULL,

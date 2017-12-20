@@ -220,6 +220,7 @@ Options -MultiViews
     # Setting up theme and core assets
     RewriteRule ^(core/assets)($|/) - [NC,L]
     RewriteRule ^(content/themes)($|/) - [NC,L]
+    RewriteRule ^(content/uploads)($|/) - [NC,L]
 
     # Setting up module assets
     RewriteCond %{REQUEST_FILENAME} !-f

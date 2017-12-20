@@ -20,6 +20,8 @@
                         </li>
                     </ul>
                 </div><!-- /Slide1 -->
+                {% else %}
+                No tags exist. Please create some in the dashboard.
                 {% endfor %}
             </div>
            <!-- /.control-box -->
