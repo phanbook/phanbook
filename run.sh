@@ -27,6 +27,7 @@ cd "$OPSFILES_DOCKER"
 
 if [ 'build' == "$1" ]; then
 	cd "$APP_PATH"
+	cp .env.example .env
 	chmod 777 -R public/
 	chmod 777 -R content/cache/
 	chmod 777 -R content/logs
@@ -41,8 +42,6 @@ fi
 if [ 'destroy' == "$1" ]; then
     # Stop and remove any existing containers
     docker rm -f $(docker ps -a -q)
-    # Delete all images
-    docker rmi -f $(docker images -q)
 fi
 
 
