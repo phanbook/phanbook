@@ -104,7 +104,7 @@ class Phanbook
 
     public function saveConfig($arrayConfig)
     {
-        $filename = config_path('options/options.php');
+        $filename = content_path('options/options.php');
         if (!file_exists($filename)) {
             $makeFile = ZFunction::makeFile($filename);
             file_put_contents($filename, "<?php return [];");
