@@ -1,4 +1,5 @@
 *
 !.gitignore
 !default
+!default/*
 !README.md
