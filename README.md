@@ -77,12 +77,6 @@ Before contributing to Phanbook:
 
 We are look forward to seeing your pull requests!
 
-## Donating
-
-Support this project via [gratipay][:gratipay:].
-
-[![Support via Gratipay][:bg-gratipay:]][:gratipay:]
-
 ## The Phanbook Team
 
 The original Phanbook code contributors can be found in [AUTHORS.MD][:authors:].
