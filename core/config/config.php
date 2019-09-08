@@ -74,7 +74,7 @@ return [
          * It is strongly recommended that plugin and theme developers use
          * in their development environments.
          */
-        'debug' => true,
+        'debug' => env('APP_DEBUG'),
 
         /**
          * Set the password hashing factor
