@@ -12,7 +12,6 @@
  */
 namespace Phanbook\Frontend\Controllers;
 
-use Phanbook\Utils\Slug;
 use Phanbook\Models\Vote;
 use Phanbook\Utils\Editor;
 use Phanbook\Models\Posts;
@@ -213,7 +212,7 @@ class PostsController extends ControllerBase
 
         if (!empty($id)) {
             $object = Posts::findFirstById($id);
-            $object->setSlug(Slug::generate($this->request->getPost('title')));
+            $object->setSlug($this->slug->generate($this->request->getPost('title')));
             // @Todo continue When moderator or admin edit post
             // Just to save history when user is TrustModerator and the user not owner the post
             if ($this->auth->isTrustModeration() && $this->auth->getUserId() != $object->getUsersId()) {
@@ -229,7 +228,7 @@ class PostsController extends ControllerBase
         } else {
             $object = new Posts();
             $object->setType(Posts::POST_QUESTIONS);
-            $object->setSlug(Slug::generate($this->request->getPost('title')));
+            $object->setSlug($this->slug->generate($this->request->getPost('title')));
             $object->setUsersId($this->auth->getUserId());
 
             $user = Users::findFirstById($this->auth->getUserId());
