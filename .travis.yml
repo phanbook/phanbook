@@ -30,7 +30,7 @@ env:
     - DISPLAY=":99.0"
     - APPLICATION_ENV=testing
   matrix:
-    - PHALCON_VERSION="v3.4.4"
+    - PHALCON_VERSION="v3.4.0"
     
 
 before_install:
