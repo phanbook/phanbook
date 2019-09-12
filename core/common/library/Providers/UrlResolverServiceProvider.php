@@ -14,6 +14,7 @@ namespace Phanbook\Common\Library\Providers;
 
 use Phalcon\Mvc\Url;
 use Phanbook\Utils\Slug;
+
 /**
  * \Phanbook\Common\Library\Providers\UrlResolverServiceProvider
  *
