@@ -2,18 +2,8 @@ language: php
 
 sudo: required
 dist: trusty
-
 php:
-  - 5.6
-
-matrix:
-  include:
-    - php: 7.0
-      env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="v3.0.0"
-    - php: 7.0
-      env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="v3.0.1"
-    - php: 7.0
-      env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="3.0.x"
+- 7.1
 
 services:
   - mysql
@@ -39,9 +29,8 @@ env:
     - DISPLAY=":99.0"
     - APPLICATION_ENV=testing
   matrix:
-    - PHALCON_VERSION="3.0.x"
-    - PHALCON_VERSION="v3.0.0"
-    - PHALCON_VERSION="v3.0.1"
+    - PHALCON_VERSION="v3.4.0"
+    
 
 before_install:
   - export PHP_MAJOR="$(echo $TRAVIS_PHP_VERSION | cut -d '.' -f 1,2)"
@@ -62,8 +51,8 @@ install:
 
 before_script:
   - echo 'CREATE DATABASE phanbook CHARSET=utf8 COLLATE=utf8_unicode_ci' | mysql -u root
-  - cat schema/phanbook.sql | mysql -uroot phanbook
-  - cat schema/examples.sql | mysql -uroot phanbook
+  - cat schema/V1.0.0__Phanbook.sql | mysql -uroot phanbook
+  - cat schema/V1.0.1__AddExamples.sql | mysql -uroot phanbook
   - cp ./tests/.env.travis .env
   - php -S 127.0.0.1:8000 -t public/ .htrouter.php >/dev/null 2>&1 &
   - ulimit -c unlimited -S || true
@@ -77,7 +66,6 @@ notifications:
   email:
     recipients:
       - hello@phanbook.com
-      - serghei@phalconphp.com
     on_success: change
     on_failure: always
   slack: phanbook:"${SLAK_TOKEN}"

@@ -16,7 +16,6 @@ use Phalcon\Mvc\View;
 use Phanbook\Backend\Forms\StickyForm;
 use Phanbook\Backend\Forms\PostsForm;
 use Phanbook\Models\Posts;
-use Phanbook\Utils\Slug;
 use Phanbook\Utils\Editor;
 
 /**
@@ -228,7 +227,7 @@ class PostsController extends ControllerBase
             $object = new Posts();
             //@todo
         }
-        $object->setSlug(Slug::generate($this->request->getPost('title')));
+        $object->setSlug$this->slug->generate($this->request->getPost('title')));
         $object->setUsersId($this->auth->getUserId());
         $form = new PostsForm($object);
         $form->bind($_POST, $object);

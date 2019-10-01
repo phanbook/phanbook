@@ -136,7 +136,7 @@ class PagesController extends ControllerBase
         } else {
             $object = new Posts();
         }
-        $object->setSlug(Slug::generate($this->request->getPost('title')));
+        $object->setSlug($this->slug->generate($this->request->getPost('title')));
         $object->setUsersId($this->auth->getUserId());
         $object->setType(Posts::POST_PAGE);
         $form = new PostsForm($object);

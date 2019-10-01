@@ -13,6 +13,7 @@
 namespace Phanbook\Common\Library\Providers;
 
 use Phalcon\Mvc\Url;
+use Phanbook\Utils\Slug;
 
 /**
  * \Phanbook\Common\Library\Providers\UrlResolverServiceProvider
@@ -57,5 +58,6 @@ class UrlResolverServiceProvider extends AbstractServiceProvider
                 return $url;
             }
         );
+        $this->di->setShared('slug', ['className' => Slug::class]);
     }
 }

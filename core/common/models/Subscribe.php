@@ -152,7 +152,7 @@ class Subscribe extends ModelBase
     /**
      * Overwrite messages
      */
-    public function getMessages()
+    public function getMessages($filter = null)
     {
         $messages = array();
         foreach (parent::getMessages() as $message) {

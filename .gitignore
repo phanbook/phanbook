@@ -6,3 +6,4 @@ sftp-config.json
 /Dockerfile
 .env
 debug.log
+/opsfiles

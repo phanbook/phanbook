@@ -15,15 +15,7 @@
                                 <div class="caption">
                                     <h4>{{ user.getFullName() | capitalize }}</h4>
                                     <p>Karma : {{ user.getHumanKarma()}}</p>
-                                    <p>Role:
-                                    {% if user.moderator === 'Y' %}
-                                        Moderator
-                                    {% elseif user.admin === 'Y' %}
-                                        Admin
-                                    {% else %}
-                                        Users
-                                    {% endif %}
-                            </p>
+                                    <p>Role: </p>
                             <p>Joined on {{ date('M d,Y', user.getCreatedAt())}}</p>
                                 </div>
                             </div>
