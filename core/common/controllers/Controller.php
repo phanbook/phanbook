@@ -632,7 +632,7 @@ class Controller extends AbstractController
             'action'        => $this->router->getActionName(),
             'controller'    => $this->router->getControllerName(),
             'baseUri'       => $this->config->application->baseUri,
-            'googleAnalytic'=> $this->config->googleAnalytic
+            'googleAnalytic'=> $this->config->google->analytic
 
         ]);
     }
