@@ -220,9 +220,10 @@ return [
      * @link http://www.google.com/analytics/
      * @link https://developers.google.com/console/help/new/
      */
-    'googleAnalytic' => env('ANALYTIC_ID'),
 
-    'analytic' => [
+
+    'google' => [
+        'analytic'     => env('ANALYTIC_ID'),
         'clientId'     => env('ANALYTIC_CLIENT_ID'),
         'clientSecret' => env('ANALYTIC_SECRET'),
         'redirectUri'  => env('ANALYTIC_REDIRECT_URI'),

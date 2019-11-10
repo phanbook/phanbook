@@ -19,7 +19,7 @@
         var baseUri     = '/backend/';
         var controller  = '{{ controller }}';
         var action      = '{{ action }}';
-        var googleAnalytic = '{{ this.config.googleAnalytic }}';
+        var googleAnalytic = '{{ this.config.google.analytic }}';
     </script>
 </head>
 
