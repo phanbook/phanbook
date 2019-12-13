@@ -24,6 +24,7 @@ jobs:
           MYSQL_DATABASE: phanbook
           MYSQL_USER: phanbook
           MYSQL_PASSWORD: secret
+          DB_DSN: mysql:host=127.0.0.1;dbname=phanbook;port=${{job.services.mysql.ports['3306'] }}
         ports:
           - 3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
