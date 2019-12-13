@@ -56,8 +56,8 @@ jobs:
         run : cp ./tests/.env.github-action .env
       - name: Run Migration
         run: |
-          cat schema/V1.0.0__Phanbook.sql | mysql -uphanbook -psecret phanbook
-          cat schema/V1.0.1__AddExamples.sql | mysql -uphanbook -psecret phanbook
+          cat schema/V1.0.0__Phanbook.sql | mysql -h 127.0.0.1 --port $DB_PORT -uphanbook -psecret phanbook
+          cat schema/V1.0.1__AddExamples.sql | mysql -h 127.0.0.1  --port $DB_PORT  -uphanbook -psecret phanbook
         env:
           DB_PORT: ${{ job.services.mysql.ports['3306'] }}
 
