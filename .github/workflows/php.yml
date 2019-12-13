@@ -20,7 +20,7 @@ jobs:
       mysql:
         image: mysql:5.7
         env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: true
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
           MYSQL_DATABASE: phanbook
           MYSQL_USER: phanbook
           MYSQL_PASSWORD: secret
