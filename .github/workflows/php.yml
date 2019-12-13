@@ -8,14 +8,14 @@ jobs:
   phalcon:
     name: Phalcon (PHP ${{ matrix.php-versions }})
     runs-on: ubuntu-latest
-    # env:
-    #   DB_ADAPTER: mysql
-    #   DB_HOST: 127.0.0.1
-    #   DB_NAME: phalcon
-    #   DB_USERNAME: root
-    #   DB_PASSWORD: password
-    #   CODECEPTION_URL: 127.0.0.1
-    #   CODECEPTION_PORT: 8888
+    env:
+      DB_ADAPTER: mysql
+      DB_HOST: 127.0.0.1
+      DB_NAME: phanbook
+      DB_USERNAME: phanbook
+      DB_PASSWORD: secret
+      CODECEPTION_URL: 127.0.0.1
+      CODECEPTION_PORT: 8888
     services:
       mysql:
         image: mysql:5.7
@@ -63,7 +63,7 @@ jobs:
 
       - name: Run Tests
         run: |
-          cat .env
+          env
           (php -S 127.0.0.1:8000 -t public/ .htrouter.php >/dev/null 2>&1 &)
           vendor/bin/phpcs --extensions=php
           vendor/bin/codecept build
