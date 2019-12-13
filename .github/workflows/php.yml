@@ -52,12 +52,12 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
       - name: Prepare the application
-        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+        #run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+        run : cp ./tests/.env.github-action .env
       - name: Run Migration
         run: |
-          echo 'CREATE DATABASE phanbook CHARSET=utf8 COLLATE=utf8_unicode_ci' | mysql -u root
-          cat schema/V1.0.0__Phanbook.sql | mysql -uroot phanbook
-          cat schema/V1.0.1__AddExamples.sql | mysql -uroot phanbook
+          cat schema/V1.0.0__Phanbook.sql | mysql -uphanbook -psecret phanbook
+          cat schema/V1.0.1__AddExamples.sql | mysql -uphanbook -psecret phanbook
         env:
           DB_PORT: ${{ job.services.mysql.ports['3306'] }}
 
