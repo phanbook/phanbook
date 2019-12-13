@@ -70,4 +70,4 @@ jobs:
           vendor/bin/codecept run
         env:
           DB_PORT: ${{ job.services.mysql.ports['3306'] }}
-          DB_DSN: ${{ mysql:host=127.0.0.1;dbname=phanbook;port=job.services.mysql.ports['3306'] }}
+          DB_DSN: mysql:host=127.0.0.1;dbname=phanbook;port=${{job.services.mysql.ports['3306'] }}
