@@ -15,7 +15,7 @@ jobs:
       DB_USERNAME: phanbook
       DB_PASSWORD: secret
       CODECEPTION_URL: 127.0.0.1
-      CODECEPTION_PORT: 8888
+      CODECEPTION_PORT: 8000
     services:
       mysql:
         image: mysql:5.7
@@ -70,3 +70,4 @@ jobs:
           vendor/bin/codecept run
         env:
           DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+          DB_DSN: ${{ mysql:host=127.0.0.1;dbname=phanbook;port=job.services.mysql.ports['3306'] }}
