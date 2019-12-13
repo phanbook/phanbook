@@ -8,21 +8,22 @@ jobs:
   phalcon:
     name: Phalcon (PHP ${{ matrix.php-versions }})
     runs-on: ubuntu-latest
-    env:
-      DB_ADAPTER: mysql
-      DB_HOST: 127.0.0.1
-      DB_NAME: phalcon
-      DB_USERNAME: root
-      DB_PASSWORD: password
-      CODECEPTION_URL: 127.0.0.1
-      CODECEPTION_PORT: 8888
+    # env:
+    #   DB_ADAPTER: mysql
+    #   DB_HOST: 127.0.0.1
+    #   DB_NAME: phalcon
+    #   DB_USERNAME: root
+    #   DB_PASSWORD: password
+    #   CODECEPTION_URL: 127.0.0.1
+    #   CODECEPTION_PORT: 8888
     services:
       mysql:
         image: mysql:5.7
         env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: false
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: phalcon
+          MYSQL_ALLOW_EMPTY_PASSWORD: true
+          MYSQL_DATABASE: phanbook
+          MYSQL_USER: phanbook
+          MYSQL_PASSWORD: secret
         ports:
           - 3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -54,12 +55,16 @@ jobs:
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
       - name: Run Migration
         run: |
-          echo "Migration success"
+          echo 'CREATE DATABASE phanbook CHARSET=utf8 COLLATE=utf8_unicode_ci' | mysql -u root
+          cat schema/V1.0.0__Phanbook.sql | mysql -uroot phanbook
+          cat schema/V1.0.1__AddExamples.sql | mysql -uroot phanbook
         env:
           DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+
       - name: Run Tests
         run: |
-          (cd public && nohup php -S $CODECEPTION_URL:$CODECEPTION_PORT > phalcon.log 2>&1 &)
+          (php -S 127.0.0.1:8000 -t public/ .htrouter.php >/dev/null 2>&1 &)
+          vendor/bin/phpcs --extensions=php
           vendor/bin/codecept build
           vendor/bin/codecept run
         env:
