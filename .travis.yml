@@ -56,7 +56,6 @@ before_script:
   - cp ./tests/.env.travis .env
   - php -S 127.0.0.1:8000 -t public/ .htrouter.php >/dev/null 2>&1 &
   - ulimit -c unlimited -S || true
-  - cat /etc/os-releas
 
 script:
   - vendor/bin/phpcs --extensions=php
