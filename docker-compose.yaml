@@ -36,7 +36,7 @@ services:
         - ./docker/phanbook.conf:/etc/nginx/conf.d/default.conf
     phpmyadmin:
       restart: 'no'
-      image: phpmyadmin:4.6
+      image: phpmyadmin:5.2.3
       depends_on:
         - db
       ports:
