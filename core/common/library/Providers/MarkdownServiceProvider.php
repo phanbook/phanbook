@@ -37,7 +37,12 @@ class MarkdownServiceProvider extends AbstractServiceProvider
         $this->di->setShared(
             $this->serviceName,
             function () {
-                return new ParsedownExtra();
+                $parsedown = new ParsedownExtra();
+                // Safe mode escapes raw HTML and strips javascript:/unsafe links in user-supplied
+                // markdown (questions/answers/bio are rendered unescaped by Volt), preventing XSS.
+                $parsedown->setSafeMode(true);
+
+                return $parsedown;
             }
         );
     }

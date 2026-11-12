@@ -212,6 +212,17 @@ class PostsController extends ControllerBase
 
         if (!empty($id)) {
             $object = Posts::findFirstById($id);
+            // Only the post owner (or a moderator/admin) may edit an existing post.
+            if (!$object) {
+                $this->flashSession->error(t('The post does not exist!'));
+
+                return $this->currentRedirect();
+            }
+            if (!$this->auth->isTrustModeration() && $this->auth->getUserId() != $object->getUsersId()) {
+                $this->flashSession->error(t('You don\'t have permission'));
+
+                return $this->currentRedirect();
+            }
             $object->setSlug($this->slug->generate($this->request->getPost('title')));
             // @Todo continue When moderator or admin edit post
             // Just to save history when user is TrustModerator and the user not owner the post
